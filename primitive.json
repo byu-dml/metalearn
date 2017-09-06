@@ -1,0 +1,36 @@
+{
+    "id": null, // todo after name and version are established
+    "name": "metalearn.features.MetaFeatures",
+    "common_name": "MetaFeatures",
+    "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
+    "languages": ["python3.5"],
+    "library": "metalearn",
+    "version": 0.1,
+    "source_code": "https://github.com/byu-dml/metalearn",
+    "is_class": true,
+    "tags": ["metafeatures", "metalearn", "metalearning"],
+    "parameters": [],
+    "methods_available": [], // todo @roland
+    "task_type": ["Feature extraction"],
+    "output_type": ["FEATURES"],
+    "team": "BYU",
+    "schema_version": 0.1,
+    "build": [
+        {
+            "type": "pip",
+            "package": "metalearn",
+        }
+    ],
+    "interface_type": "featurization",
+    "compute_resources": {
+        "sample_size": [30, 170, 20, 103],
+        "sample_unit": ["KB", "KB", "MB", "MB"],
+        "num_nodes": [1, 1, 1, 1],
+        "cores_per_node": [1, 1, 1, 1],
+        "gpus_per_node": [0, 0, 0, 0],
+        "mem_per_node": [1, 2, 4, 8],
+        "disk_per_node": [0, 0, 0, 0], // todo @brandon does this include the storage used for the data itself?
+        "mem_per_gpu": [0, 0, 0, 0],
+        "expected_running_time": [1, 10, 100, 3400]
+    }
+}
