@@ -9,8 +9,8 @@
     "source_code": "https://github.com/byu-dml/metalearn",
     "is_class": true,
     "tags": ["metafeatures", "metalearn", "metalearning"],
-    "parameters": [],
-    "methods_available": [], // todo @roland
+    "parameters": [], // todo
+    "methods_available": [], // todo
     "task_type": ["Feature extraction"],
     "output_type": ["FEATURES"],
     "team": "BYU",
@@ -29,7 +29,7 @@
         "cores_per_node": [1, 1, 1, 1],
         "gpus_per_node": [0, 0, 0, 0],
         "mem_per_node": [1, 2, 4, 8],
-        "disk_per_node": [0, 0, 0, 0], // todo @brandon does this include the storage used for the data itself?
+        "disk_per_node": [0.01, 0.01, 0.01, 0.01],
         "mem_per_gpu": [0, 0, 0, 0],
         "expected_running_time": [1, 10, 100, 3400]
     }
