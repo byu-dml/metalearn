@@ -1,7 +1,7 @@
-from distutils.core import setup
+from distutils.core import setup, find_packages
 setup(
   name = 'metalearn',
-  packages = ['metalearn'],
+  packages = find_packages(),
   version = '0.1',
   description = 'A package to retrieve metafeatures from datasets',
   author = 'Casey Davis',
