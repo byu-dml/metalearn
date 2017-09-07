@@ -1,16 +1,72 @@
 {
-    "id": null, // todo after name and version are established
+    "id": "da51d62a-e646-3b9b-9e26-b5f759549789",
     "name": "metalearn.features.metafeatures.MetaFeatures",
     "common_name": "MetaFeatures",
     "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
     "languages": ["python3.5"],
     "library": "metalearn",
-    "version": 0.1,
+    "version": "0.1",
     "source_code": "https://github.com/byu-dml/metalearn",
     "is_class": true,
     "tags": ["metafeatures", "metalearn", "metalearning"],
-    "parameters": [], // todo
-    "methods_available": [], // todo
+    "parameters": [],
+    "methods_available": [
+        {
+            "id": "metalearn.features.metafeatures.MetaFeatures.fit",
+            "name": "fit",
+            "description": "Updates and stores all the metafeatures of the labeled input dataset.",
+            "parameters": [
+                {
+                    "name": "intype",
+                    "description": "Specifies the format of the input data. The only valid value is 'dict' for this implementation.",
+                    "type": "str",
+                    "optional": false,
+                    "is_hyperparameter": false
+                },
+                {
+                    "name": "data",
+                    "description": "The input data in the specified input format. The data dict must represent tabular data, where the keys are the column names and the values are lists of equal length.",
+                    "type": "dict",
+                    "optional": false,
+                    "is_hyperparameter": false
+                },
+                {
+                    "name": "labels",
+                    "description": "A list of labels associated with the data. There must be exactly one label per data point. If no labels are given (i.e. labels=None), then no metafeatures will be computed.",
+                    "type": "list",
+                    "optional": false,
+                    "is_hyperparameter": false
+                }
+            ]
+        },
+        {
+            "id": "metalearn.features.metafeatures.MetaFeatures.predict",
+            "name": "predict",
+            "description": "Returns the metafeatures computed when fit was called.",
+            "parameters": [
+                {
+                    "name": "outtype",
+                    "description": "Specifies the format of the output data. The only valid value is 'array2+names' for this implementation.",
+                    "type": "str",
+                    "optional": false,
+                    "is_hyperparameter": false
+                },
+                {
+                    "name": "data",
+                    "description": "This parameter is ignored in this implementation. Optional argument, used in cases where the original input data was used to train a featurization model, and featurization will now be performed on a new set of test data.",
+                    "type": "dict",
+                    "optional": true,
+                    "is_hyperparameter": false
+                }
+            ],
+            "returns": {
+                "name": "metafeatures",
+                "description": "The computed metafeatures in the specified output format. The only valid value is 'array2+names' for this implementation.",
+                "type": "list",
+                "shape": "A list of 2 outputs - [0] is a list of feature names/descriptions and [1] is a 2D array-like with instances in rows and features in columns. There will only be one instance."
+            }
+        }
+    ],
     "task_type": ["Feature extraction"],
     "output_type": ["FEATURES"],
     "team": "BYU",
@@ -18,7 +74,7 @@
     "build": [
         {
             "type": "pip",
-            "package": "metalearn",
+            "package": "metalearn"
         }
     ],
     "interface_type": "featurization",
