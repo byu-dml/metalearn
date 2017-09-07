@@ -5,7 +5,7 @@
     "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
     "languages": ["python3.5"],
     "library": "metalearn",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "source_code": "https://github.com/byu-dml/metalearn",
     "is_class": true,
     "tags": ["metafeatures", "metalearn", "metalearning"],
