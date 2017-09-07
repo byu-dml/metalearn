@@ -2,7 +2,7 @@ import time
 
 import numpy as np
 
-from common_operations import *
+from .common_operations import *
 
 def get_symbol_stats(attributes):
     symbols = []

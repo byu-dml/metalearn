@@ -7,7 +7,7 @@ import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
-from common_operations import *
+from .common_operations import *
 
 def get_entropy(col):
     return entropy(list(Counter(col).values()))

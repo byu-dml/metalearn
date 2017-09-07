@@ -4,8 +4,8 @@ import math
 import numpy as np
 from scipy.stats import skew, kurtosis
 
-from common_operations import *
-from pyrcca import rcca
+from .common_operations import *
+from .pyrcca import rcca
 
 def get_skewness(data, attributes, preprocessed = False):
     classes = attributes[-1][1]

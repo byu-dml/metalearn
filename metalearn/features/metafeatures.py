@@ -2,10 +2,10 @@ import time
 
 import numpy as np
 
-from common_operations import *
-from simple_metafeatures import get_simple_metafeatures
-from statistical_metafeatures import get_statistical_metafeatures
-from information_theoretic_metafeatures import get_information_theoretic_metafeatures
+from .common_operations import *
+from .simple_metafeatures import get_simple_metafeatures
+from .statistical_metafeatures import get_statistical_metafeatures
+from .information_theoretic_metafeatures import get_information_theoretic_metafeatures
 
 class MetaFeatures():
 
