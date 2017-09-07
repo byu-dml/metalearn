@@ -1,6 +1,6 @@
 {
     "id": null, // todo after name and version are established
-    "name": "metalearn.features.MetaFeatures",
+    "name": "metalearn.features.metafeatures.MetaFeatures",
     "common_name": "MetaFeatures",
     "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
     "languages": ["python3.5"],
