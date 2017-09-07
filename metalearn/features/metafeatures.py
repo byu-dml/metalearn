@@ -7,7 +7,7 @@ from simple_metafeatures import get_simple_metafeatures
 from statistical_metafeatures import get_statistical_metafeatures
 from information_theoretic_metafeatures import get_information_theoretic_metafeatures
 
-class Metafeatures():
+class MetaFeatures():
 
     def __init__(self):
         self.metafeatures = {}
@@ -15,8 +15,8 @@ class Metafeatures():
         self.valid_outtype = 'array2+names'
 
     def fit(self, intype, data, labels=None):
-        if self.validate_inputs(intype, data, labels):
-            self.update_metafeatures(data, labels)
+        if self._validate_inputs(intype, data, labels):
+            self._update_metafeatures(data, labels)
 
     def predict(self, outtype, data=None):
         if outtype == self.valid_outtype:
@@ -32,7 +32,7 @@ class Metafeatures():
         else:
             return None
 
-    def validate_inputs(self, intype, data, labels):
+    def _validate_inputs(self, intype, data, labels):
         if intype == self.valid_intype and labels != None:
             num_instances = len(labels)
             for attribute in data:
@@ -55,7 +55,7 @@ class Metafeatures():
     -------
     n/a
     """
-    def update_metafeatures(self, inputs, labels):
+    def _update_metafeatures(self, inputs, labels):
         start_time = time.process_time()
 
         X = None
