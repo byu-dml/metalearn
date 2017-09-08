@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import skew, kurtosis
 
 from .common_operations import *
-from .pyrcca import rcca
+from .rcca import CCA
 
 def get_skewness(data, attributes, preprocessed = False):
     classes = attributes[-1][1]
@@ -63,7 +63,7 @@ def get_abs_cor(data, attributes):
                         col_j_data_by_class = replace_nominal_column(col_j_data_by_class)
                     else:
                         col_j_data_by_class = col_j_data_by_class.reshape(col_j_data_by_class.shape[0], 1)
-                    cca = rcca.CCA(kernelcca = False, reg = 0., numCC = 1)
+                    cca = CCA(kernelcca = False, reg = 0., numCC = 1)
                     try:
                         cca.train([col_i_data_by_class.astype(float), col_j_data_by_class.astype(float)])
                         c = cca.cancorrs[0]
@@ -88,7 +88,7 @@ def get_cancors(data, attributes):
     preprocess_att_data = replace_nominal(att_data, attributes)
     labels = data[:,-1]
     preprocess_labels = replace_nominal_column(labels)
-    cca = rcca.CCA(kernelcca = False, reg = 0., numCC = 1)
+    cca = CCA(kernelcca = False, reg = 0., numCC = 1)
     try:
         cca.train([preprocess_att_data.astype(float), preprocess_labels.astype(float)])
         return cca.cancorrs

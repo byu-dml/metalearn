@@ -1,11 +1,11 @@
 {
-    "id": "aa3c73de-4da3-331c-91e8-9cdefc191fb2", //uuid.uuid3(uuid.uuid3(uuid.NAMESPACE_DNS, 'datadrivendiscovery.org'), "metalearn.features.metafeatures.MetaFeatures"+"0.1.4")
+    "id": "5a34f008-6738-35d2-916c-330a81baf677", //uuid.uuid3(uuid.uuid3(uuid.NAMESPACE_DNS, 'datadrivendiscovery.org'), "metalearn.features.metafeatures.MetaFeatures"+"0.1.5")
     "name": "metalearn.features.metafeatures.MetaFeatures",
     "common_name": "MetaFeatures",
     "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
     "languages": ["python3.5"],
     "library": "metalearn",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "source_code": "https://github.com/byu-dml/metalearn",
     "is_class": true,
     "tags": ["metafeatures", "metalearn", "metalearning"],
