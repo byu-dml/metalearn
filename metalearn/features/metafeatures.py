@@ -33,7 +33,7 @@ class MetaFeatures():
             return None
 
     def _validate_inputs(self, intype, data, labels):
-        if intype == self.valid_intype and labels != None:
+        if intype == self.valid_intype and labels is not None:
             num_instances = len(labels)
             for attribute in data:
                 column = data[attribute]
@@ -64,7 +64,7 @@ class MetaFeatures():
             column = np.array(inputs[attribute])
             column = column.reshape(column.shape[0], -1)
             attributes.append((attribute, str(type(column[0,0]))))
-            if X == None:
+            if X is None:
                 X = np.array(column, dtype = 'object')
             else:
                 X = np.append(X, column, axis = 1)
