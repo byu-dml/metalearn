@@ -63,7 +63,7 @@ def get_abs_cor(data, attributes):
                         col_j_data_by_class = replace_nominal_column(col_j_data_by_class)
                     else:
                         col_j_data_by_class = col_j_data_by_class.reshape(col_j_data_by_class.shape[0], 1)
-                    cca = CCA(kernelcca = False, reg = 0., numCC = 1)
+                    cca = CCA(kernelcca = False, reg = 0., numCC = 1, verbose=False)
                     try:
                         cca.train([col_i_data_by_class.astype(float), col_j_data_by_class.astype(float)])
                         c = cca.cancorrs[0]
