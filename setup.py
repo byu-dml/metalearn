@@ -9,6 +9,6 @@ setup(
   url = 'https://github.com/byu-dml/metalearn',
   download_url = 'https://github.com/byu-dml/metalearn/archive/0.1.6.tar.gz',
   keywords = ['metalearning', 'machine learning', 'darpa', 'metalearn'],
-  install_requires = ["numpy", "sklearn", "pandas", "scipy", "h5py"],
+  install_requires = ["numpy", "sklearn", "pandas", "scipy", "h5py", "git+ssh://git@gitlab.datadrivendiscovery.org/d3m/primitive-interfaces.git"],
   classifiers = [],
 )
