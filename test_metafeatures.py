@@ -18,6 +18,8 @@ def file_find(base_dir, file_type=".arff"):
     return paths
 
 def get_dataset_paths():
+    return ['./test/iris.arff']
+    '''
     base_dir = "/home/bschoenfeld/Research/datasets/"
     dataset_names = open("test/small_dataset_names.csv", "r").read().strip().split(",")
     raw_paths = file_find(base_dir)
@@ -28,6 +30,7 @@ def get_dataset_paths():
                 paths.append(rp)
                 break
     return paths
+    '''
 
 def get_dataset_name_from_path(dataset_path):
     return dataset_path.split("/")[-1].split(".")[0]
@@ -45,30 +48,28 @@ def load_arff(infile_path, data_format="dict"):
     labels = raw_data[:,-1]
     return features, labels
 
-def extract_metafeatures(features, labels):
-    intype = "dict"
-    outtype = "array2+names"
+def extract_metafeatures(features, labels):    
     MF = MetaFeatures()
-    MF.fit(intype, features, labels)
-    metalabels, metadata = MF.predict(outtype)
-    metadata_dict = {}
-    for label, value in zip(metalabels, metadata[0]):
-        metadata_dict[label] = float(value)
+    outputs = MF.produce(inputs = [2, features, labels])
+    metadata_dict = outputs[1]
     return metadata_dict
 
-def compute_metafeatures(dataset_paths, outfile_path):
-    with open(outfile_path, "w") as f:
+def compute_metafeatures(dataset_paths, outfile_path):    
+    with open(outfile_path, "w") as f:        
         for path in dataset_paths:
-            try:
-                dataset_name = get_dataset_name_from_path(path)
-                print("\ndataset: '{}'".format(dataset_name))
-                features, labels = load_arff(path, "dict")
-                metadata = extract_metafeatures(features, labels)
-                output = {"dataset": dataset_name, "metadata": metadata}
-                f.write(json.dumps(output)+"\n")
-                print("success")
-            except Exception as e:
-                print("fail:\n{}".format(e))
+            #try:                
+            dataset_name = get_dataset_name_from_path(path)
+            print("\ndataset: '{}'".format(dataset_name))
+            features, labels = load_arff(path, "dict")
+            metadata = extract_metafeatures(features, labels)
+            #
+            return metadata
+            #
+            output = {"dataset": dataset_name, "metadata": metadata}
+            f.write(json.dumps(output)+"\n")
+            print("success")
+            #except Exception as e:
+                #print("fail:\n{}".format(e))
 
 def get_score(clf, features, labels):
     scores = cross_val_score(clf, features, labels, cv=10, scoring='accuracy')
@@ -145,11 +146,11 @@ def get_trained_metamodel(metadata_path):
     return tree, attributes[1:-1], set(labels), cv_score
 
 def load_d3m_dataset(feature_path, label_path):
-    feature_dataset = np.loadtxt(feature_path, dtype=str, delimiter",")
+    feature_dataset = np.loadtxt(feature_path, dtype=str, delimiter=",")
     feature_attributes = feature_dataset[0, 1:]
     features = feature_dataset[1:, 1:]
 
-    label_dataset = np.loadtxt(label_path, dtype=str, delimiter",")
+    label_dataset = np.loadtxt(label_path, dtype=str, delimiter=",")
     label_attributes = label_dataset[0, 1:]
     labels = label_dataset[1:, 1:]
 
@@ -163,12 +164,12 @@ if __name__ == "__main__":
     metalabel_path = "test/tree_vs_knn_output.csv"
     metadata_path = "test/metadata.csv"
     dataset_paths = get_dataset_paths()
-    # compute_metafeatures(dataset_paths, metafeature_path)
-    # compute_metalabels(dataset_paths, metalabel_path, "test/tree_vs_knn_error.log")
+    print(compute_metafeatures(dataset_paths, metafeature_path))
+    #compute_metalabels(dataset_paths, metalabel_path, "test/tree_vs_knn_error.log")
     # combine_metafeatures_and_metalabels(metafeature_path, metalabel_path, metadata_path)
     # metamodel, attributes, label_set, cv_score = get_trained_metamodel(metadata_path)
-    d3m_test_feature_path = "/home/bschoenfeld/Research/datasets/d3m/o_38/data/trainData.csv"
-    d3m_test_label_path = "/home/bschoenfeld/Research/datasets/d3m/o_38/data/trainTargets.csv"
-    features, labels = load_d3m_dataset(d3m_test_feature_path, d3m_test_label_path)
-    print(features, labels)
+    #d3m_test_feature_path = "/home/bschoenfeld/Research/datasets/d3m/o_38/data/trainData.csv"
+    #d3m_test_label_path = "/home/bschoenfeld/Research/datasets/d3m/o_38/data/trainTargets.csv"
+    #features, labels = load_d3m_dataset(d3m_test_feature_path, d3m_test_label_path)
+    #print(features, labels)
 

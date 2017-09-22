@@ -6,34 +6,26 @@ from .common_operations import *
 from .simple_metafeatures import get_simple_metafeatures
 from .statistical_metafeatures import get_statistical_metafeatures
 from .information_theoretic_metafeatures import get_information_theoretic_metafeatures
+from primitive_interfaces.base import *
+from primitive_interfaces.featurization import FeaturizationTransformerPrimitiveBase
 
-class MetaFeatures():
+class MetaFeatures(FeaturizationTransformerPrimitiveBase[Inputs, Outputs]):
 
     def __init__(self):
         self.metafeatures = {}
         self.valid_intype = 'dict'
         self.valid_outtype = 'array2+names'
 
-    def fit(self, intype, data, labels=None):
-        if self._validate_inputs(intype, data, labels):
+    def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> Outputs:        
+        data = inputs[1]
+        labels = inputs[2]
+        if self._validate_inputs(data, labels):
             self._update_metafeatures(data, labels)
+            return [1, self.metafeatures]
+        return [0]
 
-    def predict(self, outtype, data=None):
-        if outtype == self.valid_outtype:
-            features = []
-            values = []
-            values.append([])
-            for feature in self.metafeatures:
-                features.append(feature)
-                value = self.metafeatures[feature]
-                values[0].append(value)
-            output = [features, values]
-            return output
-        else:
-            return None
-
-    def _validate_inputs(self, intype, data, labels):
-        if intype == self.valid_intype and labels is not None:
+    def _validate_inputs(self, data, labels):
+        if data is not None and labels is not None:
             num_instances = len(labels)
             for attribute in data:
                 column = data[attribute]
