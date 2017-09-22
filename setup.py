@@ -14,6 +14,6 @@ setup(
       'metalearn.MetaFeatures = metalearn.features.metafeatures:MetaFeatures',
     ],
   },
-  install_requires = ["numpy", "sklearn", "pandas", "scipy", "h5py", "git+ssh://git@gitlab.datadrivendiscovery.org/d3m/primitive-interfaces.git"],
+  install_requires = ["numpy", "sklearn", "pandas", "scipy", "h5py"],
   classifiers = [],
 )
