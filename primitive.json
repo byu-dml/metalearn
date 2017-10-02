@@ -3,7 +3,7 @@
     "name": "metalearn.features.metafeatures.MetaFeatures",
     "common_name": "MetaFeatures",
     "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
-    "languages": ["python3.5"],
+    "languages": ["python3.5", "python3.6"],
     "library": "metalearn",
     "version": "0.1.7",
     "source_code": "https://github.com/byu-dml/metalearn",
