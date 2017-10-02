@@ -50,6 +50,7 @@ class MetaFeatures(FeaturizationTransformerPrimitiveBase[Inputs, Outputs]):
     def _update_metafeatures(self, inputs, labels):
         start_time = time.process_time()
 
+        labels = labels.astype(str)
         X = None
         attributes = []
         for attribute in inputs:
