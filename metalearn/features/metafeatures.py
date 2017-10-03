@@ -48,7 +48,7 @@ class MetaFeatures(FeaturizationTransformerPrimitiveBase[Inputs, Outputs]):
     n/a
     """
     def _update_metafeatures(self, inputs, labels):
-        start_time = time.process_time()
+        start_time = time.process_time()    
 
         labels = labels.astype(str)
         X = None
@@ -70,8 +70,8 @@ class MetaFeatures(FeaturizationTransformerPrimitiveBase[Inputs, Outputs]):
 
         data_numeric_without_class = replace_nominal(data[:,0:-1], attributes)
         data_preprocessed = np.append(normalize(data_numeric_without_class), data[:,-1].reshape(data.shape[0],1), axis = 1)
-
-        self.metafeatures.update(get_simple_metafeatures(attributes, data, Y))
-        self.metafeatures.update(get_statistical_metafeatures(attributes, data, data_preprocessed))
-        self.metafeatures.update(get_information_theoretic_metafeatures(attributes, data, X, Y))
+                
+        self.metafeatures.update(get_simple_metafeatures(attributes, data, Y))           
+        self.metafeatures.update(get_statistical_metafeatures(attributes, data, data_preprocessed))                
+        self.metafeatures.update(get_information_theoretic_metafeatures(attributes, data, X, Y))        
         self.metafeatures['total_time'] = time.process_time() - start_time

@@ -92,7 +92,7 @@ class CCACrossValidate(_CCABase):
         numCC - list of numbers of canonical dimensions to keep. Default is np.range(5, 10).
         kernelcca - True if using a kernel (default), False if not kernelized.
         ktype - type of kernel if kernelcca == True (linear or gaussian). Default is linear.
-        verbose - True is default
+        verbose - False is default
 
     Results:
         ws - canonical weights
@@ -102,7 +102,7 @@ class CCACrossValidate(_CCABase):
         preds - predictions on the validation dataset
         ev - explained variance for each canonical dimension
     '''
-    def __init__(self, numCV = None, regs = None, numCCs = None, kernelcca = True, ktype = None, verbose = True, select = 0.2, cutoff = 1e-15, gausigma = 1.0, degree = 2):
+    def __init__(self, numCV = None, regs = None, numCCs = None, kernelcca = True, ktype = None, verbose = False, select = 0.2, cutoff = 1e-15, gausigma = 1.0, degree = 2):
         numCV = 10 if numCV is None else numCV
         regs = np.array(np.logspace(-3, 1, 10)) if regs is None else regs
         numCCs = np.arange(5, 10) if numCCs is None else numCCs
@@ -165,7 +165,7 @@ class CCA(_CCABase):
         preds - predictions on the validation dataset
         ev - explained variance for each canonical dimension
     '''
-    def __init__(self, reg = 0., numCC = 10, kernelcca = True, ktype = None, verbose = True, cutoff = 1e-15):
+    def __init__(self, reg = 0., numCC = 10, kernelcca = True, ktype = None, verbose = False, cutoff = 1e-15):
         super(CCA, self).__init__(reg = reg, numCC = numCC, kernelcca = kernelcca, ktype = ktype, verbose = verbose, cutoff = cutoff)
 
     def train(self, data):
