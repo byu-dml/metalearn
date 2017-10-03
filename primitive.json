@@ -1,11 +1,11 @@
 {
-    "id": "1242c699-189e-328b-be95-69336e5a7d0e", //uuid.uuid3(uuid.uuid3(uuid.NAMESPACE_DNS, 'datadrivendiscovery.org'), "metalearn.features.metafeatures.MetaFeatures"+"0.1.7")
+    "id": "1242c699-189e-328b-be95-69336e5a7d0e", //uuid.uuid3(uuid.uuid3(uuid.NAMESPACE_DNS, 'datadrivendiscovery.org'), "metalearn.features.metafeatures.MetaFeatures"+"0.1.8")
     "name": "metalearn.features.metafeatures.MetaFeatures",
     "common_name": "MetaFeatures",
     "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
     "languages": ["python3.5", "python3.6"],
     "library": "metalearn",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "source_code": "https://github.com/byu-dml/metalearn",
     "is_class": true,
     "tags": ["metafeatures", "metalearn", "metalearning"],
@@ -49,7 +49,7 @@
     "task_type": ["Feature extraction"],
     "output_type": ["FEATURES"],
     "team": "BYU",
-    "schema_version": "0.1.7",
+    "schema_version": "0.1.8",
     "build": [
         {
             "type": "pip",
