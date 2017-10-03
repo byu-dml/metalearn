@@ -1,5 +1,5 @@
 {
-    "id": "75e6130b-dcd4-3e10-91f4-c339e2fdfebc", //uuid.uuid3(uuid.uuid3(uuid.NAMESPACE_DNS, 'datadrivendiscovery.org'), "metalearn.features.metafeatures.MetaFeatures"+"0.1.9")
+    "id": "75e6130b-dcd4-3e10-91f4-c339e2fdfebc", //uuid.uuid3(uuid.uuid3(uuid.NAMESPACE_DNS, 'datadrivendiscovery.org'), "metalearn.features.metafeatures.MetaFeatures"+"0.1.9") 
     "name": "metalearn.features.metafeatures.MetaFeatures",
     "common_name": "MetaFeatures",
     "description": "Extracts metafeatures from tabular data and ouputs a single metafeature vector. This currently assumes that there is no missing data.",
@@ -49,14 +49,15 @@
     "task_type": ["Feature extraction"],
     "output_type": ["FEATURES"],
     "team": "BYU",
-    "schema_version": "0.1.9",
+    "schema_version": 0.1,
     "build": [
         {
             "type": "pip",
             "package": "metalearn"
         }
     ],
-    "interface_type": "featurization",
+    "interfaces": ["primitive_interfaces.featurization.FeaturizationTransformerPrimitiveBase"],
+    "interfaces_version": "2017.9.22rc0",
     "compute_resources": {
         "sample_size": [30, 170, 20, 103],
         "sample_unit": ["KB", "KB", "MB", "MB"],
