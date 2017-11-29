@@ -51,13 +51,4 @@ def get_column_of_class(data, columnIndex, label):
     return data[:,columnIndex][data[:,-1] == label]
 
 def normalize(data):
-    newData = np.copy(data)
-    for j in range(newData.shape[1]):
-        col = newData[:,j]
-        min_v = np.amin(col)
-        max_v = np.amax(col)
-        d = max_v - min_v
-        if (d == 0):
-            d = 1.0
-        newData[:,j] = (col - min_v) / d
-    return newData
+    return (data - data.min(0)) / data.ptp(0)
