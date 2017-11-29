@@ -51,4 +51,4 @@ def get_column_of_class(data, columnIndex, label):
     return data[:,columnIndex][data[:,-1] == label]
 
 def normalize(data):
-    return (data - data.min(0)) / data.ptp(0)
+    return (data - data.min(axis=0)) / data.ptp(axis=0)
