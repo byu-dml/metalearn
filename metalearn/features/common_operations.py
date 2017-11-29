@@ -19,14 +19,11 @@ def get_min_max_mean_sd(data, label):
     features = {}
     features[label + '_min'] = np.amin(data)
     features[label + '_max'] = np.amax(data)
-    features[label + '_mean'] = np.mean(data)    
-    if len(data) > 1:
-        std = np.std(data, axis = 0, ddof = 1)
-    else:
-        std = float('nan')    
-    if math.isnan(std):
-        std = 0.0
-    features[label + '_sd'] = std
+    features[label + '_mean'] = np.mean(data)
+
+    ddof = 1 if len(data) > 1 else 0    
+    features[label + '_sd'] = np.std(data, axis = 0, ddof = ddof)
+    
     return features
 
 def is_numeric(index, attributes):    
