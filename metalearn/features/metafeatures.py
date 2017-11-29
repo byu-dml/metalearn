@@ -9,7 +9,7 @@ from .information_theoretic_metafeatures import get_information_theoretic_metafe
 from primitive_interfaces.base import *
 from primitive_interfaces.featurization import FeaturizationTransformerPrimitiveBase
 
-class MetaFeatures(FeaturizationTransformerPrimitiveBase[Inputs, Outputs]):
+class MetaFeatures(FeaturizationTransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
 
     def __init__(self):
         self.metafeatures = {}
