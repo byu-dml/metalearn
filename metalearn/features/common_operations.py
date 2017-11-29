@@ -35,13 +35,9 @@ def get_numeric(data, attributes):
     return sum(column_is_numeric(attr) for attr in attributes)
 
 def replace_nominal_column(col):
-    le = LabelEncoder()
-    le.fit(col)
-    labelledCol = le.transform(col)
+    labelledCol = LabelEncoder().fit_transform(col)
     labelledCol = labelledCol.reshape(labelledCol.shape[0],1)
-    enc = OneHotEncoder()
-    enc.fit(labelledCol)
-    return enc.transform(labelledCol).toarray()
+    return OneHotEncoder().fit_transform(labelledCol).toarray()
 
 def replace_nominal(data, attributes):
     newData = np.copy(data)
