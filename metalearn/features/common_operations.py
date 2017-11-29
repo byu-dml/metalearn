@@ -26,13 +26,12 @@ def get_min_max_mean_sd(data, label):
     
     return features
 
-def is_numeric(index, attributes):    
-    colType = attributes[index][1]
+def is_numeric(attribute):    
+    colType = attribute[1]
     return 'int' in colType or 'float' in colType
 
 def get_numeric(data, attributes):
-    column_is_numeric = lambda x : 'int' in x[1] or 'float' in x[1]
-    return sum(column_is_numeric(attr) for attr in attributes)
+    return sum(is_numeric(attr) for attr in attributes)
 
 def replace_nominal_column(col):
     labelledCol = LabelEncoder().fit_transform(col)
@@ -41,18 +40,11 @@ def replace_nominal_column(col):
 
 def replace_nominal(data, attributes):
     newData = np.copy(data)
-    oldIndex = 0
-    newIndex = 0
-    while (newIndex < (len(newData[0]))):
-        if (not is_numeric(oldIndex, attributes)):
-            cols = replace_nominal_column(newData[:,newIndex])
-            newData = np.delete(newData, newIndex, axis = 1)
-            for i in range(len(cols[0])):
-                newData = np.insert(newData, newIndex, cols[:,i], axis = 1)
-                newIndex += 1
-        else:
-            newIndex += 1
-        oldIndex += 1
+    data_index_and_feature = list(enumerate(attributes[:len(data[0])]))
+    for i, attr in reversed(data_index_and_feature):
+        if (not is_numeric(attr)):
+            cols = replace_nominal_column(newData[:,i])
+            newData = np.concatenate((newData[:,:i], cols, newData[:,i+1:]), axis =1)
     return newData
 
 def get_column_of_class(data, columnIndex, label):
