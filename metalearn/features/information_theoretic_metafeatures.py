@@ -17,7 +17,7 @@ def get_entropy_average(data, attributes, normalized = False):
     bins = 9
     length = len(data[0])
     for j in range(length):
-        if (is_numeric(j, attributes)):
+        if (is_numeric(attributes[j])):
             try:
                 col = pd.cut(data[:,j],bins)
             except:
@@ -52,7 +52,7 @@ def get_joint_entropy(data, attributes, labels):
     bins = 9
     length = len(data[0])
     for j in range(length):
-        if (is_numeric(j, attributes)):
+        if (is_numeric(attributes[j])):
             try:
                 col = pd.cut(data[:,j],bins)
             except:
@@ -69,7 +69,7 @@ def get_mutual_information(data, attributes, labels):
     bins = 9
     length = len(data[0])
     for j in range(length):
-        if (is_numeric(j, attributes)):
+        if (is_numeric(attributes[j])):
             try:
                 col = pd.cut(data[:,j],bins)
             except:
