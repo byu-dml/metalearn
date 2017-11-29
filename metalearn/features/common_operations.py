@@ -31,11 +31,8 @@ def is_numeric(index, attributes):
     return 'int' in colType or 'float' in colType
 
 def get_numeric(data, attributes):
-    counter = 0    
-    for j in range(len(data[0])):
-        if (is_numeric(j, attributes)):
-            counter += 1
-    return counter
+    column_is_numeric = lambda x : 'int' in x[1] or 'float' in x[1]
+    return sum(column_is_numeric(attr) for attr in attributes)
 
 def replace_nominal_column(col):
     le = LabelEncoder()
