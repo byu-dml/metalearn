@@ -39,13 +39,12 @@ def replace_nominal_column(col):
     return OneHotEncoder().fit_transform(labelledCol).toarray()
 
 def replace_nominal(data, attributes):
-    newData = np.copy(data)
     data_index_and_feature = list(enumerate(attributes[:len(data[0])]))
     for i, attr in reversed(data_index_and_feature):
         if (not is_numeric(attr)):
-            cols = replace_nominal_column(newData[:,i])
-            newData = np.concatenate((newData[:,:i], cols, newData[:,i+1:]), axis =1)
-    return newData
+            cols = replace_nominal_column(data[:,i])
+            data = np.concatenate((data[:,:i], cols, data[:,i+1:]), axis =1)
+    return data
 
 def get_column_of_class(data, columnIndex, label):
     return data[:,columnIndex][data[:,-1] == label]
