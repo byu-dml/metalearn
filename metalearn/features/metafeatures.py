@@ -1,11 +1,4 @@
-import time
-
 import numpy as np
-
-from .common_operations import *
-from .simple_metafeatures import get_simple_metafeatures
-from .statistical_metafeatures import get_statistical_metafeatures
-from .information_theoretic_metafeatures import get_information_theoretic_metafeatures
 
 class Metafeature(object):
 
@@ -27,4 +20,4 @@ class Metafeature(object):
     as small as possible
     """
     def compute(self, X: list, Y: list, attributes: list) -> list:        
-        throw NotImplementedError("Cannot call compute on MetaFeature object")
+        raise NotImplementedError("Cannot call compute on MetaFeature object")

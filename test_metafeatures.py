@@ -40,19 +40,21 @@ def get_dataset_name_from_path(dataset_path):
 def load_arff(infile_path, data_format="dict"):
     file_data = codecs.open(infile_path, "rb", "utf-8")
     arff_data = arff.load(file_data)
-    data = arff_data["data"]
-    X = data[: ,-1]
-    Y = data[:-1, ]
+    data = np.array(arff_data["data"], dtype=object)
+    Y = data[: ,-1]
+    X = data[:,:-1]
     attributes = []
-    for i in len(data[0]):
-        attributes.append((arff_data["attributes"][i][0],typeof(data[0][i])))
+    for i in range(0,len(X[0])):
+        attributes.append((arff_data["attributes"][i][0],str(type(data[0][i]))))
+    attributes.append(('class', list(set(Y))))
     return X, Y, attributes
 
-def extract_metafeatures(features, labels):    
-    MF = MetaFeatures()
-    outputs = MF.produce(inputs = [2, features, labels])
-    metadata_dict = outputs[1]
-    return metadata_dict
+def extract_metafeatures(X,Y,attributes):    
+    metafeatures = []
+    metafeatures.append(SimpleMetafeatures().compute(X,Y,attributes))
+    metafeatures.append(StatisticalMetafeatures().compute(X,Y,attributes))
+    metafeatures.append(InformationTheoreticMetafeatures().compute(X,Y,attributes))
+    return metafeatures
 
 def compute_metafeatures(dataset_paths, outfile_path):    
     with open(outfile_path, "w") as f:        
@@ -61,10 +63,7 @@ def compute_metafeatures(dataset_paths, outfile_path):
             dataset_name = get_dataset_name_from_path(path)
             print("\ndataset: '{}'".format(dataset_name))
             X, Y, attributes = load_arff(path, "dict")
-            print(X)
-            print(Y)
-            print(attributes)
-            metadata = extract_metafeatures(features, labels)
+            metadata = extract_metafeatures(X, Y, attributes)
             #
             return metadata
             #
