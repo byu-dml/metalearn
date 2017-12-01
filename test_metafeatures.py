@@ -3,7 +3,9 @@ import json
 import codecs
 import arff
 import numpy as np
-from metalearn.features.metafeatures import MetaFeatures
+from metalearn.features.simple_metafeatures import SimpleMetafeatures
+from metalearn.features.statistical_metafeatures import StatisticalMetafeatures
+from metalearn.features.information_theoretic_metafeatures import InformationTheoreticMetafeatures
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
@@ -38,15 +40,13 @@ def get_dataset_name_from_path(dataset_path):
 def load_arff(infile_path, data_format="dict"):
     file_data = codecs.open(infile_path, "rb", "utf-8")
     arff_data = arff.load(file_data)
-    raw_attribute_names = arff_data["attributes"]
-    attribute_names = [attr[0] for attr in raw_attribute_names]
-    raw_data = np.array(arff_data["data"], dtype=object)
-    if data_format == "dict":
-        features = {attr: raw_data[:,i] for i, attr in enumerate(attribute_names[:-1])}
-    else:
-        features = raw_data[:,:-1]
-    labels = raw_data[:,-1]
-    return features, labels
+    data = arff_data["data"]
+    X = data[: ,-1]
+    Y = data[:-1, ]
+    attributes = []
+    for i in len(data[0]):
+        attributes.append((arff_data["attributes"][i][0],typeof(data[0][i])))
+    return X, Y, attributes
 
 def extract_metafeatures(features, labels):    
     MF = MetaFeatures()
@@ -60,7 +60,10 @@ def compute_metafeatures(dataset_paths, outfile_path):
             #try:                
             dataset_name = get_dataset_name_from_path(path)
             print("\ndataset: '{}'".format(dataset_name))
-            features, labels = load_arff(path, "dict")
+            X, Y, attributes = load_arff(path, "dict")
+            print(X)
+            print(Y)
+            print(attributes)
             metadata = extract_metafeatures(features, labels)
             #
             return metadata
