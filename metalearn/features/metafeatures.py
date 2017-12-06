@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 class Metafeature(object):
 
@@ -21,3 +22,15 @@ class Metafeature(object):
     """
     def compute(self, X: list, Y: list, attributes: list) -> list:        
         raise NotImplementedError("Cannot call compute on MetaFeature object")
+
+
+    """
+    A general purpose wrapper for the compute function, which returns the elapsed wall time
+    along with the list of metafeatures
+    
+    """
+    def timed_compute(self, X: list, Y: list, attributes: list) -> (list, float):
+        start = time.time()
+        metafeatures = self.compute(X, Y, attributes)
+        end = time.time()
+        return (metafeatures, end-start)

@@ -51,9 +51,20 @@ def load_arff(infile_path, data_format="dict"):
 
 def extract_metafeatures(X,Y,attributes):    
     metafeatures = []
-    metafeatures.append(SimpleMetafeatures().compute(X,Y,attributes))
-    metafeatures.append(StatisticalMetafeatures().compute(X,Y,attributes))
-    metafeatures.append(InformationTheoreticMetafeatures().compute(X,Y,attributes))
+    features, time = SimpleMetafeatures().timed_compute(X,Y,attributes)
+    print("Time elapsed = " + str(time))
+    total_time = time
+    metafeatures.append(features)
+
+    features, time = StatisticalMetafeatures().timed_compute(X,Y,attributes)
+    print("Time elapsed = " + str(time))
+    total_time = total_time + time
+    metafeatures.append(features)
+
+    features, time = InformationTheoreticMetafeatures().timed_compute(X,Y,attributes)
+    print("Time elapsed = " + str(time))
+    total_time = total_time + time
+    metafeatures.append(features)
     return metafeatures
 
 def compute_metafeatures(dataset_paths, outfile_path):    
