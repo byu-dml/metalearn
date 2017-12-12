@@ -2,7 +2,7 @@ import time
 import numpy as np
 
 from .metafeatures import Metafeature
-from .common_operations import *
+from .common_operations import get_numeric, get_min_max_mean_sd
 
 
 class SimpleMetafeatures(Metafeature):

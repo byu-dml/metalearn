@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import skew, kurtosis
 
 from .metafeatures import Metafeature
-from .common_operations import *
+from .common_operations import replace_nominal, normalize, is_numeric, get_column_of_class, replace_nominal_column
 from .rcca import CCA
 
 class StatisticalMetafeatures(Metafeature):
