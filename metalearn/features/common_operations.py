@@ -18,6 +18,10 @@ def get_min_max_mean_sd(data, label):
     features[label + '_min'] = np.amin(data)
     features[label + '_max'] = np.amax(data)
     features[label + '_mean'] = np.mean(data)
+    
+    features[label + '_q1'] = np.percentile(data, 0.25)   
+    features[label + '_q2'] = np.percentile(data, 0.5)    
+    features[label + '_q3'] = np.percentile(data, 0.75)
 
     ddof = 1 if len(data) > 1 else 0    
     features[label + '_sd'] = np.std(data, axis = 0, ddof = ddof)
