@@ -1,8 +1,23 @@
 import time
-
 import numpy as np
 
+from .metafeatures import Metafeature
 from .common_operations import *
+
+
+class SimpleMetafeatures(Metafeature):
+
+    def __init__(self):
+        pass
+
+    def compute(self, X: list, Y: list, attributes: list) -> list:        
+        data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
+        data = data[(data != np.array(None)).all(axis=1)]
+        return get_simple_metafeatures(attributes, data, Y)
+
+'''
+Helper Methods to eventually be split and/or incorporated in the class
+'''
 
 def get_symbol_stats(attributes):
     symbols = []

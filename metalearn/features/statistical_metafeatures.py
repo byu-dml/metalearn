@@ -4,8 +4,25 @@ import math
 import numpy as np
 from scipy.stats import skew, kurtosis
 
+from .metafeatures import Metafeature
 from .common_operations import *
 from .rcca import CCA
+
+class StatisticalMetafeatures(Metafeature):
+
+    def __init__(self):
+        pass
+
+    def compute(self, X: list, Y: list, attributes: list) -> list:        
+        data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
+        data = data[(data != np.array(None)).all(axis=1)]
+        data_numeric_without_class = replace_nominal(data[:,0:-1], attributes)
+        data_preprocessed = np.append(normalize(data_numeric_without_class), data[:,-1].reshape(data.shape[0],1), axis = 1)
+        return get_statistical_metafeatures(attributes, data, data_preprocessed)
+
+'''
+Helper Methods to eventually be split and/or incorporated in the class
+'''
 
 def get_skewness(data, attributes, preprocessed = False): 
     # suppress errors brought about by code in the scipy skew function    

@@ -7,7 +7,22 @@ import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
+from .metafeatures import Metafeature
 from .common_operations import *
+
+class InformationTheoreticMetafeatures(Metafeature):
+
+    def __init__(self):
+        pass
+
+    def compute(self, X: list, Y: list, attributes: list) -> list:  
+        data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
+        data = data[(data != np.array(None)).all(axis=1)] 
+        return get_information_theoretic_metafeatures(attributes, data, X, Y)
+
+'''
+Helper Methods to eventually be split and/or incorporated in the class
+'''
 
 def get_entropy(col):
     return entropy(list(Counter(col).values()))
