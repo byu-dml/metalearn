@@ -58,6 +58,12 @@ def get_simple_metafeatures(attributes, data, Y):
     metafeatures['number_of_nominal_features'] = metafeatures['number_of_features'] - metafeatures['number_of_numeric_features'] 
     metafeatures['percentage_of_nominal_features'] = metafeatures['number_of_nominal_features'] / metafeatures['number_of_features']
     
+    # Missing Values
+    # TODO: Determine how missing values are flagged
+    # metafeatures['number_of_missing values'] = 
+    # metafeatures['number_of_instances_with_missing values'] = 
+    # metafeatures['percentage_of_instances_with_missing values'] = metafeatures['number_of_instances_with_missing values'] / metafeatures['number_of_instances']
+    
     metafeatures.update(get_symbol_stats(attributes))    
     metafeatures.update(get_class_stats(Y))    
     metafeatures['simple_time'] = time.process_time() - start_time
