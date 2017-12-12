@@ -31,25 +31,33 @@ def get_symbol_stats(attributes):
 
 def get_class_stats(Y):
     classes = set(Y)
-    probs = []
+    counts = [sum(Y == label) for label in classes]
+    probs = [count/len(Y) for count in counts]
+    
     features = {}
-    for label in classes:
-        count = np.count_nonzero(Y == label)
-        probs.append((count)/len(Y))
     features.update(get_min_max_mean_sd(probs, 'class_prob'))
+    features["default_accuracy"] = max(probs)
+    features["majority_class_size"] = max(counts)
+    features["minority_class_percentage"] = min(probs)
+    features["minority_class_size"] = min(counts)
     return features
 
 def get_simple_metafeatures(attributes, data, Y):
     metafeatures = {}
     start_time = time.process_time()    
-    metafeatures['classes'] = len(set(attributes[-1][1]))    
-    metafeatures['attributes'] = len(attributes) - 1    
-    metafeatures['numeric'] = get_numeric(data, attributes)    
-    metafeatures['nominal'] = metafeatures['attributes'] - metafeatures['numeric']    
-    metafeatures['samples'] = len(Y)    
-    metafeatures['dimensionality'] = metafeatures['attributes'] / metafeatures['samples']    
-    metafeatures['numeric_rate'] = metafeatures['numeric'] / metafeatures['attributes']    
-    metafeatures['nominal_rate'] = metafeatures['nominal'] / metafeatures['attributes']    
+    
+    #Simple metafeatures about dataset
+    metafeatures['number_of_classes'] = len(set(attributes[-1][1])) 
+    metafeatures['number_of_instances'] = len(Y)       
+    metafeatures['number_of_features'] = len(attributes) - 1   
+    metafeatures['dimensionality'] = metafeatures['number_of_features'] / metafeatures['number_of_instances']     
+    
+    #Simple metafeatures about features
+    metafeatures['number_of_numeric_features'] = get_numeric(data, attributes)  
+    metafeatures['percentage_of_numeric_features'] = metafeatures['number_of_numeric_features'] / metafeatures['number_of_features']
+    metafeatures['number_of_nominal_features'] = metafeatures['number_of_features'] - metafeatures['number_of_numeric_features'] 
+    metafeatures['percentage_of_nominal_features'] = metafeatures['number_of_nominal_features'] / metafeatures['number_of_features']
+    
     metafeatures.update(get_symbol_stats(attributes))    
     metafeatures.update(get_class_stats(Y))    
     metafeatures['simple_time'] = time.process_time() - start_time
