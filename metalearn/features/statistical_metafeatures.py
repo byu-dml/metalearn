@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import skew, kurtosis
 
 from .metafeatures import Metafeature
-from .common_operations import *
+from .common_operations import replace_nominal, normalize, is_numeric, get_column_of_class, replace_nominal_column
 from .rcca import CCA
 
 class StatisticalMetafeatures(Metafeature):
@@ -33,7 +33,7 @@ def get_skewness(data, attributes, preprocessed = False):
         s = 0.0
         n = 0.0        
         for j in range(len(data[0]) - 1):            
-            if (preprocessed or is_numeric(j, attributes)):                
+            if (preprocessed or is_numeric(attributes[j])):                
                 values_of_feature_for_class = get_column_of_class(data, j, label)                                                
                 v = skew(values_of_feature_for_class)                                
                 if ((v != None) and (not math.isnan(v))):                    
@@ -50,7 +50,7 @@ def get_kurtosis(data, attributes, preprocessed = False):
         s = 0.0
         n = 0.0
         for j in range(len(data[0]) - 1):
-            if (preprocessed or is_numeric(j, attributes)):
+            if (preprocessed or is_numeric(attributes[j])):
                 values_of_feature_for_class = get_column_of_class(data, j, label)
                 if (len(set(values_of_feature_for_class)) == 1):
                     v = 0
@@ -72,13 +72,13 @@ def get_abs_cor(data, attributes):
         for label in classes:            
             for i in range(numAtt):
                 col_i_data_by_class = get_column_of_class(data, i, label)
-                if (not is_numeric(i, attributes)):
+                if (not is_numeric(attributes[i])):
                     col_i_data_by_class = replace_nominal_column(col_i_data_by_class)
                 else:
                     col_i_data_by_class = col_i_data_by_class.reshape(col_i_data_by_class.shape[0], 1)
                 for j in range(numAtt):
                     col_j_data_by_class = get_column_of_class(data, j, label)
-                    if (not is_numeric(j, attributes)):
+                    if (not is_numeric(attributes[j])):
                         col_j_data_by_class = replace_nominal_column(col_j_data_by_class)
                     else:
                         col_j_data_by_class = col_j_data_by_class.reshape(col_j_data_by_class.shape[0], 1)
