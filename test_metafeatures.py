@@ -1,9 +1,9 @@
 import codecs
 import arff
 import numpy as np
-from metalearn.features.simple_metafeatures import SimpleMetafeatures
-from metalearn.features.statistical_metafeatures import StatisticalMetafeatures
-from metalearn.features.information_theoretic_metafeatures import InformationTheoreticMetafeatures
+from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
+from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
+from metalearn.metafeatures.information_theoretic_metafeatures import InformationTheoreticMetafeatures
 
 
 def load_arff(infile_path, data_format="dict"):
