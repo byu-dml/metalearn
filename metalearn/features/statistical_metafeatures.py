@@ -4,11 +4,11 @@ import math
 import numpy as np
 from scipy.stats import skew, kurtosis
 
-from .metafeatures import Metafeature
+from .metafeatures_base import MetafeaturesBase
 from .common_operations import replace_nominal, normalize, is_numeric, get_column_of_class, replace_nominal_column
 from .rcca import CCA
 
-class StatisticalMetafeatures(Metafeature):
+class StatisticalMetafeatures(MetafeaturesBase):
 
     def __init__(self):
         pass

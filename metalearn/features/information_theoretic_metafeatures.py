@@ -7,10 +7,10 @@ import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
-from .metafeatures import Metafeature
+from .metafeatures_base import MetafeaturesBase
 from .common_operations import *
 
-class InformationTheoreticMetafeatures(Metafeature):
+class InformationTheoreticMetafeatures(MetafeaturesBase):
 
     def __init__(self):
         pass

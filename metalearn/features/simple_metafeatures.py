@@ -1,11 +1,11 @@
 import time
 import numpy as np
 
-from .metafeatures import Metafeature
+from .metafeatures_base import MetafeaturesBase
 from .common_operations import get_numeric, get_min_max_mean_sd
 
 
-class SimpleMetafeatures(Metafeature):
+class SimpleMetafeatures(MetafeaturesBase):
 
     def __init__(self):
         pass

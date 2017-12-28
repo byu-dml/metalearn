@@ -54,3 +54,4 @@ The general idea is that we should be able to split metafeatures into as small o
 
 # Acknowledgements:
 - Our canonical correlation analysis is done using code from https://github.com/gallantlab/pyrcca
+- Much of this code was based on the R script meta-features-1.0.r
