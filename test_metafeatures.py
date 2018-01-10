@@ -13,8 +13,8 @@ def load_arff(infile_path, data_format="dict"):
     Y = data[: ,-1]
     X = data[:,:-1]
     attributes = []
-    for i in range(0,len(X[0])):
-        attributes.append((arff_data["attributes"][i][0],str(type(data[0][i]))))
+    for i in range(len(X[0])):
+        attributes.append((arff_data["attributes"][i][0],str(type(data[0,i]))))
     attributes.append(('class', list(set(Y))))
     return X, Y, attributes
 
@@ -23,20 +23,17 @@ def extract_metafeatures(X,Y,attributes):
     features, time = SimpleMetafeatures().timed_compute(X,Y,attributes)
     print("simple metafeatures compute time: {}".format(time))
     total_time = time
-    for key, value in features.items():
-        metafeatures[key] = value
+    metafeatures.update(features)
 
     features, time = StatisticalMetafeatures().timed_compute(X,Y,attributes)
     print("statistical metafeatures compute time: {}".format(time))
-    total_time = total_time + time
-    for key, value in features.items():
-        metafeatures[key] = value
+    total_time += time
+    metafeatures.update(features)
 
     features, time = InformationTheoreticMetafeatures().timed_compute(X,Y,attributes)
     print("information theoretic metafeatures compute time: {}".format(time))
-    total_time = total_time + time
-    for key, value in features.items():
-        metafeatures[key] = value
+    total_time += time
+    metafeatures.update(features)
 
     return metafeatures
 
