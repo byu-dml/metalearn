@@ -4,6 +4,7 @@ import numpy as np
 from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
 from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
 from metalearn.metafeatures.information_theoretic_metafeatures import InformationTheoreticMetafeatures
+from metalearn.metafeatures.landmarking_metafeatures import LandmarkingMetafeatures
 
 
 def load_arff(infile_path, data_format="dict"):
@@ -34,6 +35,12 @@ def extract_metafeatures(X,Y,attributes):
 
     features, time = InformationTheoreticMetafeatures().timed_compute(X,Y,attributes)
     print("information theoretic metafeatures compute time: {}".format(time))
+    total_time = total_time + time
+    for key, value in features.items():
+        metafeatures[key] = value
+
+    features, time = LandmarkingMetafeatures().timed_compute(X,Y,attributes)
+    print("Landmarking metafeatures compute time: {}".format(time))
     total_time = total_time + time
     for key, value in features.items():
         metafeatures[key] = value
