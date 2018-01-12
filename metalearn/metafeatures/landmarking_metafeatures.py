@@ -32,20 +32,22 @@ class LandmarkingMetafeatures(MetafeaturesBase):
         return get_landmarking_metafeatures(attributes, data, X, Y)
 
 def pipeline(X, Y, estimator):
+    start_time_pipeline = time.process_time()
     pipe = Pipeline([('Imputer', preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0)),
                      ('classifiers', estimator)])
     score = np.mean(cross_val_score(pipe, X, Y, cv=10, n_jobs=-1))
-    return score
+    time_pipeline = time.process_time() - start_time_pipeline
+    return score, time_pipeline
 
 def get_landmarking_metafeatures(attributes, data, X, Y):
     metafeatures = {}
     start_time = time.process_time()
-    metafeatures['one_nearest_neighbor'] = pipeline(X, Y, KNeighborsClassifier(n_neighbors = 1)) 
-    metafeatures['linear_discriminant_analysis'] = pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto')) 
-    metafeatures['naive_bayes'] = pipeline(X, Y, GaussianNB()) 
-    metafeatures['decision_node'] = pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='best', 
-                                                                         max_depth=1, random_state=0)) 
-    metafeatures['random_node'] = pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random',
-                                                                       max_depth=1, random_state=0))
+    metafeatures['one_nearest_neighbor'], metafeatures['one_nearest_neighbor_time'] = pipeline(X, Y, KNeighborsClassifier(n_neighbors = 1)) 
+    metafeatures['linear_discriminant_analysis'], metafeatures['linear_discriminant_analysis_time'] = pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto')) 
+    metafeatures['naive_bayes'], metafeatures['naive_bayes_time'] = pipeline(X, Y, GaussianNB()) 
+    metafeatures['decision_node'], metafeatures['decision_node_time']= pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='best', 
+                                                                                                             max_depth=1, random_state=0)) 
+    metafeatures['random_node'], metafeatures['random_node_time'] = pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random',
+                                                                                                          max_depth=1, random_state=0))
     metafeatures['landmark_time'] = time.process_time() - start_time
     return metafeatures
