@@ -24,9 +24,11 @@ def get_symbol_stats(attributes):
     features = {}
     for attribute in attributes:
         if ((not 'int' in attribute[1]) and (not 'float' in attribute[1])):        
-            symbols.append(len(attribute[1]))    
-    features.update(get_min_max_mean_sd(symbols, 'symbols'))    
-    features['symbols_sum'] = np.sum(symbols)
+            symbols.append(len(attribute[1]))
+
+    if len(symbols) > 0:    
+        features.update(get_min_max_mean_sd(symbols, 'symbols'))    
+        features['symbols_sum'] = np.sum(symbols)
     return features
 
 def get_class_stats(Y):

@@ -66,6 +66,8 @@ def get_joint_entropy(data, attributes, labels):
     totalEnt = 0.0
     bins = 9
     length = len(data[0])
+    labels = [str(label) for label in labels]
+
     for j in range(length):
         if (is_numeric(attributes[j])):
             try:
@@ -74,6 +76,7 @@ def get_joint_entropy(data, attributes, labels):
                 col = data[:,j]
         else:
             col = data[:,j]
+
         col = np.core.defchararray.add(col.astype(str), labels)
         ent = get_entropy(col)
         totalEnt = totalEnt + ent
