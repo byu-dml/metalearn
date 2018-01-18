@@ -4,6 +4,7 @@ import numpy as np
 from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
 from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
 from metalearn.metafeatures.information_theoretic_metafeatures import InformationTheoreticMetafeatures
+from metalearn.metafeatures.statistical_metafeatures import get_pca_values
 
 
 def load_arff(infile_path, data_format="dict"):
@@ -42,7 +43,7 @@ def extract_metafeatures(X,Y,attributes):
 
 def compute_metafeatures(dataset_path):
     X, Y, attributes = load_arff(dataset_path, "dict")
-    metadata = extract_metafeatures(X, Y, attributes)
+    metadata = get_pca_values(X, Y, attributes)
     return metadata
 
 if __name__ == "__main__":

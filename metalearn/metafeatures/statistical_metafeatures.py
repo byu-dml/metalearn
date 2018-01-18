@@ -3,6 +3,7 @@ import math
 
 import numpy as np
 from scipy.stats import skew, kurtosis
+from sklearn.decomposition import PCA
 
 from .metafeatures_base import MetafeaturesBase
 from .common_operations import replace_nominal, normalize, is_numeric, get_column_of_class, replace_nominal_column
@@ -113,6 +114,19 @@ def get_cancors(data, attributes):
         return cca.cancorrs
     except:
         return [0., 0.]
+
+def get_pca_values(X, Y, attributes):
+    data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
+    data = replace_nominal(data[:,0:-1], attributes)
+    pca_data = PCA(n_components=3)
+    pca_data.fit_transform(data)
+    pred_pca = pca_data.explained_variance_ratio_
+    pred_eigen = pca_data.explained_variance_
+    pred_det = np.linalg.det(pca_data.get_covariance())
+    values = {"pred_pca_1" : pred_pca[0], "pred_pca_2" : pred_pca[1], 
+        "pred_pca_3" : pred_pca[2], "pred_eigen_1" : pred_eigen[0], "pred_eigen_2" : pred_eigen[1], 
+        "pred_eigen_3" : pred_eigen[2], "pred_det" : pred_det}
+    return values
 
 def get_statistical_metafeatures(attributes, data, data_preprocessed):
     metafeatures = {}
