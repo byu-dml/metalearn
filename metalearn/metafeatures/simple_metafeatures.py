@@ -1,70 +1,148 @@
-import time
 import numpy as np
+from pandas import DataFrame
 
 from .metafeatures_base import MetafeaturesBase
-from .common_operations import get_numeric, get_min_max_mean_sd
-
 
 class SimpleMetafeatures(MetafeaturesBase):
 
     def __init__(self):
-        pass
+        
+        function_dict = {
+            'NumberOfInstances': self._get_dataset_stats,
+            'NumberOfFeatures': self._get_dataset_stats,
+            'NumberOfClasses': self._get_dataset_stats,
+            'NumberOfNumericFeatures': self._get_dataset_stats,
+            'NumberOfNominalFeatures': self._get_dataset_stats,
+            'RatioOfNumericFeatures': self._get_dataset_stats,
+            'RatioOfNominalFeatures': self._get_dataset_stats,
+            'Dimensionality': self._get_dimensionality,
+            'NumberOfMissingValues': self._get_missing_values,
+            'RatioOfMissingValues': self._get_missing_values,
+            'NumberOfInstancesWithMissingValues': self._get_missing_values,
+            'RatioOfInstancesWithMissingValues': self._get_missing_values,
+            'MeanClassProbability': self._get_class_stats,
+            'StdevClassProbability': self._get_class_stats,
+            'MinClassProbability': self._get_class_stats,
+            'MaxClassProbability': self._get_class_stats,
+            'MinorityClassSize': self._get_class_stats,
+            'MajorityClassSize': self._get_class_stats,
+            'MeanCardinalityOfNominalFeatures': self._get_nominal_cardinalities,
+            'StdevCardinalityOfNominalFeatures': self._get_nominal_cardinalities,
+            'MinCardinalityOfNominalFeatures': self._get_nominal_cardinalities,
+            'MaxCardinalityOfNominalFeatures': self._get_nominal_cardinalities,
+            'MeanCardinalityOfNumericFeatures': self._get_numeric_cardinalities,
+            'StdevCardinalityOfNumericFeatures': self._get_numeric_cardinalities,
+            'MinCardinalityOfNumericFeatures': self._get_numeric_cardinalities,
+            'MaxCardinalityOfNumericFeatures': self._get_numeric_cardinalities,
+        }
 
-    def compute(self, X: list, Y: list, attributes: list) -> list:        
-        data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
-        data = data[(data != np.array(None)).all(axis=1)]
-        return get_simple_metafeatures(attributes, data, Y)
+        dependencies_dict = {
+            'NumberOfInstances': [],
+            'NumberOfFeatures': [],
+            'NumberOfClasses': [],          
+            'NumberOfNumericFeatures': [],
+            'NumberOfNominalFeatures': [],
+            'RatioOfNumericFeatures': [],
+            'RatioOfNominalFeatures': [],
+            'Dimensionality': ['NumberOfFeatures','NumberOfInstances'],
+            'NumberOfMissingValues': [],
+            'RatioOfMissingValues': [],
+            'NumberOfInstancesWithMissingValues': [],
+            'RatioOfInstancesWithMissingValues': [],
+            'MeanClassProbability': [],
+            'StdevClassProbability': [],
+            'MinClassProbability': [],
+            'MaxClassProbability': [],
+            'MinorityClassSize': [],
+            'MajorityClassSize': [],
+            'MeanCardinalityOfNominalFeatures': [],
+            'StdevCardinalityOfNominalFeatures': [],
+            'MinCardinalityOfNominalFeatures': [],
+            'MaxCardinalityOfNominalFeatures': [],           
+            'MeanCardinalityOfNumericFeatures': [],
+            'StdevCardinalityOfNumericFeatures': [],
+            'MinCardinalityOfNumericFeatures': [],
+            'MaxCardinalityOfNumericFeatures': [],
+        }
 
-'''
-Helper Methods to eventually be split and/or incorporated in the class
-'''
+        super().__init__(function_dict, dependencies_dict)     
 
-def get_symbol_stats(attributes):
-    symbols = []
-    features = {}
-    for attribute in attributes:
-        if ((not 'int' in attribute[1]) and (not 'float' in attribute[1])):        
-            symbols.append(len(attribute[1]))    
-    features.update(get_min_max_mean_sd(symbols, 'symbols'))    
-    features['symbols_sum'] = np.sum(symbols)
-    return features
+    def _get_dataset_stats(self, X, Y):
+        number_of_instances = X.shape[0]
+        number_of_features = X.shape[1]
+        number_of_classes = Y.unique().shape[0]
+        numeric_features = len(self._get_numeric_features(X))
+        nominal_features = number_of_features - numeric_features
+        ratio_of_numeric_features = float(numeric_features) / float(number_of_features)
+        ratio_of_nominal_features = float(nominal_features) / float(number_of_features)
+        return {
+            'NumberOfInstances': number_of_instances,
+            'NumberOfFeatures': number_of_features,
+            'NumberOfClasses': number_of_classes,
+            'NumberOfNumericFeatures': numeric_features,
+            'NumberOfNominalFeatures': nominal_features,
+            'RatioOfNumericFeatures': ratio_of_numeric_features,
+            'RatioOfNominalFeatures': ratio_of_nominal_features
+        }
 
-def get_class_stats(Y):
-    classes = set(Y)
-    counts = [sum(Y == label) for label in classes]
-    probs = [count/len(Y) for count in counts]
-    
-    features = {}
-    features.update(get_min_max_mean_sd(probs, 'class_prob'))
-    features["default_accuracy"] = max(probs)
-    features["majority_class_size"] = max(counts)
-    features["minority_class_percentage"] = min(probs)
-    features["minority_class_size"] = min(counts)
-    return features
+    def _get_dimensionality(self, X, Y, number_of_features, number_of_instances):
+        dimensionality = float(number_of_features) / float(number_of_instances)
+        return {
+            'Dimensionality': dimensionality
+        }
 
-def get_simple_metafeatures(attributes, data, Y):
-    metafeatures = {}
-    start_time = time.process_time()    
-    
-    #Simple metafeatures about dataset
-    metafeatures['number_of_classes'] = len(set(attributes[-1][1])) 
-    metafeatures['number_of_instances'] = len(Y)       
-    metafeatures['number_of_features'] = len(attributes) - 1   
-    metafeatures['dimensionality'] = metafeatures['number_of_features'] / metafeatures['number_of_instances']     
-    
-    #Simple metafeatures about features
-    metafeatures['number_of_numeric_features'] = get_numeric(data, attributes)  
-    metafeatures['percentage_of_numeric_features'] = metafeatures['number_of_numeric_features'] / metafeatures['number_of_features']
-    metafeatures['number_of_nominal_features'] = metafeatures['number_of_features'] - metafeatures['number_of_numeric_features'] 
-    metafeatures['percentage_of_nominal_features'] = metafeatures['number_of_nominal_features'] / metafeatures['number_of_features']
-    
-    # Missing Values
-    # TODO: Determine how missing values are flagged
-    # metafeatures['number_of_missing values'] = 
-    # metafeatures['number_of_instances_with_missing values'] = 
-    # metafeatures['percentage_of_instances_with_missing values'] = metafeatures['number_of_instances_with_missing values'] / metafeatures['number_of_instances']
-    
-    metafeatures.update(get_symbol_stats(attributes))    
-    metafeatures.update(get_class_stats(Y))    
-    metafeatures['simple_time'] = time.process_time() - start_time
-    return metafeatures
+    def _get_missing_values(self, X, Y):
+        missing_values = X.shape[0] - X.count()
+        number_missing = np.sum(missing_values)
+        ratio_missing = float(number_missing) / float(X.shape[0] * X.shape[1])
+        number_instances_with_missing = X.shape[1] - np.sum(missing_values == 0)
+        ratio_instances_with_missing = float(number_instances_with_missing) / float(X.shape[1])
+        return {
+            'NumberOfMissingValues': number_missing,
+            'RatioOfMissingValues': ratio_missing,
+            'NumberOfInstancesWithMissingValues': number_instances_with_missing,
+            'RatioOfInstancesWithMissingValues': ratio_instances_with_missing
+        }
+
+    def _get_class_stats(self, X, Y):
+        classes = Y.unique()
+        counts = [sum(Y == label) for label in classes]
+        probs = [count/Y.shape[0] for count in counts]
+        
+        values_dict = self._profile_distribution(probs, 'ClassProbability')
+        majority_class_size = max(counts)        
+        minority_class_size = min(counts)
+        return {
+            'MeanClassProbability': values_dict['MeanClassProbability'],
+            'StdevClassProbability': values_dict['StdevClassProbability'],
+            'MinClassProbability': values_dict['MinClassProbability'],
+            'MaxClassProbability': values_dict['MaxClassProbability'],
+            'MinorityClassSize': minority_class_size,
+            'MajorityClassSize': majority_class_size
+        }
+
+    def _get_nominal_cardinalities(self, X, Y):              
+        cardinalities = []
+        nominal_features = self._get_nominal_features(X)
+        for feature in nominal_features:
+            cardinalities.append(np.unique(X[feature].unique()).shape[0])
+        values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNominalFeatures')        
+        return {
+            'MeanCardinalityOfNominalFeatures': values_dict['MeanCardinalityOfNominalFeatures'],
+            'StdevCardinalityOfNominalFeatures': values_dict['StdevCardinalityOfNominalFeatures'],
+            'MinCardinalityOfNominalFeatures': values_dict['MinCardinalityOfNominalFeatures'],
+            'MaxCardinalityOfNominalFeatures': values_dict['MaxCardinalityOfNominalFeatures']
+        }
+
+    def _get_numeric_cardinalities(self, X, Y):        
+        cardinalities = []
+        numeric_features = self._get_numeric_features(X)
+        for feature in numeric_features:
+            cardinalities.append(np.unique(X[feature].unique()).shape[0])
+        values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNumericFeatures')        
+        return {
+            'MeanCardinalityOfNumericFeatures': values_dict['MeanCardinalityOfNumericFeatures'],
+            'StdevCardinalityOfNumericFeatures': values_dict['StdevCardinalityOfNumericFeatures'],
+            'MinCardinalityOfNumericFeatures': values_dict['MinCardinalityOfNumericFeatures'],
+            'MaxCardinalityOfNumericFeatures': values_dict['MaxCardinalityOfNumericFeatures']
+        }

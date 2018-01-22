@@ -1,48 +1,34 @@
-import codecs
-import arff
+from arff2pandas import a2p
 import numpy as np
+import pandas as pd
 from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
 from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
 from metalearn.metafeatures.information_theoretic_metafeatures import InformationTheoreticMetafeatures
 
 
-def load_arff(infile_path, data_format="dict"):
-    file_data = codecs.open(infile_path, "rb", "utf-8")
-    arff_data = arff.load(file_data)
-    data = np.array(arff_data["data"], dtype=object)
-    Y = data[: ,-1]
-    X = data[:,:-1]
-    attributes = []
-    for i in range(0,len(X[0])):
-        attributes.append((arff_data["attributes"][i][0],str(type(data[0][i]))))
-    attributes.append(('class', list(set(Y))))
-    return X, Y, attributes
+def load_arff(infile_path):
+    f = open(infile_path)
+    dataframe = a2p.load(f)
+    column_name = [name for name in list(dataframe.columns) if 'class@' in name][0]
+    dataframe = dataframe.rename(index=str, columns={column_name: 'target'})
+    return dataframe
 
-def extract_metafeatures(X,Y,attributes):
+def extract_metafeatures(dataframe):
     metafeatures = {}
-    features, time = SimpleMetafeatures().timed_compute(X,Y,attributes)
-    print("simple metafeatures compute time: {}".format(time))
-    total_time = time
-    for key, value in features.items():
-        metafeatures[key] = value
-
-    features, time = StatisticalMetafeatures().timed_compute(X,Y,attributes)
-    print("statistical metafeatures compute time: {}".format(time))
-    total_time = total_time + time
-    for key, value in features.items():
-        metafeatures[key] = value
-
-    features, time = InformationTheoreticMetafeatures().timed_compute(X,Y,attributes)
-    print("information theoretic metafeatures compute time: {}".format(time))
-    total_time = total_time + time
-    for key, value in features.items():
-        metafeatures[key] = value
-
+    features_df = SimpleMetafeatures().compute(dataframe)
+    for feature in features_df.columns:
+        metafeatures[feature] = features_df[feature].as_matrix()[0]
+    features_df = StatisticalMetafeatures().compute(dataframe)
+    for feature in features_df.columns:
+        metafeatures[feature] = features_df[feature].as_matrix()[0]
+    features_df = InformationTheoreticMetafeatures().compute(dataframe)
+    for feature in features_df.columns:
+        metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
 
 def compute_metafeatures(dataset_path):
-    X, Y, attributes = load_arff(dataset_path, "dict")
-    metadata = extract_metafeatures(X, Y, attributes)
+    dataframe = load_arff(dataset_path)
+    metadata = extract_metafeatures(dataframe)
     return metadata
 
 if __name__ == "__main__":
