@@ -4,6 +4,7 @@ import pandas as pd
 from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
 from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
 from metalearn.metafeatures.information_theoretic_metafeatures import InformationTheoreticMetafeatures
+from metalearn.metafeatures.landmarking_metafeatures import LandmarkingMetafeatures
 
 
 def load_arff(infile_path):
