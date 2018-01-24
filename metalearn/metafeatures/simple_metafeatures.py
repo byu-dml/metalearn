@@ -125,7 +125,7 @@ class SimpleMetafeatures(MetafeaturesBase):
         cardinalities = []
         nominal_features = self._get_nominal_features(X)
         for feature in nominal_features:
-            cardinalities.append(np.unique(X[feature].unique()).shape[0])
+            cardinalities.append(X[feature].unique().shape[0])
         values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNominalFeatures')        
         return {
             'MeanCardinalityOfNominalFeatures': values_dict['MeanCardinalityOfNominalFeatures'],
@@ -138,7 +138,7 @@ class SimpleMetafeatures(MetafeaturesBase):
         cardinalities = []
         numeric_features = self._get_numeric_features(X)
         for feature in numeric_features:
-            cardinalities.append(np.unique(X[feature].unique()).shape[0])
+            cardinalities.append(X[feature].unique().shape[0])
         values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNumericFeatures')        
         return {
             'MeanCardinalityOfNumericFeatures': values_dict['MeanCardinalityOfNumericFeatures'],
