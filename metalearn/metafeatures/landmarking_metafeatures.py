@@ -1,8 +1,6 @@
 import numpy as np
 from pandas import DataFrame
-from sklearn import preprocessing
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import Imputer
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score
 from sklearn.neighbors import KNeighborsClassifier
@@ -45,11 +43,11 @@ class LandmarkingMetafeatures(MetafeaturesBase):
 
         super().__init__(function_dict, dependencies_dict)
 
-    def compute(self, dataframe: DataFrame, metafeatures: list = None) -> DataFrame:        
+    def compute(self, dataframe: DataFrame, metafeatures: list = None) -> DataFrame:
+        dataframe = dataframe.dropna(axis=1, how="all")
         X = dataframe.drop(self.target_name, axis=1)        
         X = self._preprocess_data(X)        
         Y = dataframe[self.target_name]
-        print(X)
         if metafeatures is None:
             metafeatures = self.list_metafeatures()
         return self._retrieve_metafeatures(metafeatures, X, Y)        
@@ -59,7 +57,7 @@ class LandmarkingMetafeatures(MetafeaturesBase):
         accuracy_scorer = make_scorer(accuracy_score)
         kappa_scorer = make_scorer(cohen_kappa_score)
         scores = cross_validate(pipe, X.as_matrix(), Y.as_matrix(), 
-            cv=10, n_jobs=-1, scoring={'accuracy': accuracy_scorer, 'kappa': kappa_scorer})
+            cv=2, n_jobs=-1, scoring={'accuracy': accuracy_scorer, 'kappa': kappa_scorer})
         err_rate = 1. - np.mean(scores['test_accuracy'])
         kappa = np.mean(scores['test_kappa'])
 

@@ -146,6 +146,7 @@ class StatisticalMetafeatures(MetafeaturesBase):
         skip_cols = set()
         for col_name_i, col_name_j in itertools.combinations(dataframe.columns, 2):
             if col_name_i in skip_cols or col_name_j in skip_cols:
+                correlations.append(0)
                 continue
 
             df_ij = dataframe[[col_name_i, col_name_j]].dropna(axis=0, how="any")
@@ -154,13 +155,15 @@ class StatisticalMetafeatures(MetafeaturesBase):
 
             if np.unique(col_i).shape[0] <= 1:
                 skip_cols.add(col_name_i)
+                correlations.append(0)
                 continue
             if np.unique(col_j).shape[0] <= 1:
                 skip_cols.add(col_name_j)
+                correlations.append(0)
                 continue
 
-            cca = CCA(n_components=1).fit(col_i,col_j)
-            c = cca.score(col_i, col_j)
+            col_i_c, col_j_c = CCA(n_components=1).fit_transform(col_i,col_j)
+            c = np.corrcoef(col_i_c.T, col_j_c.T)[0,1]
             correlations.append(c)
 
         return correlations

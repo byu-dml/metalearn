@@ -1,6 +1,10 @@
-from arff2pandas import a2p
+import json
+
 import numpy as np
 import pandas as pd
+
+from arff2pandas import a2p
+
 from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
 from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
 from metalearn.metafeatures.information_theoretic_metafeatures import InformationTheoreticMetafeatures
@@ -25,9 +29,9 @@ def extract_metafeatures(dataframe):
     features_df = InformationTheoreticMetafeatures().compute(dataframe)
     for feature in features_df.columns:
         metafeatures[feature] = features_df[feature].as_matrix()[0]
-    # features_df = LandmarkingMetafeatures().compute(dataframe)
-    # for feature in features_df.columns:
-    #     metafeatures[feature] = features_df[feature].as_matrix()[0]
+    features_df = LandmarkingMetafeatures().compute(dataframe)
+    for feature in features_df.columns:
+        metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
 
 def main():
@@ -47,7 +51,7 @@ def main():
             dataframe.drop(columns="d3mIndex", inplace=True)
 
         metafeatures = extract_metafeatures(dataframe)
-        # print(metafeatures)
+        print(json.dumps(metafeatures, sort_keys=True, indent=4))
     print("tests finished")
 
 if __name__ == "__main__":

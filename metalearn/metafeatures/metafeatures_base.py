@@ -2,7 +2,6 @@ import time
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder, Imputer
 
 class MetafeaturesBase(object):
 
@@ -92,7 +91,7 @@ class MetafeaturesBase(object):
         -------
         features = dictionary containing the min, max, mean, and standard deviation
         """
-
+        # todo replace with pd.describe
         if len(data) == 0:
             return {
                 'Min' + label: np.nan,
