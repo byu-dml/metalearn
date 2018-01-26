@@ -16,10 +16,10 @@ class InformationTheoreticMetafeatures(MetafeaturesBase):
         
         function_dict = {
             'ClassEntropy': self._get_class_entropy,            
-            'MeanAttributeEntropy': self._get_attribute_entropy,            
-            'MinAttributeEntropy': self._get_attribute_entropy,            
-            'MaxAttributeEntropy': self._get_attribute_entropy,            
-            'Quartile1AttributeEntropy': self._get_attribute_entropy,            
+            'MeanAttributeEntropy': self._get_attribute_entropy,         # drop missing
+            'MinAttributeEntropy': self._get_attribute_entropy,
+            'MaxAttributeEntropy': self._get_attribute_entropy,
+            'Quartile1AttributeEntropy': self._get_attribute_entropy,
             'Quartile2AttributeEntropy': self._get_attribute_entropy,            
             'Quartile3AttributeEntropy': self._get_attribute_entropy,            
             'MeanJointEntropy': self._get_joint_entropy,            
@@ -29,9 +29,9 @@ class InformationTheoreticMetafeatures(MetafeaturesBase):
             'Quartile2JointEntropy': self._get_joint_entropy,            
             'Quartile3JointEntropy': self._get_joint_entropy,               
             'MeanMutualInformation': self._get_mutual_information,            
-            'MinMutualInformation': self._get_mutual_information,            
+            'MinMutualInformation': self._get_mutual_information,            # drop missing
             'MaxMutualInformation': self._get_mutual_information,            
-            'Quartile1MutualInformation': self._get_mutual_information,            
+            'Quartile1MutualInformation': self._get_mutual_information,
             'Quartile2MutualInformation': self._get_mutual_information,            
             'Quartile3MutualInformation': self._get_mutual_information,            
             'EquivalentNumberOfFeatures': self._get_equivalent_number_features,
@@ -102,6 +102,7 @@ class InformationTheoreticMetafeatures(MetafeaturesBase):
         return { 'ClassEntropy': ent }
 
     def _get_joint_entropy(self, X, Y):
+        # drop missing pairwise with target/class
         entropies = []
         labels = Y.as_matrix()
         bins = round(math.sqrt(X.shape[0]))
@@ -109,7 +110,7 @@ class InformationTheoreticMetafeatures(MetafeaturesBase):
         for feature in X.columns:
             col = X[feature].as_matrix()
             if feature in numeric_features:
-                col = pd.cut(col,bins)    
+                col = pd.cut(col,bins)
             col = np.core.defchararray.add(col.astype(str), labels.astype(str))
             ent = self._get_entropy(col)
             entropies.append(ent)
