@@ -29,7 +29,11 @@ class LandmarkingMetafeatures(MetafeaturesBase):
             'kNN1NErrRate': self._get_knn_1,
             'kNN1NKappa': self._get_knn_1,
             'DecisionStumpErrRate': self._get_decision_stump,
-            'DecisionStumpKappa': self._get_decision_stump
+            'DecisionStumpKappa': self._get_decision_stump,
+            'RandomNodeErrRate': self._get_random_node,
+            'RandomNodeKappa': self._get_random_node,
+            'LinearDiscriminantAnalysisErrRate': self._get_lda,
+            'LinearDiscriminantAnalysisKappa': self._get_lda
         }
 
         dependencies_dict = {
@@ -38,7 +42,11 @@ class LandmarkingMetafeatures(MetafeaturesBase):
             'kNN1NErrRate': [],
             'kNN1NKappa': [],
             'DecisionStumpErrRate': [],
-            'DecisionStumpKappa': []
+            'DecisionStumpKappa': [],
+            'RandomNodeErrRate': [],
+            'RandomNodeKappa': [],
+            'LinearDiscriminantAnalysisErrRate': [],
+            'LinearDiscriminantAnalysisKappa': []
         }
 
         super().__init__(function_dict, dependencies_dict)
@@ -87,11 +95,16 @@ class LandmarkingMetafeatures(MetafeaturesBase):
             'DecisionStumpKappa': values_dict['DecisionStumpKappa']
         }
 
-    def get_landmarking_metafeatures(attributes, data, X, Y):
-        metafeatures = {}                
-        metafeatures['linear_discriminant_analysis'], metafeatures['linear_discriminant_analysis_time'] = pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'))         
-        metafeatures['decision_node'], metafeatures['decision_node_time']= pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='best', 
-                                                                                                                 max_depth=1, random_state=0)) 
-        metafeatures['random_node'], metafeatures['random_node_time'] = pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random',
-                                                                                                              max_depth=1, random_state=0))        
-        return metafeatures
+    def _get_random_node(self, X, Y):
+        values_dict = self._run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random', max_depth=1, random_state=0), 'RandomNode')
+        return {
+            'RandomNodeErrRate': values_dict['RandomNodeErrRate'],
+            'RandomNodeKappa': values_dict['RandomNodeKappa']
+        }    
+
+    def _get_lda(self, X, Y):
+        values_dict = self._run_pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'), 'LinearDiscriminantAnalysis')
+        return {
+            'LinearDiscriminantAnalysisErrRate': values_dict['LinearDiscriminantAnalysisErrRate'],
+            'LinearDiscriminantAnalysisKappa': values_dict['LinearDiscriminantAnalysisKappa']
+        }    
