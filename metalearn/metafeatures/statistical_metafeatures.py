@@ -1,12 +1,14 @@
 import time
 import math
+import itertools
 
 import numpy as np
 import pandas as pd
-from scipy.stats import skew, kurtosis
+# from scipy.stats import skew, kurtosis
+from sklearn.cross_decomposition import CCA
 
 from .metafeatures_base import MetafeaturesBase
-from .rcca import CCA
+
 
 class StatisticalMetafeatures(MetafeaturesBase):
 
@@ -84,77 +86,25 @@ class StatisticalMetafeatures(MetafeaturesBase):
 
         super().__init__(function_dict, dependencies_dict)    
 
-    def _get_numeric_means(self, X, Y):            
-        means = []
+    def _get_numeric_means(self, X, Y):
         numeric_features = self._get_numeric_features(X)
-        for feature in numeric_features:
-            means.append(np.mean(X[feature].as_matrix()))
-        values_dict = self._profile_distribution(means, 'MeansOfNumericFeatures')        
-        return {
-            'MeanMeansOfNumericFeatures': values_dict['MeanMeansOfNumericFeatures'],
-            'StdevMeansOfNumericFeatures': values_dict['StdevMeansOfNumericFeatures'],
-            'MinMeansOfNumericFeatures': values_dict['MinMeansOfNumericFeatures'],
-            'MaxMeansOfNumericFeatures': values_dict['MaxMeansOfNumericFeatures'],
-            'Quartile1MeansOfNumericFeatures': values_dict['Quartile1MeansOfNumericFeatures'],
-            'Quartile2MeansOfNumericFeatures': values_dict['Quartile2MeansOfNumericFeatures'],
-            'Quartile3MeansOfNumericFeatures': values_dict['Quartile3MeansOfNumericFeatures']
-        }
+        means = [X[feature].dropna(axis=0, how="any").mean() for feature in numeric_features]
+        return self._profile_distribution(means, 'MeansOfNumericFeatures')
 
-    def _get_numeric_stdev(self, X, Y):            
-        stdevs = []
+    def _get_numeric_stdev(self, X, Y):
         numeric_features = self._get_numeric_features(X)
-        for feature in numeric_features:
-            stdevs.append(np.std(X[feature].as_matrix()))
-        values_dict = self._profile_distribution(stdevs, 'StdDevOfNumericFeatures')
-        return {
-            'MeanStdDevOfNumericFeatures': values_dict['MeanStdDevOfNumericFeatures'],
-            'StdevStdDevOfNumericFeatures': values_dict['StdevStdDevOfNumericFeatures'],
-            'MinStdDevOfNumericFeatures': values_dict['MinStdDevOfNumericFeatures'],
-            'MaxStdDevOfNumericFeatures': values_dict['MaxStdDevOfNumericFeatures'],
-            'Quartile1StdDevOfNumericFeatures': values_dict['Quartile1StdDevOfNumericFeatures'],
-            'Quartile2StdDevOfNumericFeatures': values_dict['Quartile2StdDevOfNumericFeatures'],
-            'Quartile3StdDevOfNumericFeatures': values_dict['Quartile3StdDevOfNumericFeatures']
-        }
+        stdevs = [X[feature].dropna(axis=0, how="any").std() for feature in numeric_features]
+        return self._profile_distribution(stdevs, 'StdDevOfNumericFeatures')
 
-    def _get_numeric_skewness(self, X, Y): 
-        # suppress errors brought about by code in the scipy skew function    
-        np.seterr(divide='ignore', invalid='ignore')            
-        skw = []
+    def _get_numeric_skewness(self, X, Y):
         numeric_features = self._get_numeric_features(X)
-        for feature in numeric_features:
-            v = skew(X[feature].as_matrix())
-            if ((v != None) and (not math.isnan(v))):
-                skw.append(v)                
-        values_dict = self._profile_distribution(skw, 'SkewnessOfNumericFeatures')
-        return {
-            'MeanSkewnessOfNumericFeatures': values_dict['MeanSkewnessOfNumericFeatures'],
-            'StdevSkewnessOfNumericFeatures': values_dict['StdevSkewnessOfNumericFeatures'],
-            'MinSkewnessOfNumericFeatures': values_dict['MinSkewnessOfNumericFeatures'],
-            'MaxSkewnessOfNumericFeatures': values_dict['MaxSkewnessOfNumericFeatures'],
-            'Quartile1SkewnessOfNumericFeatures': values_dict['Quartile1SkewnessOfNumericFeatures'],
-            'Quartile2SkewnessOfNumericFeatures': values_dict['Quartile2SkewnessOfNumericFeatures'],
-            'Quartile3SkewnessOfNumericFeatures': values_dict['Quartile3SkewnessOfNumericFeatures']
-        }            
+        skews = [X[feature].dropna(axis=0, how="any").skew() for feature in numeric_features]
+        return self._profile_distribution(skews, 'SkewnessOfNumericFeatures')
 
     def _get_numeric_kurtosis(self, X, Y):
-        # suppress errors brought about by code in the scipy kurtosis function    
-        np.seterr(divide='ignore', invalid='ignore')            
-        kurt = []
         numeric_features = self._get_numeric_features(X)
-        for feature in numeric_features:
-            v = kurtosis(X[feature].as_matrix(), fisher = False)
-            if ((v != None) and (not math.isnan(v))):
-                kurt.append(v)
-        values_dict = self._profile_distribution(kurt, 'KurtosisOfNumericFeatures')
-        return {
-            'MeanKurtosisOfNumericFeatures': values_dict['MeanKurtosisOfNumericFeatures'],
-            'StdevKurtosisOfNumericFeatures': values_dict['StdevKurtosisOfNumericFeatures'],
-            'MinKurtosisOfNumericFeatures': values_dict['MinKurtosisOfNumericFeatures'],
-            'MaxKurtosisOfNumericFeatures': values_dict['MaxKurtosisOfNumericFeatures'],
-            'Quartile1KurtosisOfNumericFeatures': values_dict['Quartile1KurtosisOfNumericFeatures'],
-            'Quartile2KurtosisOfNumericFeatures': values_dict['Quartile2KurtosisOfNumericFeatures'],
-            'Quartile3KurtosisOfNumericFeatures': values_dict['Quartile3KurtosisOfNumericFeatures']
-        }
+        kurtosis = [X[feature].dropna(axis=0, how="any").kurtosis() for feature in numeric_features]
+        return self._profile_distribution(kurtosis, 'KurtosisOfNumericFeatures')
 
     def _get_correlations(self, X, Y):
         correlations = self._get_canonical_correlations(X)        
@@ -178,27 +128,41 @@ class StatisticalMetafeatures(MetafeaturesBase):
         }
 
     def _get_canonical_correlations(self, dataframe):
+        '''
+        computes the correlation coefficient between each distinct pairing of columns
+        preprocessing note:
+            any rows with missing values (in either paired column) are dropped for that pairing
+            nominal columns are replaced with one-hot encoded columns
+            any columns which have only one distinct value (after dropping missing values) are skipped
+        returns a list of the pairwise canonical correlation coefficients
+        '''
+
+        def preprocess(series):
+            array = series.as_matrix()
+            if "int" not in str(series.dtype) and "float" not in str(series.dtype):
+                array = self._replace_nominal_column(array)
+            return array.astype(float).reshape(series.shape[0], -1)
+
         correlations = []
-        nominal_features = self._get_nominal_features(dataframe)
-        for feature_i in dataframe.columns:
-            col_i = dataframe[feature_i].as_matrix()
-            if feature_i in nominal_features:                
-                col_i = self._replace_nominal_column(col_i)
-            col_i = col_i.reshape(col_i.shape[0], -1)
-            for feature_j in dataframe.columns:                
-                if feature_i != feature_j:                    
-                    col_j = dataframe[feature_j].as_matrix()
-                    if feature_j in nominal_features:
-                        col_j = self._replace_nominal_column(col_j)
-                    col_j = col_j.reshape(col_j.shape[0], -1)
-                    cca = CCA(kernelcca = False, reg = 0., numCC = 1, verbose=False)                    
-                    try:                        
-                        cca.train([col_i.astype(float), col_j.astype(float)])                        
-                        c = cca.cancorrs[0]
-                    except:
-                        continue                
-                    if c:
-                        correlations.append(c)
+        skip_cols = set()
+        for col_name_i, col_name_j in itertools.combinations(dataframe.columns, 2):
+            if col_name_i in skip_cols or col_name_j in skip_cols:
+                continue
+
+            df_ij = dataframe[[col_name_i, col_name_j]].dropna(axis=0, how="any")
+            col_i = preprocess(df_ij[col_name_i])
+            col_j = preprocess(df_ij[col_name_j])
+
+            if np.unique(col_i).shape[0] <= 1:
+                skip_cols.add(col_name_i)
+                continue
+            if np.unique(col_j).shape[0] <= 1:
+                skip_cols.add(col_name_j)
+                continue
+            cca = CCA(n_components=1).fit(col_i,col_j)
+            c = cca.score(col_i, col_j)
+            correlations.append(c)
+
         return correlations
 
     def _get_abs_cor(self, data, attributes):
