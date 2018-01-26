@@ -6,7 +6,7 @@ from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
 from .metafeatures_base import MetafeaturesBase
-from .common_operations import dtype_is_numeric
+
 
 class InformationTheoreticMetafeatures(MetafeaturesBase):
 
@@ -69,7 +69,7 @@ class InformationTheoreticMetafeatures(MetafeaturesBase):
         entropies = []
         for feature in X.columns:
             col = X[feature].dropna(axis=0, how="any")
-            if dtype_is_numeric(col.dtype):
+            if self._dtype_is_numeric(col.dtype):
                 col = pd.cut(col, col.shape[0]**.5)
             entropies.append(self._get_entropy(col))
         values_dict = self._profile_distribution(entropies, 'AttributeEntropy')
@@ -93,7 +93,7 @@ class InformationTheoreticMetafeatures(MetafeaturesBase):
             df_col_Y = pd.concat([X[feature],Y], axis=1).dropna(axis=0, how="any")
             col = df_col_Y[feature]
             targets = df_col_Y[Y.name]
-            if dtype_is_numeric(col.dtype):
+            if self._dtype_is_numeric(col.dtype):
                 col = pd.cut(col, round(col.shape[0]**.5))
             col = col.astype(str) + targets.astype(str)
             entropy = self._get_entropy(col)
@@ -114,7 +114,7 @@ class InformationTheoreticMetafeatures(MetafeaturesBase):
             df_col_Y = pd.concat([X[feature],Y], axis=1).dropna(axis=0, how="any")
             col = df_col_Y[feature]
             targets = df_col_Y[Y.name]
-            if dtype_is_numeric(col.dtype):
+            if self._dtype_is_numeric(col.dtype):
                 col = pd.cut(col, round(col.shape[0]**.5))
             mi_scores.append(mutual_info_score(col, targets))
         values_dict = self._profile_distribution(mi_scores, 'MutualInformation')

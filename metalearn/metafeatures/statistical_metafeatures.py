@@ -158,6 +158,7 @@ class StatisticalMetafeatures(MetafeaturesBase):
             if np.unique(col_j).shape[0] <= 1:
                 skip_cols.add(col_name_j)
                 continue
+
             cca = CCA(n_components=1).fit(col_i,col_j)
             c = cca.score(col_i, col_j)
             correlations.append(c)
@@ -173,13 +174,13 @@ class StatisticalMetafeatures(MetafeaturesBase):
             for label in classes:            
                 for i in range(numAtt):
                     col_i_data_by_class = get_column_of_class(data, i, label)
-                    if not dtype_is_numeric(attributes[i][1]):
+                    if not self._dtype_is_numeric(attributes[i][1]):
                         col_i_data_by_class = replace_nominal_column(col_i_data_by_class)
                     else:
                         col_i_data_by_class = col_i_data_by_class.reshape(col_i_data_by_class.shape[0], 1)
                     for j in range(numAtt):
                         col_j_data_by_class = get_column_of_class(data, j, label)
-                        if not dtype_is_numeric(attributes[j][1]):
+                        if not self._dtype_is_numeric(attributes[j][1]):
                             col_j_data_by_class = replace_nominal_column(col_j_data_by_class)
                         else:
                             col_j_data_by_class = col_j_data_by_class.reshape(col_j_data_by_class.shape[0], 1)

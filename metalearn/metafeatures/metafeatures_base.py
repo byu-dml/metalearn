@@ -145,3 +145,6 @@ class MetafeaturesBase(object):
         labelledCol = LabelEncoder().fit_transform(col)
         labelledCol = labelledCol.reshape(labelledCol.shape[0],1)
         return OneHotEncoder().fit_transform(labelledCol).toarray()
+
+    def _dtype_is_numeric(self, dtype):
+        return "int" in str(dtype) or "float" in str(dtype)
