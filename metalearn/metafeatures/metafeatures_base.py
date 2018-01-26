@@ -128,36 +128,17 @@ class MetafeaturesBase(object):
                 numeric_columns.append(col_name)
         return numeric_columns
 
-    def _get_nominal_features(self, dataframe):
-        """
-        Gets the names of the nominal attributes in the data.
-        """
-        nominal_columns = []
-        for col_name, col_type in zip(dataframe.columns, dataframe.dtypes):
-            if not("int" in str(col_type) or "float" in str(col_type)):
-                nominal_columns.append(col_name)
-        return nominal_columns
-
-    def _replace_nominal_column(self, col):
-        """
-        Returns a One Hot Encoded ndarray of col
-        """
-        labelledCol = LabelEncoder().fit_transform(col)
-        labelledCol = labelledCol.reshape(labelledCol.shape[0],1)
-        return OneHotEncoder().fit_transform(labelledCol).toarray()
-
     def _preprocess_data(self, dataframe):
-        series_array = []        
-        nominal_features = self._get_nominal_features(dataframe)        
+        series_array = []
         for feature in dataframe.columns:
             feature_series = dataframe[feature]
             col = feature_series.as_matrix()
             dropped_nan_series = feature_series.dropna(axis=0,how='any')
             num_nan = col.shape[0] - dropped_nan_series.shape[0]
             col[feature_series.isnull()] = np.random.choice(dropped_nan_series, num_nan)
-            if feature in nominal_features:                                
+            if not self._dtype_is_numeric(feature_series.dtype):
                 feature_series = pd.get_dummies(feature_series)
-            series_array.append(feature_series)        
+            series_array.append(feature_series)
         preprocessed_dataframe = pd.concat(series_array, axis=1, copy=False)
         return preprocessed_dataframe
 

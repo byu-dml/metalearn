@@ -137,10 +137,10 @@ class StatisticalMetafeatures(MetafeaturesBase):
         '''
 
         def preprocess(series):
+            if not self._dtype_is_numeric(series.dtype):
+                series = pd.get_dummies(series)
             array = series.as_matrix()
-            if "int" not in str(series.dtype) and "float" not in str(series.dtype):
-                array = self._replace_nominal_column(array)
-            return array.astype(float).reshape(series.shape[0], -1)
+            return array.reshape(series.shape[0], -1)
 
         correlations = []
         skip_cols = set()
@@ -164,35 +164,3 @@ class StatisticalMetafeatures(MetafeaturesBase):
             correlations.append(c)
 
         return correlations
-
-    def _get_abs_cor(self, data, attributes):
-        numAtt = len(data[0]) - 1
-        if (numAtt > 1):
-            classes = attributes[-1][1]
-            sums = 0.0
-            n = 0.0
-            for label in classes:            
-                for i in range(numAtt):
-                    col_i_data_by_class = get_column_of_class(data, i, label)
-                    if not self._dtype_is_numeric(attributes[i][1]):
-                        col_i_data_by_class = replace_nominal_column(col_i_data_by_class)
-                    else:
-                        col_i_data_by_class = col_i_data_by_class.reshape(col_i_data_by_class.shape[0], 1)
-                    for j in range(numAtt):
-                        col_j_data_by_class = get_column_of_class(data, j, label)
-                        if not self._dtype_is_numeric(attributes[j][1]):
-                            col_j_data_by_class = replace_nominal_column(col_j_data_by_class)
-                        else:
-                            col_j_data_by_class = col_j_data_by_class.reshape(col_j_data_by_class.shape[0], 1)
-                        cca = CCA(kernelcca = False, reg = 0., numCC = 1, verbose=False)
-                        try:                        
-                            cca.train([col_i_data_by_class.astype(float), col_j_data_by_class.astype(float)])                        
-                            c = cca.cancorrs[0]
-                        except:
-                            continue
-                        if (c):
-                            sums += abs(c)
-                            n += 1            
-            if (n != 0):
-                return sums / n
-        return 0.0
