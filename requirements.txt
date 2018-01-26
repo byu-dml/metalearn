@@ -1,5 +1,3 @@
-h5py==2.7.1
-liac-arff==2.1.1
 numpy==1.13.3
 pandas==0.21.1
 python-dateutil==2.6.1
