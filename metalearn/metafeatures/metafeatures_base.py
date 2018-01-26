@@ -2,7 +2,7 @@ import time
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, Imputer
 
 class MetafeaturesBase(object):
 
@@ -145,6 +145,21 @@ class MetafeaturesBase(object):
         labelledCol = LabelEncoder().fit_transform(col)
         labelledCol = labelledCol.reshape(labelledCol.shape[0],1)
         return OneHotEncoder().fit_transform(labelledCol).toarray()
+
+    def _preprocess_data(self, dataframe):
+        series_array = []        
+        nominal_features = self._get_nominal_features(dataframe)        
+        for feature in dataframe.columns:
+            feature_series = dataframe[feature]
+            col = feature_series.as_matrix()
+            dropped_nan_series = feature_series.dropna(axis=0,how='any')
+            num_nan = col.shape[0] - dropped_nan_series.shape[0]
+            col[feature_series.isnull()] = np.random.choice(dropped_nan_series, num_nan)
+            if feature in nominal_features:                                
+                feature_series = pd.get_dummies(feature_series)
+            series_array.append(feature_series)        
+        preprocessed_dataframe = pd.concat(series_array, axis=1, copy=False)
+        return preprocessed_dataframe
 
     def _dtype_is_numeric(self, dtype):
         return "int" in str(dtype) or "float" in str(dtype)
