@@ -25,14 +25,14 @@ def extract_metafeatures(dataframe):
     features_df = InformationTheoreticMetafeatures().compute(dataframe)
     for feature in features_df.columns:
         metafeatures[feature] = features_df[feature].as_matrix()[0]
-    features_df = LandmarkingMetafeatures().compute(dataframe)
-    for feature in features_df.columns:
-        metafeatures[feature] = features_df[feature].as_matrix()[0]
+    # features_df = LandmarkingMetafeatures().compute(dataframe)
+    # for feature in features_df.columns:
+    #     metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
 
 def main():
-    # for filename in ["./data/iris.arff", "./data/38_sick_train_data.csv"]:
-    for filename in ["./data/38_sick_train_data.csv"]:
+    for filename in ["./data/iris.arff", "./data/38_sick_train_data.csv"]:
+    # for filename in ["./data/38_sick_train_data.csv"]:
     # for filename in ["./data/iris.arff"]:
         ext = filename.split(".")[-1]
         if ext == "arff":

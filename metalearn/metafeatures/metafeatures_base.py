@@ -123,10 +123,9 @@ class MetafeaturesBase(object):
         Gets the names of the numeric attributes in the data.
         """
         numeric_columns = []
-        type_dict = dataframe.columns.to_series().groupby(dataframe.dtypes).groups
-        for t in type_dict.keys():
-            if ('int' in str(t) or 'float' in str(t)):
-                numeric_columns.extend(list(type_dict[t]))
+        for col_name, col_type in zip(dataframe.columns, dataframe.dtypes):
+            if "int" in str(col_type) or "float" in str(col_type):
+                numeric_columns.append(col_name)
         return numeric_columns
 
     def _get_nominal_features(self, dataframe):
