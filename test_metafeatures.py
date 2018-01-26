@@ -30,10 +30,25 @@ def extract_metafeatures(dataframe):
         metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
 
-def compute_metafeatures(dataset_path):
-    dataframe = load_arff(dataset_path)
-    metadata = extract_metafeatures(dataframe)
-    return metadata
+def main():
+    # for filename in ["./data/iris.arff", "./data/38_sick_train_data.csv"]:
+    for filename in ["./data/38_sick_train_data.csv"]:
+    # for filename in ["./data/iris.arff"]:
+        ext = filename.split(".")[-1]
+        if ext == "arff":
+            dataframe = load_arff(filename)
+        elif ext == "csv":
+            dataframe = pd.read_csv(filename)
+            dataframe.rename(columns={"Class": "target"}, inplace=True)
+        else:
+            raise ValueError("file type '{}' not implemented")
+
+        if "d3mIndex" in dataframe.columns:
+            dataframe.drop(columns="d3mIndex", inplace=True)
+
+        metafeatures = extract_metafeatures(dataframe)
+        # print(metafeatures)
+    print("tests finished")
 
 if __name__ == "__main__":
-    print(compute_metafeatures("./iris.arff"))
+    main()
