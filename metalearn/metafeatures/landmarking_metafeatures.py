@@ -1,8 +1,5 @@
-import time
 import numpy as np
-
-from .metafeatures_base import MetafeaturesBase
-
+from pandas import DataFrame
 from sklearn import preprocessing
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Imputer
@@ -12,6 +9,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
+
+from .metafeatures_base import MetafeaturesBase
 
 '''
 
@@ -46,9 +45,17 @@ class LandmarkingMetafeatures(MetafeaturesBase):
 
         super().__init__(function_dict, dependencies_dict)
 
+    def compute(self, dataframe: DataFrame, metafeatures: list = None) -> DataFrame:        
+        X = dataframe.drop(self.target_name, axis=1)        
+        X = self._preprocess_data(X)        
+        Y = dataframe[self.target_name]
+        print(X)
+        if metafeatures is None:
+            metafeatures = self.list_metafeatures()
+        return self._retrieve_metafeatures(metafeatures, X, Y)        
+
     def _run_pipeline(self, X, Y, estimator, label):        
-        pipe = Pipeline([('Imputer', preprocessing.Imputer(missing_values='NaN', strategy='mean', axis=0)),
-                         ('classifiers', estimator)])
+        pipe = Pipeline([('classifiers', estimator)])
         accuracy_scorer = make_scorer(accuracy_score)
         kappa_scorer = make_scorer(cohen_kappa_score)
         scores = cross_validate(pipe, X.as_matrix(), Y.as_matrix(), 
