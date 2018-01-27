@@ -52,6 +52,7 @@ def main():
 
         metafeatures = extract_metafeatures(dataframe)
         print(json.dumps(metafeatures, sort_keys=True, indent=4))
+        print(len(metafeatures), "metafeatures")
     print("tests finished")
 
 if __name__ == "__main__":
