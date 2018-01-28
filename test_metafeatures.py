@@ -35,6 +35,10 @@ def extract_metafeatures(dataframe):
     return metafeatures
 
 def main():
+    # todo compare computed metafeatures against a static file of pre-computed metafeatures
+    # this would allow us to see if we have fundamentally changed how we are computing metafeatures
+    # during any development process
+    # we then manually decide which metafeatures are correct and update the static file as needed
     for filename in ["./data/iris.arff", "./data/38_sick_train_data.csv"]:
     # for filename in ["./data/38_sick_train_data.csv"]:
     # for filename in ["./data/iris.arff"]:

@@ -91,29 +91,27 @@ class MetafeaturesBase(object):
         -------
         features = dictionary containing the min, max, mean, and standard deviation
         """
-        # todo replace with pd.describe
         if len(data) == 0:
-            return {
-                'Min' + label: np.nan,
-                'Max' + label: np.nan,
-                'Mean' + label: np.nan,
-                'Quartile1' + label: np.nan,
-                'Quartile2' + label: np.nan,
-                'Quartile3' + label: np.nan,
-                'Stdev' + label: np.nan
+            features = {
+                'Min'+label: np.nan,
+                'Max'+label: np.nan,
+                'Mean'+label: np.nan,
+                'Quartile1'+label: np.nan,
+                'Quartile2'+label: np.nan,
+                'Quartile3'+label: np.nan,
+                'Stdev'+label: np.nan
             }
-
-        features = {}
-
-        features['Min' + label] = np.amin(data)
-        features['Max' + label] = np.amax(data)
-        features['Mean' + label] = np.mean(data)
-        features['Quartile1' + label] = np.percentile(data, 0.25)
-        features['Quartile2' + label] = np.percentile(data, 0.5)
-        features['Quartile3' + label] = np.percentile(data, 0.75)
-
-        ddof = 1 if len(data) > 1 else 0
-        features['Stdev' + label] = np.std(data, axis = 0, ddof = ddof)
+        else:
+            ddof = 1 if len(data) > 1 else 0
+            features = {
+                'Mean'+label: np.mean(data),
+                'Stdev'+label: np.std(data, ddof=ddof),
+                'Max'+label: np.amax(data)
+            }
+            features['Min'+label],\
+                features['Quartile1'+label],\
+                features['Quartile2'+label],\
+                features['Quartile3'+label] = np.percentile(data, [0,.25,.5,.75])
 
         return features
 
@@ -121,11 +119,7 @@ class MetafeaturesBase(object):
         """
         Gets the names of the numeric attributes in the data.
         """
-        numeric_columns = []
-        for col_name, col_type in zip(dataframe.columns, dataframe.dtypes):
-            if "int" in str(col_type) or "float" in str(col_type):
-                numeric_columns.append(col_name)
-        return numeric_columns
+        return [col_name for col_name, col_type in zip(dataframe.columns, dataframe.dtypes) if self._dtype_is_numeric(col_type)]
 
     def _preprocess_data(self, dataframe):
         series_array = []
