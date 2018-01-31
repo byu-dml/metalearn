@@ -35,9 +35,7 @@ def import_openml_dataset(id=1):
 
 def compare_with_openml(dataframe,omlMetafeatures):
     # get metafeatures from dataset using our metafeatures
-    print("\nopenml Metafeatures: \n",omlMetafeatures,"\n\n")
-    metafeatures = extract_metafeatures(dataframe)
-    print("\nOur Metafeatures: \n",metafeatures,"\n\n")
+    ourMetafeatures = extract_metafeatures(dataframe)
 
     mfDict ={}
     mfDict['EquivalentNumberOfAtts'] = 'EquivalentNumberOfFeatures', 1
@@ -85,42 +83,66 @@ def compare_with_openml(dataframe,omlMetafeatures):
     mfDict['PercentageOfSymbolicFeatures'] = 'RatioOfNominalFeatures', 100
 
 
+    # print(json.dumps(ourMetafeatures, sort_keys=True, indent=4))
+    # print(json.dumps(omlMetafeatures, sort_keys=True, indent=4))
+
+
+    omlExclusiveMf = {}
+    ourExclusiveMf = ourMetafeatures
     sharedMf=[]
-    exclusiveMf={}
-    omlExclusiveMf={}
+    sharedMf.append(("OML Metafeature Name", "OML Metafeature Value", "Our Metafeature Name", "Our Metafeature Value", "Similar?"))
     for omlMetafeature in omlMetafeatures :
-        # compare the names that are the same
-        diff = 0
-        if (metafeatures.get(omlMetafeature) != None):
-            omlMetafeatureName = omlMetafeature
-            omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
-            metafeatureName = omlMetafeature
-            metafeatureValue = float(metafeatures.get(omlMetafeature))
-            diff = omlMetafeatureValue - metafeatureValue
+        # compare shared metafeatures
+        if (ourMetafeatures.get(omlMetafeature) != None 
+            or ourMetafeatures.get("" if omlMetafeature not in mfDict else mfDict.get(omlMetafeature)[0]) != None) :
+            omlMetafeatureName= ""
+            omlMetafeatureValue= ""
+            ourMetafeatureName= ""
+            ourMetafeatureValue= ""
+            similarityString = ""
+            diff = 0
+            similarityQualifier = .05
 
-            if (abs(diff) <= .05):
-                equalString = "yes"
+            # compare metafeatures with the same name
+            if (ourMetafeatures.get(omlMetafeature) != None):
+                omlMetafeatureName = omlMetafeature
+                omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
+                ourMetafeatureName = omlMetafeature
+                ourMetafeatureValue = float(ourMetafeatures.get(ourMetafeatureName))
+                diff = omlMetafeatureValue - ourMetafeatureValue
+            # compare equivalent metafeatures with different names
+            elif (ourMetafeatures.get(mfDict.get(omlMetafeature)[0]) != None):
+                ourMetafeatureName, multiplier = mfDict.get(omlMetafeature)
+                ourMetafeatureValue = float(ourMetafeatures.get(ourMetafeatureName))
+                omlMetafeatureName = omlMetafeature
+                omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
+                diff = omlMetafeatureValue - (ourMetafeatureValue * multiplier)
+
+            # determine if the metafeatures are similar
+            if (abs(diff) <= similarityQualifier):
+                similarityString = "yes"
             else:
-                equalString = "no"
-            print(omlMetafeatureName + "\t" + str(omlMetafeatureValue) + "\t" + metafeatureName + "\t" + str(metafeatureValue) + "\t" + equalString)
+                similarityString = "no"
 
-        elif (mfDict.get(omlMetafeature) != None):
-            metafeatureName, multiplier = mfDict.get(omlMetafeature)
-            metafeatureValue = float(metafeatures.get(metafeatureName))
-            omlMetafeatureName = omlMetafeature
-            omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
-            diff = omlMetafeatureValue - (metafeatureValue * multiplier)
-
-            if (abs(diff) <= .05):
-                equalString = "yes"
-            else:
-                equalString = "no"
-            print(omlMetafeatureName + "\t" + str(omlMetafeatureValue) + "\t" + metafeatureName + "\t" + str(metafeatureValue) + "\t" + equalString)
+            sharedMf.append((omlMetafeatureName, str(omlMetafeatureValue), ourMetafeatureName, str(ourMetafeatureValue), similarityString))
+            del ourExclusiveMf[ourMetafeatureName]
+        # Grab metafeatures computed by OpenML and not us
+        else :
+            omlExclusiveMf[omlMetafeature] = omlMetafeatures[omlMetafeature]
 
 
+    # print shared metafeature comparison
+    print("Shared metafeature comparison")
+    for x in sharedMf :
+        print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(x[0],x[1],x[2],x[3],x[4]).rjust(3))
 
-        # compare the names that are different
-        # if (mfDict.get(omlMetafeature) != None) :
+    # print metafeatures calculated only by OpenML
+    print("\nMetafeatures calculated by OpenML exclusively:")
+    print(json.dumps(omlExclusiveMf, sort_keys=True, indent=4))
+
+    # print metafeatures calculate by our primitive exclusively
+    print("\nMetafeatures calculated by our primitive exclusively:")
+    print(json.dumps(ourExclusiveMf, sort_keys=True, indent=4))
 
         
         
