@@ -14,7 +14,7 @@ from metalearn.metafeatures.information_theoretic_metafeatures import Informatio
 from metalearn.metafeatures.landmarking_metafeatures import LandmarkingMetafeatures
 
 
-def import_openml_dataset(id=1):
+def import_openml_dataset(id=4):
     # get a dataset from openml using a dataset id
     dataset = openml.datasets.get_dataset(id)
     # get the metafeatures from the dataset
@@ -101,7 +101,7 @@ def compare_with_openml(dataframe,omlMetafeatures):
             ourMetafeatureValue= ""
             similarityString = ""
             diff = 0
-            similarityQualifier = .05
+            similarityQualifier = 0.05
 
             # compare metafeatures with the same name
             if (ourMetafeatures.get(omlMetafeature) != None):
@@ -109,6 +109,7 @@ def compare_with_openml(dataframe,omlMetafeatures):
                 omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
                 ourMetafeatureName = omlMetafeature
                 ourMetafeatureValue = float(ourMetafeatures.get(ourMetafeatureName))
+                # similarityQualifier = omlMetafeatureValue * .05
                 diff = omlMetafeatureValue - ourMetafeatureValue
             # compare equivalent metafeatures with different names
             elif (ourMetafeatures.get(mfDict.get(omlMetafeature)[0]) != None):
@@ -116,6 +117,7 @@ def compare_with_openml(dataframe,omlMetafeatures):
                 ourMetafeatureValue = float(ourMetafeatures.get(ourMetafeatureName))
                 omlMetafeatureName = omlMetafeature
                 omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
+                # similarityQualifier = omlMetafeatureValue * .05
                 diff = omlMetafeatureValue - (ourMetafeatureValue * multiplier)
 
             # determine if the metafeatures are similar
@@ -133,8 +135,14 @@ def compare_with_openml(dataframe,omlMetafeatures):
 
     # print shared metafeature comparison
     print("Shared metafeature comparison")
+    print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(sharedMf[0][0],sharedMf[0][1],sharedMf[0][2],sharedMf[0][3],sharedMf[0][4]).rjust(3))
     for x in sharedMf :
-        print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(x[0],x[1],x[2],x[3],x[4]).rjust(3))
+        if (x[4] == "yes") :
+            print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(x[0],x[1],x[2],x[3],x[4]).rjust(3))
+
+    for x in sharedMf :
+        if (x[4] == "no") :
+            print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(x[0],x[1],x[2],x[3],x[4]).rjust(3))
 
     # print metafeatures calculated only by OpenML
     print("\nMetafeatures calculated by OpenML exclusively:")
