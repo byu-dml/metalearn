@@ -13,8 +13,8 @@ from .metafeatures_base import MetafeaturesBase
 '''
 
 Compute Landmarking meta-features according to Reif et al. 2012.
-The accuracy values of the following simple learners are used: 
-Naive Bayes, Linear Discriminant Analysis, One-Nearest Neighbor, 
+The accuracy values of the following simple learners are used:
+Naive Bayes, Linear Discriminant Analysis, One-Nearest Neighbor,
 Decision Node, Random Node.
 
 '''
@@ -22,7 +22,7 @@ Decision Node, Random Node.
 class LandmarkingMetafeatures(MetafeaturesBase):
 
     def __init__(self):
-        
+
         function_dict = {
             'NaiveBayesErrRate': self._get_naive_bayes,
             'NaiveBayesKappa': self._get_naive_bayes,
@@ -53,18 +53,18 @@ class LandmarkingMetafeatures(MetafeaturesBase):
 
     def compute(self, dataframe: DataFrame, metafeatures: list = None) -> DataFrame:
         dataframe = dataframe.dropna(axis=1, how="all")
-        X = dataframe.drop(self.target_name, axis=1)        
-        X = self._preprocess_data(X)        
+        X = dataframe.drop(self.target_name, axis=1)
+        X = self._preprocess_data(X)
         Y = dataframe[self.target_name]
         if metafeatures is None:
             metafeatures = self.list_metafeatures()
-        return self._retrieve_metafeatures(metafeatures, X, Y)        
+        return self._retrieve_metafeatures(metafeatures, X, Y)
 
-    def _run_pipeline(self, X, Y, estimator, label):        
+    def _run_pipeline(self, X, Y, estimator, label):
         pipe = Pipeline([('classifiers', estimator)])
         accuracy_scorer = make_scorer(accuracy_score)
         kappa_scorer = make_scorer(cohen_kappa_score)
-        scores = cross_validate(pipe, X.as_matrix(), Y.as_matrix(), 
+        scores = cross_validate(pipe, X.as_matrix(), Y.as_matrix(),
             cv=2, n_jobs=-1, scoring={'accuracy': accuracy_scorer, 'kappa': kappa_scorer})
         err_rate = 1. - np.mean(scores['test_accuracy'])
         kappa = np.mean(scores['test_kappa'])
@@ -100,11 +100,11 @@ class LandmarkingMetafeatures(MetafeaturesBase):
         return {
             'RandomNodeErrRate': values_dict['RandomNodeErrRate'],
             'RandomNodeKappa': values_dict['RandomNodeKappa']
-        }    
+        }
 
     def _get_lda(self, X, Y):
         values_dict = self._run_pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'), 'LinearDiscriminantAnalysis')
         return {
             'LinearDiscriminantAnalysisErrRate': values_dict['LinearDiscriminantAnalysisErrRate'],
             'LinearDiscriminantAnalysisKappa': values_dict['LinearDiscriminantAnalysisKappa']
-        }    
+        }
