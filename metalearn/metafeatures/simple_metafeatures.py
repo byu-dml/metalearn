@@ -6,7 +6,7 @@ from .metafeatures_base import MetafeaturesBase
 class SimpleMetafeatures(MetafeaturesBase):
 
     def __init__(self):
-        
+
         function_dict = {
             'NumberOfInstances': self._get_dataset_stats,
             'NumberOfFeatures': self._get_dataset_stats,
