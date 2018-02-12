@@ -12,7 +12,7 @@ from .metafeatures_base import MetafeaturesBase
 class StatisticalMetafeatures(MetafeaturesBase):
 
     def __init__(self):
-        
+
         function_dict = {
             'MeanMeansOfNumericFeatures': self._get_numeric_means,
             'StdevMeansOfNumericFeatures': self._get_numeric_means,
@@ -80,10 +80,10 @@ class StatisticalMetafeatures(MetafeaturesBase):
             'MeanCanonicalCorrelation': [],
             'StdevCanonicalCorrelation': [],
             'MeanCanonicalCorrelationOfFeaturesSplitByClass': [],
-            'StdevCanonicalCorrelationOfFeaturesSplitByClass': []          
+            'StdevCanonicalCorrelationOfFeaturesSplitByClass': []
         }
 
-        super().__init__(function_dict, dependencies_dict)    
+        super().__init__(function_dict, dependencies_dict)
 
     def _get_numeric_means(self, X, Y):
         numeric_features = self._get_numeric_features(X)
@@ -106,7 +106,7 @@ class StatisticalMetafeatures(MetafeaturesBase):
         return self._profile_distribution(kurtosis, 'KurtosisOfNumericFeatures')
 
     def _get_correlations(self, X, Y):
-        correlations = self._get_canonical_correlations(X)        
+        correlations = self._get_canonical_correlations(X)
         values_dict = self._profile_distribution(correlations, 'CanonicalCorrelation')
         return {
             'MeanCanonicalCorrelation': values_dict['MeanCanonicalCorrelation'],
@@ -117,8 +117,8 @@ class StatisticalMetafeatures(MetafeaturesBase):
         correlations = []
         XY = pd.concat([X,Y], axis=1)
         XY_grouped_by_class = XY.groupby(self.target_name)
-        for label in Y.unique():                        
-            group = XY_grouped_by_class.get_group(label).drop(self.target_name, axis=1)            
+        for label in Y.unique():
+            group = XY_grouped_by_class.get_group(label).drop(self.target_name, axis=1)
             correlations.extend(self._get_canonical_correlations(group))
         values_dict = self._profile_distribution(correlations, 'CanonicalCorrelationOfFeaturesSplitByClass')
         return {

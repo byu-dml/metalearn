@@ -6,7 +6,7 @@ from .metafeatures_base import MetafeaturesBase
 class SimpleMetafeatures(MetafeaturesBase):
 
     def __init__(self):
-        
+
         function_dict = {
             'NumberOfInstances': self._get_dataset_stats,
             'NumberOfFeatures': self._get_dataset_stats,
@@ -39,7 +39,7 @@ class SimpleMetafeatures(MetafeaturesBase):
         dependencies_dict = {
             'NumberOfInstances': [],
             'NumberOfFeatures': [],
-            'NumberOfClasses': [],          
+            'NumberOfClasses': [],
             'NumberOfNumericFeatures': [],
             'NumberOfNominalFeatures': [],
             'RatioOfNumericFeatures': [],
@@ -58,14 +58,14 @@ class SimpleMetafeatures(MetafeaturesBase):
             'MeanCardinalityOfNominalFeatures': [],
             'StdevCardinalityOfNominalFeatures': [],
             'MinCardinalityOfNominalFeatures': [],
-            'MaxCardinalityOfNominalFeatures': [],           
+            'MaxCardinalityOfNominalFeatures': [],
             'MeanCardinalityOfNumericFeatures': [],
             'StdevCardinalityOfNumericFeatures': [],
             'MinCardinalityOfNumericFeatures': [],
             'MaxCardinalityOfNumericFeatures': [],
         }
 
-        super().__init__(function_dict, dependencies_dict)     
+        super().__init__(function_dict, dependencies_dict)
 
     def _get_dataset_stats(self, X, Y):
         number_of_instances = X.shape[0]
@@ -108,9 +108,9 @@ class SimpleMetafeatures(MetafeaturesBase):
         classes = Y.unique()
         counts = [sum(Y == label) for label in classes]
         probs = [count/Y.shape[0] for count in counts]
-        
+
         values_dict = self._profile_distribution(probs, 'ClassProbability')
-        majority_class_size = max(counts)        
+        majority_class_size = max(counts)
         minority_class_size = min(counts)
         return {
             'MeanClassProbability': values_dict['MeanClassProbability'],
@@ -121,9 +121,9 @@ class SimpleMetafeatures(MetafeaturesBase):
             'MajorityClassSize': majority_class_size
         }
 
-    def _get_nominal_cardinalities(self, X, Y):              
+    def _get_nominal_cardinalities(self, X, Y):
         cardinalities = [X[feature].unique().shape[0] for feature in X.columns if not self._dtype_is_numeric(X[feature].dtype)]
-        values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNominalFeatures')        
+        values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNominalFeatures')
         return {
             'MeanCardinalityOfNominalFeatures': values_dict['MeanCardinalityOfNominalFeatures'],
             'StdevCardinalityOfNominalFeatures': values_dict['StdevCardinalityOfNominalFeatures'],
@@ -131,9 +131,9 @@ class SimpleMetafeatures(MetafeaturesBase):
             'MaxCardinalityOfNominalFeatures': values_dict['MaxCardinalityOfNominalFeatures']
         }
 
-    def _get_numeric_cardinalities(self, X, Y):        
+    def _get_numeric_cardinalities(self, X, Y):
         cardinalities = [X[feature].unique().shape[0] for feature in X.columns if self._dtype_is_numeric(X[feature].dtype)]
-        values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNumericFeatures')        
+        values_dict = self._profile_distribution(cardinalities, 'CardinalityOfNumericFeatures')
         return {
             'MeanCardinalityOfNumericFeatures': values_dict['MeanCardinalityOfNumericFeatures'],
             'StdevCardinalityOfNumericFeatures': values_dict['StdevCardinalityOfNumericFeatures'],
