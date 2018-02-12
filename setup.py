@@ -1,14 +1,20 @@
 from setuptools import setup, find_packages
+
+__version__ = "0.3.0"
+
 setup(
-  name = "metalearn",
-  packages = find_packages(),
-  version = "0.2.0",
-  description = "A package to aid in metalearning",
-  author = "Casey Davis, Roland Laboulaye, Brandon Schoenfeld",
-  author_email = "caseykdavis@gmail.com, rlaboulaye@gmail.com, bjschoenfeld@gmail.com",
-  url = "https://github.com/byu-dml/metalearn",
-  download_url = "https://github.com/byu-dml/metalearn/archive/0.2.0.tar.gz",
-  keywords = ["metalearning", "machine learning", "metalearn"],
-  install_requires = ["numpy", "sklearn", "pandas", "scipy", "h5py"],
-  classifiers = [],
+    name = "metalearn",
+    packages = find_packages(),
+    version = __version__,
+    description = "A package to aid in metalearning",
+    author = "Roland Laboulaye, Brandon Schoenfeld, Casey Davis",
+    author_email = "rlaboulaye@gmail.com, bjschoenfeld@gmail.com, caseykdavis@gmail.com",
+    url = "https://github.com/byu-dml/metalearn",
+    download_url = "https://github.com/byu-dml/metalearn/archive/{}.tar.gz".format(__version__),
+    keywords = ["metalearning", "machine learning", "metalearn"],
+    install_requires = ["pandas", "sklearn", "numpy", "scipy"],
+    classifiers = [
+        'Programming Language :: Python :: 3.6'
+    ],
+    python_requires='~=3.6'
 )
