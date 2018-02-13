@@ -1,12 +1,10 @@
 import json
 
 import numpy as np
-
-import openml
 import pandas as pd
-
 from arff2pandas import a2p
 
+import openml
 
 from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
 from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
