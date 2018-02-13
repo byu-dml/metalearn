@@ -152,7 +152,6 @@ def main():
     print("tests finished")
 
 if __name__ == "__main__":
-    # print(compute_metafeatures("./iris.arff"))
     dataframe, omlMetafeatures = import_openml_dataset()
     compare_with_openml(dataframe,omlMetafeatures)
     main()
