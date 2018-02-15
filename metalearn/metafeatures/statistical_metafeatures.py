@@ -8,6 +8,8 @@ from sklearn.cross_decomposition import CCA
 
 from .metafeatures_base import MetafeaturesBase
 
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning) # suppress sklearn warnings
 
 class StatisticalMetafeatures(MetafeaturesBase):
 
@@ -139,8 +141,8 @@ class StatisticalMetafeatures(MetafeaturesBase):
         def preprocess(series):
             if not self._dtype_is_numeric(series.dtype):
                 series = pd.get_dummies(series)
-            array = series.as_matrix()
-            return array.reshape(series.shape[0], -1)
+            array = series.as_matrix().reshape(series.shape[0], -1)
+            return array
 
         correlations = []
         skip_cols = set()
@@ -150,8 +152,8 @@ class StatisticalMetafeatures(MetafeaturesBase):
                 continue
 
             df_ij = dataframe[[col_name_i, col_name_j]].dropna(axis=0, how="any")
-            col_i = preprocess(df_ij[col_name_i])
-            col_j = preprocess(df_ij[col_name_j])
+            col_i = df_ij[col_name_i]
+            col_j = df_ij[col_name_j]
 
             if np.unique(col_i).shape[0] <= 1:
                 skip_cols.add(col_name_i)
@@ -162,8 +164,15 @@ class StatisticalMetafeatures(MetafeaturesBase):
                 correlations.append(0)
                 continue
 
+            col_i = preprocess(col_i)
+            col_j = preprocess(col_j)
+
             col_i_c, col_j_c = CCA(n_components=1).fit_transform(col_i,col_j)
-            c = np.corrcoef(col_i_c.T, col_j_c.T)[0,1]
+
+            if np.unique(col_i_c).shape[0] <= 1 or np.unique(col_j_c).shape[0] <= 1:
+                c = 0
+            else:
+                c = np.corrcoef(col_i_c.T, col_j_c.T)[0,1]
             correlations.append(c)
 
         return correlations

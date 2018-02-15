@@ -10,6 +10,10 @@ from sklearn.tree import DecisionTreeClassifier
 
 from .metafeatures_base import MetafeaturesBase
 
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
+
 '''
 
 Compute Landmarking meta-features according to Reif et al. 2012.

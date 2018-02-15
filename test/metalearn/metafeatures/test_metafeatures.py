@@ -125,33 +125,56 @@ def extract_metafeatures(dataframe):
         metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
 
+def sort_by_compute_time(metafeatures):
+    metafeature_times = {}
+    for key in metafeatures:
+        if "_Time" in key:
+            metafeature_times[key] = metafeatures[key]
+    return dict(sorted(metafeature_times.items(), key=lambda x: x[1], reverse=True))
+
 def main():
     # todo compare computed metafeatures against a static file of pre-computed metafeatures
     # this would allow us to see if we have fundamentally changed how we are computing metafeatures
     # during any development process
     # we then manually decide which metafeatures are correct and update the static file as needed
-    for filename in ["./data/iris.arff", "./data/38_sick_train_data.csv"]:
-    # for filename in ["./data/38_sick_train_data.csv"]:
-    # for filename in ["./data/iris.arff"]:
+
+    for filename, target_name in [
+        ("./data/LL0_1_anneal.csv", "class"),
+        ("./data/LL0_12_mfeat_factors.csv", "class"),
+        ("./data/LL0_337_spectf.csv", "OVERALL_DIAGNOSIS"),
+        ("./data/iris.arff", "class"),
+        ("./data/38_sick_train_data.csv","Class"),
+        ("./data/LL0_40509_Australian.csv", "Y"),
+        ("./data/LL0_4153_Smartphone_Based_Recognition_of_Human_Activities.csv", "Activity"),
+        ("./data/LL0_1008_analcatdata_reviewer.csv", "binaryClass"),
+        ("./data/LL0_42_soybean.csv", "class"),
+        ("./data/LL0_155_pokerhand.csv", "class"),
+        ("./data/LL0_475_analcatdata_germangss.csv", "Political_system"),
+    ]:
+
+        print(filename)
         ext = filename.split(".")[-1]
         if ext == "arff":
             dataframe = load_arff(filename)
         elif ext == "csv":
             dataframe = pd.read_csv(filename)
-            dataframe.rename(columns={"Class": "target"}, inplace=True)
+            dataframe.rename(columns={target_name: "target"}, inplace=True)
         else:
-            raise ValueError("file type '{}' not implemented")
+            raise ValueError("load file type '{}' not implemented")
 
         if "d3mIndex" in dataframe.columns:
             dataframe.drop(columns="d3mIndex", inplace=True)
 
+        if dataframe.shape[0] > 100000 or dataframe.shape[1] > 50:
+            print("skipped")
+            continue
         metafeatures = extract_metafeatures(dataframe)
-
-        print(json.dumps(metafeatures, sort_keys=True, indent=4))
-        print(len(metafeatures), "metafeatures")
-    print("tests finished")
+        # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
+        # print(json.dumps(metafeatures, sort_keys=True, indent=4))
+        # print(len(metafeatures), "metafeatures")
+    # print("tests finished")
 
 if __name__ == "__main__":
-    dataframe, omlMetafeatures = import_openml_dataset()
-    compare_with_openml(dataframe,omlMetafeatures)
+    # dataframe, omlMetafeatures = import_openml_dataset()
+    # compare_with_openml(dataframe,omlMetafeatures)
     main()
