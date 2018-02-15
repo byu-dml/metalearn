@@ -1,0 +1,50 @@
+[
+    {
+        "path": "LL0_1_anneal.csv",
+        "target_name": "class"
+    },
+    {
+        "path": "LL0_12_mfeat_factors.csv",
+        "target_name": "class"
+    },
+    {
+        "path": "LL0_337_spectf.csv",
+        "target_name": "OVERALL_DIAGNOSIS"
+    },
+    {
+        "path": "iris.arff",
+        "target_name": "class"
+    },
+    {
+        "path": "38_sick_train_data.csv",
+        "target_name": "Class"
+    },
+    {
+        "path": "LL0_40509_Australian.csv",
+        "target_name": "Y"
+    },
+    {
+        "path": "LL0_4153_Smartphone_Based_Recognition_of_Human_Activities.csv",
+        "target_name": "Activity"
+    },
+    {
+        "path": "LL0_1008_analcatdata_reviewer.csv",
+        "target_name": "binaryClass"
+    },
+    {
+        "path": "LL0_42_soybean.csv",
+        "target_name": "class"
+    },
+    {
+        "path": "LL0_155_pokerhand.csv",
+        "target_name": "class"
+    },
+    {
+        "path": "LL0_475_analcatdata_germangss.csv",
+        "target_name": "Political_system"
+    },
+    {
+        "path": "LL0_1217_click_prediction_small.csv",
+        "target_name": "click"
+    }
+]

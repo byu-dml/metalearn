@@ -137,21 +137,10 @@ def main():
     # this would allow us to see if we have fundamentally changed how we are computing metafeatures
     # during any development process
     # we then manually decide which metafeatures are correct and update the static file as needed
-
-    for filename, target_name in [
-        ("./data/LL0_1_anneal.csv", "class"),
-        ("./data/LL0_12_mfeat_factors.csv", "class"),
-        ("./data/LL0_337_spectf.csv", "OVERALL_DIAGNOSIS"),
-        ("./data/iris.arff", "class"),
-        ("./data/38_sick_train_data.csv","Class"),
-        ("./data/LL0_40509_Australian.csv", "Y"),
-        ("./data/LL0_4153_Smartphone_Based_Recognition_of_Human_Activities.csv", "Activity"),
-        ("./data/LL0_1008_analcatdata_reviewer.csv", "binaryClass"),
-        ("./data/LL0_42_soybean.csv", "class"),
-        ("./data/LL0_155_pokerhand.csv", "class"),
-        ("./data/LL0_475_analcatdata_germangss.csv", "Political_system"),
-    ]:
-
+    datasets = json.load(open("./data/test_datasets.json", "r"))
+    for obj in datasets:
+        filename = "./data/"+obj["path"]
+        target_name = obj["target_name"]
         print(filename)
         ext = filename.split(".")[-1]
         if ext == "arff":
@@ -165,7 +154,7 @@ def main():
         if "d3mIndex" in dataframe.columns:
             dataframe.drop(columns="d3mIndex", inplace=True)
 
-        if dataframe.shape[0] > 100000 or dataframe.shape[1] > 50:
+        if dataframe.shape[0] > 150000 or dataframe.shape[1] > 50:
             print("skipped")
             continue
         metafeatures = extract_metafeatures(dataframe)

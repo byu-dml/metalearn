@@ -10,6 +10,7 @@ from .metafeatures_base import MetafeaturesBase
 
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning) # suppress sklearn warnings
+warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
 
 class StatisticalMetafeatures(MetafeaturesBase):
 
