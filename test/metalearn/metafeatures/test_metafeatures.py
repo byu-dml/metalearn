@@ -137,7 +137,7 @@ def main():
     # this would allow us to see if we have fundamentally changed how we are computing metafeatures
     # during any development process
     # we then manually decide which metafeatures are correct and update the static file as needed
-    datasets = json.load(open("./data/test_datasets.json", "r"))
+    datasets = json.load(open("./data/all_datasets.json", "r"))
     for obj in datasets:
         filename = "./data/"+obj["path"]
         target_name = obj["target_name"]

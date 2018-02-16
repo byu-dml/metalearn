@@ -1,5 +1,9 @@
 [
     {
+        "path": "LL0_329_hayes_roth.csv",
+        "target_name": "class"
+    },
+    {
         "path": "LL0_1_anneal.csv",
         "target_name": "class"
     },
