@@ -113,36 +113,45 @@ def extract_metafeatures(dataframe):
         metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
 
+def sort_by_compute_time(metafeatures):
+    metafeature_times = {}
+    for key in metafeatures:
+        if "_Time" in key:
+            metafeature_times[key] = metafeatures[key]
+    return dict(sorted(metafeature_times.items(), key=lambda x: x[1], reverse=True))
+
 def main():
     # todo compare computed metafeatures against a static file of pre-computed metafeatures
     # this would allow us to see if we have fundamentally changed how we are computing metafeatures
     # during any development process
     # we then manually decide which metafeatures are correct and update the static file as needed
-    # for filename in ["./data/iris.arff", "./data/38_sick_train_data.csv"]:
-    # for filename in ["./data/38_sick_train_data.csv"]:
-    # for filename in ["./data/iris.arff"]:
-    for filename in ["./data/LL0_1569_poker_hand.csv"]:
-    # for filename in ["./data/LL0_1122_ap_breast_prostate.csv"]:
+    datasets = json.load(open("./data/all_datasets.json", "r"))
+    for obj in datasets:
+        filename = "./data/"+obj["path"]
+        target_name = obj["target_name"]
+        print(filename)
         ext = filename.split(".")[-1]
         if ext == "arff":
             dataframe = load_arff(filename)
         elif ext == "csv":
             dataframe = pd.read_csv(filename)
-            dataframe.rename(columns={"Class": "target"}, inplace=True)
+            dataframe.rename(columns={target_name: "target"}, inplace=True)
         else:
-            raise ValueError("file type '{}' not implemented")
+            raise ValueError("load file type '{}' not implemented")
 
         if "d3mIndex" in dataframe.columns:
             dataframe.drop(columns="d3mIndex", inplace=True)
 
+        if dataframe.shape[0] > 150000 or dataframe.shape[1] > 50:
+            print("skipped")
+            continue
         metafeatures = extract_metafeatures(dataframe)
-
-        print(json.dumps(metafeatures, sort_keys=True, indent=4))
-        print(len(metafeatures), "metafeatures")
-    print("tests finished")
+        # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
+        # print(json.dumps(metafeatures, sort_keys=True, indent=4))
+        # print(len(metafeatures), "metafeatures")
+    # print("tests finished")
 
 if __name__ == "__main__":
-    # print(compute_metafeatures("./iris.arff"))
-    dataframe, omlMetafeatures = import_openml_dataset()
-    compare_with_openml(dataframe,omlMetafeatures)
+    # dataframe, omlMetafeatures = import_openml_dataset()
+    # compare_with_openml(dataframe,omlMetafeatures)
     main()
