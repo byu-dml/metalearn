@@ -134,7 +134,7 @@ class Metafeatures(object):
         else:
             return (X,)
 
-    def _get_sample_of_rows(self, X, Y, sample_rows, max_rows=100000):
+    def _get_sample_of_rows(self, X, Y, sample_rows, max_rows=150000):
         if sample_rows == True and X.shape[0] > max_rows:
             row_indices = np.random.permutation(X.shape[0])[:max_rows]
             return (X.iloc[row_indices], Y.iloc[row_indices])

@@ -55,7 +55,7 @@ def get_canonical_correlations(dataframe):
     '''
 
     def preprocess(series):
-        if not self._dtype_is_numeric(series.dtype):
+        if not dtype_is_numeric(series.dtype):
             series = pd.get_dummies(series)
         array = series.as_matrix().reshape(series.shape[0], -1)
         return array
