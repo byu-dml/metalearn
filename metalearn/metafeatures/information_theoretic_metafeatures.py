@@ -1,128 +1,40 @@
-import time
-import math
-from collections import Counter
-
-import numpy as np
 import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
-from .metafeatures_base import MetafeaturesBase
 from .common_operations import *
 
-class InformationTheoreticMetafeatures(MetafeaturesBase):
-
-    def __init__(self):
-        pass
-
-    def compute(self, X: list, Y: list, attributes: list) -> list:  
-        data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
-        data = data[(data != np.array(None)).all(axis=1)] 
-        return get_information_theoretic_metafeatures(attributes, data, X, Y)
-
-'''
-Helper Methods to eventually be split and/or incorporated in the class
-'''
-
 def get_entropy(col):
-    return entropy(list(Counter(col).values()))
+    return entropy(col.value_counts())
 
-def get_entropy_average(data, attributes, normalized = False):
-    totalEnt = 0.0
-    bins = 9
-    length = len(data[0])
-    for j in range(length):
-        if (is_numeric(attributes[j])):
-            try:
-                col = pd.cut(data[:,j],bins)
-            except:
-                col = data[:,j]
-            if (normalized):
-                n = round(math.sqrt(len(data)))
-        else:
-            col = data[:,j]
-            if (normalized):
-                n = len(set(col))
-                if (n == 1):
-                    n = 2
-        ent = get_entropy(col)
-        if (normalized):
-            ent = ent / math.log(n)
-        totalEnt = totalEnt + ent
-    return totalEnt / len(data[0])
+def get_class_entropy(Y_sample):
+    return (get_entropy(Y_sample),)
 
-def get_class_entropy(data, normalized = False):
-    col = data[:,-1]
-    if (normalized):
-        n = len(set(col))
-        if (n == 1):
-            n = 2
-    ent = get_entropy(col)
-    if (normalized):
-        ent = ent / math.log(n)
-    return ent
+def get_attribute_entropy(feature_class_array):
+    entropies = [get_entropy(feature_class_pair[0]) for feature_class_pair in feature_class_array]
+    mean_attribute_entropy, _, min_attribute_entropy, quartile1_attribute_entropy, quartile2_attribute_entropy, quartile3_attribute_entropy, max_attribute_entropy = profile_distribution(entropies)
+    return (mean_attribute_entropy, min_attribute_entropy, quartile1_attribute_entropy, quartile2_attribute_entropy, quartile3_attribute_entropy, max_attribute_entropy)
 
-def get_joint_entropy(data, attributes, labels):
-    totalEnt = 0.0
-    bins = 9
-    length = len(data[0])
-    for j in range(length):
-        if (is_numeric(attributes[j])):
-            try:
-                col = pd.cut(data[:,j],bins)
-            except:
-                col = data[:,j]
-        else:
-            col = data[:,j]
-        col = np.core.defchararray.add(col.astype(str), labels)
-        ent = get_entropy(col)
-        totalEnt = totalEnt + ent
-    return totalEnt / len(data[0])
+def get_joint_entropy(feature_class_array):
+    entropies = [get_entropy(feature_class_pair[0].astype(str) + feature_class_pair[1].astype(str)) for feature_class_pair in feature_class_array]
+    mean_joint_entropy, _, min_joint_entropy, quartile1_joint_entropy, quartile2_joint_entropy, quartile3_joint_entropy, max_joint_entropy = profile_distribution(entropies)
+    return (mean_joint_entropy, min_joint_entropy, quartile1_joint_entropy, quartile2_joint_entropy, quartile3_joint_entropy, max_joint_entropy)
 
-def get_mutual_information(data, attributes, labels):
-    totalMutInfo = 0.0
-    bins = 9
-    length = len(data[0])
-    for j in range(length):
-        if (is_numeric(attributes[j])):
-            try:
-                col = pd.cut(data[:,j],bins)
-            except:
-                col = data[:,j]
-        else:
-            col = data[:,j]
-        mutInfo = mutual_info_score(col, labels)
-        totalMutInfo = totalMutInfo + mutInfo
-    return totalMutInfo / len(data[0])
+def get_mutual_information(feature_class_array):
+    mi_scores = [mutual_info_score(*feature_class_pair) for feature_class_pair in feature_class_array]
+    mean_mutual_information, _, min_mutual_information, quartile1_mutual_information, quartile2_mutual_information, quartile3_mutual_information, max_mutual_information = profile_distribution(mi_scores)
+    return (mean_mutual_information, min_mutual_information, quartile1_mutual_information, quartile2_mutual_information, quartile3_mutual_information, max_mutual_information)
 
-def get_equivalent_attributes_number(metafeatures):
-    classEnt = metafeatures['class_entropy']
-    mutInfo = metafeatures['mutual_information']
-    if (classEnt == 0):
-        return 0
-    elif (mutInfo == 0):
-        return pow(10,10)
+def get_equivalent_number_features(class_entropy, mutual_information):
+    if mutual_information == 0:
+        enf = np.nan
     else:
-        return classEnt / mutInfo
+        enf = class_entropy / mutual_information
+    return (enf,)
 
-def get_noise_signal_ratio(metafeatures):
-    mutInfo = metafeatures['mutual_information']
-    attEnt = metafeatures['attribute_entropy']
-    if (mutInfo == 0):
-        return pow(10,10)
+def get_noise_signal_ratio(attribute_entropy, mutual_information):
+    if mutual_information == 0:
+        nsr = np.nan
     else:
-        return (attEnt - mutInfo) / mutInfo
-
-def get_information_theoretic_metafeatures(attributes, data, X, Y):
-    metafeatures = {}
-    start_time = time.process_time()
-    metafeatures['class_entropy'] = get_class_entropy(data)
-    metafeatures['normalized_class_entropy'] = get_class_entropy(data, normalized = True)
-    metafeatures['attribute_entropy'] = get_entropy_average(X, attributes)
-    metafeatures['normalized_attribute_entropy'] = get_entropy_average(X, attributes, normalized = True)
-    metafeatures['joint_entropy'] = get_joint_entropy(X, attributes, Y)
-    metafeatures['mutual_information'] = get_mutual_information(X, attributes, Y)
-    metafeatures['equivalent_attributes'] = get_equivalent_attributes_number(metafeatures)
-    metafeatures['noise_signal_ratio'] = get_noise_signal_ratio(metafeatures)
-    metafeatures['infotheo_time'] = time.process_time() - start_time
-    return metafeatures
+        nsr = (attribute_entropy - mutual_information) / mutual_information
+    return (nsr,)

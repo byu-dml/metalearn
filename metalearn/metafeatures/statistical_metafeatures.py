@@ -1,141 +1,103 @@
 import time
 import math
+import itertools
+import warnings
 
 import numpy as np
+import pandas as pd
 from scipy.stats import skew, kurtosis
 from sklearn.decomposition import PCA
+from sklearn.cross_decomposition import CCA
 
-from .metafeatures_base import MetafeaturesBase
-from .common_operations import replace_nominal, normalize, is_numeric, get_column_of_class, replace_nominal_column
-from .rcca import CCA
+from .common_operations import *
 
-class StatisticalMetafeatures(MetafeaturesBase):
+warnings.filterwarnings("ignore", category=RuntimeWarning) # suppress sklearn warnings
+warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
 
-    def __init__(self):
-        pass
+def get_numeric_means(numeric_features_class_array):
+    means = [feature_class_pair[0].mean() for feature_class_pair in numeric_features_class_array]
+    return profile_distribution(means)
 
-    def compute(self, X: list, Y: list, attributes: list) -> list:        
-        data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
-        data = data[(data != np.array(None)).all(axis=1)]
-        data_numeric_without_class = replace_nominal(data[:,0:-1], attributes)
-        data_preprocessed = np.append(normalize(data_numeric_without_class), data[:,-1].reshape(data.shape[0],1), axis = 1)
-        return get_statistical_metafeatures(attributes, data, data_preprocessed)
+def get_numeric_stdev(numeric_features_class_array):
+    stdevs = [feature_class_pair[0].std() for feature_class_pair in numeric_features_class_array]
+    return profile_distribution(stdevs)
 
-'''
-Helper Methods to eventually be split and/or incorporated in the class
-'''
+def get_numeric_skewness(numeric_features_class_array):
+    skews = [feature_class_pair[0].skew() for feature_class_pair in numeric_features_class_array]
+    return profile_distribution(skews)
 
-def get_skewness(data, attributes, preprocessed = False): 
-    # suppress errors brought about by code in the scipy skew function    
-    np.seterr(divide='ignore', invalid='ignore')
-    classes = attributes[-1][1]    
-    skw = 0.0
-    for label in classes:
-        s = 0.0
-        n = 0.0        
-        for j in range(len(data[0]) - 1):            
-            if (preprocessed or is_numeric(attributes[j])):                
-                values_of_feature_for_class = get_column_of_class(data, j, label)                                                
-                v = skew(values_of_feature_for_class)                                
-                if ((v != None) and (not math.isnan(v))):                    
-                    s += abs(v)
-                    n += 1
-        if (n > 0):            
-            skw += (s / n)                
-    return skw / len(classes)
+def get_numeric_kurtosis(numeric_features_class_array):
+    kurtoses = [feature_class_pair[0].kurtosis() for feature_class_pair in numeric_features_class_array]
+    return profile_distribution(kurtoses)
 
-def get_kurtosis(data, attributes, preprocessed = False):
-    classes = attributes[-1][1]
-    kurt = 0.0
-    for label in classes:
-        s = 0.0
-        n = 0.0
-        for j in range(len(data[0]) - 1):
-            if (preprocessed or is_numeric(attributes[j])):
-                values_of_feature_for_class = get_column_of_class(data, j, label)
-                if (len(set(values_of_feature_for_class)) == 1):
-                    v = 0
-                else:
-                    v = kurtosis(values_of_feature_for_class, fisher = False)
-                if ((v != None) and (not math.isnan(v))):
-                    s += v
-                    n += 1
-        if (n > 0):
-            kurt += (s / n)
-    return (kurt / len(classes))
-
-def get_abs_cor(data, attributes):
-    numAtt = len(data[0]) - 1
-    if (numAtt > 1):
-        classes = attributes[-1][1]
-        sums = 0.0
-        n = 0.0
-        for label in classes:            
-            for i in range(numAtt):
-                col_i_data_by_class = get_column_of_class(data, i, label)
-                if (not is_numeric(attributes[i])):
-                    col_i_data_by_class = replace_nominal_column(col_i_data_by_class)
-                else:
-                    col_i_data_by_class = col_i_data_by_class.reshape(col_i_data_by_class.shape[0], 1)
-                for j in range(numAtt):
-                    col_j_data_by_class = get_column_of_class(data, j, label)
-                    if (not is_numeric(attributes[j])):
-                        col_j_data_by_class = replace_nominal_column(col_j_data_by_class)
-                    else:
-                        col_j_data_by_class = col_j_data_by_class.reshape(col_j_data_by_class.shape[0], 1)
-                    cca = CCA(kernelcca = False, reg = 0., numCC = 1, verbose=False)
-                    try:                        
-                        cca.train([col_i_data_by_class.astype(float), col_j_data_by_class.astype(float)])                        
-                        c = cca.cancorrs[0]
-                    except:
-                        continue
-                    if (c):
-                        sums += abs(c)
-                        n += 1            
-        if (n != 0):
-            return sums / n
-    return 0.0
-
-def get_cancor(data, attributes, n):
-    cancor = {}
-    c = get_cancors(data, attributes)[0:n]
-    for i in range(len(c)):
-        cancor['cancor_' + str(i + 1)] = c[i]
-    return cancor
-
-def get_cancors(data, attributes):
-    att_data = data[:,0:-1]
-    preprocess_att_data = replace_nominal(att_data, attributes)
-    labels = data[:,-1]
-    preprocess_labels = replace_nominal_column(labels)
-    cca = CCA(kernelcca = False, reg = 0., numCC = 1)
-    try:
-        cca.train([preprocess_att_data.astype(float), preprocess_labels.astype(float)])
-        return cca.cancorrs
-    except:
-        return [0., 0.]
-
-def get_pca_values(X, Y, attributes):
-    data = np.append(X, Y.reshape(Y.shape[0], -1), axis = 1)
-    data = replace_nominal(data[:,0:-1], attributes)
+def get_pca(X_preprocessed):
     pca_data = PCA(n_components=3)
-    pca_data.fit_transform(data)
+    pca_data.fit_transform(X_preprocessed.as_matrix())
     pred_pca = pca_data.explained_variance_ratio_
     pred_eigen = pca_data.explained_variance_
     pred_det = np.linalg.det(pca_data.get_covariance())
-    values = {"pred_pca_1" : pred_pca[0], "pred_pca_2" : pred_pca[1], 
-        "pred_pca_3" : pred_pca[2], "pred_eigen_1" : pred_eigen[0], "pred_eigen_2" : pred_eigen[1], 
-        "pred_eigen_3" : pred_eigen[2], "pred_det" : pred_det}
-    return values
+    return (pred_pca[0], pred_pca[1], pred_pca[2], pred_eigen[0], pred_eigen[1], pred_eigen[2], pred_det)
 
-def get_statistical_metafeatures(attributes, data, data_preprocessed):
-    metafeatures = {}
-    start_time = time.process_time()    
-    metafeatures['skewness'] = get_skewness(data, attributes)    
-    metafeatures['skewness_prep'] = get_skewness(data_preprocessed, attributes, preprocessed = True)    
-    metafeatures['kurtosis'] = get_kurtosis(data, attributes)    
-    metafeatures['kurtosis_prep'] = get_kurtosis(data_preprocessed, attributes, preprocessed = True)    
-    metafeatures['abs_cor'] = get_abs_cor(data, attributes)    
-    metafeatures.update(get_cancor(data, attributes, 1))    
-    metafeatures['statistical_time'] = time.process_time() - start_time
-    return metafeatures
+def get_correlations(X_sample):
+    correlations = get_canonical_correlations(X_sample)
+    mean_correlation, stdev_correlation, _, _, _, _, _ = profile_distribution(correlations)
+    return (mean_correlation, stdev_correlation)
+
+def get_correlations_by_class(X_sample, Y_sample):
+    correlations = []
+    XY = pd.concat([X_sample,Y_sample], axis=1)
+    XY_grouped_by_class = XY.groupby(Y_sample.name)
+    for label in Y_sample.unique():
+        group = XY_grouped_by_class.get_group(label).drop(Y_sample.name, axis=1)
+        correlations.extend(get_canonical_correlations(group))
+    mean_correlation, stdev_correlation, _, _, _, _, _ = profile_distribution(correlations)
+    return (mean_correlation, stdev_correlation)
+
+def get_canonical_correlations(dataframe):
+    '''
+    computes the correlation coefficient between each distinct pairing of columns
+    preprocessing note:
+        any rows with missing values (in either paired column) are dropped for that pairing
+        nominal columns are replaced with one-hot encoded columns
+        any columns which have only one distinct value (after dropping missing values) are skipped
+    returns a list of the pairwise canonical correlation coefficients
+    '''
+
+    def preprocess(series):
+        if not dtype_is_numeric(series.dtype):
+            series = pd.get_dummies(series)
+        array = series.as_matrix().reshape(series.shape[0], -1)
+        return array
+
+    correlations = []
+    skip_cols = set()
+    for col_name_i, col_name_j in itertools.combinations(dataframe.columns, 2):
+        if col_name_i in skip_cols or col_name_j in skip_cols:
+            correlations.append(0)
+            continue
+
+        df_ij = dataframe[[col_name_i, col_name_j]].dropna(axis=0, how="any")
+        col_i = df_ij[col_name_i]
+        col_j = df_ij[col_name_j]
+
+        if np.unique(col_i).shape[0] <= 1:
+            skip_cols.add(col_name_i)
+            correlations.append(0)
+            continue
+        if np.unique(col_j).shape[0] <= 1:
+            skip_cols.add(col_name_j)
+            correlations.append(0)
+            continue
+
+        col_i = preprocess(col_i)
+        col_j = preprocess(col_j)
+
+        col_i_c, col_j_c = CCA(n_components=1).fit_transform(col_i,col_j)
+
+        if np.unique(col_i_c).shape[0] <= 1 or np.unique(col_j_c).shape[0] <= 1:
+            c = 0
+        else:
+            c = np.corrcoef(col_i_c.T, col_j_c.T)[0,1]
+        correlations.append(c)
+
+    return correlations
