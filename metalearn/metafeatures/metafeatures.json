@@ -154,9 +154,9 @@
 			"parameters": ["XPreprocessed","YSample"],
 			"returns": ["DecisionStumpErrRate","DecisionStumpKappa"]
 		},
-		"get_random_node": {
-			"parameters": ["XPreprocessed","YSample"],
-			"returns": ["RandomNodeErrRate","RandomNodeKappa"]
+		"get_random_tree": {
+			"parameters": [],
+			"returns": []
 		},
 		"get_lda": {
 			"parameters": ["XPreprocessed","YSample"],
@@ -580,11 +580,35 @@
 		"DecisionStumpKappa": {
 			"function": "get_decision_stump"
 		},
-		"RandomNodeErrRate": {
-			"function": "get_random_node"
+		"RandomTreeDepth1ErrRate": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",1],
+			"returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
 		},
-		"RandomNodeKappa": {
-			"function": "get_random_node"
+		"RandomTreeDepth1Kappa": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",1],
+			"returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
+		},
+		"RandomTreeDepth2ErrRate": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",2],
+			"returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
+		},
+		"RandomTreeDepth2Kappa": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",2],
+			"returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
+		},
+		"RandomTreeDepth3ErrRate": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",3],
+			"returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
+		},
+		"RandomTreeDepth3Kappa": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",3],
+			"returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
 		},
 		"LinearDiscriminantAnalysisErrRate": {
 			"function": "get_lda"

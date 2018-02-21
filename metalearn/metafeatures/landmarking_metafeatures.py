@@ -43,8 +43,8 @@ def get_knn_1(X, Y):
 def get_decision_stump(X, Y):
     return run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='best', max_depth=1, random_state=0), 'DecisionStump')
 
-def get_random_node(X, Y):
-    return run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random', max_depth=1, random_state=0), 'RandomNode')
+def get_random_tree(X, Y, depth):
+    return run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random', max_depth=depth, random_state=0), 'RandomNode')
 
 def get_lda(X, Y):
     return run_pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'), 'LinearDiscriminantAnalysis')

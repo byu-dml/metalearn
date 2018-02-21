@@ -79,7 +79,10 @@ class Metafeatures(object):
         else:
             parameters = self.function_dict[f]['parameters']
         for parameter in parameters:
-            value, time_value = self._retrieve_resource(parameter)
+            if isinstance(parameter, float) or isinstance(parameter, int):
+                value, time_value = parameter, 0.
+            else:
+                value, time_value = self._retrieve_resource(parameter)
             if value is np.nan:
                 retrieved_parameters = None
                 break
