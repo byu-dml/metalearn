@@ -114,10 +114,6 @@
 			"parameters": ["XSample"],
 			"returns": ["MeanCanonicalCorrelation","StdevCanonicalCorrelation"]
 		},
-		"get_correlations_by_class": {
-			"parameters": ["XSample","YSample"],
-			"returns": ["MeanCanonicalCorrelationOfFeaturesSplitByClass","StdevCanonicalCorrelationOfFeaturesSplitByClass"]
-		},
 		"get_class_entropy": {
 			"parameters": ["YSample"],
 			"returns": ["ClassEntropy"]
@@ -352,12 +348,6 @@
 		},
 		"StdevCanonicalCorrelation": {
 			"function": "get_correlations"
-		},
-		"MeanCanonicalCorrelationOfFeaturesSplitByClass": {
-			"function": "get_correlations_by_class"
-		},
-		"StdevCanonicalCorrelationOfFeaturesSplitByClass": {
-			"function": "get_correlations_by_class"
 		},
 		"ClassEntropy": {
 			"function": "get_class_entropy"

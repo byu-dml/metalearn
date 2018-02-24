@@ -1,3 +1,4 @@
+import math
 import json
 import time
 
@@ -137,9 +138,17 @@ class Metafeatures(object):
         else:
             return (X,)
 
-    def _get_sample_of_rows(self, X, Y, sample_rows, max_rows=150000):
-        if sample_rows == True and X.shape[0] > max_rows:
-            row_indices = np.random.permutation(X.shape[0])[:max_rows]
+    def _get_sample_of_rows(self, X, Y, sample_rows, approximate_max_rows=150000, min_row_per_class=2):
+        if sample_rows == True and X.shape[0] > approximate_max_rows:
+            samples = []
+            total_rows = Y.shape[0]
+            class_groupby = Y.groupby(Y)
+            for group_key in class_groupby.groups:
+                group = class_groupby.get_group(group_key).index
+                num_to_sample = max(math.floor(float(group.shape[0]) / float(total_rows) * approximate_max_rows), min_row_per_class)
+                row_indices = np.random.permutation(group)[:num_to_sample]
+                samples.append(row_indices)
+            row_indices = np.concatenate(samples)
             return (X.iloc[row_indices], Y.iloc[row_indices])
         else:
             return (X, Y)

@@ -30,13 +30,20 @@ def get_numeric_kurtosis(numeric_features_class_array):
     kurtoses = [feature_class_pair[0].kurtosis() for feature_class_pair in numeric_features_class_array]
     return profile_distribution(kurtoses)
 
-def get_pca(X_preprocessed):
-    pca_data = PCA(n_components=3)
+def get_pca(X_preprocessed):    
+    num_components = min(3, X_preprocessed.shape[1])
+    pca_data = PCA(n_components=num_components)
     pca_data.fit_transform(X_preprocessed.as_matrix())
     pred_pca = pca_data.explained_variance_ratio_
     pred_eigen = pca_data.explained_variance_
     pred_det = np.linalg.det(pca_data.get_covariance())
-    return (pred_pca[0], pred_pca[1], pred_pca[2], pred_eigen[0], pred_eigen[1], pred_eigen[2], pred_det)
+    variance_percentages = [np.nan] * 3    
+    for i in range(len(pred_pca)):
+        variance_percentages[i] = pred_pca[i]
+    eigenvalues = [np.nan] * 3
+    for i in range(len(pred_eigen)):
+        eigenvalues[i] = pred_eigen[i]
+    return (variance_percentages[0], variance_percentages[1], variance_percentages[2], eigenvalues[0], eigenvalues[1], eigenvalues[2], pred_det)
 
 def get_correlations(X_sample):
     correlations = get_canonical_correlations(X_sample)
