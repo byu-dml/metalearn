@@ -76,6 +76,11 @@ def get_canonical_correlations(dataframe):
         array = series.as_matrix().reshape(series.shape[0], -1)
         return array
 
+    numeric_features = get_numeric_features(dataframe)
+    if len(numeric_features) < 2:
+        return []
+    dataframe = dataframe[numeric_features]
+    
     correlations = []
     skip_cols = set()
     for col_name_i, col_name_j in itertools.combinations(dataframe.columns, 2):

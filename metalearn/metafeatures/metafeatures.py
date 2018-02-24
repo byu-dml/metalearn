@@ -130,7 +130,7 @@ class Metafeatures(object):
             series_array.append(feature_series)
         return (pd.concat(series_array, axis=1, copy=False),)
 
-    def _get_sample_of_columns(self, X, sample_columns, max_columns=50):
+    def _get_sample_of_columns(self, X, sample_columns, max_columns=150):
         if sample_columns and X.shape[1] > max_columns:
             column_indices = np.random.permutation(X.shape[1])[:max_columns]
             columns = X.columns[column_indices]
