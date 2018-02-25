@@ -1,3 +1,4 @@
+import os
 import math
 import json
 import time
@@ -23,7 +24,7 @@ class Metafeatures(object):
         self.target_name = 'target'
         self.value_name = 'value'
         self.time_name = 'time'
-        self.metafeatures_info_file_name = 'metalearn/metafeatures/metafeatures.json'
+        self.metafeatures_info_file_name = os.path.realpath(__file__).rsplit(".", 1)[0]+".json"
         self.load_dicts(self.metafeatures_info_file_name)
 
     def load_dicts(self, file_name):
