@@ -1,6 +1,6 @@
 [
     {
-        "path": "LL0_1217_click_prediction_small.csv",
-        "target_name": "click"
+        "path": "38_sick_train_data.csv",
+        "target_name": "Class"
     }
 ]

@@ -6,10 +6,7 @@ from arff2pandas import a2p
 
 import openml
 
-from metalearn.metafeatures.simple_metafeatures import SimpleMetafeatures
-from metalearn.metafeatures.statistical_metafeatures import StatisticalMetafeatures
-from metalearn.metafeatures.information_theoretic_metafeatures import InformationTheoreticMetafeatures
-from metalearn.metafeatures.landmarking_metafeatures import LandmarkingMetafeatures
+from metalearn.metafeatures.metafeatures import Metafeatures
 
 
 def import_openml_dataset(id=4):
@@ -102,16 +99,7 @@ def load_arff(infile_path):
 
 def extract_metafeatures(dataframe):
     metafeatures = {}
-    features_df = SimpleMetafeatures().compute(dataframe)
-    for feature in features_df.columns:
-        metafeatures[feature] = features_df[feature].as_matrix()[0]
-    features_df = StatisticalMetafeatures().compute(dataframe)
-    for feature in features_df.columns:
-        metafeatures[feature] = features_df[feature].as_matrix()[0]
-    features_df = InformationTheoreticMetafeatures().compute(dataframe)
-    for feature in features_df.columns:
-        metafeatures[feature] = features_df[feature].as_matrix()[0]
-    features_df = LandmarkingMetafeatures().compute(dataframe)
+    features_df = Metafeatures().compute(dataframe)    
     for feature in features_df.columns:
         metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
@@ -130,7 +118,7 @@ def main():
     # this would allow us to see if we have fundamentally changed how we are computing metafeatures
     # during any development process
     # we then manually decide which metafeatures are correct and update the static file as needed
-    datasets = json.load(open("./data/all_datasets.json", "r"))
+    datasets = json.load(open("./data/test_datasets.json", "r"))
     for obj in datasets:
         filename = "./data/" + obj["path"]
         target_name = obj["target_name"]
@@ -147,14 +135,11 @@ def main():
         if "d3mIndex" in dataframe.columns:
             dataframe.drop(columns="d3mIndex", inplace=True)
 
-        if dataframe.shape[0] > 150000 or dataframe.shape[1] > 50:
-            print("skipped")
-            continue
         metafeatures = extract_metafeatures(dataframe)
         # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
-        # print(json.dumps(metafeatures, sort_keys=True, indent=4))
+        print(json.dumps(metafeatures, sort_keys=True, indent=4))
         # print(len(metafeatures), "metafeatures")
-    # print("tests finished")
+    print("tests finished")
 
 
 if __name__ == "__main__":

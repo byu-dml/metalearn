@@ -50,5 +50,13 @@
     {
         "path": "LL0_1217_click_prediction_small.csv",
         "target_name": "click"
+    },
+    {
+        "path": "LL0_1122_ap_breast_prostate.csv",
+        "target_name": "Tissue"
+    },
+    {
+        "path": "LL0_1569_poker_hand.csv",
+        "target_name": "Class"
     }
 ]

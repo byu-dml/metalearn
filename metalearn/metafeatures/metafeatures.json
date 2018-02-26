@@ -1,0 +1,610 @@
+{
+	"resources": {
+		"XRaw": {
+			"function": ""
+		},
+		"X": {
+			"function": ""
+		},
+		"Y": {
+			"function": ""
+		},
+		"SampleRowsFlag": {
+			"function": ""
+		},
+		"SampleColumnsFlag": {
+			"function": ""
+		},
+		"XSampledColumns": {
+			"function": "self._get_sample_of_columns"
+		},
+		"XSample": {
+			"function": "self._get_sample_of_rows"
+		},
+		"YSample": {
+			"function": "self._get_sample_of_rows"
+		},
+		"XPreprocessed": {
+			"function": "self._get_preprocessed_data"
+		},
+		"NoNaNNominalFeaturesAndClass": {
+			"function": "self._get_nominal_features_and_class_with_no_missing_values"
+		},
+		"NoNaNNumericFeaturesAndClass": {
+			"function": "self._get_numeric_features_and_class_with_no_missing_values"
+		},
+		"NoNaNBinnedNumericFeaturesAndClass": {
+			"function": "self._get_binned_numeric_features_and_class_with_no_missing_values"
+		}
+	},
+	"functions": {
+		"": {
+			"parameters": [],
+			"returns": []
+		},
+		"self._get_sample_of_columns": {
+			"parameters": ["X","SampleColumnsFlag"],
+			"returns": ["XSampledColumns"]
+		},
+		"self._get_sample_of_rows": {
+			"parameters": ["XSampledColumns","Y","SampleRowsFlag"],
+			"returns": ["XSample","YSample"]
+		},
+		"self._get_preprocessed_data": {
+			"parameters": ["XSample","XSampledColumns"],
+			"returns": ["XPreprocessed"]
+		},
+		"self._get_nominal_features_and_class_with_no_missing_values": {
+			"parameters": ["XSample","YSample"],
+			"returns": ["NoNaNNominalFeaturesAndClass"]
+		},
+		"self._get_numeric_features_and_class_with_no_missing_values": {
+			"parameters": ["XSample","YSample"],
+			"returns": ["NoNaNNumericFeaturesAndClass"]
+		},
+		"self._get_binned_numeric_features_and_class_with_no_missing_values": {
+			"parameters": ["NoNaNNumericFeaturesAndClass"],
+			"returns": ["NoNaNBinnedNumericFeaturesAndClass"]
+		},
+		"get_dataset_stats": {
+			"parameters": ["XRaw","Y"],
+			"returns": ["NumberOfInstances","NumberOfFeatures","NumberOfClasses","NumberOfNumericFeatures","NumberOfNominalFeatures","RatioOfNumericFeatures","RatioOfNominalFeatures"]
+		},
+		"get_dimensionality": {
+			"parameters": ["NumberOfFeatures","NumberOfInstances"],
+			"returns": ["Dimensionality"]
+		},
+		"get_missing_values": {
+			"parameters": ["XRaw"],
+			"returns": ["NumberOfMissingValues","RatioOfMissingValues","NumberOfInstancesWithMissingValues","RatioOfInstancesWithMissingValues"]
+		},
+		"get_class_stats": {
+			"parameters": ["Y"],
+			"returns": ["MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
+		},
+		"get_nominal_cardinalities": {
+			"parameters": ["X"],
+			"returns": ["MeanCardinalityOfNominalFeatures","StdevCardinalityOfNominalFeatures","MinCardinalityOfNominalFeatures","MaxCardinalityOfNominalFeatures"]
+		},
+		"get_numeric_cardinalities": {
+			"parameters": ["X"],
+			"returns": ["MeanCardinalityOfNumericFeatures","StdevCardinalityOfNumericFeatures","MinCardinalityOfNumericFeatures","MaxCardinalityOfNumericFeatures"]
+		},
+		"get_numeric_means": {
+			"parameters": ["NoNaNNumericFeaturesAndClass"],
+			"returns": ["MeanMeansOfNumericFeatures","StdevMeansOfNumericFeatures","MinMeansOfNumericFeatures","Quartile1MeansOfNumericFeatures","Quartile2MeansOfNumericFeatures","Quartile3MeansOfNumericFeatures","MaxMeansOfNumericFeatures"]
+		},
+		"get_numeric_stdev": {
+			"parameters": ["NoNaNNumericFeaturesAndClass"],
+			"returns": ["MeanStdDevOfNumericFeatures","StdevStdDevOfNumericFeatures","MinStdDevOfNumericFeatures","Quartile1StdDevOfNumericFeatures","Quartile2StdDevOfNumericFeatures","Quartile3StdDevOfNumericFeatures","MaxStdDevOfNumericFeatures"]
+		},
+		"get_numeric_skewness": {
+			"parameters": ["NoNaNNumericFeaturesAndClass"],
+			"returns": ["MeanSkewnessOfNumericFeatures","StdevSkewnessOfNumericFeatures","MinSkewnessOfNumericFeatures","Quartile1SkewnessOfNumericFeatures","Quartile2SkewnessOfNumericFeatures","Quartile3SkewnessOfNumericFeatures","MaxSkewnessOfNumericFeatures"]
+		},
+		"get_numeric_kurtosis": {
+			"parameters": ["NoNaNNumericFeaturesAndClass"],
+			"returns": ["MeanKurtosisOfNumericFeatures","StdevKurtosisOfNumericFeatures","MinKurtosisOfNumericFeatures","Quartile1KurtosisOfNumericFeatures","Quartile2KurtosisOfNumericFeatures","Quartile3KurtosisOfNumericFeatures","MaxKurtosisOfNumericFeatures"]
+		},
+		"get_pca": {
+			"parameters": ["XPreprocessed"],
+			"returns": ["PredPCA1","PredPCA2","PredPCA3","PredEigen1","PredEigen2","PredEigen3","PredDet"]
+		},
+		"get_correlations": {
+			"parameters": ["XSample"],
+			"returns": ["MeanCanonicalCorrelation","StdevCanonicalCorrelation"]
+		},
+		"get_class_entropy": {
+			"parameters": ["YSample"],
+			"returns": ["ClassEntropy"]
+		},
+		"get_attribute_entropy": {
+			"parameters": [],
+			"returns": []
+		},
+		"get_joint_entropy": {
+			"parameters": [],
+			"returns": []
+		},
+		"get_mutual_information": {
+			"parameters": [],
+			"returns": []
+		},
+		"get_equivalent_number_features": {
+			"parameters": [],
+			"returns": []
+		},
+		"get_noise_signal_ratio": {
+			"parameters": [],
+			"returns": []
+		},
+		"get_naive_bayes": {
+			"parameters": ["XPreprocessed","YSample"],
+			"returns": ["NaiveBayesErrRate","NaiveBayesKappa"]
+		},
+		"get_knn_1": {
+			"parameters": ["XPreprocessed","YSample"],
+			"returns": ["kNN1NErrRate","kNN1NKappa"]
+		},
+		"get_decision_stump": {
+			"parameters": ["XPreprocessed","YSample"],
+			"returns": ["DecisionStumpErrRate","DecisionStumpKappa"]
+		},
+		"get_random_tree": {
+			"parameters": [],
+			"returns": []
+		},
+		"get_lda": {
+			"parameters": ["XPreprocessed","YSample"],
+			"returns": ["LinearDiscriminantAnalysisErrRate","LinearDiscriminantAnalysisKappa"]
+		}
+	},
+	"metafeatures": {
+		"NumberOfInstances": {
+			"function": "get_dataset_stats"
+		},
+		"NumberOfFeatures": {
+			"function": "get_dataset_stats"
+		},
+		"NumberOfClasses": {
+			"function": "get_dataset_stats"
+		},
+		"NumberOfNumericFeatures": {
+			"function": "get_dataset_stats"
+		},
+		"NumberOfNominalFeatures": {
+			"function": "get_dataset_stats"
+		},
+		"RatioOfNumericFeatures": {
+			"function": "get_dataset_stats"
+		},
+		"RatioOfNominalFeatures": {
+			"function": "get_dataset_stats"
+		},
+		"Dimensionality": {
+			"function": "get_dimensionality"
+		},
+		"NumberOfMissingValues": {
+			"function": "get_missing_values"
+		},
+		"RatioOfMissingValues": {
+			"function": "get_missing_values"
+		},
+		"NumberOfInstancesWithMissingValues": {
+			"function": "get_missing_values"
+		},
+		"RatioOfInstancesWithMissingValues": {
+			"function": "get_missing_values"
+		},
+		"MeanClassProbability": {
+			"function": "get_class_stats"
+		},
+		"StdevClassProbability": {
+			"function": "get_class_stats"
+		},
+		"MinClassProbability": {
+			"function": "get_class_stats"
+		},
+		"MaxClassProbability": {
+			"function": "get_class_stats"
+		},
+		"MinorityClassSize": {
+			"function": "get_class_stats"
+		},
+		"MajorityClassSize": {
+			"function": "get_class_stats"
+		},
+		"MeanCardinalityOfNominalFeatures": {
+			"function": "get_nominal_cardinalities"
+		},
+		"StdevCardinalityOfNominalFeatures": {
+			"function": "get_nominal_cardinalities"
+		},
+		"MinCardinalityOfNominalFeatures": {
+			"function": "get_nominal_cardinalities"
+		},
+		"MaxCardinalityOfNominalFeatures": {
+			"function": "get_nominal_cardinalities"
+		},
+		"MeanCardinalityOfNumericFeatures": {
+			"function": "get_numeric_cardinalities"
+		},
+		"StdevCardinalityOfNumericFeatures": {
+			"function": "get_numeric_cardinalities"
+		},
+		"MinCardinalityOfNumericFeatures": {
+			"function": "get_numeric_cardinalities"
+		},
+		"MaxCardinalityOfNumericFeatures": {
+			"function": "get_numeric_cardinalities"
+		},
+		"MeanMeansOfNumericFeatures": {
+			"function": "get_numeric_means"
+		},
+		"StdevMeansOfNumericFeatures": {
+			"function": "get_numeric_means"
+		},
+		"MinMeansOfNumericFeatures": {
+			"function": "get_numeric_means"
+		},
+		"MaxMeansOfNumericFeatures": {
+			"function": "get_numeric_means"
+		},
+		"Quartile1MeansOfNumericFeatures": {
+			"function": "get_numeric_means"
+		},
+		"Quartile2MeansOfNumericFeatures": {
+			"function": "get_numeric_means"
+		},
+		"Quartile3MeansOfNumericFeatures": {
+			"function": "get_numeric_means"
+		},
+		"MeanStdDevOfNumericFeatures": {
+			"function": "get_numeric_stdev"
+		},
+		"StdevStdDevOfNumericFeatures": {
+			"function": "get_numeric_stdev"
+		},
+		"MinStdDevOfNumericFeatures": {
+			"function": "get_numeric_stdev"
+		},
+		"MaxStdDevOfNumericFeatures": {
+			"function": "get_numeric_stdev"
+		},
+		"Quartile1StdDevOfNumericFeatures": {
+			"function": "get_numeric_stdev"
+		},
+		"Quartile2StdDevOfNumericFeatures": {
+			"function": "get_numeric_stdev"
+		},
+		"Quartile3StdDevOfNumericFeatures": {
+			"function": "get_numeric_stdev"
+		},
+		"MeanSkewnessOfNumericFeatures": {
+			"function": "get_numeric_skewness"
+		},
+		"StdevSkewnessOfNumericFeatures": {
+			"function": "get_numeric_skewness"
+		},
+		"MinSkewnessOfNumericFeatures": {
+			"function": "get_numeric_skewness"
+		},
+		"MaxSkewnessOfNumericFeatures": {
+			"function": "get_numeric_skewness"
+		},
+		"Quartile1SkewnessOfNumericFeatures": {
+			"function": "get_numeric_skewness"
+		},
+		"Quartile2SkewnessOfNumericFeatures": {
+			"function": "get_numeric_skewness"
+		},
+		"Quartile3SkewnessOfNumericFeatures": {
+			"function": "get_numeric_skewness"
+		},
+		"MeanKurtosisOfNumericFeatures": {
+			"function": "get_numeric_kurtosis"
+		},
+		"StdevKurtosisOfNumericFeatures": {
+			"function": "get_numeric_kurtosis"
+		},
+		"MinKurtosisOfNumericFeatures": {
+			"function": "get_numeric_kurtosis"
+		},
+		"MaxKurtosisOfNumericFeatures": {
+			"function": "get_numeric_kurtosis"
+		},
+		"Quartile1KurtosisOfNumericFeatures": {
+			"function": "get_numeric_kurtosis"
+		},
+		"Quartile2KurtosisOfNumericFeatures": {
+			"function": "get_numeric_kurtosis"
+		},
+		"Quartile3KurtosisOfNumericFeatures": {
+			"function": "get_numeric_kurtosis"
+		},
+		"PredPCA1": {
+			"function": "get_pca"
+		},
+		"PredPCA2": {
+			"function": "get_pca"
+		},
+		"PredPCA3": {
+			"function": "get_pca"
+		},
+		"PredEigen1": {
+			"function": "get_pca"
+		},
+		"PredEigen2": {
+			"function": "get_pca"
+		},
+		"PredEigen3": {
+			"function": "get_pca"
+		},
+		"PredDet": {
+			"function": "get_pca"
+		},
+		"MeanCanonicalCorrelation": {
+			"function": "get_correlations"
+		},
+		"StdevCanonicalCorrelation": {
+			"function": "get_correlations"
+		},
+		"ClassEntropy": {
+			"function": "get_class_entropy"
+		},
+		"MeanNominalAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+		},
+		"MinNominalAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+		},
+		"Quartile1NominalAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+		},
+		"Quartile2NominalAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+		},
+		"Quartile3NominalAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+		},
+		"MaxNominalAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+		},
+		"MeanNumericAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+		},
+		"MinNumericAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+		},
+		"Quartile1NumericAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+		},
+		"Quartile2NumericAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+		},
+		"Quartile3NumericAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+		},
+		"MaxNumericAttributeEntropy": {
+			"function": "get_attribute_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+		},
+		"MeanNominalJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+		},
+		"MinNominalJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+		},
+		"Quartile1NominalJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+		},
+		"Quartile2NominalJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+		},
+		"Quartile3NominalJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+		},
+		"MaxNominalJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+		},
+		"MeanNumericJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+		},
+		"MinNumericJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+		},
+		"Quartile1NumericJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+		},
+		"Quartile2NumericJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+		},
+		"Quartile3NumericJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+		},
+		"MaxNumericJointEntropy": {
+			"function": "get_joint_entropy",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+		},
+		"MeanNominalMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+		},
+		"MinNominalMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+		},
+		"Quartile1NominalMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+		},
+		"Quartile2NominalMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+		},
+		"Quartile3NominalMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+		},
+		"MaxNominalMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNNominalFeaturesAndClass"],
+			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+		},
+		"MeanNumericMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+		},
+		"MinNumericMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+		},
+		"Quartile1NumericMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+		},
+		"Quartile2NumericMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+		},
+		"Quartile3NumericMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+		},
+		"MaxNumericMutualInformation": {
+			"function": "get_mutual_information",
+			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+			"returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+		},
+		"EquivalentNumberOfNominalFeatures": {
+			"function": "get_equivalent_number_features",
+			"parameters": ["ClassEntropy","MeanNominalMutualInformation"],
+			"returns": ["EquivalentNumberOfNominalFeatures"]
+		},
+		"EquivalentNumberOfNumericFeatures": {
+			"function": "get_equivalent_number_features",
+			"parameters": ["ClassEntropy","MeanNumericMutualInformation"],
+			"returns": ["EquivalentNumberOfNumericFeatures"]
+		},
+		"NominalNoiseToSignalRatio": {
+			"function": "get_noise_signal_ratio",
+			"parameters": ["MeanNominalAttributeEntropy","MeanNominalMutualInformation"],
+			"returns": ["NominalNoiseToSignalRatio"]
+		},
+		"NumericNoiseToSignalRatio": {
+			"function": "get_noise_signal_ratio",
+			"parameters": ["MeanNumericAttributeEntropy","MeanNumericMutualInformation"],
+			"returns": ["NumericNoiseToSignalRatio"]
+		},
+		"NaiveBayesErrRate": {
+			"function": "get_naive_bayes"
+		},
+		"NaiveBayesKappa": {
+			"function": "get_naive_bayes"
+		},
+		"kNN1NErrRate": {
+			"function": "get_knn_1"
+		},
+		"kNN1NKappa": {
+			"function": "get_knn_1"
+		},
+		"DecisionStumpErrRate": {
+			"function": "get_decision_stump"
+		},
+		"DecisionStumpKappa": {
+			"function": "get_decision_stump"
+		},
+		"RandomTreeDepth1ErrRate": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",1],
+			"returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
+		},
+		"RandomTreeDepth1Kappa": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",1],
+			"returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
+		},
+		"RandomTreeDepth2ErrRate": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",2],
+			"returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
+		},
+		"RandomTreeDepth2Kappa": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",2],
+			"returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
+		},
+		"RandomTreeDepth3ErrRate": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",3],
+			"returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
+		},
+		"RandomTreeDepth3Kappa": {
+			"function": "get_random_tree",
+			"parameters": ["XPreprocessed","YSample",3],
+			"returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
+		},
+		"LinearDiscriminantAnalysisErrRate": {
+			"function": "get_lda"
+		},
+		"LinearDiscriminantAnalysisKappa": {
+			"function": "get_lda"
+		}
+	}
+}
