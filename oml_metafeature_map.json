@@ -1,45 +1,286 @@
 {
-    "EquivalentNumberOfAtts": ["EquivalentNumberOfFeatures", 1],
-    "MeanCardinalityOfNominalAttributes": ["MeanCardinalityOfNominalFeatures", 1],
-    "StdevCardinalityOfNominalAttributes": ["StdevCardinalityOfNominalFeatures", 1],
-    "MaxCardinalityOfNominalAttributes": ["MaxCardinalityOfNominalFeatures", 1],
-    "MinCardinalityOfNominalAttributes": ["MinCardinalityOfNominalFeatures", 1],
-    "MeanCardinalityOfNumericAttributes": ["MeanCardinalityOfNumericFeatures", 1],
-    "StdevCardinalityOfNumericAttributes": ["StdevCardinalityOfNumericFeatures", 1],
-    "MaxCardinalityOfNumericAttributes": ["MaxCardinalityOfNumericFeatures", 1],
-    "MinCardinalityOfNumericAttributes": ["MinCardinalityOfNumericFeatures", 1],
-    "MinorityClassPercentage": ["MinClassProbability", 100],
-    "MajorityClassPercentage": ["MaxClassProbability", 100],
-    "MaxMeansOfNumericAtts": ["MaxMeansOfNumericFeatures", 1],
-    "MaxStdevOfNumericAtts": ["MaxStdevOfNumericFeatures", 1],
-    "MaxSkewnessOfNumericAtts": ["MaxSkewnessOfNumericFeatures", 1],
-    "MaxKurtosisOfNumericAtts": ["MaxKurtosisOfNumericFeatures", 1],
-    "MinMeansOfNumericAtts": ["MinMeansOfNumericFeatures", 1],
-    "MinStdevOfNumericAtts": ["MinStdevOfNumericFeatures", 1],
-    "MinSkewnessOfNumericAtts": ["MinSkewnessOfNumericFeatures", 1],
-    "MinKurtosisOfNumericAtts": ["MinKurtosisOfNumericFeatures", 1],
-    "MeanMeansOfNumericAtts": ["MeanMeansOfNumericFeatures", 1],
-    "MeanStdevOfNumericAtts": ["MeanStdevOfNumericFeatures", 1],
-    "MeanSkewnessOfNumericAtts": ["MeanSkewnessOfNumericFeatures", 1],
-    "MeanKurtosisOfNumericAtts": ["MeanKurtosisOfNumericFeatures", 1],
-    "StdevMeansOfNumericAtts": ["StdevMeansOfNumericFeatures", 1],
-    "StdevStdevOfNumericAtts": ["StdevStdevOfNumericFeatures", 1],
-    "StdevSkewnessOfNumericAtts": ["StdevSkewnessOfNumericFeatures", 1],
-    "StdevKurtosisOfNumericAtts": ["StdevKurtosisOfNumericFeatures", 1],
-    "Quartile1MeansOfNumericAtts": ["Quartile1MeansOfNumericFeatures", 1],
-    "Quartile1StdevOfNumericAtts": ["Quartile1StdevOfNumericFeatures", 1],
-    "Quartile1SkewnessOfNumericAtts": ["Quartile1SkewnessOfNumericFeatures", 1],
-    "Quartile1KurtosisOfNumericAtts": ["Quartile1KurtosisOfNumericFeatures", 1],
-    "Quartile2MeansOfNumericAtts": ["Quartile2MeansOfNumericFeatures", 1],
-    "Quartile2StdevOfNumericAtts": ["Quartile2StdevOfNumericFeatures", 1],
-    "Quartile2SkewnessOfNumericAtts": ["Quartile2SkewnessOfNumericFeatures", 1],
-    "Quartile2KurtosisOfNumericAtts": ["Quartile2KurtosisOfNumericFeatures", 1],
-    "Quartile3MeansOfNumericAtts": ["Quartile3MeansOfNumericFeatures", 1],
-    "Quartile3StdevOfNumericAtts": ["Quartile3StdevOfNumericFeatures", 1],
-    "Quartile3SkewnessOfNumericAtts": ["Quartile3SkewnessOfNumericFeatures", 1],
-    "Quartile3KurtosisOfNumericAtts": ["Quartile3KurtosisOfNumericFeatures", 1],
-    "PercentageOfInstancesWithMissingValues": ["RatioOfInstancesWithMissingValues", 100],
-    "PercentageOfMissingValues": ["RatioOfMissingValues", 100],
-    "PercentageOfNumericFeatures": ["RatioOfNumericFeatures", 100],
-    "PercentageOfSymbolicFeatures": ["RatioOfNominalFeatures", 100]
+    "EquivalentNumberOfFeatures": {
+        "openmlName": "EquivalentNumberOfAtts",
+        "multiplier": 1
+    },
+    "MeanCardinalityOfNominalFeatures": {
+        "openmlName": "MeanCardinalityOfNominalAttributes",
+        "multiplier": 1
+    },
+    "StdevCardinalityOfNominalFeatures": {
+        "openmlName": "StdevCardinalityOfNominalAttributes",
+        "multiplier": 1
+    },
+    "MaxCardinalityOfNominalFeatures": {
+        "openmlName": "MaxCardinalityOfNominalAttributes",
+        "multiplier": 1
+    },
+    "MinCardinalityOfNominalFeatures": {
+        "openmlName": "MinCardinalityOfNominalAttributes",
+        "multiplier": 1
+    },
+    "MeanCardinalityOfNumericFeatures": {
+        "openmlName": "MeanCardinalityOfNumericAttributes",
+        "multiplier": 1
+    },
+    "StdevCardinalityOfNumericFeatures": {
+        "openmlName": "StdevCardinalityOfNumericAttributes",
+        "multiplier": 1
+    },
+    "MaxCardinalityOfNumericFeatures": {
+        "openmlName": "MaxCardinalityOfNumericAttributes",
+        "multiplier": 1
+    },
+    "MinCardinalityOfNumericFeatures": {
+        "openmlName": "MinCardinalityOfNumericAttributes",
+        "multiplier": 1
+    },
+    "MinClassProbability": {
+        "openmlName": "MinorityClassPercentage",
+        "multiplier": 100
+    },
+    "MaxClassProbability": {
+        "openmlName": "MajorityClassPercentage",
+        "multiplier": 100
+    },
+    "MaxMeansOfNumericFeatures": {
+        "openmlName": "MaxMeansOfNumericAtts",
+        "multiplier": 1
+    },
+    "MaxStdevOfNumericFeatures": {
+        "openmlName": "MaxStdevOfNumericAtts",
+        "multiplier": 1
+    },
+    "MaxSkewnessOfNumericFeatures": {
+        "openmlName": "MaxSkewnessOfNumericAtts",
+        "multiplier": 1
+    },
+    "MaxKurtosisOfNumericFeatures": {
+        "openmlName": "MaxKurtosisOfNumericAtts",
+        "multiplier": 1
+    },
+    "MinMeansOfNumericFeatures": {
+        "openmlName": "MinMeansOfNumericAtts",
+        "multiplier": 1
+    },
+    "MinStdevOfNumericFeatures": {
+        "openmlName": "MinStdevOfNumericAtts",
+        "multiplier": 1
+    },
+    "MinSkewnessOfNumericFeatures": {
+        "openmlName": "MinSkewnessOfNumericAtts",
+        "multiplier": 1
+    },
+    "MinKurtosisOfNumericFeatures": {
+        "openmlName": "MinKurtosisOfNumericAtts",
+        "multiplier": 1
+    },
+    "MeanMeansOfNumericFeatures": {
+        "openmlName": "MeanMeansOfNumericAtts",
+        "multiplier": 1
+    },
+    "MeanStdevOfNumericFeatures": {
+        "openmlName": "MeanStdevOfNumericAtts",
+        "multiplier": 1
+    },
+    "MeanSkewnessOfNumericFeatures": {
+        "openmlName": "MeanSkewnessOfNumericAtts",
+        "multiplier": 1
+    },
+    "MeanKurtosisOfNumericFeatures": {
+        "openmlName": "MeanKurtosisOfNumericAtts",
+        "multiplier": 1
+    },
+    "StdevMeansOfNumericFeatures": {
+        "openmlName": "StdevMeansOfNumericAtts",
+        "multiplier": 1
+    },
+    "StdevStdevOfNumericFeatures": {
+        "openmlName": "StdevStdevOfNumericAtts",
+        "multiplier": 1
+    },
+    "StdevSkewnessOfNumericFeatures": {
+        "openmlName": "StdevSkewnessOfNumericAtts",
+        "multiplier": 1
+    },
+    "StdevKurtosisOfNumericFeatures": {
+        "openmlName": "StdevKurtosisOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile1MeansOfNumericFeatures": {
+        "openmlName": "Quartile1MeansOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile1StdevOfNumericFeatures": {
+        "openmlName": "Quartile1StdevOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile1SkewnessOfNumericFeatures": {
+        "openmlName": "Quartile1SkewnessOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile1KurtosisOfNumericFeatures": {
+        "openmlName": "Quartile1KurtosisOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile2MeansOfNumericFeatures": {
+        "openmlName": "Quartile2MeansOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile2StdevOfNumericFeatures": {
+        "openmlName": "Quartile2StdevOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile2SkewnessOfNumericFeatures": {
+        "openmlName": "Quartile2SkewnessOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile2KurtosisOfNumericFeatures": {
+        "openmlName": "Quartile2KurtosisOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile3MeansOfNumericFeatures": {
+        "openmlName": "Quartile3MeansOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile3StdevOfNumericFeatures": {
+        "openmlName": "Quartile3StdevOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile3SkewnessOfNumericFeatures": {
+        "openmlName": "Quartile3SkewnessOfNumericAtts",
+        "multiplier": 1
+    },
+    "Quartile3KurtosisOfNumericFeatures": {
+        "openmlName": "Quartile3KurtosisOfNumericAtts",
+        "multiplier": 1
+    },
+    "RatioOfInstancesWithMissingValues": {
+        "openmlName": "PercentageOfInstancesWithMissingValues",
+        "multiplier": 100
+    },
+    "RatioOfMissingValues": {
+        "openmlName": "PercentageOfMissingValues",
+        "multiplier": 100
+    },
+    "RatioOfNumericFeatures": {
+        "openmlName": "PercentageOfNumericFeatures",
+        "multiplier": 100
+    },
+    "RatioOfNominalFeatures": {
+        "openmlName": "PercentageOfSymbolicFeatures",
+        "multiplier": 100
+    },
+    "Dimensionality": {
+        "openmlName": "Dimensionality",
+        "multiplier": 1
+    },
+    "MajorityClassSize": {
+        "openmlName": "MajorityClassSize",
+        "multiplier": 1
+    },
+    "MeanAttributeEntropy": {
+        "openmlName": "MeanAttributeEntropy",
+        "multiplier": 1
+    },
+    "MinAttributeEntropy": {
+        "openmlName": "MinAttributeEntropy",
+        "multiplier": 1
+    },
+    "MinMutualInformation": {
+        "openmlName": "MinMutualInformation",
+        "multiplier": 1
+    },
+    "MinorityClassSize": {
+        "openmlName": "MinorityClassSize",
+        "multiplier": 1
+    },
+    "NumberOfClasses": {
+        "openmlName": "NumberOfClasses",
+        "multiplier": 1
+    },
+    "NumberOfInstances": {
+        "openmlName": "NumberOfInstances",
+        "multiplier": 1
+    },
+    "NumberOfMissingValues": {
+        "openmlName": "NumberOfMissingValues",
+        "multiplier": 1
+    },
+    "Quartile1MutualInformation": {
+        "openmlName": "Quartile1MutualInformation",
+        "multiplier": 1
+    },
+    "ClassEntropy": {
+        "openmlName": "ClassEntropy",
+        "multiplier": 1
+    },
+    "DecisionStumpErrRate": {
+        "openmlName": "DecisionStumpErrRate",
+        "multiplier": 1
+    },
+    "DecisionStumpKappa": {
+        "openmlName": "DecisionStumpKappa",
+        "multiplier": 1
+    },
+    "MaxAttributeEntropy": {
+        "openmlName": "MaxAttributeEntropy",
+        "multiplier": 1
+    },
+    "MaxMutualInformation": {
+        "openmlName": "MaxMutualInformation",
+        "multiplier": 1
+    },
+    "MeanMutualInformation": {
+        "openmlName": "MeanMutualInformation",
+        "multiplier": 1
+    },
+    "NaiveBayesErrRate": {
+        "openmlName": "NaiveBayesErrRate",
+        "multiplier": 1
+    },
+    "NaiveBayesKappa": {
+        "openmlName": "NaiveBayesKappa",
+        "multiplier": 1
+    },
+    "NumberOfFeatures": {
+        "openmlName": "NumberOfFeatures",
+        "multiplier": 1
+    },
+    "NumberOfInstancesWithMissingValues": {
+        "openmlName": "NumberOfInstancesWithMissingValues",
+        "multiplier": 1
+    },
+    "NumberOfNumericFeatures": {
+        "openmlName": "NumberOfNumericFeatures",
+        "multiplier": 1
+    },
+    "Quartile1AttributeEntropy": {
+        "openmlName": "Quartile1AttributeEntropy",
+        "multiplier": 1
+    },
+    "Quartile2AttributeEntropy": {
+        "openmlName": "Quartile2AttributeEntropy",
+        "multiplier": 1
+    },
+    "Quartile2MutualInformation": {
+        "openmlName": "Quartile2MutualInformation",
+        "multiplier": 1
+    },
+    "Quartile3AttributeEntropy": {
+        "openmlName": "Quartile3AttributeEntropy",
+        "multiplier": 1
+    },
+    "Quartile3MutualInformation": {
+        "openmlName": "Quartile3MutualInformation",
+        "multiplier": 1
+    },
+    "kNN1NErrRate": {
+        "openmlName": "kNN1NErrRate",
+        "multiplier": 1
+    },
+    "kNN1NKappa": {
+        "openmlName": "kNN1NKappa",
+        "multiplier": 1
+    }
 }
