@@ -1,15 +1,13 @@
 import json
 
-import numpy as np
+import openml
 import pandas as pd
 from arff2pandas import a2p
-
-import openml
 
 from metalearn.metafeatures.metafeatures import Metafeatures
 
 
-def import_openml_dataset(id=4):
+def import_openml_dataset(id=1):
     # get a dataset from openml using a dataset id
     dataset = openml.datasets.get_dataset(id)
     # get the metafeatures from the dataset
@@ -18,7 +16,7 @@ def import_openml_dataset(id=4):
     # get X, Y, and attributes from the dataset
     X, Y, attributes = dataset.get_data(target=dataset.default_target_attribute, return_attribute_names=True)
 
-    # create datafrom object from X,Y, and attributes
+    # create dataframe object from X,Y, and attributes
     dataframe = pd.DataFrame(X, columns=attributes)
     dataframe = dataframe.assign(target=pd.Series(Y))
 
@@ -34,59 +32,68 @@ def import_openml_dataset(id=4):
 def compare_with_openml(dataframe, omlMetafeatures):
     # get metafeatures from dataset using our metafeatures
     ourMetafeatures = extract_metafeatures(dataframe)
-    mfNameMap = json.load(open("../../../oml_metafeature_map.json", "r"))
+    metafeatureDictPath = "oml_metafeature_map.json"
+    mfNameMap = json.load(open(metafeatureDictPath, "r"))
 
     omlExclusiveMf = {x: v for x, v in omlMetafeatures.items()}
     ourExclusiveMf = {}
     sharedMfList = []
-    sharedMf = pd.DataFrame(columns=(
-    "OML Metafeature Name", "OML Metafeature Value", "Our Metafeature Name", "Our Metafeature Value", "Similar?"))
+    sharedMf = pd.DataFrame(
+        columns=("OML Metafeature Name", "OML Metafeature Value", "Our Metafeature Name", "Our Metafeature Value", "Similar?"))
 
+    # iterate over outMetafeatures.items()
     for metafeatureName, metafeatureValue in ourMetafeatures.items():
+        # if metafeatureName is not found in the dictionary, the metafeature is calculated
+        # exclusively by us, and therefore it is added to ourExclusiveMf
         if mfNameMap.get(metafeatureName) is None:
             ourExclusiveMf[metafeatureName] = metafeatureValue
         else:
+            # if oml DOES compute a metafeature that is equivalent to the metafeature represented by "metafeatureName"
+            # BUT they did not compute said metafeature for this specific dataset, the metafeature is added to ourExclusiveMf
+            # (ie, we're the only ones who calculated this metafeature)
             openmlName = mfNameMap[metafeatureName]["openmlName"]
             if omlMetafeatures.get(openmlName) is None:
                 ourExclusiveMf[metafeatureName] = metafeatureValue
+
+            # else both oml and us calculated the metafeature
             else:
+                # compare oml value with our value, get diff between the two
                 diff = abs(omlMetafeatures[openmlName] - metafeatureValue)
                 if diff > .05:
                     similarityString = "No"
                 else:
                     similarityString = "Yes"
 
-                sharedMfList.append([openmlName, omlMetafeatures[openmlName], metafeatureName, metafeatureValue, similarityString])
-                # sharedMf.append(pd.Series(
-                #     (openmlName, omlMetafeatures[openmlName], metafeatureName, metafeatureValue, similarityString)),
-                #                 ignore_index=True)
-                # remove shared metafeature from omlExclusiveMf
+                # sharedMfList is a pandas dataframe. We add a row consisting of the following values:
+                # "OML Metafeature Name", "OML Metafeature Value", "Our Metafeature Name", "Our Metafeature Value", "Similar?"
+                sharedMfList.append(
+                    [openmlName, omlMetafeatures[openmlName], metafeatureName, metafeatureValue, similarityString])
+
                 omlExclusiveMf.pop(openmlName)
 
-    # sharedMf = pd.concat([pd.DataFrame(sharedMfList[i]) for i in sharedMfList], ignore_index=True)
-    for i in sharedMfList:
-        sharedMf.loc[i] = [pd.DataFrame(sharedMfList[i][n]) for n in sharedMfList[i]]
+
+    for index, row in enumerate(sharedMfList):
+        sharedMf.loc[index] = row
+
 
     # print shared metafeature comparison
     print("Shared metafeature comparison")
-    # print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(sharedMf[0][0],sharedMf[0][1],sharedMf[0][2],sharedMf[0][3],sharedMf[0][4]).rjust(3))
-    # for x in sharedMf :
-    #     if (x[4] == "yes") :
-    #         print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(x[0],x[1],x[2],x[3],x[4]).rjust(3))
-    #
-    # for x in sharedMf :
-    #     if (x[4] == "no") :
-    #         print("{0:40} {1:30} {2:40} {3:30} {4:5}".format(x[0],x[1],x[2],x[3],x[4]).rjust(3))
-    # with pd.option_context('display.max_rows', None, 'display.max_columns', 3):
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
+
+    sharedMf.sort_values("Similar?", ascending=False, axis=0, inplace=True)
+
     print(sharedMf)
+
+    # print metafeatures calculate by our primitive exclusively
+    print("\nMetafeatures calculated by our primitive exclusively:")
+    print(json.dumps(ourExclusiveMf, sort_keys=True, indent=4))
 
     # print metafeatures calculated only by OpenML
     print("\nMetafeatures calculated by OpenML exclusively:")
     print(json.dumps(omlExclusiveMf, sort_keys=True, indent=4))
 
-    # print metafeatures calculate by our primitive exclusively
-    print("\nMetafeatures calculated by our primitive exclusively:")
-    print(json.dumps(ourExclusiveMf, sort_keys=True, indent=4))
+
 
 
 def load_arff(infile_path):
@@ -99,7 +106,7 @@ def load_arff(infile_path):
 
 def extract_metafeatures(dataframe):
     metafeatures = {}
-    features_df = Metafeatures().compute(dataframe)    
+    features_df = Metafeatures().compute(dataframe)
     for feature in features_df.columns:
         metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
