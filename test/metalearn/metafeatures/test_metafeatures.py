@@ -71,6 +71,14 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
     
+    def setUp(self):
+        self.dummy_df = pd.DataFrame(np.random.rand(50,50))
+        self.dummy_df.columns = [*self.dummy_df.columns[:-1], "target"]
+        
+        self.invalid_metafeature_message_start = "One or more requested metafeatures are not valid:"
+        self.invalid_metafeature_message_start_fail_message = "Error message indicating invalid metafeatures did not start with expected string."
+        self.invalid_metafeature_message_contains_fail_message = "Error message indicating invalid metafeatures should include names of invalid features."
+    
     def test_dataframe_input_error(self): 
         """ Tests if `compute` gives a user-friendly error when a TypeError occurs. """
         
@@ -85,6 +93,46 @@ class MetaFeaturesTestCase(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Metafeatures().compute(dataframe = np.zeros((500,50)))
         self.assertEqual(str(cm.exception), expected_error_message, fail_message)
+    
+    def _check_invalid_metafeature_exception_string(self, exception_str, invalid_metafeatures):
+        """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
+        self.assertTrue(
+                exception_str.startswith(self.invalid_metafeature_message_start),
+                self.invalid_metafeature_message_start_fail_message
+                )
+        
+        for invalid_mf in invalid_metafeatures:
+            self.assertTrue(
+                    invalid_mf in exception_str,
+                    self.invalid_metafeature_message_contains_fail_message
+                    )        
+    
+    def test_metafeatures_input_all_invalid(self): 
+        """ Test case where all requested metafeatures are invalid. """
+                
+        invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
+        
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(dataframe = self.dummy_df, metafeatures = invalid_metafeatures)
+            
+        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+    
+    def test_metafeatures_input_partial_invalid(self): 
+        """ Test case where only some requested metafeatures are invalid. """
+                
+        invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
+        valid_metafeatures = ["NumberOfInstances", "NumberOfFeatures"]
+        
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(dataframe = self.dummy_df, metafeatures = invalid_metafeatures+valid_metafeatures)
+            
+        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+            
+        # Order should not matter
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(dataframe = self.dummy_df, metafeatures = valid_metafeatures+invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+        
         
 def metafeatures_suite():
     test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]    
