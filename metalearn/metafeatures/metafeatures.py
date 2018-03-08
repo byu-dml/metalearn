@@ -51,6 +51,13 @@ class Metafeatures(object):
         if not isinstance(dataframe, pd.DataFrame):
             raise TypeError("DataFrame has to be Pandas DataFrame.")
             
+        if metafeatures is None:
+            metafeatures = self.list_metafeatures()
+        else:        
+            invalid_metafeatures = [mf for mf in metafeatures if mf not in self.resource_info_dict]
+            if invalid_metafeatures:
+                raise ValueError("One or more requested metafeatures are not valid:"+str(invalid_metafeatures))
+            
         X_raw = dataframe.drop(self.target_name, axis=1)
         X = X_raw.dropna(axis=1, how="all")
         Y = dataframe[self.target_name]
@@ -59,8 +66,7 @@ class Metafeatures(object):
         self.resource_results_dict['Y'] = {self.value_name: Y, self.time_name: 0.}
         self.resource_results_dict['SampleRowsFlag'] = {self.value_name: sample_rows, self.time_name: 0.}
         self.resource_results_dict['SampleColumnsFlag'] = {self.value_name: sample_columns, self.time_name: 0.}
-        if metafeatures is None:
-            metafeatures = self.list_metafeatures()
+        
         return self._retrieve_metafeatures(metafeatures)
 
     def list_metafeatures(self):
