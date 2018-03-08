@@ -68,6 +68,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         """ For each dataset that has a corresponding mf (metafeature) file present, 
             check differences in columns we do not expect to change.
         """
+        # Known value file was made with seeds set to 0 (some mfs use randomness)
         np.random.seed(0)
         random.seed(0)
         
