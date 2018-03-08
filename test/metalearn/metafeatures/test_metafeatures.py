@@ -71,7 +71,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
     
-    def test_intput_error(self): 
+    def test_dataframe_input_error(self): 
         """ Tests if `compute` gives a user-friendly error when a TypeError occurs. """
         
         expected_error_message = "DataFrame has to be Pandas DataFrame."
