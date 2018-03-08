@@ -47,7 +47,10 @@ class Metafeatures(object):
         Returns
         -------
         A dataframe containing one row and twice as many columns as requested metafeatures because <metafeature>_time columns will also be included
-        """        
+        """
+        if not isinstance(dataframe, pd.DataFrame):
+            raise TypeError("DataFrame has to be Pandas DataFrame.")
+            
         X_raw = dataframe.drop(self.target_name, axis=1)
         X = X_raw.dropna(axis=1, how="all")
         Y = dataframe[self.target_name]
