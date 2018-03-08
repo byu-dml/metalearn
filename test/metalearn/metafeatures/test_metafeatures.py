@@ -6,6 +6,9 @@
 # we then manually decide which metafeatures are correct and update the static file as needed
 """
 import json
+import math
+import os
+import random
 import unittest
 
 import numpy as np
@@ -40,15 +43,15 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
     
     def setUp(self):
         self.dataframes = {}
-        data_folder = './data/'
-        with open(data_folder + "test_datasets.json", "r") as fh:
+        self.data_folder = './data/'
+        with open(self.data_folder + "test_datasets.json", "r") as fh:
             datasets = json.load(fh)
             
         for obj in datasets:
-            filename = data_folder + obj["path"]
+            filename = obj["path"]
             target_name = obj["target_name"]
             
-            dataframe = load_data(filename)
+            dataframe = load_data(self.data_folder + filename)
             dataframe.rename(columns={target_name: "target"}, inplace=True)
             
             if "d3mIndex" in dataframe.columns:
@@ -61,12 +64,54 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
         # print(len(metafeatures), "metafeatures")
     
-    def test_correctness(self):
+    def test_run_without_fail(self):
         for filename, dataframe in self.dataframes.items():
-            print(filename)
             metafeatures_df = Metafeatures().compute(dataframe)
             metafeatures_dict = metafeatures_df.to_dict('records')[0]
             print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
+            
+    def test_correctness(self):
+        """ For each dataset that has a corresponding mf (metafeature) file present, 
+            check differences in columns we do not expect to change.
+        """
+        np.random.seed(0)
+        random.seed(0)
+        
+        fails = {}
+        for filename, dataframe in self.dataframes.items():
+            last_results_file = filename.replace('data','mf').replace('.csv','.json')
+            if os.path.exists(self.data_folder + last_results_file):
+                with open(self.data_folder + last_results_file) as fh:
+                    known_mfs = json.load(fh)
+                
+                # Explicitly create empty dict because this provides information about successful tests.
+                fails[last_results_file] = {}
+                
+                metafeatures_df = Metafeatures().compute(dataframe)
+                computed_mfs = metafeatures_df.to_dict('records')[0]
+                
+                for mf, computed_value in computed_mfs.items():
+                    if '_Time' in mf:
+                        # Timing metafeatures will always differ anyway.
+                        # For now we pay no mind, no matter how big a difference may be.
+                        continue
+                    
+                    known_value = known_mfs[mf]
+                    if not math.isclose(known_value, computed_value):
+                        fails[last_results_file][mf] = (known_value, computed_value)
+        
+        self.assertGreater(len(fails), 0, "No known results could be loaded, correctness could not be verified.")
+        if not all(f == {} for f in fails.values()):
+            # Results are no longer correct. Because multiple results that can be wrong are calculated at once,
+            # we want to output all of the wrong results so it might be easier to find out what went wrong.
+            fails = {k:v for (k,v) in fails.items() if v != {}}
+            fail_report_file = './test/metalearn/metafeatures/correctness_fails.json'
+            with open(fail_report_file,'w') as fh:
+                json.dump(fails, fh, indent=4)
+                
+            self.assertTrue(False, "Not all metafeatures matched previous results, output written to {}.".format(fail_report_file))
+            
+        
         
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
