@@ -38,7 +38,7 @@ class Metafeatures(object):
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
 
-    def compute(self, dataframe: DataFrame, metafeatures: list = None, sample_rows=True, sample_columns=True) -> DataFrame:
+    def compute(self, dataframe: DataFrame, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
         """
         Parameters
         ----------

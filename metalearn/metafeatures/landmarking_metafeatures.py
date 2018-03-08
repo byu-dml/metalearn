@@ -23,7 +23,7 @@ Decision Node, Random Node.
 
 '''
 
-def run_pipeline(X, Y, estimator, label):
+def run_pipeline(X, Y, estimator):
     pipe = Pipeline([('classifiers', estimator)])
     accuracy_scorer = make_scorer(accuracy_score)
     kappa_scorer = make_scorer(cohen_kappa_score)
@@ -35,16 +35,16 @@ def run_pipeline(X, Y, estimator, label):
     return (err_rate, kappa)
 
 def get_naive_bayes(X, Y):
-    return run_pipeline(X, Y, GaussianNB(), 'NaiveBayes')
+    return run_pipeline(X, Y, GaussianNB())
 
 def get_knn_1(X, Y):
-    return run_pipeline(X, Y, KNeighborsClassifier(n_neighbors = 1), 'kNN1N')
+    return run_pipeline(X, Y, KNeighborsClassifier(n_neighbors = 1))
 
-def get_decision_stump(X, Y):
-    return run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='best', max_depth=1, random_state=0), 'DecisionStump')
+def get_decision_stump(X, Y, seed):
+    return run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='best', max_depth=1, random_state=seed))
 
-def get_random_tree(X, Y, depth):
-    return run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random', max_depth=depth, random_state=0), 'RandomNode')
+def get_random_tree(X, Y, depth, seed):
+    return run_pipeline(X, Y, DecisionTreeClassifier(criterion='entropy', splitter='random', max_depth=depth, random_state=seed))
 
 def get_lda(X, Y):
-    return run_pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'), 'LinearDiscriminantAnalysis')
+    return run_pipeline(X, Y, LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'))
