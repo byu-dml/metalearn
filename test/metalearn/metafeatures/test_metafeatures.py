@@ -1,4 +1,12 @@
+""" Contains unit tests for the MetaFeatures class.
+# TODO
+# compare computed metafeatures against a static file of pre-computed metafeatures
+# this would allow us to see if we have fundamentally changed how we are computing metafeatures
+# during any development process
+# we then manually decide which metafeatures are correct and update the static file as needed
+"""
 import json
+import unittest
 
 import numpy as np
 import pandas as pd
@@ -8,7 +16,81 @@ import openml
 
 from metalearn.metafeatures.metafeatures import Metafeatures
 
+def load_arff(infile_path):
+    """ Loads and ARFF file to a pandas dataframe and drops meta-info on column type. """
+    with open(infile_path) as fh:
+        df = a2p.load(fh)
+    # Default column names follow ARFF, e.g. petalwidth@REAL, class@{a,b,c}
+    df.columns = [col.split('@')[0] for col in df.columns]
+    return df
 
+def load_data(filename):
+    """ Loads a csv or arff file (provided they are named *.{csv|arff}) """
+    ext = filename.split(".")[-1]
+    if ext == "arff":
+        dataframe = load_arff(filename)
+    elif ext == "csv":
+        dataframe = pd.read_csv(filename)
+    else:
+        raise ValueError("load file type '{}' not implemented")
+    return dataframe
+
+class MetaFeaturesWithDataTestCase(unittest.TestCase):
+    """ Contains tests for MetaFeatures that require loading data first. """
+    
+    def setUp(self):
+        self.dataframes = {}
+        data_folder = './data/'
+        with open(data_folder + "test_datasets.json", "r") as fh:
+            datasets = json.load(fh)
+            
+        for obj in datasets:
+            filename = data_folder + obj["path"]
+            target_name = obj["target_name"]
+            
+            dataframe = load_data(filename)
+            dataframe.rename(columns={target_name: "target"}, inplace=True)
+            
+            if "d3mIndex" in dataframe.columns:
+                dataframe.drop(columns="d3mIndex", inplace=True)
+            
+            self.dataframes[filename] = dataframe
+        
+    def tearDown(self):
+        del self.dataframes
+        # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
+        # print(len(metafeatures), "metafeatures")
+    
+    def test_correctness(self):
+        for filename, dataframe in self.dataframes.items():
+            print(filename)
+            metafeatures_df = Metafeatures().compute(dataframe)
+            metafeatures_dict = metafeatures_df.to_dict('records')[0]
+            print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
+        
+class MetaFeaturesTestCase(unittest.TestCase):
+    """ Contains tests for MetaFeatures that can be executed without loading data. """
+    
+    def test_intput_error(self): 
+        """ Tests if `compute` gives a user-friendly error when a TypeError occurs. """
+        
+        expected_error_message = "DataFrame has to be Pandas DataFrame."
+        fail_message = "We expect a user friendly message the object passed to compute is not a Pandas.DataFrame."
+        # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
+        
+        with self.assertRaises(TypeError) as cm:
+            Metafeatures().compute(dataframe = None)
+        self.assertEqual(str(cm.exception), expected_error_message, fail_message)
+        
+        with self.assertRaises(TypeError) as cm:
+            Metafeatures().compute(dataframe = np.zeros((500,50)))
+        self.assertEqual(str(cm.exception), expected_error_message, fail_message)
+        
+def metafeatures_suite():
+    test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]    
+    return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+        
+""" === Anything under is line is currently not in use. === """
 def import_openml_dataset(id=4):
     # get a dataset from openml using a dataset id
     dataset = openml.datasets.get_dataset(id)
@@ -99,56 +181,13 @@ def compare_with_openml(dataframe, omlMetafeatures):
     print("\nMetafeatures calculated by our primitive exclusively:")
     print(json.dumps(ourExclusiveMf, sort_keys=True, indent=4))
 
-def load_arff(infile_path):
-    f = open(infile_path)
-    dataframe = a2p.load(f)
-    column_name = [name for name in list(dataframe.columns) if 'class@' in name][0]
-    dataframe = dataframe.rename(index=str, columns={column_name: 'target'})
-    return dataframe
-
-def extract_metafeatures(dataframe):
-    metafeatures = {}
-    features_df = Metafeatures().compute(dataframe)    
-    for feature in features_df.columns:
-        metafeatures[feature] = features_df[feature].as_matrix()[0]
-    return metafeatures
-
 def sort_by_compute_time(metafeatures):
     metafeature_times = {}
     for key in metafeatures:
         if "_Time" in key:
             metafeature_times[key] = metafeatures[key]
     return dict(sorted(metafeature_times.items(), key=lambda x: x[1], reverse=True))
-
-def main():
-    # todo compare computed metafeatures against a static file of pre-computed metafeatures
-    # this would allow us to see if we have fundamentally changed how we are computing metafeatures
-    # during any development process
-    # we then manually decide which metafeatures are correct and update the static file as needed
-    datasets = json.load(open("./data/test_datasets.json", "r"))
-    for obj in datasets:
-        filename = "./data/"+obj["path"]
-        target_name = obj["target_name"]
-        print(filename)
-        ext = filename.split(".")[-1]
-        if ext == "arff":
-            dataframe = load_arff(filename)
-        elif ext == "csv":
-            dataframe = pd.read_csv(filename)
-            dataframe.rename(columns={target_name: "target"}, inplace=True)
-        else:
-            raise ValueError("load file type '{}' not implemented")
-
-        if "d3mIndex" in dataframe.columns:
-            dataframe.drop(columns="d3mIndex", inplace=True)
-
-        metafeatures = extract_metafeatures(dataframe)
-        # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
-        print(json.dumps(metafeatures, sort_keys=True, indent=4))
-        # print(len(metafeatures), "metafeatures")
-    print("tests finished")
-
-if __name__ == "__main__":
-    # dataframe, omlMetafeatures = import_openml_dataset()
-    # compare_with_openml(dataframe,omlMetafeatures)
-    main()
+    
+#if __name__ == "__main__":
+# dataframe, omlMetafeatures = import_openml_dataset()
+# compare_with_openml(dataframe,omlMetafeatures)
