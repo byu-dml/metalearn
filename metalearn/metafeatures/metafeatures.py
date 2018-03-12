@@ -51,6 +51,7 @@ class Metafeatures(object):
         X_raw = dataframe.drop(self.target_name, axis=1)
         X = X_raw.dropna(axis=1, how="all")
         Y = dataframe[self.target_name]
+        self.seed = seed
         self.resource_results_dict['XRaw'] = {self.value_name: X_raw, self.time_name: 0.}
         self.resource_results_dict['X'] = {self.value_name: X, self.time_name: 0.}
         self.resource_results_dict['Y'] = {self.value_name: Y, self.time_name: 0.}
@@ -97,6 +98,7 @@ class Metafeatures(object):
             retrieved_parameters, total_time = self._retrieve_parameters(resource_name)
             resource_info = self.resource_info_dict[resource_name]
             f = resource_info['function']
+            print(f)
             if 'returns' in resource_info:
                 returns = resource_info['returns']
             else:
@@ -117,6 +119,10 @@ class Metafeatures(object):
         value = self.resource_results_dict[resource_name][self.value_name]
         total_time = self.resource_results_dict[resource_name][self.time_name]
         return (value, total_time)
+
+    def _get_random_state(self):
+        self.seed += 1
+        return (self.seed,)
 
     def _get_preprocessed_data(self, X_sample, X_sampled_columns):
         series_array = []

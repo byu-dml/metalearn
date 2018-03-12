@@ -113,14 +113,6 @@ def extract_metafeatures(dataframe):
         metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
 
-def extract_metafeatures(dataframe, selection):
-    metafeatures = {}
-    features_df = Metafeatures().compute(dataframe)    
-    for feature in features_df.columns:
-        if feature in selection:
-            metafeatures[feature] = features_df[feature].as_matrix()[0]
-    return metafeatures
-
 def sort_by_compute_time(metafeatures):
     metafeature_times = {}
     for key in metafeatures:
