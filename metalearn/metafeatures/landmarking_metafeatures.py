@@ -27,7 +27,7 @@ def run_pipeline(X, Y, estimator, random):
     pipe = Pipeline([('classifiers', estimator)])
     accuracy_scorer = make_scorer(accuracy_score)
     kappa_scorer = make_scorer(cohen_kappa_score)
-    cv = StratifiedKFold(n_splits=3,shuffle=True,random_state=random)
+    cv = StratifiedKFold(n_splits=2,shuffle=True,random_state=random)
     scores = cross_validate(pipe, X.as_matrix(), Y.as_matrix(),
         cv=cv, n_jobs=-1, scoring={'accuracy': accuracy_scorer, 'kappa': kappa_scorer})
     err_rate = 1. - np.mean(scores['test_accuracy'])
