@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 
 setup(
     name = "metalearn",
@@ -16,5 +16,6 @@ setup(
     classifiers = [
         'Programming Language :: Python :: 3.6'
     ],
-    python_requires='~=3.6'
+    python_requires='~=3.6',
+    include_package_data=True
 )
