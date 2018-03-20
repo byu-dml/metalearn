@@ -1,7 +1,5 @@
-from test.metalearn.metafeatures.test_metafeatures import main as mf_tests
-
-def main():
-    mf_tests()
+import unittest
+from test.metalearn.metafeatures.test_metafeatures import metafeatures_suite
 
 if __name__ == '__main__':
-    main()
+    unittest.TextTestRunner().run(metafeatures_suite())
