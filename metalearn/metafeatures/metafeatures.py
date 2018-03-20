@@ -32,7 +32,7 @@ class Metafeatures(object):
             json_dict = json.load(json_file)
             self.function_dict = json_dict['functions']
             json_metafeatures_dict = json_dict['metafeatures']
-            json_resources_dict = json_dict['resources']            
+            json_resources_dict = json_dict['resources']
             self.metafeatures_list = list(json_metafeatures_dict.keys())
             combined_dict = {**json_metafeatures_dict, **json_resources_dict}
             for key in combined_dict:
@@ -50,14 +50,14 @@ class Metafeatures(object):
         """
         if not isinstance(dataframe, pd.DataFrame):
             raise TypeError("DataFrame has to be Pandas DataFrame.")
-            
+
         if metafeatures is None:
             metafeatures = self.list_metafeatures()
-        else:        
+        else:
             invalid_metafeatures = [mf for mf in metafeatures if mf not in self.resource_info_dict]
-            if invalid_metafeatures:
-                raise ValueError("One or more requested metafeatures are not valid:"+str(invalid_metafeatures))
-            
+            if len(invalid_metafeatures) > 0:
+                raise ValueError("One or more requested metafeatures are not valid: {}".format(invalid_metafeatures))
+
         X_raw = dataframe.drop(self.target_name, axis=1)
         X = X_raw.dropna(axis=1, how="all")
         Y = dataframe[self.target_name]
@@ -66,7 +66,7 @@ class Metafeatures(object):
         self.resource_results_dict['Y'] = {self.value_name: Y, self.time_name: 0.}
         self.resource_results_dict['SampleRowsFlag'] = {self.value_name: sample_rows, self.time_name: 0.}
         self.resource_results_dict['SampleColumnsFlag'] = {self.value_name: sample_columns, self.time_name: 0.}
-        
+
         return self._retrieve_metafeatures(metafeatures)
 
     def list_metafeatures(self):
@@ -101,7 +101,7 @@ class Metafeatures(object):
             total_time += time_value
         return (retrieved_parameters, total_time)
 
-    def _retrieve_resource(self, resource_name):        
+    def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:
             retrieved_parameters, total_time = self._retrieve_parameters(resource_name)
             resource_info = self.resource_info_dict[resource_name]
@@ -132,7 +132,7 @@ class Metafeatures(object):
         for feature in X_sample.columns:
             feature_series = X_sample[feature]
             col = feature_series.as_matrix()
-            dropped_nan_series = X_sampled_columns[feature].dropna(axis=0,how='any')            
+            dropped_nan_series = X_sampled_columns[feature].dropna(axis=0,how='any')
             num_nan = np.sum(feature_series.isnull())
             col[feature_series.isnull()] = np.random.choice(dropped_nan_series, num_nan)
             if not dtype_is_numeric(feature_series.dtype):
