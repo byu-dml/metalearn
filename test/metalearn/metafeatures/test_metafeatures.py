@@ -142,10 +142,9 @@ def main():
         if "d3mIndex" in dataframe.columns:
             dataframe.drop(columns="d3mIndex", inplace=True)
 
-        #metafeatures = extract_metafeatures(dataframe)
-        compare_seeds(dataframe)
+        metafeatures = extract_metafeatures(dataframe)
         # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
-        #print(json.dumps(metafeatures, sort_keys=True, indent=4))
+        print(json.dumps(metafeatures, sort_keys=True, indent=4))
         # print(len(metafeatures), "metafeatures")
 
     print("tests finished")
