@@ -69,8 +69,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             check differences in columns we do not expect to change.
         """
         # Known value file was made with seeds set to 0 (some mfs use randomness)
-        np.random.seed(0)
-        random.seed(0)
+        random_seed = 0
 
         fails = {}
         for filename, dataframe in self.dataframes.items():
@@ -82,7 +81,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 # Explicitly create empty dict because this provides information about successful tests.
                 fails[last_results_file] = {}
 
-                metafeatures_df = Metafeatures().compute(dataframe)
+                metafeatures_df = Metafeatures().compute(dataframe,seed=random_seed)
                 computed_mfs = metafeatures_df.to_dict('records')[0]
 
                 for mf, computed_value in computed_mfs.items():
