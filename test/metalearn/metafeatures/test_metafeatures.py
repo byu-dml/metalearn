@@ -68,13 +68,11 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         """ For each dataset that has a corresponding mf (metafeature) file present,
             check differences in columns we do not expect to change.
         """
-        # Known value file was made with seeds set to 0 (some mfs use randomness)
-        np.random.seed(0)
-        random.seed(0)
+        random_seed = 0
 
         fails = {}
         for filename, dataframe in self.dataframes.items():
-            last_results_file = filename.replace('data','mf').replace('.csv','.json')
+            last_results_file = filename.replace('.csv','_mf.json')
             if os.path.exists(self.data_folder + last_results_file):
                 with open(self.data_folder + last_results_file) as fh:
                     known_mfs = json.load(fh)
@@ -82,7 +80,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 # Explicitly create empty dict because this provides information about successful tests.
                 fails[last_results_file] = {}
 
-                metafeatures_df = Metafeatures().compute(dataframe)
+                metafeatures_df = Metafeatures().compute(dataframe,seed=random_seed)
                 computed_mfs = metafeatures_df.to_dict('records')[0]
 
                 for mf, computed_value in computed_mfs.items():
@@ -92,7 +90,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                         continue
 
                     known_value = known_mfs[mf]
-                    if not math.isclose(known_value, computed_value):
+                    if not math.isclose(known_value, computed_value) and not (np.isnan(known_value) and np.isnan(computed_value)):
                         fails[last_results_file][mf] = (known_value, computed_value)
 
         self.assertGreater(len(fails), 0, "No known results could be loaded, correctness could not be verified.")
@@ -216,7 +214,7 @@ def compare_with_openml(dataframe, omlMetafeatures):
             omlMetafeatureValue= ""
             ourMetafeatureName= ""
             ourMetafeatureValue= ""
-            similarityString = ""
+            similarityString= ""
             diff = 0
             similarityQualifier = 0.05
 
