@@ -5,7 +5,7 @@ import time
 
 import numpy as np
 import pandas as pd
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 from .common_operations import *
 from .simple_metafeatures import *
@@ -38,7 +38,7 @@ class Metafeatures(object):
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
 
-    def compute(self, dataframe: DataFrame, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
+    def compute(self, dataframe: DataFrame, target_feature, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
         """
         Parameters
         ----------
@@ -58,9 +58,10 @@ class Metafeatures(object):
             if len(invalid_metafeatures) > 0:
                 raise ValueError("One or more requested metafeatures are not valid: {}".format(invalid_metafeatures))
 
-        X_raw = dataframe.drop(self.target_name, axis=1)
+        X_raw = dataframe
         X = X_raw.dropna(axis=1, how="all")
-        Y = dataframe[self.target_name]
+        Y = target_feature
+
         self.seed = seed
         self.resource_results_dict['XRaw'] = {self.value_name: X_raw, self.time_name: 0.}
         self.resource_results_dict['X'] = {self.value_name: X, self.time_name: 0.}
