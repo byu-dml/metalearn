@@ -62,7 +62,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
     def test_run_without_fail(self):
         for filename, dataframe in self.dataframes.items():
-            metafeatures_df = Metafeatures().compute(dataframe[0],dataframe[1])
+            metafeatures_df = Metafeatures().compute(X=dataframe[0],Y=dataframe[1])
             metafeatures_dict = metafeatures_df.to_dict('records')[0]
             # print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
 
@@ -82,7 +82,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 # Explicitly create empty dict because this provides information about successful tests.
                 fails[last_results_file] = {}
 
-                metafeatures_df = Metafeatures().compute(dataframe=dataframe[0],target_feature=dataframe[1],seed=random_seed)
+                metafeatures_df = Metafeatures().compute(X=dataframe[0],Y=dataframe[1],seed=random_seed)
                 computed_mfs = metafeatures_df.to_dict('records')[0]
 
                 for mf, computed_value in computed_mfs.items():
@@ -128,11 +128,11 @@ class MetaFeaturesTestCase(unittest.TestCase):
         # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
 
         with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(dataframe = None, target_feature=None)
+            Metafeatures().compute(X=None, Y=None)
         self.assertEqual(str(cm.exception), expected_error_message, fail_message)
 
         with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(dataframe = np.zeros((500,50)), target_feature = np.zeros(500))
+            Metafeatures().compute(X=np.zeros((500,50)), Y=np.zeros(500))
         self.assertEqual(str(cm.exception), expected_error_message, fail_message)
 
     def _check_invalid_metafeature_exception_string(self, exception_str, invalid_metafeatures):
@@ -154,7 +154,7 @@ class MetaFeaturesTestCase(unittest.TestCase):
         invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(dataframe = self.dummy_df, target_feature = self.dummy_target, metafeatures = invalid_metafeatures)
+            Metafeatures().compute(X=self.dummy_df, Y=self.dummy_target, metafeatures = invalid_metafeatures)
 
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
@@ -165,13 +165,13 @@ class MetaFeaturesTestCase(unittest.TestCase):
         valid_metafeatures = ["NumberOfInstances", "NumberOfFeatures"]
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(dataframe = self.dummy_df, target_feature = self.dummy_target, metafeatures = invalid_metafeatures+valid_metafeatures)
+            Metafeatures().compute(X=self.dummy_df, Y=self.dummy_target, metafeatures = invalid_metafeatures+valid_metafeatures)
 
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
         # Order should not matter
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(dataframe = self.dummy_df, target_feature = self.dummy_target, metafeatures = valid_metafeatures+invalid_metafeatures)
+            Metafeatures().compute(X = self.dummy_df, Y = self.dummy_target, metafeatures = valid_metafeatures+invalid_metafeatures)
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
 

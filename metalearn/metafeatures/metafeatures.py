@@ -48,9 +48,9 @@ class Metafeatures(object):
         -------
         A dataframe containing one row and twice as many columns as requested metafeatures because <metafeature>_time columns will also be included
         """
-        if not isinstance(dataframe, pd.DataFrame):
+        if not isinstance(X, pd.DataFrame):
             raise TypeError("DataFrame has to be Pandas DataFrame.")
-        if not isinstance(dataframe, pd.Series):
+        if not isinstance(Y, pd.Series):
             raise TypeError("Target Column has to be Pandas Series.")    
 
         if metafeatures is None:
