@@ -38,7 +38,7 @@ class Metafeatures(object):
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
 
-    def compute(self, dataframe: DataFrame, target_feature, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
+    def compute(self, X: DataFrame, Y: Series, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
         """
         Parameters
         ----------
@@ -50,6 +50,8 @@ class Metafeatures(object):
         """
         if not isinstance(dataframe, pd.DataFrame):
             raise TypeError("DataFrame has to be Pandas DataFrame.")
+        if not isinstance(dataframe, pd.Series):
+            raise TypeError("Target Column has to be Pandas Series.")    
 
         if metafeatures is None:
             metafeatures = self.list_metafeatures()
@@ -58,9 +60,8 @@ class Metafeatures(object):
             if len(invalid_metafeatures) > 0:
                 raise ValueError("One or more requested metafeatures are not valid: {}".format(invalid_metafeatures))
 
-        X_raw = dataframe
+        X_raw = X
         X = X_raw.dropna(axis=1, how="all")
-        Y = target_feature
 
         self.seed = seed
         self.resource_results_dict['XRaw'] = {self.value_name: X_raw, self.time_name: 0.}
