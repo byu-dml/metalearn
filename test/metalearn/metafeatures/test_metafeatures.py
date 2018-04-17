@@ -46,14 +46,10 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             target_name = obj["target_name"]
 
             data = load_data(self.data_folder + filename)
-            X = data.drop(target_name, axis=1)
+            X = data.drop(columns=[target_name], axis=1)
+            X.drop(columns=["d3mIndex"], axis=1, inplace=True, errors="ignore")
             Y = data[target_name]
-            #dataframe.rename(columns={target_name: "target"}, inplace=True)
-            dataset = {"X": X, "Y": Y}
-            if "d3mIndex" in dataset["X"].columns:
-                dataset["X"].drop(columns="d3mIndex", inplace=True)
-
-            self.datasets[filename] = dataset
+            self.datasets[filename] = {"X": X, "Y": Y}
 
     def tearDown(self):
         del self.datasets
@@ -66,6 +62,11 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             metafeatures_dict = metafeatures_df.to_dict('records')[0]
             # print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
 
+    def _get_last_mf_results_filename(self, dataset_filename):
+        ext = dataset_filename.rsplit(".", 1)[1]
+        search_str = "." + ext
+        return dataset_filename.replace(search_str, "_mf.json")
+
     def test_correctness(self):
         """ For each dataset that has a corresponding mf (metafeature) file present,
             check differences in columns we do not expect to change.
@@ -74,7 +75,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
         fails = {}
         for filename, dataset in self.datasets.items():
-            last_results_file = filename.replace('.csv','_mf.json')
+            last_results_file = self._get_last_mf_results_filename(filename)
             if os.path.exists(self.data_folder + last_results_file):
                 with open(self.data_folder + last_results_file) as fh:
                     known_mfs = json.load(fh)
