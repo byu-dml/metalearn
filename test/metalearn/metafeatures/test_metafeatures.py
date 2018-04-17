@@ -4,6 +4,7 @@ import math
 import os
 import random
 import unittest
+import time
 
 # import openml
 import pandas as pd
@@ -106,6 +107,15 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
             self.assertTrue(False, "Not all metafeatures matched previous results, output written to {}.".format(fail_report_file))
 
+    def test_timeout(self):
+        '''Tests whether the Metafeatures.compute function returns within the allotted time.'''
+        for filename, dataset in self.datasets.items():
+            for timeout in [3, 5, 10]:
+                mf = Metafeatures()
+                start_time = time.time()
+                mf.compute(X=dataset["X"], Y=dataset["Y"], timeout=timeout)
+                compute_time = time.time() - start_time
+                self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
 
 
 class MetaFeaturesTestCase(unittest.TestCase):
@@ -123,9 +133,9 @@ class MetaFeaturesTestCase(unittest.TestCase):
     def test_dataframe_input_error(self):
         """ Tests if `compute` gives a user-friendly error when a TypeError occurs. """
 
-        expected_error_message1 = "X has to be Pandas DataFrame."
+        expected_error_message1 = "X must be of type pandas.DataFrame"
         fail_message1 = "We expect a user friendly message when the features passed to compute is not a Pandas.DataFrame."
-        expected_error_message2 = "Y has to be Pandas Series."
+        expected_error_message2 = "Y must be of type pandas.Series"
         fail_message2 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
         # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
 
@@ -164,7 +174,7 @@ class MetaFeaturesTestCase(unittest.TestCase):
         invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeatures = invalid_metafeatures)
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeature_ids = invalid_metafeatures)
 
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
@@ -175,13 +185,13 @@ class MetaFeaturesTestCase(unittest.TestCase):
         valid_metafeatures = ["NumberOfInstances", "NumberOfFeatures"]
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeatures = invalid_metafeatures+valid_metafeatures)
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeature_ids = invalid_metafeatures+valid_metafeatures)
 
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
         # Order should not matter
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(X = self.dummy_features, Y = self.dummy_target, metafeatures = valid_metafeatures+invalid_metafeatures)
+            Metafeatures().compute(X = self.dummy_features, Y = self.dummy_target, metafeature_ids = valid_metafeatures+invalid_metafeatures)
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
 
@@ -210,7 +220,6 @@ def import_openml_dataset(id=4):
         # set types of attributes (column headers) as well as the names
 
     return dataframe, omlMetafeatures
-
 
 def compare_with_openml(dataframe, omlMetafeatures):
     # get metafeatures from dataset using our metafeatures

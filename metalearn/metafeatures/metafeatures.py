@@ -2,6 +2,7 @@ import os
 import math
 import json
 import time
+import signal
 
 import numpy as np
 import pandas as pd
@@ -38,50 +39,75 @@ class Metafeatures(object):
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
 
-    def compute(self, X: DataFrame, Y: Series, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
+    def compute(self, X: DataFrame, Y: Series, metafeature_ids: list = None, sample_rows=True, sample_columns=True, seed=42, timeout=None) -> DataFrame:
         """
         Parameters
         ----------
-        dataframe: The data for metafeatures "seed_offset": null,to be computed on. The targets are contained in a column named 'target'
-        metafeatures: A list of strings (metafeature names) to be computed
+        X: pandas.DataFrame, the features used to compute metafeatures
+        Y: pandas.Seris, the targets for the features used to compute metafeatures
+        metafeature_ids: list, the metafeatures to compute. default of None indicates to compute all metafeatures
+        sample_rows: bool, whether to uniformly sample from the rows
+        sample_columns: bool, whether to uniformly sample from the columns
+        seed: int, the seed used to generate psuedo-random numbers
+        timeout: int, the maximum amount of wall time used to compute metafeatures
+
         Returns
         -------
-        A dataframe containing one row and twice as many columns as requested metafeatures because <metafeature>_time columns will also be included
+        A dataframe containing one row and two columns for each metafeature: one for the value and one for the compute time of that metafeature value
         """
+        computed_metafeatures = DataFrame()
+        try:
+            if timeout is not None:
+                def handler(signal_number, stack_frame):
+                    raise TimeoutError()
+                signal.signal(signal.SIGALRM, handler)
+                signal.alarm(timeout - 2)
+
+            self._validate_compute_arguments(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout)
+            if metafeature_ids is None:
+                metafeature_ids = self.list_metafeatures()
+
+            X_raw = X
+            X = X_raw.dropna(axis=1, how="all")
+            self.seed = seed
+            self.resource_results_dict['XRaw'] = {self.value_name: X_raw, self.time_name: 0.}
+            self.resource_results_dict['X'] = {self.value_name: X, self.time_name: 0.}
+            self.resource_results_dict['Y'] = {self.value_name: Y, self.time_name: 0.}
+            self.resource_results_dict['SampleRowsFlag'] = {self.value_name: sample_rows, self.time_name: 0.}
+            self.resource_results_dict['SampleColumnsFlag'] = {self.value_name: sample_columns, self.time_name: 0.}
+
+            self._compute_metafeatures(metafeature_ids, computed_metafeatures)
+
+            if timeout is not None:
+                signal.alarm(0) # cancels alarm
+        except TimeoutError as e:
+            pass
+        return computed_metafeatures
+
+    def _start_timeout(self, timeout, buffer_time=1):
+        def handler(signal_number, stack_frame):
+            raise TimeoutError()
+        signal.signal(signal.SIGALRM, handler)
+        signal.alarm(timeout - buffer_time)
+
+    def _validate_compute_arguments(self, X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout):
         if not isinstance(X, pd.DataFrame):
-            raise TypeError("X has to be Pandas DataFrame.")
+            raise TypeError("X must be of type pandas.DataFrame")
         if not isinstance(Y, pd.Series):
-            raise TypeError("Y has to be Pandas Series.")    
-
-        if metafeatures is None:
-            metafeatures = self.list_metafeatures()
-        else:
-            invalid_metafeatures = [mf for mf in metafeatures if mf not in self.resource_info_dict]
-            if len(invalid_metafeatures) > 0:
-                raise ValueError("One or more requested metafeatures are not valid: {}".format(invalid_metafeatures))
-
-        X_raw = X
-        X = X_raw.dropna(axis=1, how="all")
-
-        self.seed = seed
-        self.resource_results_dict['XRaw'] = {self.value_name: X_raw, self.time_name: 0.}
-        self.resource_results_dict['X'] = {self.value_name: X, self.time_name: 0.}
-        self.resource_results_dict['Y'] = {self.value_name: Y, self.time_name: 0.}
-        self.resource_results_dict['SampleRowsFlag'] = {self.value_name: sample_rows, self.time_name: 0.}
-        self.resource_results_dict['SampleColumnsFlag'] = {self.value_name: sample_columns, self.time_name: 0.}
-
-        return self._retrieve_metafeatures(metafeatures)
+            raise TypeError("Y must be of type pandas.Series")
+        if metafeature_ids is not None:
+            invalid_metafeature_ids = [mf for mf in metafeature_ids if mf not in self.resource_info_dict]
+            if len(invalid_metafeature_ids) > 0:
+                raise ValueError("One or more requested metafeatures are not valid: {}".format(invalid_metafeature_ids))
 
     def list_metafeatures(self):
         return self.metafeatures_list
 
-    def _retrieve_metafeatures(self, metafeatures):
-        metafeature_frame = pd.DataFrame()
-        for metafeature_name in metafeatures:
-            value, time_value = self._retrieve_resource(metafeature_name)
-            metafeature_frame.at[0,metafeature_name] = value
-            metafeature_frame.at[0,metafeature_name + '_Time'] = time_value
-        return metafeature_frame
+    def _compute_metafeatures(self, metafeature_ids, computed_metafeatures):
+        for metafeature_id in metafeature_ids:
+            value, time_value = self._retrieve_resource(metafeature_id)
+            computed_metafeatures.at[0,metafeature_id] = value
+            computed_metafeatures.at[0,metafeature_id+'_Time'] = time_value
 
     def _retrieve_parameters(self, resource_name):
         total_time = 0.0
