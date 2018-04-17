@@ -38,7 +38,7 @@ class Metafeatures(object):
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
 
-    def compute(self, X: DataFrame, Y: Series, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
+    def compute(self, X: DataFrame, Y: Series, column_types: dict, metafeatures: list = None, sample_rows=True, sample_columns=True, seed=42) -> DataFrame:
         """
         Parameters
         ----------
@@ -51,7 +51,16 @@ class Metafeatures(object):
         if not isinstance(X, pd.DataFrame):
             raise TypeError("X has to be Pandas DataFrame.")
         if not isinstance(Y, pd.Series):
-            raise TypeError("Y has to be Pandas Series.")    
+            raise TypeError("Y has to be Pandas Series.")
+        # numeric (shorter) out of [numerical, numeric]
+        # categorical (differs more from numeric) out of [categorical, nominal]
+        # ordinal
+        # interval
+        for col_name in X.columns:
+            if col_name not in column_types:
+                raise ValueError("column type not defined for column '{}'".format(col_name))
+            if column_types[col_name] not in ["NUMERIC", "CATEGORICAL"]:#, "ORDINAL", "INTERVAL"]:
+                raise ValueError("invalid column type for column '{}'. must be one of: 'NUMERIC', 'CATEGORICAL'.".format(col_name))
 
         if metafeatures is None:
             metafeatures = self.list_metafeatures()
