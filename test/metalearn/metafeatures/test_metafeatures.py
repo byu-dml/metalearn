@@ -35,33 +35,36 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that require loading data first. """
 
     def setUp(self):
-        self.dataframes = {}
+        self.datasets = {}
         self.data_folder = './data/'
         with open(self.data_folder + "test_datasets.json", "r") as fh:
-            datasets = json.load(fh)
+            dataset_descriptions = json.load(fh)
 
-        for obj in datasets:
+        for obj in dataset_descriptions:
             filename = obj["path"]
             target_name = obj["target_name"]
 
-            dataframe = load_data(self.data_folder + filename)
-            dataframe.rename(columns={target_name: "target"}, inplace=True)
-
-            if "d3mIndex" in dataframe.columns:
-                dataframe.drop(columns="d3mIndex", inplace=True)
-
-            self.dataframes[filename] = dataframe
+            data = load_data(self.data_folder + filename)
+            X = data.drop(columns=[target_name], axis=1)
+            X.drop(columns=["d3mIndex"], axis=1, inplace=True, errors="ignore")
+            Y = data[target_name]
+            self.datasets[filename] = {"X": X, "Y": Y}
 
     def tearDown(self):
-        del self.dataframes
+        del self.datasets
         # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
         # print(len(metafeatures), "metafeatures")
 
     def test_run_without_fail(self):
-        for filename, dataframe in self.dataframes.items():
-            metafeatures_df = Metafeatures().compute(dataframe)
+        for filename, dataset in self.datasets.items():
+            metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
             metafeatures_dict = metafeatures_df.to_dict('records')[0]
             # print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
+
+    def _get_last_mf_results_filename(self, dataset_filename):
+        ext = dataset_filename.rsplit(".", 1)[1]
+        search_str = "." + ext
+        return dataset_filename.replace(search_str, "_mf.json")
 
     def test_correctness(self):
         """ For each dataset that has a corresponding mf (metafeature) file present,
@@ -70,8 +73,8 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         random_seed = 0
 
         fails = {}
-        for filename, dataframe in self.dataframes.items():
-            last_results_file = filename.replace('.csv','_mf.json')
+        for filename, dataset in self.datasets.items():
+            last_results_file = self._get_last_mf_results_filename(filename)
             if os.path.exists(self.data_folder + last_results_file):
                 with open(self.data_folder + last_results_file) as fh:
                     known_mfs = json.load(fh)
@@ -79,7 +82,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 # Explicitly create empty dict because this provides information about successful tests.
                 fails[last_results_file] = {}
 
-                metafeatures_df = Metafeatures().compute(dataframe,seed=random_seed)
+                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"],seed=random_seed)
                 computed_mfs = metafeatures_df.to_dict('records')[0]
 
                 for mf, computed_value in computed_mfs.items():
@@ -109,8 +112,9 @@ class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
 
     def setUp(self):
-        self.dummy_df = pd.DataFrame(np.random.rand(50,50))
-        self.dummy_df.columns = [*self.dummy_df.columns[:-1], "target"]
+        self.dummy_features = pd.DataFrame(np.random.rand(50,50))
+        self.dummy_target = pd.Series(np.random.rand(50))
+        self.dummy_features.columns = [*self.dummy_features.columns[:-1], "target"]
 
         self.invalid_metafeature_message_start = "One or more requested metafeatures are not valid:"
         self.invalid_metafeature_message_start_fail_message = "Error message indicating invalid metafeatures did not start with expected string."
@@ -119,17 +123,27 @@ class MetaFeaturesTestCase(unittest.TestCase):
     def test_dataframe_input_error(self):
         """ Tests if `compute` gives a user-friendly error when a TypeError occurs. """
 
-        expected_error_message = "DataFrame has to be Pandas DataFrame."
-        fail_message = "We expect a user friendly message the object passed to compute is not a Pandas.DataFrame."
+        expected_error_message1 = "X has to be Pandas DataFrame."
+        fail_message1 = "We expect a user friendly message when the features passed to compute is not a Pandas.DataFrame."
+        expected_error_message2 = "Y has to be Pandas Series."
+        fail_message2 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
         # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
 
         with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(dataframe = None)
-        self.assertEqual(str(cm.exception), expected_error_message, fail_message)
+            Metafeatures().compute(X=None, Y=self.dummy_target)
+        self.assertEqual(str(cm.exception), expected_error_message1, fail_message1)
 
         with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(dataframe = np.zeros((500,50)))
-        self.assertEqual(str(cm.exception), expected_error_message, fail_message)
+            Metafeatures().compute(X=self.dummy_features, Y=None)
+        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+
+        with self.assertRaises(TypeError) as cm:
+            Metafeatures().compute(X=np.zeros((500,50)), Y=pd.Series(np.zeros(500)))
+        self.assertEqual(str(cm.exception), expected_error_message1, fail_message1)
+
+        with self.assertRaises(TypeError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((500,50))), Y=np.zeros(500))
+        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
 
     def _check_invalid_metafeature_exception_string(self, exception_str, invalid_metafeatures):
         """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
@@ -150,7 +164,7 @@ class MetaFeaturesTestCase(unittest.TestCase):
         invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(dataframe = self.dummy_df, metafeatures = invalid_metafeatures)
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeatures = invalid_metafeatures)
 
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
@@ -161,13 +175,13 @@ class MetaFeaturesTestCase(unittest.TestCase):
         valid_metafeatures = ["NumberOfInstances", "NumberOfFeatures"]
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(dataframe = self.dummy_df, metafeatures = invalid_metafeatures+valid_metafeatures)
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeatures = invalid_metafeatures+valid_metafeatures)
 
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
         # Order should not matter
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(dataframe = self.dummy_df, metafeatures = valid_metafeatures+invalid_metafeatures)
+            Metafeatures().compute(X = self.dummy_features, Y = self.dummy_target, metafeatures = valid_metafeatures+invalid_metafeatures)
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
 
