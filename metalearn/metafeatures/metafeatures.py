@@ -2,7 +2,7 @@ import os
 import math
 import json
 import time
-import signal
+import multiprocessing
 
 import numpy as np
 import pandas as pd
@@ -13,6 +13,7 @@ from .simple_metafeatures import *
 from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
+
 
 class Metafeatures(object):
 
@@ -55,40 +56,35 @@ class Metafeatures(object):
         -------
         A dataframe containing one row and two columns for each metafeature: one for the value and one for the compute time of that metafeature value
         """
-        computed_metafeatures = DataFrame()
-        try:
-            if timeout is not None:
-                def handler(signal_number, stack_frame):
-                    raise TimeoutError()
-                signal.signal(signal.SIGALRM, handler)
-                signal.alarm(timeout - 2)
+        self.computed_metafeatures = DataFrame()
+        if timeout is None:
+            self._compute(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout)
+        else:
+            p = multiprocessing.Process(target=self._compute, args=(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout))
+            p.start()
+            p.join(timeout-2)
+            if p.is_alive():
+                # Terminate
+                p.terminate()
+                p.join()
+        return self.computed_metafeatures
 
-            self._validate_compute_arguments(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout)
-            if metafeature_ids is None:
-                metafeature_ids = self.list_metafeatures()
+    def _compute(self, X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout):
+        self._validate_compute_arguments(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout)
 
-            X_raw = X
-            X = X_raw.dropna(axis=1, how="all")
-            self.seed = seed
-            self.resource_results_dict['XRaw'] = {self.value_name: X_raw, self.time_name: 0.}
-            self.resource_results_dict['X'] = {self.value_name: X, self.time_name: 0.}
-            self.resource_results_dict['Y'] = {self.value_name: Y, self.time_name: 0.}
-            self.resource_results_dict['SampleRowsFlag'] = {self.value_name: sample_rows, self.time_name: 0.}
-            self.resource_results_dict['SampleColumnsFlag'] = {self.value_name: sample_columns, self.time_name: 0.}
+        if metafeature_ids is None:
+            metafeature_ids = self.list_metafeatures()
 
-            self._compute_metafeatures(metafeature_ids, computed_metafeatures)
+        X_raw = X
+        X = X_raw.dropna(axis=1, how="all")
+        self.seed = seed
+        self.resource_results_dict['XRaw'] = {self.value_name: X_raw, self.time_name: 0.}
+        self.resource_results_dict['X'] = {self.value_name: X, self.time_name: 0.}
+        self.resource_results_dict['Y'] = {self.value_name: Y, self.time_name: 0.}
+        self.resource_results_dict['SampleRowsFlag'] = {self.value_name: sample_rows, self.time_name: 0.}
+        self.resource_results_dict['SampleColumnsFlag'] = {self.value_name: sample_columns, self.time_name: 0.}
 
-            if timeout is not None:
-                signal.alarm(0) # cancels alarm
-        except TimeoutError as e:
-            pass
-        return computed_metafeatures
-
-    def _start_timeout(self, timeout, buffer_time=1):
-        def handler(signal_number, stack_frame):
-            raise TimeoutError()
-        signal.signal(signal.SIGALRM, handler)
-        signal.alarm(timeout - buffer_time)
+        self._compute_metafeatures(metafeature_ids)
 
     def _validate_compute_arguments(self, X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout):
         if not isinstance(X, pd.DataFrame):
@@ -103,11 +99,11 @@ class Metafeatures(object):
     def list_metafeatures(self):
         return self.metafeatures_list
 
-    def _compute_metafeatures(self, metafeature_ids, computed_metafeatures):
+    def _compute_metafeatures(self, metafeature_ids):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
-            computed_metafeatures.at[0,metafeature_id] = value
-            computed_metafeatures.at[0,metafeature_id+'_Time'] = time_value
+            self.computed_metafeatures.at[0,metafeature_id] = value
+            self.computed_metafeatures.at[0,metafeature_id+'_Time'] = time_value
 
     def _retrieve_parameters(self, resource_name):
         total_time = 0.0
