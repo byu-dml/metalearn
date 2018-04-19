@@ -3,6 +3,8 @@ import math
 import json
 import time
 import multiprocessing
+from contextlib import redirect_stderr
+import io
 
 import numpy as np
 import pandas as pd
@@ -60,13 +62,13 @@ class Metafeatures(object):
         if timeout is None:
             self._compute(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout)
         else:
-            p = multiprocessing.Process(target=self._compute, args=(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout))
-            p.start()
-            p.join(timeout-2)
-            if p.is_alive():
-                # Terminate
-                p.terminate()
-                p.join()
+            with redirect_stderr(io.StringIO()):
+                p = multiprocessing.Process(target=self._compute, args=(X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout))
+                p.start()
+                p.join(timeout-2)
+                if p.is_alive():
+                    p.terminate()
+                    p.join()
         return self.computed_metafeatures
 
     def _compute(self, X, Y, metafeature_ids, sample_rows, sample_columns, seed, timeout):
