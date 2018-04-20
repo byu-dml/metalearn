@@ -5,6 +5,7 @@ import time
 import multiprocessing
 from contextlib import redirect_stderr
 import io
+from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -36,6 +37,8 @@ class Metafeatures(object):
     VALUE_NAME = 'value'
     TIME_NAME = 'time'
     TIMEOUT_BUFFER = .1
+    NUMERIC = "NUMERIC"
+    CATEGORICAL = "CATEGORICAL"
 
     def __init__(self):
         self.resource_info_dict = {}
@@ -58,8 +61,9 @@ class Metafeatures(object):
         return self.metafeatures_list
 
     def compute(
-        self, X: DataFrame, Y: Series, metafeature_ids: list = None,
-        sample_rows=True, sample_columns=True, seed=None, timeout=None
+        self, X: DataFrame, Y: Series, column_types: Dict[str, str] = None,
+        metafeature_ids: List = None, sample_rows=True, sample_columns=True,
+        seed=None, timeout=None
     ) -> DataFrame:
         """
         Parameters
@@ -84,23 +88,31 @@ class Metafeatures(object):
         self.computed_metafeatures = DataFrame()
         if timeout is None:
             self._compute(
-                X, Y, metafeature_ids, sample_rows, sample_columns, seed
+                X, Y, column_types, metafeature_ids, sample_rows,
+                sample_columns, seed
             )
         else:
             with redirect_stderr(io.StringIO()):
                 threadsafe_timeout_function(
                     self._compute,
-                    (X, Y, metafeature_ids, sample_rows, sample_columns, seed),
+                    (
+                        X, Y, column_types, metafeature_ids, sample_rows,
+                        sample_columns, seed
+                    ),
                     timeout-self.TIMEOUT_BUFFER
                 )
         return self.computed_metafeatures
 
     def _compute(
-        self, X, Y, metafeature_ids, sample_rows, sample_columns, seed
+        self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+        seed
     ):
         self._validate_compute_arguments(
-            X, Y, metafeature_ids, sample_rows, sample_columns, seed
+            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+            seed
         )
+        if column_types is None:
+            column_types = self._infer_column_types(X, Y)
 
         if metafeature_ids is None:
             metafeature_ids = self.list_metafeatures()
@@ -131,12 +143,26 @@ class Metafeatures(object):
         return (self.seed + self.seed_offset,)
 
     def _validate_compute_arguments(
-        self, X, Y, metafeature_ids, sample_rows, sample_columns, seed
+        self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+        seed
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
         if not isinstance(Y, pd.Series):
             raise TypeError('Y must be of type pandas.Series')
+        if column_types is not None:
+            invalid_column_types = []
+            for col_name, col_type in column_types.items():
+                if col_type != self.NUMERIC and col_type != self.CATEGORICAL:
+                    invalid_column_types.append((col_name, col_type))
+            if len(invalid_column_types) > 0:
+                raise ValueError(
+                    'One or more input column types are not valid: {}. Valid '+
+                    'types include {} and {}.'.
+                    format(
+                        invalid_column_types, self.NUMERIC, self.CATEGORICAL
+                    )
+                )
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if
@@ -147,6 +173,19 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
+
+    def _infer_column_types(self, X, Y):
+        column_types = {}
+        for col_name in X.columns:
+            if dtype_is_numeric(X[col_name].dtype):
+                column_types[col_name] = self.NUMERIC
+            else:
+                column_types[col_name] = self.CATEGORICAL
+        if dtype_is_numeric(Y.dtype):
+            column_types[Y.name] = self.NUMERIC
+        else:
+            column_types[Y.name] = self.CATEGORICAL
+        return column_types
 
     def _compute_metafeatures(self, metafeature_ids):
         for metafeature_id in metafeature_ids:
