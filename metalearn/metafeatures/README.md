@@ -10,9 +10,9 @@ The general idea is that we should be able to split metafeatures into as small o
 - classes - length of the set of possible values of the class
 - attributes - number of attributes (not counting the class)
 - numeric - number of numeric attributes
-- nominal - number of nominal attributes
+- categorical - number of categorical attributes
 - numeric_rate - fraction of the attributes that are numeric
-- nominal_rate - fraction of the attributes that are nominal
+- categorical_rate - fraction of the attributes that are categorical
 - dimensionality - number of attributes divided by number of samples
 - samples - number of samples
 - symbols_mean - mean of the length of the set of possible values for each attribute
@@ -31,9 +31,9 @@ The general idea is that we should be able to split metafeatures into as small o
 # Statistical Metafeatures:
 
 - skewness - mean of skewness calculated per attribute computed for each class
-- skewness_prep - same as skewness except that the dataset's nominal attributes are one-hot encoded
+- skewness_prep - same as skewness except that the dataset's categorical attributes are one-hot encoded
 - kurtosis - mean of kurtosis calculated per attribute per class
-- kurtosis_prep - same as kurtosis except that the dataset's nominal attributes are one-hot encoded
+- kurtosis_prep - same as kurtosis except that the dataset's categorical attributes are one-hot encoded
 - abs_cor - sum of correlation for each pair of attributes computed for each class (uses canonical correlation analysis)
 - cancor_1 - cancor value 1 returned from canonical correlation analysis
 - statistical_time - time for statistical metafeatures to be extracted
