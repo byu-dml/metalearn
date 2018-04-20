@@ -35,6 +35,7 @@ class Metafeatures(object):
 
     VALUE_NAME = 'value'
     TIME_NAME = 'time'
+    TIMEOUT_BUFFER = .1
 
     def __init__(self):
         self.resource_info_dict = {}
@@ -89,7 +90,7 @@ class Metafeatures(object):
                 threadsafe_timeout_function(
                     self._compute,
                     (X, Y, metafeature_ids, sample_rows, sample_columns, seed),
-                    timeout-2
+                    timeout-self.TIMEOUT_BUFFER
                 )
         return self.computed_metafeatures
 
