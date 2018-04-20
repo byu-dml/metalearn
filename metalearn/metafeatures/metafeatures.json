@@ -16,7 +16,7 @@
 			"function": ""
 		},
 		"Seed": {
-			"function": "self._get_random_state"
+			"function": "self._get_random_seed"
 		},
 		"XSampledColumns": {
 			"function": "self._get_sample_of_columns"
@@ -45,7 +45,7 @@
 			"parameters": [],
 			"returns": []
 		},
-		"self._get_random_state":{
+		"self._get_random_seed":{
 			"parameters": [],
 			"returns": ["Seed"]
 		},

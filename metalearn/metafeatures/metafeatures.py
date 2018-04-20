@@ -59,7 +59,7 @@ class Metafeatures(object):
 
     def compute(
         self, X: DataFrame, Y: Series, metafeature_ids: list = None,
-        sample_rows=True, sample_columns=True, seed=42, timeout=None
+        sample_rows=True, sample_columns=True, seed=None, timeout=None
     ) -> DataFrame:
         """
         Parameters
@@ -70,7 +70,8 @@ class Metafeatures(object):
             default of None indicates to compute all metafeatures
         sample_rows: bool, whether to uniformly sample from the rows
         sample_columns: bool, whether to uniformly sample from the columns
-        seed: int, the seed used to generate psuedo-random numbers
+        seed: int, the seed used to generate psuedo-random numbers.
+            default is None, a seed will be generated randomly
         timeout: int, the maximum amount of wall time in seconds used to
             compute metafeatures
 
@@ -106,7 +107,7 @@ class Metafeatures(object):
 
         X_raw = X
         X = X_raw.dropna(axis=1, how='all')
-        self.seed = seed
+        self._set_random_seed(seed)
         self.resource_results_dict = {
             'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
             'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
@@ -119,6 +120,15 @@ class Metafeatures(object):
             }
         }
         self._compute_metafeatures(metafeature_ids)
+
+    def _set_random_seed(self, seed):
+        if seed is None:
+            self.seed = np.random.randint(2**32)
+        else:
+            self.seed = seed
+
+    def _get_random_seed(self):
+        return (self.seed + self.seed_offset,)
 
     def _validate_compute_arguments(
         self, X, Y, metafeature_ids, sample_rows, sample_columns, seed
@@ -200,9 +210,6 @@ class Metafeatures(object):
             retrieved_parameters.append(value)
             total_time += time_value
         return (retrieved_parameters, total_time)
-
-    def _get_random_state(self):
-        return (self.seed+self.seed_offset,)
 
     def _get_preprocessed_data(self, X_sample, X_sampled_columns, seed=42):
         series_array = []
