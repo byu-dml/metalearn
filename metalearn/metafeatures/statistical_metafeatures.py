@@ -65,7 +65,7 @@ def get_canonical_correlations(dataframe):
     computes the correlation coefficient between each distinct pairing of columns
     preprocessing note:
         any rows with missing values (in either paired column) are dropped for that pairing
-        nominal columns are replaced with one-hot encoded columns
+        categorical columns are replaced with one-hot encoded columns
         any columns which have only one distinct value (after dropping missing values) are skipped
     returns a list of the pairwise canonical correlation coefficients
     '''

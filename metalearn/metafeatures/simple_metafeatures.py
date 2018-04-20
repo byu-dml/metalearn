@@ -8,10 +8,10 @@ def get_dataset_stats(X, Y):
     number_of_features = X.shape[1]
     number_of_classes = Y.unique().shape[0]
     numeric_features = len(get_numeric_features(X))
-    nominal_features = number_of_features - numeric_features
+    categorical_features = number_of_features - numeric_features
     ratio_of_numeric_features = float(numeric_features) / float(number_of_features)
-    ratio_of_nominal_features = float(nominal_features) / float(number_of_features)
-    return (number_of_instances, number_of_features, number_of_classes, numeric_features, nominal_features, ratio_of_numeric_features, ratio_of_nominal_features)
+    ratio_of_categorical_features = float(categorical_features) / float(number_of_features)
+    return (number_of_instances, number_of_features, number_of_classes, numeric_features, categorical_features, ratio_of_numeric_features, ratio_of_categorical_features)
 
 def get_dimensionality(number_of_features, number_of_instances):
     dimensionality = float(number_of_features) / float(number_of_instances)
@@ -34,10 +34,10 @@ def get_class_stats(Y):
     minority_class_size = min(counts)
     return (mean_class_probability, stdev_class_probability, min_class_probability, max_class_probability, minority_class_size, majority_class_size)
 
-def get_nominal_cardinalities(X):
+def get_categorical_cardinalities(X):
     cardinalities = [X[feature].unique().shape[0] for feature in X.columns if not dtype_is_numeric(X[feature].dtype)]
-    mean_cardinality_of_nominal_features, stdev_cardinality_of_nominal_features, min_cardinality_of_nominal_features, _, _, _, max_cardinality_of_nominal_features = profile_distribution(cardinalities)
-    return (mean_cardinality_of_nominal_features, stdev_cardinality_of_nominal_features, min_cardinality_of_nominal_features, max_cardinality_of_nominal_features)
+    mean_cardinality_of_categorical_features, stdev_cardinality_of_categorical_features, min_cardinality_of_categorical_features, _, _, _, max_cardinality_of_categorical_features = profile_distribution(cardinalities)
+    return (mean_cardinality_of_categorical_features, stdev_cardinality_of_categorical_features, min_cardinality_of_categorical_features, max_cardinality_of_categorical_features)
 
 def get_numeric_cardinalities(X):
     cardinalities = [X[feature].unique().shape[0] for feature in X.columns if dtype_is_numeric(X[feature].dtype)]

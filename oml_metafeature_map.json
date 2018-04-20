@@ -3,19 +3,19 @@
         "openmlName": "EquivalentNumberOfAtts",
         "multiplier": 1
     },
-    "MeanCardinalityOfNominalFeatures": {
+    "MeanCardinalityOfCategoricalFeatures": {
         "openmlName": "MeanCardinalityOfNominalAttributes",
         "multiplier": 1
     },
-    "StdevCardinalityOfNominalFeatures": {
+    "StdevCardinalityOfCategoricalFeatures": {
         "openmlName": "StdevCardinalityOfNominalAttributes",
         "multiplier": 1
     },
-    "MaxCardinalityOfNominalFeatures": {
+    "MaxCardinalityOfCategoricalFeatures": {
         "openmlName": "MaxCardinalityOfNominalAttributes",
         "multiplier": 1
     },
-    "MinCardinalityOfNominalFeatures": {
+    "MinCardinalityOfCategoricalFeatures": {
         "openmlName": "MinCardinalityOfNominalAttributes",
         "multiplier": 1
     },
@@ -167,7 +167,7 @@
         "openmlName": "PercentageOfNumericFeatures",
         "multiplier": 100
     },
-    "RatioOfNominalFeatures": {
+    "RatioOfCategoricalFeatures": {
         "openmlName": "PercentageOfSymbolicFeatures",
         "multiplier": 100
     },

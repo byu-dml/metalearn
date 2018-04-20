@@ -264,20 +264,20 @@ class Metafeatures(object):
         else:
             return (X, Y)
 
-    def _get_nominal_features_and_class_with_no_missing_values(
+    def _get_categorical_features_and_class_with_no_missing_values(
         self, X_sample, Y_sample
     ):
-        nominal_features_and_class_with_no_missing_values = []
+        categorical_features_and_class_with_no_missing_values = []
         numeric_features = get_numeric_features(X_sample)
         for feature in X_sample.columns:
             if feature not in numeric_features:
                 df = pd.concat([X_sample[feature],Y_sample], axis=1).dropna(
                     axis=0, how='any'
                 )
-                nominal_features_and_class_with_no_missing_values.append(
+                categorical_features_and_class_with_no_missing_values.append(
                     (df[feature],df[Y_sample.name])
                 )
-        return (nominal_features_and_class_with_no_missing_values,)
+        return (categorical_features_and_class_with_no_missing_values,)
 
     def _get_numeric_features_and_class_with_no_missing_values(
         self, X_sample, Y_sample
