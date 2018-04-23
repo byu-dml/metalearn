@@ -3,11 +3,11 @@ from pandas import DataFrame
 
 from .common_operations import *
 
-def get_dataset_stats(X, Y):
+def get_dataset_stats(X, Y, column_types):
     number_of_instances = X.shape[0]
     number_of_features = X.shape[1]
     number_of_classes = Y.unique().shape[0]
-    numeric_features = len(get_numeric_features(X))
+    numeric_features = len(get_numeric_features(X, column_types))
     categorical_features = number_of_features - numeric_features
     ratio_of_numeric_features = float(numeric_features) / float(number_of_features)
     ratio_of_categorical_features = float(categorical_features) / float(number_of_features)

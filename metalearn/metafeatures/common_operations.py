@@ -23,11 +23,8 @@ def profile_distribution(data):
         dist_min, dist_quartile1, dist_quartile2, dist_quartile3 = np.percentile(data, [0,.25,.5,.75])
     return (dist_mean, dist_stdev, dist_min, dist_quartile1, dist_quartile2, dist_quartile3, dist_max)
 
-def get_numeric_features(dataframe):
-    """
-    Gets the names of the numeric attributes in the data.
-    """
-    return [col_name for col_name, col_type in zip(dataframe.columns, dataframe.dtypes) if dtype_is_numeric(col_type)]
+def get_numeric_features(dataframe, column_types):
+    return [feature for feature in dataframe.columns if column_types[feature] == "NUMERIC"]
 
 def dtype_is_numeric(dtype):
     return "int" in str(dtype) or "float" in str(dtype)

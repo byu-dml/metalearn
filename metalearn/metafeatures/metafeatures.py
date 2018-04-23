@@ -124,6 +124,7 @@ class Metafeatures(object):
             'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
             'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
             'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
+            'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
             'SampleRowsFlag': {
                 self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
             },
@@ -304,12 +305,11 @@ class Metafeatures(object):
             return (X, Y)
 
     def _get_categorical_features_and_class_with_no_missing_values(
-        self, X_sample, Y_sample
+        self, X_sample, Y_sample, column_types
     ):
         categorical_features_and_class_with_no_missing_values = []
-        numeric_features = get_numeric_features(X_sample)
         for feature in X_sample.columns:
-            if feature not in numeric_features:
+            if column_types[feature] == self.CATEGORICAL:
                 df = pd.concat([X_sample[feature],Y_sample], axis=1).dropna(
                     axis=0, how='any'
                 )
@@ -319,17 +319,17 @@ class Metafeatures(object):
         return (categorical_features_and_class_with_no_missing_values,)
 
     def _get_numeric_features_and_class_with_no_missing_values(
-        self, X_sample, Y_sample
+        self, X_sample, Y_sample, column_types
     ):
         numeric_features_and_class_with_no_missing_values = []
-        numeric_features = get_numeric_features(X_sample)
-        for feature in numeric_features:
-            df = pd.concat([X_sample[feature],Y_sample], axis=1).dropna(
-                axis=0, how='any'
-            )
-            numeric_features_and_class_with_no_missing_values.append(
-                (df[feature],df[Y_sample.name])
-            )
+        for feature in X_sample.columns:
+            if column_types[feature] == self.NUMERIC:
+                df = pd.concat([X_sample[feature],Y_sample], axis=1).dropna(
+                    axis=0, how='any'
+                )
+                numeric_features_and_class_with_no_missing_values.append(
+                    (df[feature],df[Y_sample.name])
+                )
         return (numeric_features_and_class_with_no_missing_values,)
 
     def _get_binned_numeric_features_and_class_with_no_missing_values(

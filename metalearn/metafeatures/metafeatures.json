@@ -9,6 +9,9 @@
 		"Y": {
 			"function": ""
 		},
+		"ColumnTypes": {
+			"function": ""
+		},
 		"SampleRowsFlag": {
 			"function": ""
 		},
@@ -65,11 +68,11 @@
 			"returns": ["XPreprocessed"]
 		},
 		"self._get_categorical_features_and_class_with_no_missing_values": {
-			"parameters": ["XSample","YSample"],
+			"parameters": ["XSample","YSample", "ColumnTypes"],
 			"returns": ["NoNaNCategoricalFeaturesAndClass"]
 		},
 		"self._get_numeric_features_and_class_with_no_missing_values": {
-			"parameters": ["XSample","YSample"],
+			"parameters": ["XSample","YSample", "ColumnTypes"],
 			"returns": ["NoNaNNumericFeaturesAndClass"]
 		},
 		"self._get_binned_numeric_features_and_class_with_no_missing_values": {
@@ -77,7 +80,7 @@
 			"returns": ["NoNaNBinnedNumericFeaturesAndClass"]
 		},
 		"get_dataset_stats": {
-			"parameters": ["XRaw","Y"],
+			"parameters": ["XRaw","Y", "ColumnTypes"],
 			"returns": ["NumberOfInstances","NumberOfFeatures","NumberOfClasses","NumberOfNumericFeatures","NumberOfCategoricalFeatures","RatioOfNumericFeatures","RatioOfCategoricalFeatures"]
 		},
 		"get_dimensionality": {
@@ -121,7 +124,7 @@
 			"returns": ["PredPCA1","PredPCA2","PredPCA3","PredEigen1","PredEigen2","PredEigen3","PredDet"]
 		},
 		"get_correlations": {
-			"parameters": ["XSample"],
+			"parameters": ["XSample", "ColumnTypes"],
 			"returns": ["MeanCanonicalCorrelation","StdevCanonicalCorrelation"]
 		},
 		"get_class_entropy": {
