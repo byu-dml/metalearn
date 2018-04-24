@@ -123,8 +123,7 @@ class MetaFeaturesTestCase(unittest.TestCase):
 
     def setUp(self):
         self.dummy_features = pd.DataFrame(np.random.rand(50,50))
-        self.dummy_target = pd.Series(np.random.rand(50))
-        self.dummy_features.columns = [*self.dummy_features.columns[:-1], "target"]
+        self.dummy_target = pd.Series(np.random.randint(2, size=50)).rename("target")
 
         self.invalid_metafeature_message_start = "One or more requested metafeatures are not valid:"
         self.invalid_metafeature_message_start_fail_message = "Error message indicating invalid metafeatures did not start with expected string."
@@ -194,6 +193,52 @@ class MetaFeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(X = self.dummy_features, Y = self.dummy_target, metafeature_ids = valid_metafeatures+invalid_metafeatures)
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
+    def test_column_type_input(self):
+        column_types = {feature: "NUMERIC" for feature in self.dummy_features.columns}
+        column_types[self.dummy_features.columns[2]] = "CATEGORICAL"
+        column_types[self.dummy_target.name] = "CATEGORICAL"
+        # all valid
+        Metafeatures().compute(
+            self.dummy_features, self.dummy_target, column_types
+        )
+        # some valid
+        column_types[self.dummy_features.columns[0]] = "NUMBER"
+        column_types[self.dummy_features.columns[1]] = "CATEGORY"
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(
+                self.dummy_features, self.dummy_target, column_types
+            )
+            self.assertTrue(
+                str(cm.exception).startswith(
+                    "One or more input column types are not valid:"
+                ),
+                "Some invalid column types test failed"
+            )
+        # all invalid
+        column_types = {feature: "INVALID_TYPE" for feature in self.dummy_features.columns}
+        column_types[self.dummy_target.name] = "INVALID"
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(
+                self.dummy_features, self.dummy_target, column_types
+            )
+            self.assertTrue(
+                str(cm.exception).startswith(
+                    "One or more input column types are not valid:"
+                ),
+                "All invalid column types test failed"
+            )
+        # invalid number of column types
+        del column_types[self.dummy_features.columns[0]]
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(
+                self.dummy_features, self.dummy_target, column_types
+            )
+            self.assertEqual(
+                str(cm.exception),
+                "The number of column_types does not match the number of" +
+                "features plus the target",
+                "Invalid number of column types test failed"
+            )
 
 def metafeatures_suite():
     test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
