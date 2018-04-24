@@ -116,6 +116,10 @@ class Metafeatures(object):
 
         if metafeature_ids is None:
             metafeature_ids = self.list_metafeatures()
+        self._validate_compute_arguments(
+            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+            seed
+        )
 
         X_raw = X
         X = X_raw.dropna(axis=1, how='all')
@@ -152,6 +156,11 @@ class Metafeatures(object):
         if not isinstance(Y, pd.Series):
             raise TypeError('Y must be of type pandas.Series')
         if column_types is not None:
+            if len(column_types.keys()) != len(X.columns) + 1:
+                raise ValueError(
+                    "The number of column_types does not match the number of" +
+                    "features plus the target"
+                )
             invalid_column_types = []
             for col_name, col_type in column_types.items():
                 if col_type != self.NUMERIC and col_type != self.CATEGORICAL:
