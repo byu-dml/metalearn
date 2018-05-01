@@ -1,0 +1,546 @@
+{
+    "Inconsistent Shared Metafeatures": [
+        {
+            "ClassEntropy_oml": 0.9182958340544896,
+            "ClassEntropy": 0.6365141682948128,
+            "difference": 0.2817816657596768
+        },
+        {
+            "MaxCardinalityOfNominalAttributes": 28.0,
+            "MaxCardinalityOfNominalFeatures": NaN,
+            "difference": NaN
+        },
+        {
+            "MaxKurtosisOfNumericAtts": 3692.300324617947,
+            "MaxKurtosisOfNumericFeatures": 0.5629964470863342,
+            "difference": 3691.7373281708606
+        },
+        {
+            "MaxMeansOfNumericAtts": 1986.4639175257732,
+            "MaxMeansOfNumericFeatures": 90.0,
+            "difference": 1896.4639175257732
+        },
+        {
+            "MaxSkewnessOfNumericAtts": 60.780756425692104,
+            "MaxSkewnessOfNumericFeatures": 0.8474133014678955,
+            "difference": 59.93334312422421
+        },
+        {
+            "MeanCardinalityOfNominalAttributes": 12.6,
+            "MeanCardinalityOfNominalFeatures": NaN,
+            "difference": NaN
+        },
+        {
+            "MeanCardinalityOfNumericAttributes": 27.2,
+            "MeanCardinalityOfNumericFeatures": 22.11111111111111,
+            "difference": 5.088888888888889
+        },
+        {
+            "MeanKurtosisOfNumericAtts": 156.4800560565649,
+            "MeanKurtosisOfNumericFeatures": -0.625259329047468,
+            "difference": 157.10531538561239
+        },
+        {
+            "MeanMeansOfNumericAtts": 13.131992971599848,
+            "MeanMeansOfNumericFeatures": 19.117477416992188,
+            "difference": -5.9854844453923395
+        },
+        {
+            "MeanSkewnessOfNumericAtts": 6.504547958968587,
+            "MeanSkewnessOfNumericFeatures": 0.21996002478732002,
+            "difference": 6.284587934181267
+        },
+        {
+            "MinCardinalityOfNumericAttributes": 3.0,
+            "MinCardinalityOfNumericFeatures": 2.0,
+            "difference": 1.0
+        },
+        {
+            "MinKurtosisOfNumericAtts": -1.9647726016183191,
+            "MinKurtosisOfNumericFeatures": -1.5022387504577637,
+            "difference": -0.46253385116055545
+        },
+        {
+            "MinMeansOfNumericAtts": -1.465547210821148,
+            "MinMeansOfNumericFeatures": 0.0,
+            "difference": -1.465547210821148
+        },
+        {
+            "MinSkewnessOfNumericAtts": -3.804792477739578,
+            "MinSkewnessOfNumericFeatures": -0.016117792576551437,
+            "difference": -3.7886746851630266
+        },
+        {
+            "MinorityClassPercentage": 0.3333333333333333,
+            "MinClassProbability": 0.3333333333333333,
+            "difference": -32.99999999999999
+        },
+        {
+            "NumberOfFeatures_oml": 10.0,
+            "NumberOfFeatures": 9.0,
+            "difference": 1.0
+        },
+        {
+            "NumberOfInstancesWithMissingValues_oml": 666.0,
+            "NumberOfInstancesWithMissingValues": 2.0,
+            "difference": 664.0
+        },
+        {
+            "NumberOfNumericFeatures_oml": 5.0,
+            "NumberOfNumericFeatures": 9.0,
+            "difference": -4.0
+        },
+        {
+            "PercentageOfInstancesWithMissingValues": 99.10714285714286,
+            "RatioOfInstancesWithMissingValues": 0.2222222222222222,
+            "difference": 76.88492063492063
+        },
+        {
+            "PercentageOfMissingValues": 17.857142857142858,
+            "RatioOfMissingValues": 0.1984126984126984,
+            "difference": -1.9841269841269842
+        },
+        {
+            "PercentageOfNumericFeatures": 50.0,
+            "RatioOfNumericFeatures": 1.0,
+            "difference": -50.0
+        },
+        {
+            "PercentageOfSymbolicFeatures": 50.0,
+            "RatioOfNominalFeatures": 0.0,
+            "difference": 50.0
+        },
+        {
+            "Quartile1KurtosisOfNumericAtts": 1.2028609874827962,
+            "Quartile1KurtosisOfNumericFeatures": -1.5000671410560609,
+            "difference": 2.702928128538857
+        },
+        {
+            "Quartile1MeansOfNumericAtts": -0.13181835691680163,
+            "Quartile1MeansOfNumericFeatures": 0.02107142925262451,
+            "difference": -0.15288978616942614
+        },
+        {
+            "Quartile1SkewnessOfNumericAtts": 0.878078930550055,
+            "Quartile1SkewnessOfNumericFeatures": -0.016068380419164894,
+            "difference": 0.89414731096922
+        },
+        {
+            "Quartile2KurtosisOfNumericAtts": 16.041760975601104,
+            "Quartile2KurtosisOfNumericFeatures": -1.4978955316543578,
+            "difference": 17.53965650725546
+        },
+        {
+            "Quartile2SkewnessOfNumericAtts": 3.239808136787477,
+            "Quartile2SkewnessOfNumericFeatures": -0.016018968261778354,
+            "difference": 3.255827105049255
+        },
+        {
+            "Quartile3KurtosisOfNumericAtts": 65.87505524302517,
+            "Quartile3KurtosisOfNumericFeatures": -1.4957239222526548,
+            "difference": 67.37077916527782
+        },
+        {
+            "Quartile3MeansOfNumericAtts": 0.3550332666197869,
+            "Quartile3MeansOfNumericFeatures": 0.06321428775787354,
+            "difference": 0.2918189788619134
+        },
+        {
+            "Quartile3SkewnessOfNumericAtts": 6.158285404413535,
+            "Quartile3SkewnessOfNumericFeatures": -0.015969556104391814,
+            "difference": 6.174254960517927
+        },
+        {
+            "RandomTreeDepth1Kappa_oml": 0.12135355892648783,
+            "RandomTreeDepth1Kappa": 0.019498607242339816,
+            "difference": 0.10185495168414802
+        },
+        {
+            "RandomTreeDepth2Kappa_oml": 0.12135355892648783,
+            "RandomTreeDepth2Kappa": 0.062189717385513266,
+            "difference": 0.059163841540974565
+        },
+        {
+            "RandomTreeDepth3ErrRate_oml": 0.37351190476190477,
+            "RandomTreeDepth3ErrRate": 0.3214285714285714,
+            "difference": 0.05208333333333337
+        },
+        {
+            "StdevCardinalityOfNominalAttributes": 14.099645385611653,
+            "StdevCardinalityOfNominalFeatures": NaN,
+            "difference": NaN
+        },
+        {
+            "StdevCardinalityOfNumericAttributes": 17.19592975096142,
+            "StdevCardinalityOfNumericFeatures": 16.120208159670614,
+            "difference": 1.0757215912908045
+        },
+        {
+            "kNN1NErrRate_oml": 0.5,
+            "kNN1NErrRate": 0.4330357142857142,
+            "difference": 0.06696428571428581
+        },
+        {
+            "kNN1NKappa_oml": -0.07462686567164176,
+            "kNN1NKappa": 0.037256389310304616,
+            "difference": -0.11188325498194637
+        }
+    ],
+    "Consistent Shared Metafeatures": [
+        {
+            "DecisionStumpErrRate_oml": 0.3333333333333333,
+            "DecisionStumpErrRate": 0.33333333333333337,
+            "difference": -5.551115123125783e-17
+        },
+        {
+            "DecisionStumpKappa_oml": 0.0,
+            "DecisionStumpKappa": 0.0,
+            "difference": 0.0
+        },
+        {
+            "Dimensionality_oml": 0.01488095238095238,
+            "Dimensionality": 0.013392857142857142,
+            "difference": 0.001488095238095238
+        },
+        {
+            "MajorityClassPercentage": 66.66666666666666,
+            "MaxClassProbability": 0.6666666666666666,
+            "difference": 0.0
+        },
+        {
+            "MajorityClassSize_oml": 448.0,
+            "MajorityClassSize": 448.0,
+            "difference": 0.0
+        },
+        {
+            "MaxCardinalityOfNumericAttributes": 46.0,
+            "MaxCardinalityOfNumericFeatures": 46.0,
+            "difference": 0.0
+        },
+        {
+            "MinorityClassSize_oml": 224.0,
+            "MinorityClassSize": 224.0,
+            "difference": 0.0
+        },
+        {
+            "NaiveBayesErrRate_oml": 0.33035714285714285,
+            "NaiveBayesErrRate": 0.33630952380952384,
+            "difference": -0.005952380952380987
+        },
+        {
+            "NaiveBayesKappa_oml": 0.16541353383458643,
+            "NaiveBayesKappa": 0.14173076923076922,
+            "difference": 0.023682764603817213
+        },
+        {
+            "NumberOfClasses_oml": 2.0,
+            "NumberOfClasses": 2.0,
+            "difference": 0.0
+        },
+        {
+            "NumberOfInstances_oml": 672.0,
+            "NumberOfInstances": 672.0,
+            "difference": 0.0
+        },
+        {
+            "NumberOfMissingValues_oml": 1200.0,
+            "NumberOfMissingValues": 1200.0,
+            "difference": 0.0
+        },
+        {
+            "Quartile2MeansOfNumericAtts": 0.01922972899875588,
+            "Quartile2MeansOfNumericFeatures": 0.04214285850524902,
+            "difference": -0.02291312950649314
+        },
+        {
+            "RandomTreeDepth1ErrRate_oml": 0.37351190476190477,
+            "RandomTreeDepth1ErrRate": 0.33779761904761907,
+            "difference": 0.0357142857142857
+        },
+        {
+            "RandomTreeDepth2ErrRate_oml": 0.37351190476190477,
+            "RandomTreeDepth2ErrRate": 0.32738095238095233,
+            "difference": 0.04613095238095244
+        },
+        {
+            "RandomTreeDepth3Kappa_oml": 0.12135355892648783,
+            "RandomTreeDepth3Kappa": 0.07650712458896602,
+            "difference": 0.04484643433752181
+        }
+    ],
+    "Our Exclusive Metafeatures": {
+        "NumberOfInstances_Time": 0.0003707408905029297,
+        "NumberOfFeatures_Time": 0.0003707408905029297,
+        "NumberOfClasses_Time": 0.0003707408905029297,
+        "NumberOfNumericFeatures_Time": 0.0003707408905029297,
+        "NumberOfNominalFeatures": 0.0,
+        "NumberOfNominalFeatures_Time": 0.0003707408905029297,
+        "RatioOfNumericFeatures_Time": 0.0003707408905029297,
+        "RatioOfNominalFeatures_Time": 0.0003707408905029297,
+        "Dimensionality_Time": 0.00077056884765625,
+        "NumberOfMissingValues_Time": 0.0016279220581054688,
+        "RatioOfMissingValues_Time": 0.0016279220581054688,
+        "NumberOfInstancesWithMissingValues_Time": 0.0016279220581054688,
+        "RatioOfInstancesWithMissingValues_Time": 0.0016279220581054688,
+        "MeanClassProbability": 0.5,
+        "MeanClassProbability_Time": 0.0008423328399658203,
+        "StdevClassProbability": 0.23570226039551584,
+        "StdevClassProbability_Time": 0.0008423328399658203,
+        "MinClassProbability_Time": 0.0008423328399658203,
+        "MaxClassProbability_Time": 0.0008423328399658203,
+        "MinorityClassSize_Time": 0.0008423328399658203,
+        "MajorityClassSize_Time": 0.0008423328399658203,
+        "MeanCardinalityOfNominalFeatures_Time": 0.0005357265472412109,
+        "StdevCardinalityOfNominalFeatures_Time": 0.0005357265472412109,
+        "MinCardinalityOfNominalFeatures": NaN,
+        "MinCardinalityOfNominalFeatures_Time": 0.0005357265472412109,
+        "MaxCardinalityOfNominalFeatures_Time": 0.0005357265472412109,
+        "MeanCardinalityOfNumericFeatures_Time": 0.0012919902801513672,
+        "StdevCardinalityOfNumericFeatures_Time": 0.0012919902801513672,
+        "MinCardinalityOfNumericFeatures_Time": 0.0012919902801513672,
+        "MaxCardinalityOfNumericFeatures_Time": 0.0012919902801513672,
+        "MeanMeansOfNumericFeatures_Time": 0.023555755615234375,
+        "StdevMeansOfNumericFeatures": 27.6008358001709,
+        "StdevMeansOfNumericFeatures_Time": 0.023555755615234375,
+        "MinMeansOfNumericFeatures_Time": 0.023555755615234375,
+        "MaxMeansOfNumericFeatures_Time": 0.023555755615234375,
+        "Quartile1MeansOfNumericFeatures_Time": 0.023555755615234375,
+        "Quartile2MeansOfNumericFeatures_Time": 0.023555755615234375,
+        "Quartile3MeansOfNumericFeatures_Time": 0.023555755615234375,
+        "MeanStdDevOfNumericFeatures": 5.050268173217773,
+        "MeanStdDevOfNumericFeatures_Time": 0.024123430252075195,
+        "StdevStdDevOfNumericFeatures": 3.9208483695983887,
+        "StdevStdDevOfNumericFeatures_Time": 0.024123430252075195,
+        "MinStdDevOfNumericFeatures": 0.0,
+        "MinStdDevOfNumericFeatures_Time": 0.024123430252075195,
+        "MaxStdDevOfNumericFeatures": 9.965482711791992,
+        "MaxStdDevOfNumericFeatures_Time": 0.024123430252075195,
+        "Quartile1StdDevOfNumericFeatures": 0.016342096328735352,
+        "Quartile1StdDevOfNumericFeatures_Time": 0.024123430252075195,
+        "Quartile2StdDevOfNumericFeatures": 0.032684192657470704,
+        "Quartile2StdDevOfNumericFeatures_Time": 0.024123430252075195,
+        "Quartile3StdDevOfNumericFeatures": 0.049026288986206056,
+        "Quartile3StdDevOfNumericFeatures_Time": 0.024123430252075195,
+        "MeanSkewnessOfNumericFeatures_Time": 0.023992061614990234,
+        "StdevSkewnessOfNumericFeatures": 0.30384823043590475,
+        "StdevSkewnessOfNumericFeatures_Time": 0.023992061614990234,
+        "MinSkewnessOfNumericFeatures_Time": 0.023992061614990234,
+        "MaxSkewnessOfNumericFeatures_Time": 0.023992061614990234,
+        "Quartile1SkewnessOfNumericFeatures_Time": 0.023992061614990234,
+        "Quartile2SkewnessOfNumericFeatures_Time": 0.023992061614990234,
+        "Quartile3SkewnessOfNumericFeatures_Time": 0.023992061614990234,
+        "MeanKurtosisOfNumericFeatures_Time": 0.024270296096801758,
+        "StdevKurtosisOfNumericFeatures": 0.8414888339387527,
+        "StdevKurtosisOfNumericFeatures_Time": 0.024270296096801758,
+        "MinKurtosisOfNumericFeatures_Time": 0.024270296096801758,
+        "MaxKurtosisOfNumericFeatures_Time": 0.024270296096801758,
+        "Quartile1KurtosisOfNumericFeatures_Time": 0.024270296096801758,
+        "Quartile2KurtosisOfNumericFeatures_Time": 0.024270296096801758,
+        "Quartile3KurtosisOfNumericFeatures_Time": 0.024270296096801758,
+        "PredPCA1": 0.28676077723503113,
+        "PredPCA1_Time": 0.04448533058166504,
+        "PredPCA2": 0.25159764289855957,
+        "PredPCA2_Time": 0.04448533058166504,
+        "PredPCA3": 0.19601581990718842,
+        "PredPCA3_Time": 0.04448533058166504,
+        "PredEigen1": 101.09825897216797,
+        "PredEigen1_Time": 0.04448533058166504,
+        "PredEigen2": 88.70140838623047,
+        "PredEigen2_Time": 0.04448533058166504,
+        "PredEigen3": 69.10588836669922,
+        "PredEigen3_Time": 0.04448533058166504,
+        "PredDet": 8958736596992.0,
+        "PredDet_Time": 0.04448533058166504,
+        "MeanCanonicalCorrelation": -0.0056304638693222345,
+        "MeanCanonicalCorrelation_Time": 0.08104205131530762,
+        "StdevCanonicalCorrelation": 0.06305804596099791,
+        "StdevCanonicalCorrelation_Time": 0.08104205131530762,
+        "ClassEntropy_Time": 0.0012645721435546875,
+        "MeanNominalAttributeEntropy": NaN,
+        "MeanNominalAttributeEntropy_Time": 0.00045609474182128906,
+        "MinNominalAttributeEntropy": NaN,
+        "MinNominalAttributeEntropy_Time": 0.00045609474182128906,
+        "Quartile1NominalAttributeEntropy": NaN,
+        "Quartile1NominalAttributeEntropy_Time": 0.00045609474182128906,
+        "Quartile2NominalAttributeEntropy": NaN,
+        "Quartile2NominalAttributeEntropy_Time": 0.00045609474182128906,
+        "Quartile3NominalAttributeEntropy": NaN,
+        "Quartile3NominalAttributeEntropy_Time": 0.00045609474182128906,
+        "MaxNominalAttributeEntropy": NaN,
+        "MaxNominalAttributeEntropy_Time": 0.00045609474182128906,
+        "MeanNumericAttributeEntropy": 1.5855627105527774,
+        "MeanNumericAttributeEntropy_Time": 0.05162501335144043,
+        "MinNumericAttributeEntropy": 0.0,
+        "MinNumericAttributeEntropy_Time": 0.05162501335144043,
+        "Quartile1NumericAttributeEntropy": 0.02197224577336219,
+        "Quartile1NumericAttributeEntropy_Time": 0.05162501335144043,
+        "Quartile2NumericAttributeEntropy": 0.04394449154672438,
+        "Quartile2NumericAttributeEntropy_Time": 0.05162501335144043,
+        "Quartile3NumericAttributeEntropy": 0.06591673732008657,
+        "Quartile3NumericAttributeEntropy_Time": 0.05162501335144043,
+        "MaxNumericAttributeEntropy": 2.1807408624209246,
+        "MaxNumericAttributeEntropy_Time": 0.05162501335144043,
+        "MeanNominalJointEntropy": NaN,
+        "MeanNominalJointEntropy_Time": 0.00047278404235839844,
+        "MinNominalJointEntropy": NaN,
+        "MinNominalJointEntropy_Time": 0.00047278404235839844,
+        "Quartile1NominalJointEntropy": NaN,
+        "Quartile1NominalJointEntropy_Time": 0.00047278404235839844,
+        "Quartile2NominalJointEntropy": NaN,
+        "Quartile2NominalJointEntropy_Time": 0.00047278404235839844,
+        "Quartile3NominalJointEntropy": NaN,
+        "Quartile3NominalJointEntropy_Time": 0.00047278404235839844,
+        "MaxNominalJointEntropy": NaN,
+        "MaxNominalJointEntropy_Time": 0.00047278404235839844,
+        "MeanNumericJointEntropy": 2.202135764507415,
+        "MeanNumericJointEntropy_Time": 0.09948611259460449,
+        "MinNumericJointEntropy": 0.5253213195155949,
+        "MinNumericJointEntropy_Time": 0.09948611259460449,
+        "Quartile1NumericJointEntropy": 0.5495070131099956,
+        "Quartile1NumericJointEntropy_Time": 0.09948611259460449,
+        "Quartile2NumericJointEntropy": 0.5736927067043965,
+        "Quartile2NumericJointEntropy_Time": 0.09948611259460449,
+        "Quartile3NumericJointEntropy": 0.5978784002987974,
+        "Quartile3NumericJointEntropy_Time": 0.09948611259460449,
+        "MaxNumericJointEntropy": 2.81617254071901,
+        "MaxNumericJointEntropy_Time": 0.09948611259460449,
+        "MeanNominalMutualInformation": NaN,
+        "MeanNominalMutualInformation_Time": 0.0004849433898925781,
+        "MinNominalMutualInformation": NaN,
+        "MinNominalMutualInformation_Time": 0.0004849433898925781,
+        "Quartile1NominalMutualInformation": NaN,
+        "Quartile1NominalMutualInformation_Time": 0.0004849433898925781,
+        "Quartile2NominalMutualInformation": NaN,
+        "Quartile2NominalMutualInformation_Time": 0.0004849433898925781,
+        "Quartile3NominalMutualInformation": NaN,
+        "Quartile3NominalMutualInformation_Time": 0.0004849433898925781,
+        "MaxNominalMutualInformation": NaN,
+        "MaxNominalMutualInformation_Time": 0.0004849433898925781,
+        "MeanNumericMutualInformation": 0.010857516999624955,
+        "MeanNumericMutualInformation_Time": 0.10126733779907227,
+        "MinNumericMutualInformation": 5.551115123125783e-17,
+        "MinNumericMutualInformation_Time": 0.10126733779907227,
+        "Quartile1NumericMutualInformation": 1.0409154545806821e-05,
+        "Quartile1NumericMutualInformation_Time": 0.10126733779907227,
+        "Quartile2NumericMutualInformation": 2.081830909155813e-05,
+        "Quartile2NumericMutualInformation_Time": 0.10126733779907227,
+        "Quartile3NumericMutualInformation": 3.122746363730944e-05,
+        "Quartile3NumericMutualInformation_Time": 0.10126733779907227,
+        "MaxNumericMutualInformation": 0.03717247286884535,
+        "MaxNumericMutualInformation_Time": 0.10126733779907227,
+        "EquivalentNumberOfNominalFeatures": NaN,
+        "EquivalentNumberOfNominalFeatures_Time": NaN,
+        "EquivalentNumberOfNumericFeatures": 58.624284752839856,
+        "EquivalentNumberOfNumericFeatures_Time": 0.10256528854370117,
+        "NominalNoiseToSignalRatio": NaN,
+        "NominalNoiseToSignalRatio_Time": NaN,
+        "NumericNoiseToSignalRatio": 145.03363831781672,
+        "NumericNoiseToSignalRatio_Time": 0.1529231071472168,
+        "NaiveBayesErrRate_Time": 0.21895098686218262,
+        "NaiveBayesKappa_Time": 0.21895098686218262,
+        "kNN1NErrRate_Time": 0.2187793254852295,
+        "kNN1NKappa_Time": 0.2187793254852295,
+        "DecisionStumpErrRate_Time": 0.2194812297821045,
+        "DecisionStumpKappa_Time": 0.2194812297821045,
+        "RandomTreeDepth1ErrRate_Time": 0.21471619606018066,
+        "RandomTreeDepth1Kappa_Time": 0.21471619606018066,
+        "RandomTreeDepth2ErrRate_Time": 0.21887993812561035,
+        "RandomTreeDepth2Kappa_Time": 0.21887993812561035,
+        "RandomTreeDepth3ErrRate_Time": 0.22090744972229004,
+        "RandomTreeDepth3Kappa_Time": 0.22090744972229004,
+        "LinearDiscriminantAnalysisErrRate": 0.3392857142857143,
+        "LinearDiscriminantAnalysisErrRate_Time": 0.21909689903259277,
+        "LinearDiscriminantAnalysisKappa": 0.12081681205392547,
+        "LinearDiscriminantAnalysisKappa_Time": 0.21909689903259277
+    },
+    "OpenML Exclusive Metafeatures": {
+        "AutoCorrelation": "0.5454545454545454",
+        "CardinalityAtFour": "1566208.0",
+        "CardinalityAtThree": "55936.0",
+        "CardinalityAtTwo": "1748.0",
+        "CfsSubsetEval_DecisionStumpAUC": "0.5",
+        "CfsSubsetEval_DecisionStumpErrRate": "0.3333333333333333",
+        "CfsSubsetEval_DecisionStumpKappa": "0.0",
+        "CfsSubsetEval_NaiveBayesAUC": "0.5",
+        "CfsSubsetEval_NaiveBayesErrRate": "0.3333333333333333",
+        "CfsSubsetEval_NaiveBayesKappa": "0.0",
+        "CfsSubsetEval_kNN1NAUC": "0.5",
+        "CfsSubsetEval_kNN1NErrRate": "0.3333333333333333",
+        "CfsSubsetEval_kNN1NKappa": "0.0",
+        "ClassEntropy": "0.9182958340544896",
+        "DecisionStumpAUC": "0.625129544005102",
+        "DecisionStumpErrRate": "0.3333333333333333",
+        "DecisionStumpKappa": "0.0",
+        "DefaultAccuracy": "0.6666666666666666",
+        "Dimensionality": "0.01488095238095238",
+        "EquivalentNumberOfAtts": "48.791652210823095",
+        "J48.00001.AUC": "0.5496004065688775",
+        "J48.00001.ErrRate": "0.3273809523809524",
+        "J48.00001.Kappa": "0.11051212938005411",
+        "J48.0001.AUC": "0.5496004065688775",
+        "J48.0001.ErrRate": "0.3273809523809524",
+        "J48.0001.Kappa": "0.11051212938005411",
+        "J48.001.AUC": "0.5496004065688775",
+        "J48.001.ErrRate": "0.3273809523809524",
+        "J48.001.Kappa": "0.11051212938005411",
+        "MajorityClassSize": "448.0",
+        "MaxAttributeEntropy": "4.654144207343773",
+        "MaxMutualInformation": "0.03446761121749",
+        "MaxNominalAttDistinctValues": "28.0",
+        "MaxStdDevOfNumericAtts": "294.2445979892383",
+        "MeanAttributeEntropy": "2.46903405393586",
+        "MeanMutualInformation": "0.018820757085385",
+        "MeanNoiseToSignalRatio": "130.1867552795288",
+        "MeanNominalAttDistinctValues": "15.5",
+        "MeanStdDevOfNumericAtts": "3.652501883958817",
+        "MinAttributeEntropy": "-0.0",
+        "MinCardinalityOfNominalAttributes": "1.0",
+        "MinMutualInformation": "0.0",
+        "MinNominalAttDistinctValues": "2.0",
+        "MinStdDevOfNumericAtts": "0.0",
+        "MinorityClassSize": "224.0",
+        "NaiveBayesAUC": "0.6411232461734694",
+        "NaiveBayesErrRate": "0.33035714285714285",
+        "NaiveBayesKappa": "0.16541353383458643",
+        "NumberOfBinaryFeatures": "1.0",
+        "NumberOfClasses": "2.0",
+        "NumberOfFeatures": "10.0",
+        "NumberOfInstances": "672.0",
+        "NumberOfInstancesWithMissingValues": "666.0",
+        "NumberOfMissingValues": "1200.0",
+        "NumberOfNumericFeatures": "5.0",
+        "NumberOfSymbolicFeatures": "5.0",
+        "PercentageOfBinaryFeatures": "10.0",
+        "Quartile1AttributeEntropy": "0.14288500188494896",
+        "Quartile1MutualInformation": "0.0017772654493725",
+        "Quartile1StdDevOfNumericAtts": "0.15238231841427405",
+        "Quartile2AttributeEntropy": "2.6109960041998335",
+        "Quartile2MutualInformation": "0.020407708562025",
+        "Quartile2StdDevOfNumericAtts": "0.476221879010095",
+        "Quartile3AttributeEntropy": "4.653221155722798",
+        "Quartile3MutualInformation": "0.034277297244757504",
+        "Quartile3StdDevOfNumericAtts": "1.0000000026146292",
+        "REPTreeDepth1AUC": "0.5",
+        "REPTreeDepth1ErrRate": "0.3333333333333333",
+        "REPTreeDepth1Kappa": "0.0",
+        "REPTreeDepth2AUC": "0.5",
+        "REPTreeDepth2ErrRate": "0.3333333333333333",
+        "REPTreeDepth2Kappa": "0.0",
+        "REPTreeDepth3AUC": "0.5",
+        "REPTreeDepth3ErrRate": "0.3333333333333333",
+        "REPTreeDepth3Kappa": "0.0",
+        "RandomTreeDepth1AUC": "0.5484644052933674",
+        "RandomTreeDepth1ErrRate": "0.37351190476190477",
+        "RandomTreeDepth1Kappa": "0.12135355892648783",
+        "RandomTreeDepth2AUC": "0.5484644052933674",
+        "RandomTreeDepth2ErrRate": "0.37351190476190477",
+        "RandomTreeDepth2Kappa": "0.12135355892648783",
+        "RandomTreeDepth3AUC": "0.5484644052933674",
+        "RandomTreeDepth3ErrRate": "0.37351190476190477",
+        "RandomTreeDepth3Kappa": "0.12135355892648783",
+        "StdvNominalAttDistinctValues": "14.45683229480096",
+        "kNN1NAUC": "0.4609375",
+        "kNN1NErrRate": "0.5",
+        "kNN1NKappa": "-0.07462686567164176"
+    }
+}
