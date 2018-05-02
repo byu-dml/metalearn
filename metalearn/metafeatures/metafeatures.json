@@ -9,6 +9,9 @@
 		"Y": {
 			"function": ""
 		},
+		"ColumnTypes": {
+			"function": ""
+		},
 		"SampleRowsFlag": {
 			"function": ""
 		},
@@ -16,7 +19,7 @@
 			"function": ""
 		},
 		"Seed": {
-			"function": "self._get_random_state"
+			"function": "self._get_random_seed"
 		},
 		"XSampledColumns": {
 			"function": "self._get_sample_of_columns"
@@ -30,8 +33,8 @@
 		"XPreprocessed": {
 			"function": "self._get_preprocessed_data"
 		},
-		"NoNaNNominalFeaturesAndClass": {
-			"function": "self._get_nominal_features_and_class_with_no_missing_values"
+		"NoNaNCategoricalFeaturesAndClass": {
+			"function": "self._get_categorical_features_and_class_with_no_missing_values"
 		},
 		"NoNaNNumericFeaturesAndClass": {
 			"function": "self._get_numeric_features_and_class_with_no_missing_values"
@@ -45,7 +48,7 @@
 			"parameters": [],
 			"returns": []
 		},
-		"self._get_random_state":{
+		"self._get_random_seed":{
 			"parameters": [],
 			"returns": ["Seed"]
 		},
@@ -64,12 +67,12 @@
 			"seed_offset": 2,
 			"returns": ["XPreprocessed"]
 		},
-		"self._get_nominal_features_and_class_with_no_missing_values": {
-			"parameters": ["XSample","YSample"],
-			"returns": ["NoNaNNominalFeaturesAndClass"]
+		"self._get_categorical_features_and_class_with_no_missing_values": {
+			"parameters": ["XSample","YSample", "ColumnTypes"],
+			"returns": ["NoNaNCategoricalFeaturesAndClass"]
 		},
 		"self._get_numeric_features_and_class_with_no_missing_values": {
-			"parameters": ["XSample","YSample"],
+			"parameters": ["XSample","YSample", "ColumnTypes"],
 			"returns": ["NoNaNNumericFeaturesAndClass"]
 		},
 		"self._get_binned_numeric_features_and_class_with_no_missing_values": {
@@ -77,8 +80,8 @@
 			"returns": ["NoNaNBinnedNumericFeaturesAndClass"]
 		},
 		"get_dataset_stats": {
-			"parameters": ["XRaw","Y"],
-			"returns": ["NumberOfInstances","NumberOfFeatures","NumberOfClasses","NumberOfNumericFeatures","NumberOfNominalFeatures","RatioOfNumericFeatures","RatioOfNominalFeatures"]
+			"parameters": ["XRaw","Y", "ColumnTypes"],
+			"returns": ["NumberOfInstances","NumberOfFeatures","NumberOfClasses","NumberOfNumericFeatures","NumberOfCategoricalFeatures","RatioOfNumericFeatures","RatioOfCategoricalFeatures"]
 		},
 		"get_dimensionality": {
 			"parameters": ["NumberOfFeatures","NumberOfInstances"],
@@ -92,9 +95,9 @@
 			"parameters": ["Y"],
 			"returns": ["MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
 		},
-		"get_nominal_cardinalities": {
+		"get_categorical_cardinalities": {
 			"parameters": ["X"],
-			"returns": ["MeanCardinalityOfNominalFeatures","StdevCardinalityOfNominalFeatures","MinCardinalityOfNominalFeatures","MaxCardinalityOfNominalFeatures"]
+			"returns": ["MeanCardinalityOfCategoricalFeatures","StdevCardinalityOfCategoricalFeatures","MinCardinalityOfCategoricalFeatures","MaxCardinalityOfCategoricalFeatures"]
 		},
 		"get_numeric_cardinalities": {
 			"parameters": ["X"],
@@ -121,7 +124,7 @@
 			"returns": ["PredPCA1","PredPCA2","PredPCA3","PredEigen1","PredEigen2","PredEigen3","PredDet"]
 		},
 		"get_correlations": {
-			"parameters": ["XSample"],
+			"parameters": ["XSample", "ColumnTypes"],
 			"returns": ["MeanCanonicalCorrelation","StdevCanonicalCorrelation"]
 		},
 		"get_class_entropy": {
@@ -187,13 +190,13 @@
 		"NumberOfNumericFeatures": {
 			"function": "get_dataset_stats"
 		},
-		"NumberOfNominalFeatures": {
+		"NumberOfCategoricalFeatures": {
 			"function": "get_dataset_stats"
 		},
 		"RatioOfNumericFeatures": {
 			"function": "get_dataset_stats"
 		},
-		"RatioOfNominalFeatures": {
+		"RatioOfCategoricalFeatures": {
 			"function": "get_dataset_stats"
 		},
 		"Dimensionality": {
@@ -229,17 +232,17 @@
 		"MajorityClassSize": {
 			"function": "get_class_stats"
 		},
-		"MeanCardinalityOfNominalFeatures": {
-			"function": "get_nominal_cardinalities"
+		"MeanCardinalityOfCategoricalFeatures": {
+			"function": "get_categorical_cardinalities"
 		},
-		"StdevCardinalityOfNominalFeatures": {
-			"function": "get_nominal_cardinalities"
+		"StdevCardinalityOfCategoricalFeatures": {
+			"function": "get_categorical_cardinalities"
 		},
-		"MinCardinalityOfNominalFeatures": {
-			"function": "get_nominal_cardinalities"
+		"MinCardinalityOfCategoricalFeatures": {
+			"function": "get_categorical_cardinalities"
 		},
-		"MaxCardinalityOfNominalFeatures": {
-			"function": "get_nominal_cardinalities"
+		"MaxCardinalityOfCategoricalFeatures": {
+			"function": "get_categorical_cardinalities"
 		},
 		"MeanCardinalityOfNumericFeatures": {
 			"function": "get_numeric_cardinalities"
@@ -367,35 +370,35 @@
 		"ClassEntropy": {
 			"function": "get_class_entropy"
 		},
-		"MeanNominalAttributeEntropy": {
+		"MeanCategoricalAttributeEntropy": {
 			"function": "get_attribute_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
 		},
-		"MinNominalAttributeEntropy": {
+		"MinCategoricalAttributeEntropy": {
 			"function": "get_attribute_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
 		},
-		"Quartile1NominalAttributeEntropy": {
+		"Quartile1CategoricalAttributeEntropy": {
 			"function": "get_attribute_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
 		},
-		"Quartile2NominalAttributeEntropy": {
+		"Quartile2CategoricalAttributeEntropy": {
 			"function": "get_attribute_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
 		},
-		"Quartile3NominalAttributeEntropy": {
+		"Quartile3CategoricalAttributeEntropy": {
 			"function": "get_attribute_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
 		},
-		"MaxNominalAttributeEntropy": {
+		"MaxCategoricalAttributeEntropy": {
 			"function": "get_attribute_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalAttributeEntropy","MinNominalAttributeEntropy","Quartile1NominalAttributeEntropy","Quartile2NominalAttributeEntropy","Quartile3NominalAttributeEntropy","MaxNominalAttributeEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
 		},
 		"MeanNumericAttributeEntropy": {
 			"function": "get_attribute_entropy",
@@ -427,35 +430,35 @@
 			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
 			"returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
 		},
-		"MeanNominalJointEntropy": {
+		"MeanCategoricalJointEntropy": {
 			"function": "get_joint_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
 		},
-		"MinNominalJointEntropy": {
+		"MinCategoricalJointEntropy": {
 			"function": "get_joint_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
 		},
-		"Quartile1NominalJointEntropy": {
+		"Quartile1CategoricalJointEntropy": {
 			"function": "get_joint_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
 		},
-		"Quartile2NominalJointEntropy": {
+		"Quartile2CategoricalJointEntropy": {
 			"function": "get_joint_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
 		},
-		"Quartile3NominalJointEntropy": {
+		"Quartile3CategoricalJointEntropy": {
 			"function": "get_joint_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
 		},
-		"MaxNominalJointEntropy": {
+		"MaxCategoricalJointEntropy": {
 			"function": "get_joint_entropy",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalJointEntropy","MinNominalJointEntropy","Quartile1NominalJointEntropy","Quartile2NominalJointEntropy","Quartile3NominalJointEntropy","MaxNominalJointEntropy"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
 		},
 		"MeanNumericJointEntropy": {
 			"function": "get_joint_entropy",
@@ -487,35 +490,35 @@
 			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
 			"returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
 		},
-		"MeanNominalMutualInformation": {
+		"MeanCategoricalMutualInformation": {
 			"function": "get_mutual_information",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
 		},
-		"MinNominalMutualInformation": {
+		"MinCategoricalMutualInformation": {
 			"function": "get_mutual_information",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
 		},
-		"Quartile1NominalMutualInformation": {
+		"Quartile1CategoricalMutualInformation": {
 			"function": "get_mutual_information",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
 		},
-		"Quartile2NominalMutualInformation": {
+		"Quartile2CategoricalMutualInformation": {
 			"function": "get_mutual_information",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
 		},
-		"Quartile3NominalMutualInformation": {
+		"Quartile3CategoricalMutualInformation": {
 			"function": "get_mutual_information",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
 		},
-		"MaxNominalMutualInformation": {
+		"MaxCategoricalMutualInformation": {
 			"function": "get_mutual_information",
-			"parameters": ["NoNaNNominalFeaturesAndClass"],
-			"returns": ["MeanNominalMutualInformation","MinNominalMutualInformation","Quartile1NominalMutualInformation","Quartile2NominalMutualInformation","Quartile3NominalMutualInformation","MaxNominalMutualInformation"]
+			"parameters": ["NoNaNCategoricalFeaturesAndClass"],
+			"returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
 		},
 		"MeanNumericMutualInformation": {
 			"function": "get_mutual_information",
@@ -547,20 +550,20 @@
 			"parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
 			"returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
 		},
-		"EquivalentNumberOfNominalFeatures": {
+		"EquivalentNumberOfCategoricalFeatures": {
 			"function": "get_equivalent_number_features",
-			"parameters": ["ClassEntropy","MeanNominalMutualInformation"],
-			"returns": ["EquivalentNumberOfNominalFeatures"]
+			"parameters": ["ClassEntropy","MeanCategoricalMutualInformation"],
+			"returns": ["EquivalentNumberOfCategoricalFeatures"]
 		},
 		"EquivalentNumberOfNumericFeatures": {
 			"function": "get_equivalent_number_features",
 			"parameters": ["ClassEntropy","MeanNumericMutualInformation"],
 			"returns": ["EquivalentNumberOfNumericFeatures"]
 		},
-		"NominalNoiseToSignalRatio": {
+		"CategoricalNoiseToSignalRatio": {
 			"function": "get_noise_signal_ratio",
-			"parameters": ["MeanNominalAttributeEntropy","MeanNominalMutualInformation"],
-			"returns": ["NominalNoiseToSignalRatio"]
+			"parameters": ["MeanCategoricalAttributeEntropy","MeanCategoricalMutualInformation"],
+			"returns": ["CategoricalNoiseToSignalRatio"]
 		},
 		"NumericNoiseToSignalRatio": {
 			"function": "get_noise_signal_ratio",

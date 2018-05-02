@@ -45,8 +45,8 @@ def get_pca(X_preprocessed):
         eigenvalues[i] = pred_eigen[i]
     return (variance_percentages[0], variance_percentages[1], variance_percentages[2], eigenvalues[0], eigenvalues[1], eigenvalues[2], pred_det)
 
-def get_correlations(X_sample):
-    correlations = get_canonical_correlations(X_sample)
+def get_correlations(X_sample, column_types):
+    correlations = get_canonical_correlations(X_sample, column_types)
     mean_correlation, stdev_correlation, _, _, _, _, _ = profile_distribution(correlations)
     return (mean_correlation, stdev_correlation)
 
@@ -60,12 +60,12 @@ def get_correlations_by_class(X_sample, Y_sample):
     mean_correlation, stdev_correlation, _, _, _, _, _ = profile_distribution(correlations)
     return (mean_correlation, stdev_correlation)
 
-def get_canonical_correlations(dataframe):
+def get_canonical_correlations(dataframe, column_types):
     '''
     computes the correlation coefficient between each distinct pairing of columns
     preprocessing note:
         any rows with missing values (in either paired column) are dropped for that pairing
-        nominal columns are replaced with one-hot encoded columns
+        categorical columns are replaced with one-hot encoded columns
         any columns which have only one distinct value (after dropping missing values) are skipped
     returns a list of the pairwise canonical correlation coefficients
     '''
@@ -76,7 +76,7 @@ def get_canonical_correlations(dataframe):
         array = series.as_matrix().reshape(series.shape[0], -1)
         return array
 
-    numeric_features = get_numeric_features(dataframe)
+    numeric_features = get_numeric_features(dataframe, column_types)
     if len(numeric_features) < 2:
         return []
     dataframe = dataframe[numeric_features]
