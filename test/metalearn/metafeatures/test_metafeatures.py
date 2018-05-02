@@ -57,10 +57,10 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         # print(json.dumps(sort_by_compute_time(metafeatures), indent=4))
         # print(len(metafeatures), "metafeatures")
 
-    def test_run_without_fail(self):
-        for filename, dataset in self.datasets.items():
-            metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
-            metafeatures_dict = metafeatures_df.to_dict('records')[0]
+    # def test_run_without_fail(self):
+    #     for filename, dataset in self.datasets.items():
+    #         metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+    #         metafeatures_dict = metafeatures_df.to_dict('records')[0]
             # print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
 
     def _get_last_mf_results_filename(self, dataset_filename):
@@ -68,45 +68,45 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         search_str = "." + ext
         return dataset_filename.replace(search_str, "_mf.json")
 
-    def test_correctness(self):
-        """ For each dataset that has a corresponding mf (metafeature) file present,
-            check differences in columns we do not expect to change.
-        """
-        random_seed = 0
+    # def test_correctness(self):
+    #     """ For each dataset that has a corresponding mf (metafeature) file present,
+    #         check differences in columns we do not expect to change.
+    #     """
+    #     random_seed = 0
 
-        fails = {}
-        for filename, dataset in self.datasets.items():
-            last_results_file = self._get_last_mf_results_filename(filename)
-            if os.path.exists(self.data_folder + last_results_file):
-                with open(self.data_folder + last_results_file) as fh:
-                    known_mfs = json.load(fh)
+    #     fails = {}
+    #     for filename, dataset in self.datasets.items():
+    #         last_results_file = self._get_last_mf_results_filename(filename)
+    #         if os.path.exists(self.data_folder + last_results_file):
+    #             with open(self.data_folder + last_results_file) as fh:
+    #                 known_mfs = json.load(fh)
 
-                # Explicitly create empty dict because this provides information about successful tests.
-                fails[last_results_file] = {}
+    #             # Explicitly create empty dict because this provides information about successful tests.
+    #             fails[last_results_file] = {}
 
-                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"],seed=random_seed)
-                computed_mfs = metafeatures_df.to_dict('records')[0]
+    #             metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"],seed=random_seed)
+    #             computed_mfs = metafeatures_df.to_dict('records')[0]
 
-                for mf, computed_value in computed_mfs.items():
-                    if '_Time' in mf:
-                        # Timing metafeatures will always differ anyway.
-                        # For now we pay no mind, no matter how big a difference may be.
-                        continue
+    #             for mf, computed_value in computed_mfs.items():
+    #                 if '_Time' in mf:
+    #                     # Timing metafeatures will always differ anyway.
+    #                     # For now we pay no mind, no matter how big a difference may be.
+    #                     continue
 
-                    known_value = known_mfs[mf]
-                    if not math.isclose(known_value, computed_value) and not (np.isnan(known_value) and np.isnan(computed_value)):
-                        fails[last_results_file][mf] = (known_value, computed_value)
+    #                 known_value = known_mfs[mf]
+    #                 if not math.isclose(known_value, computed_value) and not (np.isnan(known_value) and np.isnan(computed_value)):
+    #                     fails[last_results_file][mf] = (known_value, computed_value)
 
-        self.assertGreater(len(fails), 0, "No known results could be loaded, correctness could not be verified.")
-        if not all(f == {} for f in fails.values()):
-            # Results are no longer correct. Because multiple results that can be wrong are calculated at once,
-            # we want to output all of the wrong results so it might be easier to find out what went wrong.
-            fails = {k:v for (k,v) in fails.items() if v != {}}
-            fail_report_file = './test/metalearn/metafeatures/correctness_fails.json'
-            with open(fail_report_file,'w') as fh:
-                json.dump(fails, fh, indent=4)
+    #     self.assertGreater(len(fails), 0, "No known results could be loaded, correctness could not be verified.")
+    #     if not all(f == {} for f in fails.values()):
+    #         # Results are no longer correct. Because multiple results that can be wrong are calculated at once,
+    #         # we want to output all of the wrong results so it might be easier to find out what went wrong.
+    #         fails = {k:v for (k,v) in fails.items() if v != {}}
+    #         fail_report_file = './test/metalearn/metafeatures/correctness_fails.json'
+    #         with open(fail_report_file,'w') as fh:
+    #             json.dump(fails, fh, indent=4)
 
-            self.assertTrue(False, "Not all metafeatures matched previous results, output written to {}.".format(fail_report_file))
+    #         self.assertTrue(False, "Not all metafeatures matched previous results, output written to {}.".format(fail_report_file))
 
     def test_compare_openml(self):
 
@@ -123,14 +123,13 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             #randomly sample (2-5) of these datasets
             num_datasets = random.randint(2,5)
             rand_dataset_ids = random.sample(dataset_indices,num_datasets)
-            #rand_dataset_ids = [470]
+            rand_dataset_ids = [470]
 
             # get X, Y, and metafeatures from the datasets
             oml_datasets = []
             for raw_dataset_id in rand_dataset_ids:
                 raw_dataset = openml.datasets.get_dataset(raw_dataset_id)
-                dataset_metafeatures = raw_dataset.qualities.items()
-                dataset_metafeatures = dict(dataset_metafeatures)
+                dataset_metafeatures = {x: float(v) for x,v in raw_dataset.qualities.items()}
                 X_raw, Y_raw, attributes= raw_dataset.get_data(target=raw_dataset.default_target_attribute, return_attribute_names=True)
                 X = pd.DataFrame(data=X_raw, columns=attributes)
                 Y = pd.Series(data=Y_raw, name="target")
@@ -142,54 +141,41 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
         def compare_with_openml(X,Y, omlMetafeatures, dataset_id):
             # get metafeatures from dataset using our metafeatures
-            ourMetafeatures = Metafeatures().compute(X=X,Y=Y, sample_rows=False, sample_columns=False)
-            ourMetafeatures = ourMetafeatures.to_dict(orient='records')
-            ourMetafeatures = dict(ourMetafeatures[0])
-            # todo use nested dictionary instead of tuple to make values more descriptive
-            mfDict = json.load(open("oml_metafeature_map.json", "r"))
-            omlExclusiveMf = omlMetafeatures.copy()
-            ourExclusiveMf = ourMetafeatures.copy()
+            temp = Metafeatures()
+            ourMetafeatures = temp.compute(X,Y)
+            ourMetafeatures = ourMetafeatures.to_dict(orient="records")
+            ourMetafeatures = ourMetafeatures[0]
+
+            mfNameMap = json.load(open("oml_metafeature_map.json", "r"))
+
+            omlExclusiveMf = {x: float(v) for x, v in omlMetafeatures.items()}
+            ourExclusiveMf = {}
             consistentSharedMf = []
             inconsistentSharedMf = []
-            #sharedMf = pd.DataFrame(columns=("OML Metafeature Name", "OML Metafeature Value", "Our Metafeature Name", "Our Metafeature Value", "Similar?"))
+
             similarityQualifier = .05
-            for omlMetafeature in omlMetafeatures :
-                # compare shared metafeatures
-                if (ourMetafeatures.get(omlMetafeature) != None 
-                    or ourMetafeatures.get("" if omlMetafeature not in mfDict else mfDict.get(omlMetafeature)["ourName"]) != None) :
-
-                    # compare metafeatures with the same name
-                    if (ourMetafeatures.get(omlMetafeature) != None):
-                        omlMetafeatureName = omlMetafeature + "_oml"
-                        omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
-                        ourMetafeatureName = omlMetafeature
-                        ourMetafeatureValue = ourMetafeatures.get(ourMetafeatureName)
-                        diff = omlMetafeatureValue - ourMetafeatureValue
-                    # compare equivalent metafeatures with different names
-                    elif (ourMetafeatures.get(mfDict.get(omlMetafeature)["ourName"]) != None):
-                        ourMetafeatureName = mfDict.get(omlMetafeature)["ourName"]
-                        multiplier = mfDict.get(omlMetafeature)["multiplier"]
-                        ourMetafeatureValue = ourMetafeatures.get(ourMetafeatureName)
-                        omlMetafeatureName = omlMetafeature
-                        omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
-                        diff = omlMetafeatureValue - (ourMetafeatureValue * multiplier)
-                        
-                    # determine if the metafeatures are similar. Add to respective shared dictionary
-                    tempMfDict = {omlMetafeatureName: omlMetafeatureValue, ourMetafeatureName: ourMetafeatureValue, "difference": diff}
-                    if (abs(diff) <= similarityQualifier):
-                        similarityString = "Yes"
-                        consistentSharedMf.append(tempMfDict)
+            for metafeatureName, metafeatureValue in ourMetafeatures.items():
+                if mfNameMap.get(metafeatureName) is None:
+                    ourExclusiveMf[metafeatureName] = metafeatureValue
+                else:
+                    openmlName = mfNameMap[metafeatureName]["openmlName"]
+                    if omlMetafeatures.get(openmlName) is None:
+                        ourExclusiveMf[metafeatureName] = metafeatureValue
                     else:
-                        similarityString = "No"
-                        inconsistentSharedMf.append(tempMfDict)
-
-                    #update exclusive dictionaries
-                    omlExclusiveMf.pop(omlMetafeatureName, None)
-                    ourExclusiveMf.pop(ourMetafeatureName, None)
+                        omlExclusiveMf.pop(openmlName)
+                        omlMetafeatureValue = omlMetafeatures[openmlName]
+                        diff = abs(omlMetafeatureValue - metafeatureValue)
+                        singleMfDict = {metafeatureName: {"OpenML Value": omlMetafeatureValue, "Our Value": metafeatureValue, "Difference": diff}}
+                        if diff > .05 or diff == np.isnan(diff):
+                            similarityString = "No"
+                            inconsistentSharedMf.append(singleMfDict)
+                        else:
+                            similarityString = "Yes"
+                            consistentSharedMf.append(singleMfDict)
 
             #write results to json file
-            openmlData = { "Inconsistent Shared Metafeatures": inconsistentSharedMf, "Consistent Shared Metafeatures": consistentSharedMf,
-                "Our Exclusive Metafeatures": ourExclusiveMf, "OpenML Exclusive Metafeatures": omlExclusiveMf}
+            openmlData = { "INCONSISTENT SHARED METAFEATURES": inconsistentSharedMf, "CONSISTENT SHARED METAFEATURES": consistentSharedMf,
+                "OUR EXCLUSIVE METAFEATURES": ourExclusiveMf, "OPENML EXCLUSIVE METAFEATURES": omlExclusiveMf}
             report_file = './test/metalearn/metafeatures/openmlComparisons/openml_comparison_' + str(dataset_id) + '.json'
             with open(report_file,'w') as fh:
                 json.dump(openmlData, fh, indent=4)
