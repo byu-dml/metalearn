@@ -129,12 +129,11 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             oml_datasets = []
             inconsistencies = False
             for raw_dataset_id in rand_dataset_ids:
-
                 print(raw_dataset_id)
                 raw_dataset = openml.datasets.get_dataset(raw_dataset_id)
                 X_raw, Y_raw, column_types, attributes = raw_dataset.get_data(target=raw_dataset.default_target_attribute, return_categorical_indicator=True, return_attribute_names=True)
-                print(Y_raw)
-                if not all(len(f) == 0 for f in Y_raw):                    
+                print(Y_raw.shape[1])
+                if Y_raw.shape[1] != 0:                    
                     dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in raw_dataset.qualities.items()}
                     X = pd.DataFrame(data=X_raw, columns=attributes)
                     Y = pd.Series(data=Y_raw, name="target")
