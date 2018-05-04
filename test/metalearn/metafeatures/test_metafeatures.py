@@ -122,24 +122,30 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             #randomly sample (2-5) of these datasets
             num_datasets = random.randint(2,5)
             rand_dataset_ids = random.sample(dataset_indices,num_datasets)
-            #rand_dataset_ids = [31]
+            rand_dataset_ids = [40597]
+            #rand_dataset_ids = datasets
 
             # get X, Y, and metafeatures from the datasets
             oml_datasets = []
             inconsistencies = False
             for raw_dataset_id in rand_dataset_ids:
-                #print(raw_dataset_id)
+
+                print(raw_dataset_id)
                 raw_dataset = openml.datasets.get_dataset(raw_dataset_id)
-                dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in raw_dataset.qualities.items()}
                 X_raw, Y_raw, column_types, attributes = raw_dataset.get_data(target=raw_dataset.default_target_attribute, return_categorical_indicator=True, return_attribute_names=True)
-                X = pd.DataFrame(data=X_raw, columns=attributes)
-                Y = pd.Series(data=Y_raw, name="target")
-                columns = {k:(Metafeatures().CATEGORICAL if v is True else Metafeatures().NUMERIC) for k,v in zip(attributes,column_types)}
-                columns["target"] = Metafeatures().CATEGORICAL
-                dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures, "columns": columns}
-                oml_datasets.append(dataset)
-                if compare_with_openml(dataset, raw_dataset_id):
-                    inconsistencies = True
+                print(Y_raw)
+                if not all(len(f) == 0 for f in Y_raw):                    
+                    dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in raw_dataset.qualities.items()}
+                    X = pd.DataFrame(data=X_raw, columns=attributes)
+                    Y = pd.Series(data=Y_raw, name="target")
+                    columns = {k:(Metafeatures().CATEGORICAL if v is True else Metafeatures().NUMERIC) for k,v in zip(attributes,column_types)}
+                    columns["target"] = Metafeatures().CATEGORICAL
+                    dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures, "columns": columns}
+                    oml_datasets.append(dataset)
+                    if compare_with_openml(dataset, raw_dataset_id):
+                        inconsistencies = True
+                else:
+                    print("unable to process multi label targets")
 
             self.assertFalse(inconsistencies, "Not all metafeatures matched results from OpenML.")
 
