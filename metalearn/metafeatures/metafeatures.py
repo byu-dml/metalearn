@@ -158,7 +158,7 @@ class Metafeatures(object):
         if column_types is not None:
             if len(column_types.keys()) != len(X.columns) + 1:
                 raise ValueError(
-                    "The number of column_types does not match the number of" +
+                    "The number of column_types does not match the number of " +
                     "features plus the target"
                 )
             invalid_column_types = []
