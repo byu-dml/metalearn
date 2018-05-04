@@ -18,11 +18,11 @@ def get_dimensionality(number_of_features, number_of_instances):
     return (dimensionality,)
 
 def get_missing_values(X):
-    missing_values = X.shape[0] - X.count()
-    number_missing = np.sum(missing_values)
+    missing_values_by_instance = X.shape[1] - X.count(axis=1)
+    number_missing = np.sum(missing_values_by_instance)
     ratio_missing = float(number_missing) / float(X.shape[0] * X.shape[1])
-    number_instances_with_missing = X.shape[1] - np.sum(missing_values == 0)
-    ratio_instances_with_missing = float(number_instances_with_missing) / float(X.shape[1])
+    number_instances_with_missing = X.shape[0] - np.sum(missing_values_by_instance == 0)
+    ratio_instances_with_missing = float(number_instances_with_missing) / float(X.shape[0])
     return (number_missing, ratio_missing, number_instances_with_missing, ratio_instances_with_missing)
 
 def get_class_stats(Y):
