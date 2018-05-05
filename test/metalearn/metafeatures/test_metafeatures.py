@@ -241,8 +241,11 @@ class MetaFeaturesTestCase(unittest.TestCase):
             )
 
 def metafeatures_suite():
-    test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
-    return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+    # test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
+    # return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+    suite = unittest.TestSuite()
+    suite.addTest(MetaFeaturesWithDataTestCase("test_correctness"))
+    return suite
 
 """ === Anything under is line is currently not in use. === """
 def import_openml_dataset(id=4):
