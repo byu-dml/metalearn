@@ -9,20 +9,20 @@ def get_dataset_stats(X, Y, column_types):
     number_of_classes = Y.unique().shape[0]
     numeric_features = len(get_numeric_features(X, column_types))
     categorical_features = number_of_features - numeric_features
-    ratio_of_numeric_features = float(numeric_features) / float(number_of_features)
-    ratio_of_categorical_features = float(categorical_features) / float(number_of_features)
+    ratio_of_numeric_features = numeric_features / number_of_features
+    ratio_of_categorical_features = categorical_features / number_of_features
     return (number_of_instances, number_of_features, number_of_classes, numeric_features, categorical_features, ratio_of_numeric_features, ratio_of_categorical_features)
 
 def get_dimensionality(number_of_features, number_of_instances):
-    dimensionality = float(number_of_features) / float(number_of_instances)
+    dimensionality = number_of_features / number_of_instances
     return (dimensionality,)
 
 def get_missing_values(X):
-    missing_values = X.shape[0] - X.count()
-    number_missing = np.sum(missing_values)
-    ratio_missing = float(number_missing) / float(X.shape[0] * X.shape[1])
-    number_instances_with_missing = X.shape[1] - np.sum(missing_values == 0)
-    ratio_instances_with_missing = float(number_instances_with_missing) / float(X.shape[1])
+    missing_values_by_instance = X.shape[1] - X.count(axis=1)
+    number_missing = np.sum(missing_values_by_instance)
+    ratio_missing = number_missing / (X.shape[0] * X.shape[1])
+    number_instances_with_missing = np.sum(missing_values_by_instance != 0)
+    ratio_instances_with_missing = number_instances_with_missing / X.shape[0]
     return (number_missing, ratio_missing, number_instances_with_missing, ratio_instances_with_missing)
 
 def get_class_stats(Y):
