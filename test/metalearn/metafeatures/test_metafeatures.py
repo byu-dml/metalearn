@@ -114,37 +114,53 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         def import_openml_datasets():
 
             # get a list of datasets from openml
-            datasets = openml.datasets.list_datasets()
-            datasets = list(datasets.keys())
+            datasets_dict = openml.datasets.list_datasets()
+            datasets = [8, 1547, 1552, 1553, 1554, 40693, 4551, 1490, 230, 189, 198, 561, 562, 203,]
+            datasets = list([k for k,v in datasets_dict.items() if v["NumberOfInstances"] < 100000])
+
+            random.shuffle(datasets)
             #get a list of filtered dataset ids
-            dataset_indices = [31, 1464, 334, 50, 333, 1570, 1504, 1494, 3, 1510, 1489, 37, 1479, 1063, 1471, 1467, 1487, 44, 1067, 1493, 1480, 1492, 1068, 1491, 1050, 1462, 1046, 335, 151, 1049, 1116, 312, 1485, 1457, 1220, 1038, 1120, 1461, 6, 1486, 4534, 300, 183, 4134, 42, 1515, 4135, 40536, 28, 16, 18, 22, 32, 20, 12, 14, 1501, 1466, 1459, 375, 36, 1468, 469, 2, 188, 182, 307, 377, 54, 29, 23380, 11, 1549, 1555, 458, 15, 1476, 1478, 1475, 4538, 23, 1233, 60, 470, 451, 24, 61, 1497, 46, 23512, 4, 554, 6332, 1554, 1552, 38, 1053, 1114, 1112, 23381, 40496, 1553, 1590, 5, 1548, 40499, 43, 1547, 53, 1128, 1137, 1138, 1166, 1158, 1134, 1165, 1130, 1145, 1161, 179, 30, 59, 9, 40, 40668, 56, 181, 13, 55, 48, 52, 10, 26, 27, 782, 184, 51, 41, 39, 49, 34, 7, 35, 137, 172, 40900, 336, 885, 867, 171, 313, 163, 875, 186, 736, 916, 895, 187, 754, 974, 1013, 969, 829, 448, 726, 337, 464, 346, 921, 890, 119, 784, 811, 747, 902, 714, 461, 955, 444, 783, 748, 719, 255, 338, 789, 878, 762, 808, 278, 860, 40910, 277, 276, 814, 1075, 251, 685, 343, 450, 339, 342, 1069, 340, 803, 976, 730, 776, 733, 275, 911, 57, 1026, 925, 744, 886, 918, 879, 900, 1056, 943, 1011, 931, 896, 794, 949, 880, 932, 994, 889, 937, 792, 926, 933, 820, 795, 970, 871, 888, 788, 948, 936, 807, 1020, 796, 868, 995, 996, 774, 793, 185, 909, 934, 935, 779, 775, 906, 876, 1061, 884, 869, 877, 805, 1018, 1064, 756, 830, 766, 1021, 770, 973, 893, 908, 951, 870, 1014, 979, 997, 1037, 749, 812, 947, 873, 804, 763, 922, 923, 962, 819, 824, 841, 863, 958, 1005, 894, 724, 920, 838, 768, 1065, 950, 764, 753, 716, 978, 1054, 1066, 980, 746, 772, 907, 991, 834, 850, 1002, 752, 778, 816, 941, 725, 761, 741, 945, 1017, 1071, 750, 971, 832, 847, 790, 818, 1025, 915, 769, 717, 946, 481, 735, 1003, 765, 874, 817, 1059, 898, 732, 855, 882, 1045, 720, 857, 737, 773, 848, 833, 1015, 993, 1073, 1006, 1048, 721, ]
-            dataset_indices.sort()
+            dataset_indices = [ 40601]
             #randomly sample (2-5) of these datasets
             num_datasets = random.randint(2,5)
-            rand_dataset_ids = random.sample(dataset_indices,num_datasets)
-            rand_dataset_ids = [40597]
+            rand_dataset_ids = random.sample(datasets, num_datasets)
             #rand_dataset_ids = datasets
+            rand_dataset_ids = dataset_indices
 
             # get X, Y, and metafeatures from the datasets
             oml_datasets = []
             inconsistencies = False
-            for raw_dataset_id in rand_dataset_ids:
-                print(raw_dataset_id)
-                raw_dataset = openml.datasets.get_dataset(raw_dataset_id)
-                X_raw, Y_raw, column_types, attributes = raw_dataset.get_data(target=raw_dataset.default_target_attribute, return_categorical_indicator=True, return_attribute_names=True)
-                print(Y_raw.shape[1])
-                if Y_raw.shape[1] != 0:                    
-                    dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in raw_dataset.qualities.items()}
-                    X = pd.DataFrame(data=X_raw, columns=attributes)
-                    Y = pd.Series(data=Y_raw, name="target")
-                    columns = {k:(Metafeatures().CATEGORICAL if v is True else Metafeatures().NUMERIC) for k,v in zip(attributes,column_types)}
-                    columns["target"] = Metafeatures().CATEGORICAL
-                    dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures, "columns": columns}
-                    oml_datasets.append(dataset)
-                    if compare_with_openml(dataset, raw_dataset_id):
-                        inconsistencies = True
+            for dataset_id in rand_dataset_ids:
+                print(dataset_id)
+                dataset = openml.datasets.get_dataset(dataset_id)
+                target = str(dataset.default_target_attribute).split(",")
+                print(target)
+                df = load_arff(dataset.data_file)
+                X = df.drop(columns=target, axis=1)
+                Y = df[target]
+                if len(target) <= 1:
+                    Y = pd.Series(Y)
+                    print(Y.dtype)
+                    if Y.dtype != "object":
+                        print("regression")
+                    else:
+                        print("classification")
                 else:
-                    print("unable to process multi label targets")
+                    print("multi label")
+                # raw_dataset = openml.datasets.get_dataset(raw_dataset_id)
+                # X_raw, Y_raw, column_types, attributes = raw_dataset.get_data(target=raw_dataset.default_target_attribute, return_categorical_indicator=True, return_attribute_names=True)
+                # if Y_raw.ndim == 1:
+                #     dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in raw_dataset.qualities.items()}
+                #     X = pd.DataFrame(data=X_raw, columns=attributes)
+                #     Y = pd.Series(data=Y_raw, name="target")
+                #     columns = {k:(Metafeatures().CATEGORICAL if v is True else Metafeatures().NUMERIC) for k,v in zip(attributes,column_types)}
+                #     columns["target"] = Metafeatures().CATEGORICAL
+                #     dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures, "columns": columns}
+                #     oml_datasets.append(dataset)
+                #     if compare_with_openml(dataset, raw_dataset_id):
+                #         inconsistencies = True
+                # else:
+                #     print("unable to process multi label targets")
 
             self.assertFalse(inconsistencies, "Not all metafeatures matched results from OpenML.")
 
@@ -178,7 +194,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                             consistentSharedMf.append(singleMfDict)
                         elif diff > .05 or diff == np.isnan(diff):
                             inconsistentSharedMf.append(singleMfDict)
-                        
+
 
             #write results to json file
             openmlData = { "INCONSISTENT SHARED METAFEATURES": inconsistentSharedMf, "CONSISTENT SHARED METAFEATURES": consistentSharedMf,
