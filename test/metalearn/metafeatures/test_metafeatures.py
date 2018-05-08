@@ -11,6 +11,7 @@ import openml
 import pandas as pd
 import numpy as np
 from arff2pandas import a2p
+import arff
 
 from metalearn.metafeatures.metafeatures import Metafeatures
 
@@ -125,48 +126,38 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             num_datasets = random.randint(2,5)
             rand_dataset_ids = random.sample(datasets, num_datasets)
             #rand_dataset_ids = datasets
-            rand_dataset_ids = dataset_indices
+            rand_dataset_ids = datasets
+            #rand_dataset_ids = [564]
 
             # get X, Y, and metafeatures from the datasets
             oml_datasets = []
             inconsistencies = False
             for dataset_id in rand_dataset_ids:
-                print(dataset_id)
-                dataset = openml.datasets.get_dataset(dataset_id)
-                target = str(dataset.default_target_attribute).split(",")
-                print(target)
-                df = load_arff(dataset.data_file)
-                X = df.drop(columns=target, axis=1)
-                Y = df[target]
-                if len(target) <= 1:
-                    Y = pd.Series(Y)
-                    print(Y.dtype)
-                    if Y.dtype != "object":
-                        print("regression")
+                try:
+                    print(dataset_id)
+                    dataset = openml.datasets.get_dataset(dataset_id)
+                    target = str(dataset.default_target_attribute).split(",")
+                    df = load_arff(dataset.data_file)
+                    X = df.drop(columns=target, axis=1)
+                    if len(target) <= 1:
+                        Y = df[target].squeeze()
+                        if Y.dtype == "object":
+                            dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in dataset.qualities.items()}
+                            dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures}
+                            if compare_with_openml(dataset, dataset_id):
+                                inconsistencies = True
                     else:
-                        print("classification")
-                else:
-                    print("multi label")
-                # raw_dataset = openml.datasets.get_dataset(raw_dataset_id)
-                # X_raw, Y_raw, column_types, attributes = raw_dataset.get_data(target=raw_dataset.default_target_attribute, return_categorical_indicator=True, return_attribute_names=True)
-                # if Y_raw.ndim == 1:
-                #     dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in raw_dataset.qualities.items()}
-                #     X = pd.DataFrame(data=X_raw, columns=attributes)
-                #     Y = pd.Series(data=Y_raw, name="target")
-                #     columns = {k:(Metafeatures().CATEGORICAL if v is True else Metafeatures().NUMERIC) for k,v in zip(attributes,column_types)}
-                #     columns["target"] = Metafeatures().CATEGORICAL
-                #     dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures, "columns": columns}
-                #     oml_datasets.append(dataset)
-                #     if compare_with_openml(dataset, raw_dataset_id):
-                #         inconsistencies = True
-                # else:
-                #     print("unable to process multi label targets")
+                        print("multi label")
+                except KeyboardInterrupt:
+                    raise KeyboardInterrupt
+                except arff.BadNominalValue:
+                    continue
 
             self.assertFalse(inconsistencies, "Not all metafeatures matched results from OpenML.")
 
         def compare_with_openml(oml_dataset, dataset_id):
             # get metafeatures from dataset using our metafeatures
-            ourMetafeatures = Metafeatures().compute(X=oml_dataset["X"], Y=oml_dataset["Y"], column_types=oml_dataset["columns"])
+            ourMetafeatures = Metafeatures().compute(X=oml_dataset["X"], Y=oml_dataset["Y"])
             ourMetafeatures = ourMetafeatures.to_dict(orient="records")[0]
 
             mfNameMap = json.load(open("oml_metafeature_map.json", "r"))
