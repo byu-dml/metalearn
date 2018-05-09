@@ -155,6 +155,8 @@ class Metafeatures(object):
             raise TypeError('X must be of type pandas.DataFrame')
         if not isinstance(Y, pd.Series):
             raise TypeError('Y must be of type pandas.Series')
+        if "float" in str(Y.dtype):
+            raise TypeError('Regression problems are not supported (target feature is of type float)')
         if column_types is not None:
             if len(column_types.keys()) != len(X.columns) + 1:
                 raise ValueError(
