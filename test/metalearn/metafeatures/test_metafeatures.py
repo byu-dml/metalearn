@@ -116,7 +116,6 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
             # get a list of datasets from openml
             datasets_dict = openml.datasets.list_datasets()
-            datasets = [8, 1547, 1552, 1553, 1554, 40693, 4551, 1490, 230, 189, 198, 561, 562, 203,]
             datasets = list([k for k,v in datasets_dict.items() if v["NumberOfInstances"] < 100000])
 
             random.shuffle(datasets)
@@ -132,9 +131,12 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             # get X, Y, and metafeatures from the datasets
             oml_datasets = []
             inconsistencies = False
-            for dataset_id in rand_dataset_ids:
+            runs = 0
+            sample_size = 3
+            while runs < sample_size:
                 try:
-                    print(dataset_id)
+                    dataset_id = np.random.choice(datasets, replace = False)
+                    #print(dataset_id)
                     dataset = openml.datasets.get_dataset(dataset_id)
                     target = str(dataset.default_target_attribute).split(",")
                     df = load_arff(dataset.data_file)
@@ -146,13 +148,18 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                             dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures}
                             if compare_with_openml(dataset, dataset_id):
                                 inconsistencies = True
-                    else:
-                        print("multi label")
+                            runs = runs + 1
+                            print("Runs: " + str(runs) + "\tid: " + str(dataset_id))
                 except KeyboardInterrupt:
                     raise KeyboardInterrupt
                 except arff.BadNominalValue:
                     continue
-
+                except TypeError:
+                    continue
+                except ValueError:
+                    continue
+                except IndexError:
+                    print("IndexError")
             self.assertFalse(inconsistencies, "Not all metafeatures matched results from OpenML.")
 
         def compare_with_openml(oml_dataset, dataset_id):
