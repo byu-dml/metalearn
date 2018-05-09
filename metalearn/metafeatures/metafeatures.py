@@ -113,7 +113,6 @@ class Metafeatures(object):
         )
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
-
         if metafeature_ids is None:
             metafeature_ids = self.list_metafeatures()
         self._validate_compute_arguments(
@@ -155,8 +154,6 @@ class Metafeatures(object):
             raise TypeError('X must be of type pandas.DataFrame')
         if not isinstance(Y, pd.Series):
             raise TypeError('Y must be of type pandas.Series')
-        if "float" in str(Y.dtype):
-            raise TypeError('Regression problems are not supported (target feature is of type float)')
         if column_types is not None:
             if len(column_types.keys()) != len(X.columns) + 1:
                 raise ValueError(
@@ -175,6 +172,8 @@ class Metafeatures(object):
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
                     )
                 )
+            if column_types[Y.name] != self.CATEGORICAL:
+                raise TypeError('Regression problems are not supported (target feature is not categorical)')
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if

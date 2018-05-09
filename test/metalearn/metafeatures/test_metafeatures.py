@@ -136,7 +136,7 @@ class MetaFeaturesTestCase(unittest.TestCase):
         fail_message1 = "We expect a user friendly message when the features passed to compute is not a Pandas.DataFrame."
         expected_error_message2 = "Y must be of type pandas.Series"
         fail_message2 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
-        expected_error_message3 = "Regression problems are not supported (target feature is of type float)"
+        expected_error_message3 = "Regression problems are not supported (target feature is not categorical)"
         fail_message3 = "We expect a user friendly message when the DataFrame passed to compute is a regression problem"
         # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
 
