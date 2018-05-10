@@ -116,14 +116,8 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
             # get a list of datasets from openml
             datasets_dict = openml.datasets.list_datasets()
-            datasets = list([k for k,v in datasets_dict.items() if v["NumberOfInstances"] < 100000])
-
-            random.shuffle(datasets)
+            datasets = list([k for k,v in datasets_dict.items() if v["NumberOfInstances"] <= 50000 and v["NumberOfFeatures"] <= 200])
             #get a list of filtered dataset ids
-            dataset_indices = [ 40601]
-            #randomly sample (2-5) of these datasets
-            num_datasets = random.randint(2,5)
-            rand_dataset_ids = random.sample(datasets, num_datasets)
             #rand_dataset_ids = datasets
             rand_dataset_ids = datasets
             #rand_dataset_ids = [564]
@@ -132,7 +126,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             oml_datasets = []
             inconsistencies = False
             runs = 0
-            sample_size = 3
+            sample_size = 10
             while runs < sample_size:
                 try:
                     dataset_id = np.random.choice(datasets, replace = False)
@@ -146,6 +140,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                         if Y.dtype == "object":
                             dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in dataset.qualities.items()}
                             dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures}
+                            print(dataset_id)
                             if compare_with_openml(dataset, dataset_id):
                                 inconsistencies = True
                             runs = runs + 1
@@ -155,8 +150,10 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 except arff.BadNominalValue:
                     continue
                 except TypeError:
+                    print("TypeError")
                     continue
                 except ValueError:
+                    print("ValueError")
                     continue
                 except IndexError:
                     print("IndexError")
@@ -346,8 +343,8 @@ class MetaFeaturesTestCase(unittest.TestCase):
             )
 
 def metafeatures_suite():
-    # test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
-    # return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
-    suite = unittest.TestSuite()
-    suite.addTest(MetaFeaturesWithDataTestCase("test_compare_openml"))
-    return suite
+    test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
+    return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+    # suite = unittest.TestSuite()
+    # suite.addTest(MetaFeaturesWithDataTestCase("test_compare_openml"))
+    # return suite
