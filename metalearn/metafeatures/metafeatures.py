@@ -157,7 +157,7 @@ class Metafeatures(object):
         if column_types is not None:
             if len(column_types.keys()) != len(X.columns) + 1:
                 raise ValueError(
-                    "The number of column_types does not match the number of" +
+                    "The number of column_types does not match the number of " +
                     "features plus the target"
                 )
             invalid_column_types = []
@@ -172,8 +172,8 @@ class Metafeatures(object):
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
                     )
                 )
-            if column_types[Y.name] != self.CATEGORICAL:
-                raise TypeError('Regression problems are not supported (target feature is not categorical)')
+            if column_types[Y.name] == self.NUMERIC:
+                raise TypeError('Regression problems are not supported (target feature is numeric)')
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if
