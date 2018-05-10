@@ -1,0 +1,474 @@
+{
+	"NumberOfInstances": {
+		"data_metafeatures_path": "number_of_instances",
+		"required_type": "integer"
+	},
+	"NumberOfFeatures": {
+		"data_metafeatures_path": "number_of_features",
+		"required_type": "integer"
+	},
+	"NumberOfClasses": {
+		"data_metafeatures_path": "number_of_classes",
+		"required_type": "integer"
+	},
+	"NumberOfNumericFeatures": {
+		"data_metafeatures_path": "number_of_numeric_features",
+		"required_type": "integer"
+	},
+	"NumberOfCategoricalFeatures": {
+		"data_metafeatures_path": "number_of_discrete_features",
+		"required_type": "integer"
+	},
+	"RatioOfNumericFeatures": {
+		"data_metafeatures_path": "ratio_of_numeric_features",
+		"required_type": "number"
+	},
+	"RatioOfCategoricalFeatures": {
+		"data_metafeatures_path": "ratio_of_nominal_features",
+		"required_type": "number"
+	},
+	"Dimensionality": {
+		"data_metafeatures_path": "dimensionality",
+		"required_type": "number"
+	},
+	"NumberOfMissingValues": {
+		"data_metafeatures_path": "number_of_missing_values",
+		"required_type": "integer"
+	},
+	"RatioOfMissingValues": {
+		"data_metafeatures_path": "ratio_of_missing_values",
+		"required_type": "number"
+	},
+	"NumberOfInstancesWithMissingValues": {
+		"data_metafeatures_path": "number_of_instances_with_missing_values",
+		"required_type": "integer"
+	},
+	"RatioOfInstancesWithMissingValues": {
+		"data_metafeatures_path": "ratio_of_instances_with_missing_values",
+		"required_type": "number"
+	},
+	"MeanClassProbability": {
+		"data_metafeatures_path": "class_probability.mean",
+		"required_type": "number"
+	},
+	"StdevClassProbability": {
+		"data_metafeatures_path": "class_probability.std",
+		"required_type": "number"
+	},
+	"MinClassProbability": {
+		"data_metafeatures_path": "class_probability.min",
+		"required_type": "number"
+	},
+	"MaxClassProbability": {
+		"data_metafeatures_path": "class_probability.max",
+		"required_type": "number"
+	},
+	"MinorityClassSize": {
+		"data_metafeatures_path": "minority_class_size",
+		"required_type": "integer"
+	},
+	"MajorityClassSize": {
+		"data_metafeatures_path": "majority_class_size",
+		"required_type": "integer"
+	},
+	"MeanCardinalityOfCategoricalFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_nominal_features.mean",
+		"required_type": "number"
+	},
+	"StdevCardinalityOfCategoricalFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_nominal_features.std",
+		"required_type": "number"
+	},
+	"MinCardinalityOfCategoricalFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_nominal_features.min",
+		"required_type": "integer"
+	},
+	"MaxCardinalityOfCategoricalFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_nominal_features.max",
+		"required_type": "integer"
+	},
+	"MeanCardinalityOfNumericFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_numeric_features.mean",
+		"required_type": "number"
+	},
+	"StdevCardinalityOfNumericFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_numeric_features.std",
+		"required_type": "number"
+	},
+	"MinCardinalityOfNumericFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_numeric_features.min",
+		"required_type": "integer"
+	},
+	"MaxCardinalityOfNumericFeatures": {
+		"data_metafeatures_path": "number_distinct_values_of_numeric_features.max",
+		"required_type": "integer"
+	},
+	"MeanMeansOfNumericFeatures": {
+		"data_metafeatures_path": "means_of_features.mean",
+		"required_type": "number"
+	},
+	"StdevMeansOfNumericFeatures": {
+		"data_metafeatures_path": "means_of_features.std",
+		"required_type": "number"
+	},
+	"MinMeansOfNumericFeatures": {
+		"data_metafeatures_path": "means_of_features.min",
+		"required_type": "number"
+	},
+	"MaxMeansOfNumericFeatures": {
+		"data_metafeatures_path": "means_of_features.max",
+		"required_type": "number"
+	},
+	"Quartile1MeansOfNumericFeatures": {
+		"data_metafeatures_path": "means_of_features.quartile_1",
+		"required_type": "number"
+	},
+	"Quartile2MeansOfNumericFeatures": {
+		"data_metafeatures_path": "means_of_features.quartile_2",
+		"required_type": "number"
+	},
+	"Quartile3MeansOfNumericFeatures": {
+		"data_metafeatures_path": "means_of_features.quartile_3",
+		"required_type": "number"
+	},
+	"MeanStdDevOfNumericFeatures": {
+		"data_metafeatures_path": "standard_deviations_of_features.mean",
+		"required_type": "number"
+	},
+	"StdevStdDevOfNumericFeatures": {
+		"data_metafeatures_path": "standard_deviations_of_features.std",
+		"required_type": "number"
+	},
+	"MinStdDevOfNumericFeatures": {
+		"data_metafeatures_path": "standard_deviations_of_features.min",
+		"required_type": "number"
+	},
+	"MaxStdDevOfNumericFeatures": {
+		"data_metafeatures_path": "standard_deviations_of_features.max",
+		"required_type": "number"
+	},
+	"Quartile1StdDevOfNumericFeatures": {
+		"data_metafeatures_path": "standard_deviations_of_features.quartile_1",
+		"required_type": "number"
+	},
+	"Quartile2StdDevOfNumericFeatures": {
+		"data_metafeatures_path": "standard_deviations_of_features.quartile_2",
+		"required_type": "number"
+	},
+	"Quartile3StdDevOfNumericFeatures": {
+		"data_metafeatures_path": "standard_deviations_of_features.quartile_3",
+		"required_type": "number"
+	},
+	"MeanSkewnessOfNumericFeatures": {
+		"data_metafeatures_path": "skew_of_features.mean",
+		"required_type": "number"
+	},
+	"StdevSkewnessOfNumericFeatures": {
+		"data_metafeatures_path": "skew_of_features.std",
+		"required_type": "number"
+	},
+	"MinSkewnessOfNumericFeatures": {
+		"data_metafeatures_path": "skew_of_features.min",
+		"required_type": "number"
+	},
+	"MaxSkewnessOfNumericFeatures": {
+		"data_metafeatures_path": "skew_of_features.max",
+		"required_type": "number"
+	},
+	"Quartile1SkewnessOfNumericFeatures": {
+		"data_metafeatures_path": "skew_of_features.quartile_1",
+		"required_type": "number"
+	},
+	"Quartile2SkewnessOfNumericFeatures": {
+		"data_metafeatures_path": "skew_of_features.quartile_2",
+		"required_type": "number"
+	},
+	"Quartile3SkewnessOfNumericFeatures": {
+		"data_metafeatures_path": "skew_of_features.quartile_3",
+		"required_type": "number"
+	},
+	"MeanKurtosisOfNumericFeatures": {
+        "data_metafeatures_path": "kurtosis_of_features.mean",
+        "required_type": "number"
+    },
+    "StdevKurtosisOfNumericFeatures": {
+        "data_metafeatures_path": "kurtosis_of_features.std",
+        "required_type": "number"
+    },
+    "MinKurtosisOfNumericFeatures": {
+        "data_metafeatures_path": "kurtosis_of_features.min",
+        "required_type": "number"
+    },
+    "MaxKurtosisOfNumericFeatures": {
+        "data_metafeatures_path": "kurtosis_of_features.max",
+        "required_type": "number"
+    },
+    "Quartile1KurtosisOfNumericFeatures": {
+        "data_metafeatures_path": "kurtosis_of_features.quartile_1",
+        "required_type": "number"
+    },
+    "Quartile2KurtosisOfNumericFeatures": {
+        "data_metafeatures_path": "kurtosis_of_features.quartile_2",
+        "required_type": "number"
+    },
+    "Quartile3KurtosisOfNumericFeatures": {
+        "data_metafeatures_path": "kurtosis_of_features.quartile_3",
+        "required_type": "number"
+    },
+    "PredPCA1": {
+    	"data_metafeatures_path": "pred_pca.pca1",
+    	"required_type": "number"
+    },
+    "PredPCA2": {
+    	"data_metafeatures_path": "pred_pca.pca2",
+    	"required_type": "number"
+    },
+    "PredPCA3": {
+    	"data_metafeatures_path": "pred_pca.pca3",
+    	"required_type": "number"
+    },
+    "PredEigen1": {
+    	"data_metafeatures_path": "pred_pca.eigen1",
+    	"required_type": "number"
+    },
+    "PredEigen2": {
+    	"data_metafeatures_path": "pred_pca.eigen2",
+    	"required_type": "number"
+    },
+    "PredEigen3": {
+    	"data_metafeatures_path": "pred_pca.eigen3",
+    	"required_type": "number"
+    },
+    "PredDet": {
+    	"data_metafeatures_path": "pred_pca.determinant",
+    	"required_type": "number"
+    },
+    "MeanCanonicalCorrelation": {
+    	"data_metafeatures_path": "mean_canonical_correlation",
+    	"required_type": "number"
+    },
+    "StdevCanonicalCorrelation": {
+    	"data_metafeatures_path": "std_canonical_correlation",
+    	"required_type": "number"
+    },
+    "ClassEntropy": {
+    	"data_metafeatures_path": "class_entropy",
+    	"required_type": "number"
+    },
+    "MeanCategoricalAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_nominal_features.mean",
+        "required_type": "number"
+    },
+    "MinCategoricalAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of__nominal_features.min",
+        "required_type": "number"
+    },
+    "Quartile1CategoricalAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_nominal_features.quartile_1",
+        "required_type": "number"
+    },
+    "Quartile2CategoricalAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_nominal_features.quartile_2",
+        "required_type": "number"
+    },
+    "Quartile3CategoricalAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_nominal_features.quartile_3",
+        "required_type": "number"
+    },
+    "MaxCategoricalAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_nominal_features.max",
+        "required_type": "number"
+    },
+    "MeanNumericAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_numeric_features.mean",
+        "required_type": "number"
+    },
+    "MinNumericAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_numeric_features.min",
+        "required_type": "number"
+    },
+    "Quartile1NumericAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_numeric_features.quartile_1",
+        "required_type": "number"
+    },
+    "Quartile2NumericAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_numeric_features.quartile_2",
+        "required_type": "number"
+    },
+    "Quartile3NumericAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_numeric_features.quartile_3",
+        "required_type": "number"
+    },
+    "MaxNumericAttributeEntropy": {
+        "data_metafeatures_path": "entropy_of_numeric_features.max",
+        "required_type": "number"
+    },
+    "MeanCategoricalJointEntropy": {
+        "data_metafeatures_path": "nominal_joint_entropy.mean",
+        "required_type": "number"
+    },
+    "MinCategoricalJointEntropy": {
+        "data_metafeatures_path": "nominal_joint_entropy.min",
+        "required_type": "number"
+    },
+    "Quartile1CategoricalJointEntropy": {
+        "data_metafeatures_path": "nominal_joint_entropy.quartile_1",
+        "required_type": "number"
+    },
+    "Quartile2CategoricalJointEntropy": {
+        "data_metafeatures_path": "nominal_joint_entropy.quartile_2",
+        "required_type": "number"
+    },
+    "Quartile3CategoricalJointEntropy": {
+        "data_metafeatures_path": "nominal_joint_entropy.quartile_3",
+        "required_type": "number"
+    },
+    "MaxCategoricalJointEntropy": {
+        "data_metafeatures_path": "nominal_joint_entropy.max",
+        "required_type": "number"
+    },
+    "MeanNumericJointEntropy": {
+        "data_metafeatures_path": "numeric_joint_entropy.mean",
+        "required_type": "number"
+    },
+    "MinNumericJointEntropy": {
+        "data_metafeatures_path": "numeric_joint_entropy.min",
+        "required_type": "number"
+    },
+    "Quartile1NumericJointEntropy": {
+        "data_metafeatures_path": "numeric_joint_entropy.quartile_1",
+        "required_type": "number"
+    },
+    "Quartile2NumericJointEntropy": {
+        "data_metafeatures_path": "numeric_joint_entropy.quartile_2",
+        "required_type": "number"
+    },
+    "Quartile3NumericJointEntropy": {
+        "data_metafeatures_path": "numeric_joint_entropy.quartile_3",
+        "required_type": "number"
+    },
+    "MaxNumericJointEntropy": {
+        "data_metafeatures_path": "numeric_joint_entropy.max",
+        "required_type": "number"
+    },
+    "MeanCategoricalMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_nominal_features.mean",
+        "required_type": "number"
+    },
+    "MinCategoricalMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_nominal_features.min",
+        "required_type": "number"
+    },
+    "Quartile1CategoricalMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_nominal_features.quartile_1",
+        "required_type": "number"
+    },
+    "Quartile2CategoricalMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_nominal_features.quartile_2",
+        "required_type": "number"
+    },
+    "Quartile3CategoricalMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_nominal_features.quartile_3",
+        "required_type": "number"
+    },
+    "MaxCategoricalMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_nominal_features.max",
+        "required_type": "number"
+    },
+    "MeanNumericMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_numeric_features.mean",
+        "required_type": "number"
+    },
+    "MinNumericMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_numeric_features.min",
+        "required_type": "number"
+    },
+    "Quartile1NumericMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_numeric_features.quartile_1",
+        "required_type": "number"
+    },
+    "Quartile2NumericMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_numeric_features.quartile_2",
+        "required_type": "number"
+    },
+    "Quartile3NumericMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_numeric_features.quartile_3",
+        "required_type": "number"
+    },
+    "MaxNumericMutualInformation": {
+        "data_metafeatures_path": "mutual_information_of_numeric_features.max",
+        "required_type": "number"
+    },
+    "EquivalentNumberOfCategoricalFeatures": {
+    	"data_metafeatures_path": "equivalent_number_of_nominal_features",
+    	"required_type": "number"
+    },
+    "EquivalentNumberOfNumericFeatures": {
+    	"data_metafeatures_path": "equivalent_number_of_numeric_features",
+    	"required_type": "number"
+    },
+    "CategoricalNoiseToSignalRatio": {
+    	"data_metafeatures_path": "nominal_noise_to_signal_ratio",
+    	"required_type": "number"
+    },
+    "NumericNoiseToSignalRatio": {
+    	"data_metafeatures_path": "numeric_noise_to_signal_ratio",
+    	"required_type": "number"
+    },
+    "NaiveBayesErrRate": {
+    	"data_metafeatures_path": "naive_bayes_err_rate",
+    	"required_type": "number"
+    },
+    "NaiveBayesKappa": {
+    	"data_metafeatures_path": "naive_bayes_kappa",
+    	"required_type": "number"
+    },
+    "kNN1NErrRate": {
+    	"data_metafeatures_path": "knn_1n_err_rate",
+    	"required_type": "number"
+    },
+    "kNN1NKappa": {
+    	"data_metafeatures_path": "knn_1n_kappa",
+    	"required_type": "number"
+    },
+    "DecisionStumpErrRate": {
+    	"data_metafeatures_path": "decision_stump_err_rate",
+    	"required_type": "number"
+    },
+    "DecisionStumpKappa": {
+    	"data_metafeatures_path": "decision_stump_kappa",
+    	"required_type": "number"
+    },
+    "RandomTreeDepth1ErrRate": {
+    	"data_metafeatures_path": "random_tree_depth1_err_rate",
+    	"required_type": "number"
+    },
+    "RandomTreeDepth1Kappa": {
+    	"data_metafeatures_path": "random_tree_depth1_kappa",
+    	"required_type": "number"
+    },
+    "RandomTreeDepth2ErrRate": {
+    	"data_metafeatures_path": "random_tree_depth2_err_rate",
+    	"required_type": "number"
+    },
+    "RandomTreeDepth2Kappa": {
+    	"data_metafeatures_path": "random_tree_depth2_kappa",
+    	"required_type": "number"
+    },
+    "RandomTreeDepth3ErrRate": {
+    	"data_metafeatures_path": "random_tree_depth3_err_rate",
+    	"required_type": "number"
+    },
+    "RandomTreeDepth3Kappa": {
+    	"data_metafeatures_path": "random_tree_depth3_kappa",
+    	"required_type": "number"
+    },
+    "LinearDiscriminantAnalysisErrRate": {
+    	"data_metafeatures_path": "linear_discriminant_anal_err_rate",
+    	"required_type": "number"
+    },
+    "LinearDiscriminantAnalysisKappa": {
+    	"data_metafeatures_path": "linear_discriminant_anal_kappa",
+    	"required_type": "number"
+    }
+}
