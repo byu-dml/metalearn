@@ -101,6 +101,7 @@ class Metafeatures(object):
                     ),
                     timeout-self.TIMEOUT_BUFFER
                 )
+                print(self.computed_metafeatures)
         return self.computed_metafeatures
 
     def _compute(
@@ -200,6 +201,7 @@ class Metafeatures(object):
     def _compute_metafeatures(self, metafeature_ids):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
+            # print(str(metafeature_id) + ": " + str(value))
             row, col = 0, metafeature_id
             self.computed_metafeatures.at[row, col] = value
             col += "_Time"
