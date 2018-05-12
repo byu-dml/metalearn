@@ -50,19 +50,24 @@ class Metafeatures(object):
                 self.resource_info_dict[key] = combined_dict[key]
 
     def threadsafe_timeout_function(self, f, args, timeout):
-        p = multiprocessing.Process(target=f, args=args)
-        p.start()
-        p.join(timeout)
-        if p.is_alive():
-            p.terminate()
-            p.join()
-        # metafeatures = {}
-        # while not self.queue.empty():
-        #     name,value = self.queue.get()
-        #     metafeatures[name] = value
-        # self.computed_metafeatures = DataFrame(metafeatures)
-        self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
-        self.computed_metafeatures = self.computed_metafeatures.set_index(0).T
+        try:
+            p = multiprocessing.Process(target=f, args=args)
+            p.start()
+            p.join(timeout)
+            if p.is_alive():
+                p.terminate()
+                p.join()
+            # metafeatures = {}
+            # while not self.queue.empty():
+            #     name,value = self.queue.get()
+            #     metafeatures[name] = value
+            # self.computed_metafeatures = DataFrame(metafeatures)
+            self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
+            if self.computed_metafeatures.shape[1] > 0:
+                self.computed_metafeatures = self.computed_metafeatures.set_index(0).T
+        except:
+            raise
+        
 
 
     def list_metafeatures(self):
@@ -81,8 +86,8 @@ class Metafeatures(object):
         ----------
         X: pandas.DataFrame, the dataset features
         Y: pandas.Seris, the dataset targets
-        column_types: Dict[str, str], dict from column name to column type as
-            "NUMERIC" or "CATEGORICAL", must include Y column
+        column_types: Dict[str, str], dict from column name to column type 
+            as "NUMERIC" or "CATEGORICAL", must include Y column
         metafeature_ids: list, the metafeatures to compute.
             default of None indicates to compute all metafeatures
         sample_rows: bool, whether to uniformly sample from the rows
@@ -99,21 +104,6 @@ class Metafeatures(object):
         value
         """
         self.computed_metafeatures = DataFrame()
-        # if timeout is None:
-        #     self._compute(
-        #         X, Y, column_types, metafeature_ids, sample_rows,
-        #         sample_columns, seed
-        #     )
-        # else:
-        #     with redirect_stderr(io.StringIO()):
-        #         self.threadsafe_timeout_function(
-        #             self._compute,
-        #             (
-        #                 X, Y, column_types, metafeature_ids, sample_rows,
-        #                 sample_columns, seed
-        #             ),
-        #             timeout-self.TIMEOUT_BUFFER
-        #         )
         with redirect_stderr(io.StringIO()):
             if(timeout is None):
                 self.threadsafe_timeout_function(

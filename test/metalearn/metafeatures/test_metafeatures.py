@@ -120,7 +120,6 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 compute_time = time.time() - start_time
                 self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
 
-
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
 
@@ -244,11 +243,11 @@ class MetaFeaturesTestCase(unittest.TestCase):
             )
 
 def metafeatures_suite():
-    # test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
-    # return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
-    suite = unittest.TestSuite()
-    suite.addTest(MetaFeaturesWithDataTestCase("test_timeout"))
-    return suite
+    test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
+    return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+    # suite = unittest.TestSuite()
+    # suite.addTest(MetaFeaturesWithDataTestCase("test_timeout"))
+    # return suite
 
 """ === Anything under is line is currently not in use. === """
 def import_openml_dataset(id=4):
