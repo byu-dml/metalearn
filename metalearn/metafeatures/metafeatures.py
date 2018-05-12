@@ -18,13 +18,7 @@ from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
 
 
-def threadsafe_timeout_function(f, args, timeout):
-    p = multiprocessing.Process(target=f, args=args)
-    p.start()
-    p.join(timeout)
-    if p.is_alive():
-        p.terminate()
-        p.join()
+
 
 class Metafeatures(object):
     """
@@ -41,6 +35,7 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
 
     def __init__(self):
+        self.queue = multiprocessing.Queue()
         self.resource_info_dict = {}
         self.metafeatures_list = []
         mf_info_file_path = os.path.splitext(__file__)[0] + '.json'
@@ -53,6 +48,22 @@ class Metafeatures(object):
             combined_dict = {**json_metafeatures_dict, **json_resources_dict}
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
+
+    def threadsafe_timeout_function(self, f, args, timeout):
+        p = multiprocessing.Process(target=f, args=args)
+        p.start()
+        p.join(timeout)
+        if p.is_alive():
+            p.terminate()
+            p.join()
+        # metafeatures = {}
+        # while not self.queue.empty():
+        #     name,value = self.queue.get()
+        #     metafeatures[name] = value
+        # self.computed_metafeatures = DataFrame(metafeatures)
+        self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
+        self.computed_metafeatures = self.computed_metafeatures.set_index(0).T
+
 
     def list_metafeatures(self):
         """
@@ -70,6 +81,8 @@ class Metafeatures(object):
         ----------
         X: pandas.DataFrame, the dataset features
         Y: pandas.Seris, the dataset targets
+        column_types: Dict[str, str], dict from column name to column type as
+            "NUMERIC" or "CATEGORICAL", must include Y column
         metafeature_ids: list, the metafeatures to compute.
             default of None indicates to compute all metafeatures
         sample_rows: bool, whether to uniformly sample from the rows
@@ -86,22 +99,40 @@ class Metafeatures(object):
         value
         """
         self.computed_metafeatures = DataFrame()
-        if timeout is None:
-            self._compute(
-                X, Y, column_types, metafeature_ids, sample_rows,
-                sample_columns, seed
-            )
-        else:
-            with redirect_stderr(io.StringIO()):
-                threadsafe_timeout_function(
+        # if timeout is None:
+        #     self._compute(
+        #         X, Y, column_types, metafeature_ids, sample_rows,
+        #         sample_columns, seed
+        #     )
+        # else:
+        #     with redirect_stderr(io.StringIO()):
+        #         self.threadsafe_timeout_function(
+        #             self._compute,
+        #             (
+        #                 X, Y, column_types, metafeature_ids, sample_rows,
+        #                 sample_columns, seed
+        #             ),
+        #             timeout-self.TIMEOUT_BUFFER
+        #         )
+        with redirect_stderr(io.StringIO()):
+            if(timeout is None):
+                self.threadsafe_timeout_function(
                     self._compute,
                     (
                         X, Y, column_types, metafeature_ids, sample_rows,
                         sample_columns, seed
                     ),
-                    timeout-self.TIMEOUT_BUFFER
+                    timeout
                 )
-                print(self.computed_metafeatures)
+            else:
+                self.threadsafe_timeout_function(
+                    self._compute,
+                    (
+                        X, Y, column_types, metafeature_ids, sample_rows,
+                        sample_columns, seed
+                    ),
+                    timeout - self.TIMEOUT_BUFFER
+                )
         return self.computed_metafeatures
 
     def _compute(
@@ -138,6 +169,8 @@ class Metafeatures(object):
             }
         }
         self._compute_metafeatures(metafeature_ids)
+        # print(self.computed_metafeatures)
+
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -202,10 +235,18 @@ class Metafeatures(object):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
             # print(str(metafeature_id) + ": " + str(value))
-            row, col = 0, metafeature_id
-            self.computed_metafeatures.at[row, col] = value
-            col += "_Time"
-            self.computed_metafeatures.at[row, col] = time_value
+            # row, col = 0, metafeature_id
+            # self.computed_metafeatures.at[row, col] = value
+            # col += "_Time"
+            # self.computed_metafeatures.at[row, col] = time_value
+            # # print(self.computed_metafeatures)
+            # print(self.queue.qsize)
+            self.queue.put((metafeature_id,value))
+            metafeature_time_id = metafeature_id + "_Time"
+            # print(metafeature_time_id)
+            self.queue.put((metafeature_time_id,time_value))
+            # print(self.computed_metafeatures)
+            
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:
