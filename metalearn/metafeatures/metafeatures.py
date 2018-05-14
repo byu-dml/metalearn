@@ -36,6 +36,7 @@ class Metafeatures(object):
 
     def __init__(self):
         self.queue = multiprocessing.Queue()
+        self.error = multiprocessing.Queue()
         self.resource_info_dict = {}
         self.metafeatures_list = []
         mf_info_file_path = os.path.splitext(__file__)[0] + '.json'
@@ -50,25 +51,19 @@ class Metafeatures(object):
                 self.resource_info_dict[key] = combined_dict[key]
 
     def threadsafe_timeout_function(self, f, args, timeout):
-        try:
-            p = multiprocessing.Process(target=f, args=args)
-            p.start()
-            p.join(timeout)
-            if p.is_alive():
-                p.terminate()
-                p.join()
-            # metafeatures = {}
-            # while not self.queue.empty():
-            #     name,value = self.queue.get()
-            #     metafeatures[name] = value
-            # self.computed_metafeatures = DataFrame(metafeatures)
-            self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
-            if self.computed_metafeatures.shape[1] > 0:
-                self.computed_metafeatures = self.computed_metafeatures.set_index(0).T
-        except:
-            raise
-        
+        p = multiprocessing.Process(target=f, args=args)
+        p.start()
+        p.join(timeout)
+        if p.is_alive():
+            p.terminate()
+            p.join()
 
+        if not self.error.empty():
+            raise self.error.get()
+
+        self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
+        if self.computed_metafeatures.shape[1] > 0:
+            self.computed_metafeatures = self.computed_metafeatures.set_index(0).T
 
     def list_metafeatures(self):
         """
@@ -104,63 +99,67 @@ class Metafeatures(object):
         value
         """
         self.computed_metafeatures = DataFrame()
-        with redirect_stderr(io.StringIO()):
-            if(timeout is None):
-                self.threadsafe_timeout_function(
-                    self._compute,
-                    (
-                        X, Y, column_types, metafeature_ids, sample_rows,
-                        sample_columns, seed
-                    ),
-                    timeout
-                )
-            else:
-                self.threadsafe_timeout_function(
-                    self._compute,
-                    (
-                        X, Y, column_types, metafeature_ids, sample_rows,
-                        sample_columns, seed
-                    ),
-                    timeout - self.TIMEOUT_BUFFER
-                )
+        if(timeout is None):
+            self.threadsafe_timeout_function(
+                self._compute,
+                (
+                    X, Y, column_types, metafeature_ids, sample_rows,
+                    sample_columns, seed
+                ),
+                timeout
+            )
+        else:
+            self.threadsafe_timeout_function(
+                self._compute,
+                (
+                    X, Y, column_types, metafeature_ids, sample_rows,
+                    sample_columns, seed
+                ),
+                timeout - self.TIMEOUT_BUFFER
+            )
+        
         return self.computed_metafeatures
 
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
         seed
     ):
-        self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-            seed
-        )
-        if column_types is None:
-            column_types = self._infer_column_types(X, Y)
+        try:
+            self._validate_compute_arguments(
+                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+                seed
+            )
+            if column_types is None:
+                column_types = self._infer_column_types(X, Y)
 
-        if metafeature_ids is None:
-            metafeature_ids = self.list_metafeatures()
-        self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-            seed
-        )
+            if metafeature_ids is None:
+                metafeature_ids = self.list_metafeatures()
+            self._validate_compute_arguments(
+                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+                seed
+            )
+        
+        
 
-        X_raw = X
-        X = X_raw.dropna(axis=1, how='all')
-        self._set_random_seed(seed)
-        self.resource_results_dict = {
-            'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
-            'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
-            'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
-            'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
-            'SampleRowsFlag': {
-                self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
-            },
-            'SampleColumnsFlag': {
-                self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
+            X_raw = X
+            X = X_raw.dropna(axis=1, how='all')
+            self._set_random_seed(seed)
+            self.resource_results_dict = {
+                'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
+                'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
+                'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
+                'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
+                'SampleRowsFlag': {
+                    self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
+                },
+                'SampleColumnsFlag': {
+                    self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
+                }
             }
-        }
-        self._compute_metafeatures(metafeature_ids)
-        # print(self.computed_metafeatures)
-
+            self._compute_metafeatures(metafeature_ids)
+        except Exception as e:
+            self.error.put(e)
+        
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -191,7 +190,7 @@ class Metafeatures(object):
                     invalid_column_types.append((col_name, col_type))
             if len(invalid_column_types) > 0:
                 raise ValueError(
-                    'One or more input column types are not valid: {}. Valid '+
+                    'One or more input column types are not valid: {}. Valid '
                     'types include {} and {}.'.
                     format(
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
@@ -207,6 +206,7 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
+        
 
     def _infer_column_types(self, X, Y):
         column_types = {}

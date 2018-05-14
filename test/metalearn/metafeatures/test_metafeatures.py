@@ -114,7 +114,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             for timeout in [3,5,10]:
                 mf = Metafeatures()
                 start_time = time.time()
-                mfs = mf.compute(X=dataset["X"], Y=dataset["Y"], timeout=timeout)
+                mf.compute(X=dataset["X"], Y=dataset["Y"], timeout=timeout)
                 # print(mfs)
                 # print(mfs.shape)
                 compute_time = time.time() - start_time
