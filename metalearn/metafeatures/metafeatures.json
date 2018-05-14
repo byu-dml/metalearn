@@ -96,11 +96,11 @@
 			"returns": ["MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
 		},
 		"get_categorical_cardinalities": {
-			"parameters": ["X"],
+			"parameters": ["X", "ColumnTypes"],
 			"returns": ["MeanCardinalityOfCategoricalFeatures","StdevCardinalityOfCategoricalFeatures","MinCardinalityOfCategoricalFeatures","MaxCardinalityOfCategoricalFeatures"]
 		},
 		"get_numeric_cardinalities": {
-			"parameters": ["X"],
+			"parameters": ["X", "ColumnTypes"],
 			"returns": ["MeanCardinalityOfNumericFeatures","StdevCardinalityOfNumericFeatures","MinCardinalityOfNumericFeatures","MaxCardinalityOfNumericFeatures"]
 		},
 		"get_numeric_means": {

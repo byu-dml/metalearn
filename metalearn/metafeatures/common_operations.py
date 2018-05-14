@@ -26,5 +26,10 @@ def profile_distribution(data):
 def get_numeric_features(dataframe, column_types):
     return [feature for feature in dataframe.columns if column_types[feature] == "NUMERIC"]
 
+def get_categorical_features(dataframe, column_types):
+    return [feature for feature in dataframe.columns if column_types[feature] == "CATEGORICAL"]
+
 def dtype_is_numeric(dtype):
     return "int" in str(dtype) or "float" in str(dtype)
+
+# from metalearn.metafeatures import metafeatures
