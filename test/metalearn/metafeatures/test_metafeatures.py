@@ -92,7 +92,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                         # For now we pay no mind, no matter how big a difference may be.
                         continue
 
-                    known_value = known_mfs[mf]
+                    known_value = known_mfs.get(mf)
                     if not math.isclose(known_value, computed_value) and not (np.isnan(known_value) and np.isnan(computed_value)):
                         fails[last_results_file][mf] = (known_value, computed_value)
 
@@ -106,6 +106,54 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 json.dump(fails, fh, indent=4)
 
             self.assertTrue(False, "Not all metafeatures matched previous results, output written to {}.".format(fail_report_file))
+
+    def test_compare_metafeature_lists(self):
+        inconsistencies = {}
+        with open("./metalearn/metafeatures/metafeatures.json") as fh:
+            master_list = json.load(fh)
+        master_names = set(master_list["metafeatures"].keys())
+        for filename, dataset in self.datasets.items():
+            last_results_file = self._get_last_mf_results_filename(filename)
+
+            if os.path.exists(self.data_folder + last_results_file):
+                with open(self.data_folder + last_results_file) as fh:
+                    known_mfs = json.load(fh)
+
+                inconsistencies[last_results_file] = {}
+
+                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+                computed_mfs = metafeatures_df.to_dict('records')[0]
+
+                known_names_t = set({x for x in known_mfs.keys() if "_Time" in x})
+                computed_names_t = set({x for x in computed_mfs.keys() if "_Time" in x})
+                intersect_t = known_names_t.intersection(computed_names_t)
+                
+                known_names_t_unique = known_names_t - intersect_t
+                computed_names_t_unique = computed_names_t - intersect_t
+
+                known_names_no_t = set({x for x in known_mfs.keys() if "_Time" not in x})
+                computed_names_no_t = set({x for x in computed_mfs.keys() if "_Time" not in x})
+                intersect = master_names.intersection(computed_names_no_t.intersection(known_names_no_t))
+
+                master_names_unique = master_names - intersect
+                known_names_unique = (known_names_no_t - intersect).union(known_names_t_unique)
+                computed_names_unique = (computed_names_no_t - intersect).union(computed_names_t_unique)
+
+                if len(known_names_unique) > 0:
+                    inconsistencies[last_results_file]["Known Metafeatures"] = list(known_names_unique)
+                if len(computed_names_unique) > 0:
+                    inconsistencies[last_results_file]["Computed Metafeatures"] = list(computed_names_unique)
+                if len(master_names_unique) > 0:
+                    inconsistencies[last_results_file]["Master List Metafeatures"] = list(master_names_unique)
+
+        self.assertGreater(len(inconsistencies), 0, "No known results could be loaded, metafeature lists could not be compared.")
+        if not all(i == {} for i in inconsistencies.values()):
+            inconsistencies = {k:v for (k,v) in inconsistencies.items() if v != {}}
+            inconsistency_report_file = './test/metalearn/metafeatures/mf_inconsistencies.json'
+            with open(inconsistency_report_file, 'w') as fh:
+                json.dump(inconsistencies, fh, indent=4)
+
+            self.assertTrue(False, "Metafeature lists do not match, output written to {}.".format(inconsistency_report_file))
 
     def test_timeout(self):
         '''Tests whether the Metafeatures.compute function returns within the allotted time.'''
