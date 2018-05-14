@@ -95,28 +95,28 @@ class Metafeatures(object):
             timeout,
             metafeature_ids
         )
-        
-        return self.computed_metafeatures
-
-    def _threadsafe_timeout_function(self, f, args, timeout, metafeature_ids):
-        p = multiprocessing.Process(target=f, args=args)
-        p.start()
-        p.join(timeout)
-        if p.is_alive():
-            p.terminate()
-            p.join()
-
-        if not self.error.empty():
-            raise self.error.get()
 
         if not self.queue.empty():
             self.computed_metafeatures = self.queue.get()
             for x in range(self.queue.qsize()):
                 mf, value = self.queue.get()
                 self.computed_metafeatures.at[0, mf] = value
-            self.computed_metafeatures.replace("inf", "TIMEOUT")
 
-        print(self.computed_metafeatures.to_dict('records')[0])
+        return self.computed_metafeatures
+
+    def _threadsafe_timeout_function(self, f, args, timeout, metafeature_ids):
+        p = multiprocessing.Process(target=f, args=args)
+        p.start()
+        try:
+            p.join(timeout)
+            if p.is_alive():
+                p.terminate()
+                p.join()
+        except multiprocessing.TimeoutError:
+            print("timeout")        
+
+        if not self.error.empty():
+            raise self.error.get()
 
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
@@ -157,8 +157,7 @@ class Metafeatures(object):
             }
             self._compute_metafeatures(metafeature_ids)
         except Exception as e:
-            self.error.put(e)
-        
+            self.error.put(e)     
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -205,7 +204,6 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
-        
 
     def _infer_column_types(self, X, Y):
         column_types = {}
@@ -223,18 +221,9 @@ class Metafeatures(object):
     def _compute_metafeatures(self, metafeature_ids):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
-            # print(str(metafeature_id) + ": " + str(value))
-            # row, col = 0, metafeature_id
-            # self.computed_metafeatures.at[row, col] = value
-            # col += "_Time"
-            # self.computed_metafeatures.at[row, col] = time_value
-            # # print(self.computed_metafeatures)
-            # print(self.queue.qsize)
             self.queue.put((metafeature_id,value))
             metafeature_time_id = metafeature_id + "_Time"
-            # print(metafeature_time_id)
             self.queue.put((metafeature_time_id,time_value))
-            # print(self.computed_metafeatures)
             
 
     def _retrieve_resource(self, resource_name):
