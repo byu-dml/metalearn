@@ -61,8 +61,8 @@ class Metafeatures(object):
         if not self.error.empty():
             raise self.error.get()
 
-        self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
-        if self.computed_metafeatures.shape[1] > 0:
+        if not self.queue.empty():
+            self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
             self.computed_metafeatures = self.computed_metafeatures.set_index(0).T
 
     def list_metafeatures(self):
