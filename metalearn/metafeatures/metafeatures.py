@@ -50,21 +50,6 @@ class Metafeatures(object):
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
 
-    def threadsafe_timeout_function(self, f, args, timeout):
-        p = multiprocessing.Process(target=f, args=args)
-        p.start()
-        p.join(timeout)
-        if p.is_alive():
-            p.terminate()
-            p.join()
-
-        if not self.error.empty():
-            raise self.error.get()
-
-        if not self.queue.empty():
-            self.computed_metafeatures = DataFrame.from_records([self.queue.get() for x in range(self.queue.qsize())])
-            self.computed_metafeatures = self.computed_metafeatures.set_index(0).T
-
     def list_metafeatures(self):
         """
         Returns a list of metafeatures computable by the Metafeatures class.
@@ -98,27 +83,40 @@ class Metafeatures(object):
         one for the value and one for the compute time of that metafeature
         value
         """
-        self.computed_metafeatures = DataFrame()
-        if(timeout is None):
-            self.threadsafe_timeout_function(
-                self._compute,
-                (
-                    X, Y, column_types, metafeature_ids, sample_rows,
-                    sample_columns, seed
-                ),
-                timeout
-            )
-        else:
-            self.threadsafe_timeout_function(
-                self._compute,
-                (
-                    X, Y, column_types, metafeature_ids, sample_rows,
-                    sample_columns, seed
-                ),
-                timeout - self.TIMEOUT_BUFFER
-            )
+        if timeout is not None:
+            timeout = timeout - self.TIMEOUT_BUFFER
+
+        self._threadsafe_timeout_function(
+            self._compute,
+            (
+                X, Y, column_types, metafeature_ids, sample_rows,
+                sample_columns, seed
+            ),
+            timeout,
+            metafeature_ids
+        )
         
         return self.computed_metafeatures
+
+    def _threadsafe_timeout_function(self, f, args, timeout, metafeature_ids):
+        p = multiprocessing.Process(target=f, args=args)
+        p.start()
+        p.join(timeout)
+        if p.is_alive():
+            p.terminate()
+            p.join()
+
+        if not self.error.empty():
+            raise self.error.get()
+
+        if not self.queue.empty():
+            self.computed_metafeatures = self.queue.get()
+            for x in range(self.queue.qsize()):
+                mf, value = self.queue.get()
+                self.computed_metafeatures.at[0, mf] = value
+            self.computed_metafeatures.replace("inf", "TIMEOUT")
+
+        print(self.computed_metafeatures.to_dict('records')[0])
 
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
@@ -139,7 +137,8 @@ class Metafeatures(object):
                 seed
             )
         
-        
+            initialized_df = DataFrame({name:["TIMEOUT"] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
+            self.queue.put(initialized_df)
 
             X_raw = X
             X = X_raw.dropna(axis=1, how='all')
