@@ -71,7 +71,7 @@ def get_canonical_correlations(dataframe, column_types):
     '''
 
     def preprocess(series):
-        if not dtype_is_numeric(series.dtype):
+        if column_types[series.name] == 'CATEGORICAL':
             series = pd.get_dummies(series)
         array = series.as_matrix().reshape(series.shape[0], -1)
         return array

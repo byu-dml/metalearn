@@ -63,7 +63,7 @@
 			"returns": ["XSample","YSample"]
 		},
 		"self._get_preprocessed_data": {
-			"parameters": ["XSample","XSampledColumns", "Seed"],
+			"parameters": ["XSample","XSampledColumns", "ColumnTypes", "Seed"],
 			"seed_offset": 2,
 			"returns": ["XPreprocessed"]
 		},
