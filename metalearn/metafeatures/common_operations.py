@@ -31,5 +31,3 @@ def get_categorical_features(dataframe, column_types):
 
 def dtype_is_numeric(dtype):
     return "int" in str(dtype) or "float" in str(dtype)
-
-# from metalearn.metafeatures import metafeatures
