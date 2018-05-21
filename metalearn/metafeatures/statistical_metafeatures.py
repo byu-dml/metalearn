@@ -37,10 +37,10 @@ def get_pca(X_preprocessed):
     pred_pca = pca_data.explained_variance_ratio_
     pred_eigen = pca_data.explained_variance_
     pred_det = np.linalg.det(pca_data.get_covariance())
-    variance_percentages = [np.nan] * 3
+    variance_percentages = [0] * 3
     for i in range(len(pred_pca)):
         variance_percentages[i] = pred_pca[i]
-    eigenvalues = [np.nan] * 3
+    eigenvalues = [0] * 3
     for i in range(len(pred_eigen)):
         eigenvalues[i] = pred_eigen[i]
     return (variance_percentages[0], variance_percentages[1], variance_percentages[2], eigenvalues[0], eigenvalues[1], eigenvalues[2], pred_det)
@@ -76,10 +76,8 @@ def get_canonical_correlations(dataframe, column_types):
         array = series.as_matrix().reshape(series.shape[0], -1)
         return array
 
-    numeric_features = get_numeric_features(dataframe, column_types)
-    if len(numeric_features) < 2:
+    if dataframe.shape[1] < 2:
         return []
-    dataframe = dataframe[numeric_features]
 
     correlations = []
     skip_cols = set()
