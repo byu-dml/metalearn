@@ -34,12 +34,12 @@ def get_class_stats(Y):
     minority_class_size = min(counts)
     return (mean_class_probability, stdev_class_probability, min_class_probability, max_class_probability, minority_class_size, majority_class_size)
 
-def get_categorical_cardinalities(X):
-    cardinalities = [X[feature].unique().shape[0] for feature in X.columns if not dtype_is_numeric(X[feature].dtype)]
+def get_categorical_cardinalities(X, column_types):
+    cardinalities = [X[feature].unique().shape[0] for feature in get_categorical_features(X, column_types)]
     mean_cardinality_of_categorical_features, stdev_cardinality_of_categorical_features, min_cardinality_of_categorical_features, _, _, _, max_cardinality_of_categorical_features = profile_distribution(cardinalities)
     return (mean_cardinality_of_categorical_features, stdev_cardinality_of_categorical_features, min_cardinality_of_categorical_features, max_cardinality_of_categorical_features)
 
-def get_numeric_cardinalities(X):
-    cardinalities = [X[feature].unique().shape[0] for feature in X.columns if dtype_is_numeric(X[feature].dtype)]
+def get_numeric_cardinalities(X, column_types):
+    cardinalities = [X[feature].unique().shape[0] for feature in get_numeric_features(X, column_types)]
     mean_cardinality_of_numeric_features, stdev_cardinality_of_numeric_features, min_cardinality_of_numeric_features, _, _, _, max_cardinality_of_numeric_features = profile_distribution(cardinalities)
     return (mean_cardinality_of_numeric_features, stdev_cardinality_of_numeric_features, min_cardinality_of_numeric_features, max_cardinality_of_numeric_features)
