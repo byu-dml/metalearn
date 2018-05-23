@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
 
+
 from .common_operations import *
 from .simple_metafeatures import *
 from .statistical_metafeatures import *
@@ -179,7 +180,7 @@ class Metafeatures(object):
         if column_types is not None:
             if len(column_types.keys()) != len(X.columns) + 1:
                 raise ValueError(
-                    "The number of column_types does not match the number of" +
+                    "The number of column_types does not match the number of " +
                     "features plus the target"
                 )
             invalid_column_types = []
@@ -194,6 +195,8 @@ class Metafeatures(object):
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
                     )
                 )
+            if column_types[Y.name] == self.NUMERIC:
+                raise TypeError('Regression problems are not supported (target feature is numeric)')
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if
@@ -281,7 +284,7 @@ class Metafeatures(object):
             total_time += time_value
         return (retrieved_parameters, total_time)
 
-    def _get_preprocessed_data(self, X_sample, X_sampled_columns, seed=42):
+    def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed=42):
         series_array = []
         for feature in X_sample.columns:
             feature_series = X_sample[feature]
@@ -294,7 +297,7 @@ class Metafeatures(object):
             col[feature_series.isnull()] = np.random.choice(
                 dropped_nan_series, num_nan
             )
-            if not dtype_is_numeric(feature_series.dtype):
+            if column_types[feature_series.name] == self.CATEGORICAL:
                 feature_series = pd.get_dummies(feature_series)
             series_array.append(feature_series)
         return (pd.concat(series_array, axis=1, copy=False),)
