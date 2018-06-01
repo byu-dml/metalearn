@@ -19,13 +19,7 @@ from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
 
 
-def threadsafe_timeout_function(f, args, timeout):
-    p = multiprocessing.Process(target=f, args=args)
-    p.start()
-    p.join(timeout)
-    if p.is_alive():
-        p.terminate()
-        p.join()
+
 
 class Metafeatures(object):
     """
@@ -42,6 +36,8 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
 
     def __init__(self):
+        self.queue = multiprocessing.Queue()
+        self.error = multiprocessing.Queue()
         self.resource_info_dict = {}
         self.metafeatures_list = []
         mf_info_file_path = os.path.splitext(__file__)[0] + '.json'
@@ -71,6 +67,8 @@ class Metafeatures(object):
         ----------
         X: pandas.DataFrame, the dataset features
         Y: pandas.Seris, the dataset targets
+        column_types: Dict[str, str], dict from column name to column type 
+            as "NUMERIC" or "CATEGORICAL", must include Y column
         metafeature_ids: list, the metafeatures to compute.
             default of None indicates to compute all metafeatures
         sample_rows: bool, whether to uniformly sample from the rows
@@ -86,57 +84,80 @@ class Metafeatures(object):
         one for the value and one for the compute time of that metafeature
         value
         """
-        self.computed_metafeatures = DataFrame()
-        if timeout is None:
-            self._compute(
+        if timeout is not None:
+            timeout = timeout - self.TIMEOUT_BUFFER
+
+        self._threadsafe_timeout_function(
+            self._compute,
+            (
                 X, Y, column_types, metafeature_ids, sample_rows,
                 sample_columns, seed
-            )
-        else:
-            with redirect_stderr(io.StringIO()):
-                threadsafe_timeout_function(
-                    self._compute,
-                    (
-                        X, Y, column_types, metafeature_ids, sample_rows,
-                        sample_columns, seed
-                    ),
-                    timeout-self.TIMEOUT_BUFFER
-                )
+            ),
+            timeout,
+        )
+
+        if not self.queue.empty():
+            self.computed_metafeatures = self.queue.get()
+            for x in range(self.queue.qsize()):
+                mf, value = self.queue.get()
+                self.computed_metafeatures.at[0, mf] = value
+
         return self.computed_metafeatures
+
+    def _threadsafe_timeout_function(self, f, args, timeout):
+        p = multiprocessing.Process(target=f, args=args)
+        p.start()
+        try:
+            p.join(timeout)
+            if p.is_alive():
+                p.terminate()
+                p.join()     
+        except multiprocessing.TimeoutError:
+            pass
+
+        if not self.error.empty():
+            raise self.error.get()
 
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
         seed
     ):
-        self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-            seed
-        )
-        if column_types is None:
-            column_types = self._infer_column_types(X, Y)
-        if metafeature_ids is None:
-            metafeature_ids = self.list_metafeatures()
-        self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-            seed
-        )
+        try:
+            self._validate_compute_arguments(
+                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+                seed
+            )
+            if column_types is None:
+                column_types = self._infer_column_types(X, Y)
 
-        X_raw = X
-        X = X_raw.dropna(axis=1, how='all')
-        self._set_random_seed(seed)
-        self.resource_results_dict = {
-            'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
-            'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
-            'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
-            'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
-            'SampleRowsFlag': {
-                self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
-            },
-            'SampleColumnsFlag': {
-                self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
+            if metafeature_ids is None:
+                metafeature_ids = self.list_metafeatures()
+            self._validate_compute_arguments(
+                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+                seed
+            )
+        
+            initialized_df = DataFrame({name:["TIMEOUT"] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
+            self.queue.put(initialized_df)
+
+            X_raw = X
+            X = X_raw.dropna(axis=1, how='all')
+            self._set_random_seed(seed)
+            self.resource_results_dict = {
+                'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
+                'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
+                'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
+                'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
+                'SampleRowsFlag': {
+                    self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
+                },
+                'SampleColumnsFlag': {
+                    self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
+                }
             }
-        }
-        self._compute_metafeatures(metafeature_ids)
+            self._compute_metafeatures(metafeature_ids)
+        except Exception as e:
+            self.error.put(e)     
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -167,7 +188,7 @@ class Metafeatures(object):
                     invalid_column_types.append((col_name, col_type))
             if len(invalid_column_types) > 0:
                 raise ValueError(
-                    'One or more input column types are not valid: {}. Valid '+
+                    'One or more input column types are not valid: {}. Valid '
                     'types include {} and {}.'.
                     format(
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
@@ -202,10 +223,10 @@ class Metafeatures(object):
     def _compute_metafeatures(self, metafeature_ids):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
-            row, col = 0, metafeature_id
-            self.computed_metafeatures.at[row, col] = value
-            col += "_Time"
-            self.computed_metafeatures.at[row, col] = time_value
+            self.queue.put((metafeature_id,value))
+            metafeature_time_id = metafeature_id + "_Time"
+            self.queue.put((metafeature_time_id,time_value))
+            
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:

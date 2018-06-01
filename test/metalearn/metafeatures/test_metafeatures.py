@@ -158,14 +158,14 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
     def test_timeout(self):
         '''Tests whether the Metafeatures.compute function returns within the allotted time.'''
         for filename, dataset in self.datasets.items():
-            for timeout in [3, 5, 10]:
+            for timeout in [3,5,10]:
                 mf = Metafeatures()
                 start_time = time.time()
-                mf.compute(X=dataset["X"], Y=dataset["Y"], timeout=timeout)
+                df = mf.compute(X=dataset["X"], Y=dataset["Y"], timeout=timeout)
                 compute_time = time.time() - start_time
                 self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
-
-
+                self.assertEqual(df.shape[1], 2*len(Metafeatures().list_metafeatures()), "Some metafeatures were not returned...")
+                
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
 
@@ -297,9 +297,6 @@ class MetaFeaturesTestCase(unittest.TestCase):
 def metafeatures_suite():
     test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
-    # suite = unittest.TestSuite()
-    # suite.addTest(MetaFeaturesTestCase("test_dataframe_input_error"))
-    # return suite
 
 """ === Anything under is line is currently not in use. === """
 def import_openml_dataset(id=4):
