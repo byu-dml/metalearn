@@ -14,20 +14,20 @@ from .common_operations import *
 warnings.filterwarnings("ignore", category=RuntimeWarning) # suppress sklearn warnings
 warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
 
-def get_numeric_means(numeric_features_class_array):
-    means = [feature_class_pair[0].mean() for feature_class_pair in numeric_features_class_array]
+def get_numeric_means(numeric_features_array):
+    means = [feature.mean() for feature in numeric_features_array]
     return profile_distribution(means)
 
-def get_numeric_stdev(numeric_features_class_array):
-    stdevs = [feature_class_pair[0].std() for feature_class_pair in numeric_features_class_array]
+def get_numeric_stdev(numeric_features_array):
+    stdevs = [feature.std() for feature in numeric_features_array]
     return profile_distribution(stdevs)
 
-def get_numeric_skewness(numeric_features_class_array):
-    skews = [feature_class_pair[0].skew() for feature_class_pair in numeric_features_class_array]
+def get_numeric_skewness(numeric_features_array):
+    skews = [feature.skew() for feature in numeric_features_array]
     return profile_distribution(skews)
 
-def get_numeric_kurtosis(numeric_features_class_array):
-    kurtoses = [feature_class_pair[0].kurtosis() for feature_class_pair in numeric_features_class_array]
+def get_numeric_kurtosis(numeric_features_array):
+    kurtoses = [feature.kurtosis() for feature in numeric_features_array]
     return profile_distribution(kurtoses)
 
 def get_pca(X_preprocessed):

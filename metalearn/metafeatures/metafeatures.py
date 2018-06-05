@@ -174,28 +174,35 @@ class Metafeatures(object):
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
-        if not isinstance(Y, pd.Series):
+        if not isinstance(Y, pd.Series) and Y is not None:
             raise TypeError('Y must be of type pandas.Series')
         if column_types is not None:
-            if len(column_types.keys()) != len(X.columns) + 1:
-                raise ValueError(
-                    "The number of column_types does not match the number of " +
-                    "features plus the target"
-                )
+            if Y is not None:
+                if len(column_types.keys()) != len(X.columns) + 1:
+                    raise ValueError(
+                        "The number of column_types does not match the number of " +
+                        "features plus the target"
+                    )
+                if column_types[Y.name] == self.NUMERIC:
+                    raise TypeError('Regression problems are not supported (target feature is numeric)')
+            else:
+                if len(column_types.keys()) != len(X.columns):
+                    raise ValueError(
+                        "The number of column_types does not match the number of " +
+                        "features"
+                    )
             invalid_column_types = []
             for col_name, col_type in column_types.items():
                 if col_type != self.NUMERIC and col_type != self.CATEGORICAL:
                     invalid_column_types.append((col_name, col_type))
             if len(invalid_column_types) > 0:
                 raise ValueError(
-                    'One or more input column types are not valid: {}. Valid '
+                    'One or more input column types are not valid: {}. Valid '+
                     'types include {} and {}.'.
                     format(
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
                     )
                 )
-            if column_types[Y.name] == self.NUMERIC:
-                raise TypeError('Regression problems are not supported (target feature is numeric)')
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if
@@ -286,7 +293,7 @@ class Metafeatures(object):
     def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed=42):
         series_array = []
         for feature in X_sample.columns:
-            feature_series = X_sample[feature]
+            feature_series = X_sample[feature].copy()
             col = feature_series.as_matrix()
             dropped_nan_series = X_sampled_columns[feature].dropna(
                 axis=0,how='any'
@@ -336,6 +343,20 @@ class Metafeatures(object):
         else:
             return (X, Y)
 
+    def _get_categorical_features_with_no_missing_values(
+        self, X_sample, column_types
+    ):
+        categorical_features_with_no_missing_values = []
+        for feature in X_sample.columns:
+            if column_types[feature] == self.CATEGORICAL:
+                no_nan_series = X_sample[feature].dropna(
+                    axis=0, how='any'
+                )
+                categorical_features_with_no_missing_values.append(
+                    no_nan_series
+                )
+        return (categorical_features_with_no_missing_values,)
+
     def _get_categorical_features_and_class_with_no_missing_values(
         self, X_sample, Y_sample, column_types
     ):
@@ -350,7 +371,32 @@ class Metafeatures(object):
                 )
         return (categorical_features_and_class_with_no_missing_values,)
 
-    def _get_numeric_features_and_class_with_no_missing_values(
+    def _get_numeric_features_with_no_missing_values(
+        self, X_sample, column_types
+    ):
+        numeric_features_with_no_missing_values = []
+        for feature in X_sample.columns:
+            if column_types[feature] == self.NUMERIC:
+                no_nan_series = X_sample[feature].dropna(
+                    axis=0, how='any'
+                )
+                numeric_features_with_no_missing_values.append(
+                    no_nan_series
+                )
+        return (numeric_features_with_no_missing_values,)
+
+    def _get_binned_numeric_features_with_no_missing_values(
+        self, numeric_features_array
+    ):
+        binned_feature_array = [
+            (
+                pd.cut(feature,
+                round(feature.shape[0]**(1./3.)))
+            ) for feature in numeric_features_array
+        ]
+        return (binned_feature_array,)
+
+    def _get_binned_numeric_features_and_class_with_no_missing_values(
         self, X_sample, Y_sample, column_types
     ):
         numeric_features_and_class_with_no_missing_values = []
@@ -362,16 +408,11 @@ class Metafeatures(object):
                 numeric_features_and_class_with_no_missing_values.append(
                     (df[feature],df[Y_sample.name])
                 )
-        return (numeric_features_and_class_with_no_missing_values,)
-
-    def _get_binned_numeric_features_and_class_with_no_missing_values(
-        self, numeric_features_class_array
-    ):
         binned_feature_class_array = [
             (
                 pd.cut(feature_class_pair[0],
                 round(feature_class_pair[0].shape[0]**(1./3.))),
                 feature_class_pair[1]
-            ) for feature_class_pair in numeric_features_class_array
+            ) for feature_class_pair in numeric_features_and_class_with_no_missing_values
         ]
         return (binned_feature_class_array,)
