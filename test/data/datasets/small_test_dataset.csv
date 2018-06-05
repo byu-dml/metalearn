@@ -1,0 +1,11 @@
+index,cat_1,cat_2,num_1,num_2,class
+0,F,F,0,0,A
+1,F,F,0,1,B
+2,F,N,1,0,C
+3,F,F,1,1,A
+4,F,T,0,0,U
+5,F,N,0,,C
+6,,T,1,0,U
+7,F,T,1,1,B
+8,T,N,0,0,C
+9,T,F,0,1,A

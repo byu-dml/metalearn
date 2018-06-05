@@ -23,6 +23,7 @@
     },
     {
         "filename": "small_test_dataset.csv",
-        "target_class_name": "class"
+        "target_class_name": "class",
+        "index_col_name": "index"
     }
 ]

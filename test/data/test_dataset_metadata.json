@@ -5,8 +5,8 @@
         "index_col_name": "d3mIndex"
     },
     {
-        "filename": "LL0_1122_ap_breast_prostate.csv",
-        "target_class_name": "Tissue",
-        "index_col_name": "d3mIndex"
+        "filename": "small_test_dataset.csv",
+        "target_class_name": "class",
+        "index_col_name": "index"
     }
 ]
