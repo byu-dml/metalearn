@@ -5,8 +5,7 @@
         "index_col_name": "d3mIndex"
     },
     {
-        "filename": "small_test_dataset.csv",
-        "target_class_name": "class",
-        "index_col_name": "index"
+        "filename": "small_test_dataset.arff",
+        "target_class_name": "class"
     }
 ]
