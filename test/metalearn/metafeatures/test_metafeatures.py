@@ -58,6 +58,13 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
                 metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"],seed=random_seed)
                 computed_mfs = metafeatures_df.to_dict('records')[0]
+                for key, value in computed_mfs.items():
+                    if 'int' in str(type(value)):
+                        computed_mfs[key] = int(value)
+                    elif 'float' in str(type(value)):
+                        computed_mfs[key] = float(value)
+                    else:
+                        raise Exception('unhandled type: {}'.format(type(value)))
 
                 for mf, computed_value in computed_mfs.items():
                     if '_Time' in mf:
