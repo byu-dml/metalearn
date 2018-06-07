@@ -131,11 +131,20 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
     def test_timeout(self):
         '''Tests whether the Metafeatures.compute function returns within the allotted time.'''
         for filename, dataset in self.datasets.items():
+            known_mfs = None
+            known_dataset_metafeatures_path = get_dataset_metafeatures_path(filename)
+            if os.path.exists(known_dataset_metafeatures_path):
+                with open(known_dataset_metafeatures_path) as fh:
+                    known_mfs = json.load(fh)
             for timeout in [3,5,10]:
                 mf = Metafeatures()
                 start_time = time.time()
-                df = mf.compute(X=dataset["X"], Y=dataset["Y"], timeout=timeout)
+                df = mf.compute(X=dataset["X"], Y=dataset["Y"], timeout=timeout, seed=0)
                 compute_time = time.time() - start_time
+                if not known_mfs is None:
+                    for mf_name, mf_value in df.to_dict('records')[0].items():
+                        if not '_Time' in mf_name and mf_value != 'TIMEOUT':
+                            self.assertEqual(mf_value, known_mfs[mf_name], f'Metafeature {mf_name} not computed correctly with timeout enabled')
                 self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
                 self.assertEqual(df.shape[1], 2*len(Metafeatures().list_metafeatures()), "Some metafeatures were not returned...")
 
