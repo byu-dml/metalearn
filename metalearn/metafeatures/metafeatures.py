@@ -3,6 +3,8 @@ import math
 import json
 import time
 import multiprocessing
+import queue
+import traceback
 from contextlib import redirect_stderr
 import io
 from typing import Dict, List
@@ -10,6 +12,9 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
+from signal import signal, SIGPIPE, SIG_DFL
+# this should cause "BROKEN PIPE ERROR" to be ignored
+signal(SIGPIPE, SIG_DFL)
 
 
 from .common_operations import *
@@ -58,7 +63,7 @@ class Metafeatures(object):
         return self.metafeatures_list
 
     def compute(
-        self, X: DataFrame, Y: Series, column_types: Dict[str, str] = None,
+        self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
         metafeature_ids: List = None, sample_rows=True, sample_columns=True,
         seed=None, timeout=None
     ) -> DataFrame:
@@ -96,10 +101,18 @@ class Metafeatures(object):
             timeout,
         )
 
-        if not self.queue.empty():
-            self.computed_metafeatures = self.queue.get()
-            for x in range(self.queue.qsize()):
-                mf, value = self.queue.get()
+        
+        try:
+            self.computed_metafeatures = self.queue.get_nowait()
+        except queue.Empty:
+            self.computed_metafeatures = None
+
+        while True:
+            try:
+                mf, value = self.queue.get_nowait()
+            except queue.Empty:
+                break
+            else:
                 self.computed_metafeatures.at[0, mf] = value
 
         return self.computed_metafeatures
@@ -118,10 +131,36 @@ class Metafeatures(object):
         if not self.error.empty():
             raise self.error.get()
 
+    def is_target_dependent(self, resource_name):
+        if resource_name=='Y':
+            return True
+        elif resource_name=='XSample':
+            return False
+        else:
+            resource_info = self.resource_info_dict[resource_name]
+            parameters = resource_info.get('parameters', [])
+            for parameter in parameters:
+                if self.is_target_dependent(parameter):
+                    return True
+            function = resource_info['function']
+            parameters = self.function_dict[function]['parameters']
+            for parameter in parameters:
+                if self.is_target_dependent(parameter):
+                    return True
+            return False
+
+    def get_target_dependent_metafeatures(self):
+        target_dependent_metafeatures = []
+        for mf in self.metafeatures_list:
+            if self.is_target_dependent(mf):
+                target_dependent_metafeatures.append(mf)
+        return target_dependent_metafeatures
+
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
         seed
     ):
+
         try:
             self._validate_compute_arguments(
                 X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
@@ -129,14 +168,12 @@ class Metafeatures(object):
             )
             if column_types is None:
                 column_types = self._infer_column_types(X, Y)
-
             if metafeature_ids is None:
                 metafeature_ids = self.list_metafeatures()
             self._validate_compute_arguments(
                 X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
                 seed
             )
-        
             initialized_df = DataFrame({name:["TIMEOUT"] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
             self.queue.put(initialized_df)
 
@@ -155,9 +192,35 @@ class Metafeatures(object):
                     self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
                 }
             }
+            parsed_target_dependent_metafeatures = self.get_target_dependent_metafeatures()
+            # target_dependent_metafeatures = [
+            # "NumberOfClasses", "MeanClassProbability", "StdevClassProbability", "MinClassProbability", "MaxClassProbability", "MinorityClassSize", "MajorityClassSize", 
+            # "ClassEntropy", "MeanCategoricalJointEntropy", "MinCategoricalJointEntropy", "Quartile1CategoricalJointEntropy", "Quartile2CategoricalJointEntropy", 
+            # "Quartile3CategoricalJointEntropy", "MaxCategoricalJointEntropy", "MeanNumericJointEntropy", "MinNumericJointEntropy", "Quartile1NumericJointEntropy", 
+            # "Quartile2NumericJointEntropy", "Quartile3NumericJointEntropy", "MaxNumericJointEntropy", "MeanCategoricalMutualInformation", "MinCategoricalMutualInformation",
+            # "Quartile1CategoricalMutualInformation", "Quartile2CategoricalMutualInformation", "Quartile3CategoricalMutualInformation", "MaxCategoricalMutualInformation",
+            # "MeanNumericMutualInformation", "MinNumericMutualInformation", "Quartile1NumericMutualInformation", "Quartile2NumericMutualInformation", 
+            # "Quartile3NumericMutualInformation", "MaxNumericMutualInformation", "EquivalentNumberOfCategoricalFeatures", "EquivalentNumberOfNumericFeatures",
+            # "CategoricalNoiseToSignalRatio", "NumericNoiseToSignalRatio", "NaiveBayesErrRate", "NaiveBayesKappa", "kNN1NErrRate", "kNN1NKappa", "DecisionStumpErrRate",
+            # "DecisionStumpKappa", "RandomTreeDepth1ErrRate", "RandomTreeDepth1Kappa", "RandomTreeDepth2ErrRate", "RandomTreeDepth2Kappa", "RandomTreeDepth3ErrRate", 
+            # "RandomTreeDepth3Kappa", "LinearDiscriminantAnalysisErrRate", "LinearDiscriminantAnalysisKappa"
+            # ]
+            # print('Computed the correct tdms: \n', set(parsed_target_dependent_metafeatures) == set(target_dependent_metafeatures))
+            # print('\nComputed tdms that are not correct: \n', set(parsed_target_dependent_metafeatures) - set(target_dependent_metafeatures))
+            # print('\nCorrect tdms that were not computed: \n', set(target_dependent_metafeatures) - set(parsed_target_dependent_metafeatures))
+            if Y is None:
+                # set every target-dependent metafeature that was requested by the user to "NO TARGETS"
+                for metafeature_id in parsed_target_dependent_metafeatures:
+                    if metafeature_id in metafeature_ids:
+                        self.queue.put((metafeature_id,"NO TARGETS"))
+                        metafeature_time_id = metafeature_id + "_Time"
+                        self.queue.put((metafeature_time_id,"NO TARGETS"))
+                # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
+                metafeature_ids = [mf for mf in metafeature_ids if mf not in parsed_target_dependent_metafeatures]
             self._compute_metafeatures(metafeature_ids)
         except Exception as e:
-            self.error.put(e)     
+            self.error.put(e)
+            # traceback.print_exc()     
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -221,10 +284,11 @@ class Metafeatures(object):
                 column_types[col_name] = self.NUMERIC
             else:
                 column_types[col_name] = self.CATEGORICAL
-        if dtype_is_numeric(Y.dtype):
-            column_types[Y.name] = self.NUMERIC
-        else:
-            column_types[Y.name] = self.CATEGORICAL
+        if Y is not None:
+            if dtype_is_numeric(Y.dtype):
+                column_types[Y.name] = self.NUMERIC
+            else:
+                column_types[Y.name] = self.CATEGORICAL
         return column_types
 
     def _compute_metafeatures(self, metafeature_ids):

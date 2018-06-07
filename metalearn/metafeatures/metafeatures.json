@@ -90,12 +90,12 @@
             "returns": ["NoNaNBinnedNumericFeatures"]
         },
         "self._get_binned_numeric_features_and_class_with_no_missing_values": {
-            "parameters": ["XSample","YSample", "ColumnTypes"],
+            "parameters": ["XSample","YSample","ColumnTypes"],
             "returns": ["NoNaNBinnedNumericFeaturesAndClass"]
         },
         "get_dataset_stats": {
-            "parameters": ["XRaw","Y", "ColumnTypes"],
-            "returns": ["NumberOfInstances","NumberOfFeatures","NumberOfClasses","NumberOfNumericFeatures","NumberOfCategoricalFeatures","RatioOfNumericFeatures","RatioOfCategoricalFeatures"]
+            "parameters": ["XRaw","ColumnTypes"],
+            "returns": ["NumberOfInstances","NumberOfFeatures","NumberOfNumericFeatures","NumberOfCategoricalFeatures","RatioOfNumericFeatures","RatioOfCategoricalFeatures"]
         },
         "get_dimensionality": {
             "parameters": ["NumberOfFeatures","NumberOfInstances"],
@@ -107,7 +107,7 @@
         },
         "get_class_stats": {
             "parameters": ["Y"],
-            "returns": ["MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
+            "returns": ["NumberOfClasses","MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
         },
         "get_categorical_cardinalities": {
             "parameters": ["X", "ColumnTypes"],
@@ -199,7 +199,7 @@
             "function": "get_dataset_stats"
         },
         "NumberOfClasses": {
-            "function": "get_dataset_stats"
+            "function": "get_class_stats"
         },
         "NumberOfNumericFeatures": {
             "function": "get_dataset_stats"

@@ -193,10 +193,6 @@ class MetaFeaturesTestCase(unittest.TestCase):
         self.assertEqual(str(cm.exception), expected_error_message1, fail_message1)
 
         with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(X=self.dummy_features, Y=None)
-        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
-
-        with self.assertRaises(TypeError) as cm:
             Metafeatures().compute(X=np.zeros((500,50)), Y=pd.Series(np.zeros(500)))
         self.assertEqual(str(cm.exception), expected_error_message1, fail_message1)
 

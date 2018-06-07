@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import numpy as np
 
 import pandas as pd
 
@@ -12,6 +13,10 @@ def extract_metafeatures(X, Y, random_seed=0):
     for feature in features_df.columns:
         metafeatures[feature] = features_df[feature].as_matrix()[0]
     return metafeatures
+
+def default(o):
+    if isinstance(o, np.int64): return int(o)  
+    raise TypeError
 
 directory_path = './data/'
 datasets_path = os.path.join(directory_path, 'test_datasets.json')
@@ -34,11 +39,11 @@ for dataset in datasets:
 		metafeatures = extract_metafeatures(X=X,Y=Y)
 		run_time = time.time() - start_time
 		if choice == 'v':
-			print(json.dumps(metafeatures, sort_keys=True, indent=4))
+			print(json.dumps(metafeatures, sort_keys=True, indent=4, default=default))
 		print('Dataset: ' + name)
 		print('Runtime: ' + str(run_time))
 		choice = input('y - update known metafeatures / n - don\'t \n')
 		if choice == 'y':
 			mf_file = open(os.path.join(directory_path, name + '_mf.json'), 'w')
-			json.dump(metafeatures, mf_file, sort_keys=True, indent=4)
+			json.dump(metafeatures, mf_file, sort_keys=True, indent=4, default=default)
 			mf_file.close()
