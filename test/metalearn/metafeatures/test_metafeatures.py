@@ -152,8 +152,86 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             inconsistency_report_file = './test/metalearn/metafeatures/mf_inconsistencies.json'
             with open(inconsistency_report_file, 'w') as fh:
                 json.dump(inconsistencies, fh, indent=4)
-
             self.assertTrue(False, "Metafeature lists do not match, output written to {}.".format(inconsistency_report_file))
+
+    def _is_target_dependent(self, resource_name):
+        if resource_name=='Y':
+            return True
+        elif resource_name=='XSample':
+            return False
+        else:
+            resource_info = self.resource_info_dict[resource_name]
+            parameters = resource_info.get('parameters', [])
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            function = resource_info['function']
+            parameters = self.function_dict[function]['parameters']
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            return False
+
+    def _get_target_dependent_metafeatures(self):
+        self.resource_info_dict = {}
+        metafeatures_list = []
+        mf_info_file_path = './metalearn/metafeatures/metafeatures.json'
+        with open(mf_info_file_path, 'r') as f:
+            mf_info_json = json.load(f)
+            self.function_dict = mf_info_json['functions']
+            json_metafeatures_dict = mf_info_json['metafeatures']
+            json_resources_dict = mf_info_json['resources']
+            metafeatures_list = list(json_metafeatures_dict.keys())
+            combined_dict = {**json_metafeatures_dict, **json_resources_dict}
+            for key in combined_dict:
+                self.resource_info_dict[key] = combined_dict[key]
+        target_dependent_metafeatures = []
+        for mf in metafeatures_list:
+            if self._is_target_dependent(mf):
+                target_dependent_metafeatures.append(mf)
+        return target_dependent_metafeatures
+
+    def test_no_targets(self):
+        print("TESTING NO TARGETS")
+        random_seed = 0
+        fails = {}
+        inconsistencies = {}
+        for filename, dataset in self.datasets.items():
+            last_results_file = self._get_last_mf_results_filename(filename)
+            if os.path.exists(self.data_folder + last_results_file):
+                with open(self.data_folder + last_results_file) as fh:
+                    known_mfs = json.load(fh)
+
+                # Explicitly create empty dicts because this provides information about successful tests.
+                fails[last_results_file] = {}
+                inconsistencies[last_results_file] = {}
+
+                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=None,seed=random_seed)
+                computed_mfs = metafeatures_df.to_dict('records')[0]
+                self.assertEqual(len(known_mfs), len(computed_mfs), "Computed metafeature list does not match correct metafeature list for no_targets test.")
+                
+                target_dependent_metafeatures = self._get_target_dependent_metafeatures()
+                for mf, computed_value in computed_mfs.items():
+                    if '_Time' in mf:
+                        # Timing metafeatures will always differ anyway.
+                        # For now we pay no mind, no matter how big a difference may be.
+                        continue
+                    if mf in target_dependent_metafeatures:
+                        if not computed_value == 'NO_TARGETS':
+                            fails[last_results_file][mf] = ('NO_TARGETS', computed_value)
+                    else:
+                        known_value = known_mfs.get(mf)
+                        if not math.isclose(known_value, computed_value) and not (np.isnan(known_value) and np.isnan(computed_value)):
+                            fails[last_results_file][mf] = (known_value, computed_value)
+        self.assertGreater(len(fails), 0, "No known results could be loaded, correctness for no_targets test could not be verified.")
+        if not all(f == {} for f in fails.values()):
+            # Results are no longer correct. Because multiple results that can be wrong are calculated at once,
+            # we want to output all of the wrong results so it might be easier to find out what went wrong.
+            fails = {k:v for (k,v) in fails.items() if v != {}}
+            fail_report_file = './test/metalearn/metafeatures/no_targets_correctness_fails.json'
+            with open(fail_report_file,'w') as fh:
+                json.dump(fails, fh, indent=4)
+            self.assertTrue(False, "Not all metafeatures matched correct results for no_targets test, output written to {}.".format(fail_report_file))
 
     def test_timeout(self):
         '''Tests whether the Metafeatures.compute function returns within the allotted time.'''

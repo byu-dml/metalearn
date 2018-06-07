@@ -13,7 +13,7 @@ setup(
     download_url = 'https://github.com/byu-dml/metalearn/archive/{}.tar.gz'.format(__version__),
     keywords = ['metalearning', 'machine learning', 'metalearn'],
     install_requires = [
-        'numpy',
+        'numpy==1.14.2',
         'pandas==0.22.0',
         'python-dateutil==2.7.2',
         'pytz==2018.4',

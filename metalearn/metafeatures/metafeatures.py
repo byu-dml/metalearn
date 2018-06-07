@@ -4,7 +4,7 @@ import json
 import time
 import multiprocessing
 import queue
-import tracebackg
+import traceback
 from contextlib import redirect_stderr
 import io
 from typing import Dict, List
@@ -129,7 +129,7 @@ class Metafeatures(object):
         if not self.error.empty():
             raise self.error.get()
 
-    def is_target_dependent(self, resource_name):
+    def _is_target_dependent(self, resource_name):
         if resource_name=='Y':
             return True
         elif resource_name=='XSample':
@@ -138,19 +138,19 @@ class Metafeatures(object):
             resource_info = self.resource_info_dict[resource_name]
             parameters = resource_info.get('parameters', [])
             for parameter in parameters:
-                if self.is_target_dependent(parameter):
+                if self._is_target_dependent(parameter):
                     return True
             function = resource_info['function']
             parameters = self.function_dict[function]['parameters']
             for parameter in parameters:
-                if self.is_target_dependent(parameter):
+                if self._is_target_dependent(parameter):
                     return True
             return False
 
-    def get_target_dependent_metafeatures(self):
+    def _get_target_dependent_metafeatures(self):
         target_dependent_metafeatures = []
         for mf in self.metafeatures_list:
-            if self.is_target_dependent(mf):
+            if self._is_target_dependent(mf):
                 target_dependent_metafeatures.append(mf)
         return target_dependent_metafeatures
 
@@ -191,7 +191,7 @@ class Metafeatures(object):
                 }
             }
             if Y is None:
-                target_dependent_metafeatures = self.get_target_dependent_metafeatures()
+                target_dependent_metafeatures = self._get_target_dependent_metafeatures()
                 # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
                 for metafeature_id in target_dependent_metafeatures:
                     if metafeature_id in metafeature_ids:
