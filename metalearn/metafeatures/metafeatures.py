@@ -4,7 +4,7 @@ import json
 import time
 import multiprocessing
 import queue
-import traceback
+import tracebackg
 from contextlib import redirect_stderr
 import io
 from typing import Dict, List
@@ -23,9 +23,6 @@ from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
 
-
-
-
 class Metafeatures(object):
     """
     Computes metafeatures on a given tabular dataset (pandas.DataFrame) with
@@ -39,6 +36,8 @@ class Metafeatures(object):
     TIMEOUT_BUFFER = .1
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
+    TIMEOUT = "TIMEOUT"
+    NO_TARGETS = "NO_TARGETS"
 
     def __init__(self):
         self.queue = multiprocessing.Queue()
@@ -100,7 +99,6 @@ class Metafeatures(object):
             ),
             timeout,
         )
-
         
         try:
             self.computed_metafeatures = self.queue.get_nowait()
@@ -174,7 +172,7 @@ class Metafeatures(object):
                 X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
                 seed
             )
-            initialized_df = DataFrame({name:["TIMEOUT"] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
+            initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
             self.queue.put(initialized_df)
 
             X_raw = X
@@ -192,35 +190,20 @@ class Metafeatures(object):
                     self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
                 }
             }
-            parsed_target_dependent_metafeatures = self.get_target_dependent_metafeatures()
-            # target_dependent_metafeatures = [
-            # "NumberOfClasses", "MeanClassProbability", "StdevClassProbability", "MinClassProbability", "MaxClassProbability", "MinorityClassSize", "MajorityClassSize", 
-            # "ClassEntropy", "MeanCategoricalJointEntropy", "MinCategoricalJointEntropy", "Quartile1CategoricalJointEntropy", "Quartile2CategoricalJointEntropy", 
-            # "Quartile3CategoricalJointEntropy", "MaxCategoricalJointEntropy", "MeanNumericJointEntropy", "MinNumericJointEntropy", "Quartile1NumericJointEntropy", 
-            # "Quartile2NumericJointEntropy", "Quartile3NumericJointEntropy", "MaxNumericJointEntropy", "MeanCategoricalMutualInformation", "MinCategoricalMutualInformation",
-            # "Quartile1CategoricalMutualInformation", "Quartile2CategoricalMutualInformation", "Quartile3CategoricalMutualInformation", "MaxCategoricalMutualInformation",
-            # "MeanNumericMutualInformation", "MinNumericMutualInformation", "Quartile1NumericMutualInformation", "Quartile2NumericMutualInformation", 
-            # "Quartile3NumericMutualInformation", "MaxNumericMutualInformation", "EquivalentNumberOfCategoricalFeatures", "EquivalentNumberOfNumericFeatures",
-            # "CategoricalNoiseToSignalRatio", "NumericNoiseToSignalRatio", "NaiveBayesErrRate", "NaiveBayesKappa", "kNN1NErrRate", "kNN1NKappa", "DecisionStumpErrRate",
-            # "DecisionStumpKappa", "RandomTreeDepth1ErrRate", "RandomTreeDepth1Kappa", "RandomTreeDepth2ErrRate", "RandomTreeDepth2Kappa", "RandomTreeDepth3ErrRate", 
-            # "RandomTreeDepth3Kappa", "LinearDiscriminantAnalysisErrRate", "LinearDiscriminantAnalysisKappa"
-            # ]
-            # print('Computed the correct tdms: \n', set(parsed_target_dependent_metafeatures) == set(target_dependent_metafeatures))
-            # print('\nComputed tdms that are not correct: \n', set(parsed_target_dependent_metafeatures) - set(target_dependent_metafeatures))
-            # print('\nCorrect tdms that were not computed: \n', set(target_dependent_metafeatures) - set(parsed_target_dependent_metafeatures))
             if Y is None:
-                # set every target-dependent metafeature that was requested by the user to "NO TARGETS"
-                for metafeature_id in parsed_target_dependent_metafeatures:
+                target_dependent_metafeatures = self.get_target_dependent_metafeatures()
+                # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
+                for metafeature_id in target_dependent_metafeatures:
                     if metafeature_id in metafeature_ids:
-                        self.queue.put((metafeature_id,"NO TARGETS"))
+                        self.queue.put((metafeature_id,self.NO_TARGETS))
                         metafeature_time_id = metafeature_id + "_Time"
-                        self.queue.put((metafeature_time_id,"NO TARGETS"))
+                        self.queue.put((metafeature_time_id,self.NO_TARGETS))
                 # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
-                metafeature_ids = [mf for mf in metafeature_ids if mf not in parsed_target_dependent_metafeatures]
+                metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
             self._compute_metafeatures(metafeature_ids)
         except Exception as e:
             self.error.put(e)
-            # traceback.print_exc()     
+            # traceback.print_exc()    
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -237,10 +220,10 @@ class Metafeatures(object):
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
-        if not isinstance(Y, pd.Series) and Y is not None:
+        if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
         if column_types is not None:
-            if Y is not None:
+            if not Y is None:
                 if len(column_types.keys()) != len(X.columns) + 1:
                     raise ValueError(
                         "The number of column_types does not match the number of " +
@@ -284,7 +267,7 @@ class Metafeatures(object):
                 column_types[col_name] = self.NUMERIC
             else:
                 column_types[col_name] = self.CATEGORICAL
-        if Y is not None:
+        if not Y is None:
             if dtype_is_numeric(Y.dtype):
                 column_types[Y.name] = self.NUMERIC
             else:
@@ -388,22 +371,26 @@ class Metafeatures(object):
         min_row_per_class=2
     ):
         if sample_rows == True and X.shape[0] > approximate_max_rows:
-            samples = []
-            total_rows = Y.shape[0]
-            class_groupby = Y.groupby(Y)
-            for group_key in class_groupby.groups:
-                group = class_groupby.get_group(group_key).index
-                num_to_sample = max(
-                    math.floor(
-                        float(group.shape[0]) / float(total_rows) *
-                        approximate_max_rows
-                    ), min_row_per_class
-                )
-                np.random.seed(seed)
-                row_indices = np.random.permutation(group)[:num_to_sample]
-                samples.append(row_indices)
-            row_indices = np.concatenate(samples)
-            return (X.iloc[row_indices], Y.iloc[row_indices])
+            if not Y is None:
+                samples = []
+                total_rows = Y.shape[0]
+                class_groupby = Y.groupby(Y)
+                for group_key in class_groupby.groups:
+                    group = class_groupby.get_group(group_key).index
+                    num_to_sample = max(
+                        math.floor(
+                            float(group.shape[0]) / float(total_rows) *
+                            approximate_max_rows
+                        ), min_row_per_class
+                    )
+                    np.random.seed(seed)
+                    row_indices = np.random.permutation(group)[:num_to_sample]
+                    samples.append(row_indices)
+                row_indices = np.concatenate(samples)
+                return (X.iloc[row_indices], Y.iloc[row_indices])
+            else:
+                row_indices = np.random.choice(X.shape[0], approximate_max_rows, replace=False)
+                return(X.iloc[row_indices], Y)
         else:
             return (X, Y)
 
