@@ -4,7 +4,6 @@ import json
 import time
 import multiprocessing
 import queue
-import traceback
 from contextlib import redirect_stderr
 import io
 from typing import Dict, List
@@ -12,9 +11,9 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
-from signal import signal, SIGPIPE, SIG_DFL
+from signal import signal, SIGPIPE, SIG_IGN
 # this should cause "BROKEN PIPE ERROR" to be ignored
-signal(SIGPIPE, SIG_DFL)
+signal(SIGPIPE, SIG_IGN)
 
 
 from .common_operations import *
@@ -71,7 +70,7 @@ class Metafeatures(object):
         ----------
         X: pandas.DataFrame, the dataset features
         Y: pandas.Seris, the dataset targets
-        column_types: Dict[str, str], dict from column name to column type 
+        column_types: Dict[str, str], dict from column name to column type
             as "NUMERIC" or "CATEGORICAL", must include Y column
         metafeature_ids: list, the metafeatures to compute.
             default of None indicates to compute all metafeatures
@@ -99,7 +98,7 @@ class Metafeatures(object):
             ),
             timeout,
         )
-        
+
         try:
             self.computed_metafeatures = self.queue.get_nowait()
         except queue.Empty:
@@ -122,7 +121,7 @@ class Metafeatures(object):
             p.join(timeout)
             if p.is_alive():
                 p.terminate()
-                p.join()     
+                p.join()
         except multiprocessing.TimeoutError:
             pass
 
@@ -203,7 +202,6 @@ class Metafeatures(object):
             self._compute_metafeatures(metafeature_ids)
         except Exception as e:
             self.error.put(e)
-            # traceback.print_exc()    
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -280,7 +278,7 @@ class Metafeatures(object):
             self.queue.put((metafeature_id,value))
             metafeature_time_id = metafeature_id + "_Time"
             self.queue.put((metafeature_time_id,time_value))
-            
+
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:
