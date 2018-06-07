@@ -3,6 +3,7 @@ import math
 import json
 import time
 import multiprocessing
+import queue
 from contextlib import redirect_stderr
 import io
 from typing import Dict, List
@@ -10,6 +11,9 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
+from signal import signal, SIGPIPE, SIG_IGN
+# this should cause "BROKEN PIPE ERROR" to be ignored
+signal(SIGPIPE, SIG_IGN)
 
 
 from .common_operations import *
@@ -96,11 +100,18 @@ class Metafeatures(object):
             timeout,
         )
 
-        if not self.queue.empty():
-            self.computed_metafeatures = self.queue.get()
-            for x in range(self.queue.qsize()):
-                mf, value = self.queue.get()
-                self.computed_metafeatures.at[0, mf] = value
+        try:
+            self.computed_metafeatures = self.queue.get_nowait()
+        except queue.Empty:
+            self.computed_metafeatures = None
+
+        while True:
+            try:
+                mf, value = self.queue.get_nowait()
+            except queue.Empty:
+                break
+            else:
+                self.computed_metafeatures.at[0, mf] = value        
 
         return self.computed_metafeatures
 
