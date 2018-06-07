@@ -71,7 +71,7 @@ class Metafeatures(object):
         ----------
         X: pandas.DataFrame, the dataset features
         Y: pandas.Seris, the dataset targets
-        column_types: Dict[str, str], dict from column name to column type 
+        column_types: Dict[str, str], dict from column name to column type
             as "NUMERIC" or "CATEGORICAL", must include Y column
         metafeature_ids: list, the metafeatures to compute.
             default of None indicates to compute all metafeatures
@@ -111,7 +111,7 @@ class Metafeatures(object):
             except queue.Empty:
                 break
             else:
-                self.computed_metafeatures.at[0, mf] = value        
+                self.computed_metafeatures.at[0, mf] = value
 
         return self.computed_metafeatures
 
@@ -122,7 +122,7 @@ class Metafeatures(object):
             p.join(timeout)
             if p.is_alive():
                 p.terminate()
-                p.join()     
+                p.join()
         except multiprocessing.TimeoutError:
             pass
 
@@ -147,7 +147,7 @@ class Metafeatures(object):
                 X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
                 seed
             )
-        
+
             initialized_df = DataFrame({name:["TIMEOUT"] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
             self.queue.put(initialized_df)
 
@@ -168,7 +168,7 @@ class Metafeatures(object):
             }
             self._compute_metafeatures(metafeature_ids)
         except Exception as e:
-            self.error.put(e)     
+            self.error.put(e)
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -237,7 +237,7 @@ class Metafeatures(object):
             self.queue.put((metafeature_id,value))
             metafeature_time_id = metafeature_id + "_Time"
             self.queue.put((metafeature_time_id,time_value))
-            
+
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:
