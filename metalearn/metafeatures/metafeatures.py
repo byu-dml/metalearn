@@ -297,7 +297,7 @@ class Metafeatures(object):
     def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed=42):
         series_array = []
         for feature in X_sample.columns:
-            feature_series = X_sample[feature]
+            feature_series = X_sample[feature].copy()
             col = feature_series.as_matrix()
             dropped_nan_series = X_sampled_columns[feature].dropna(
                 axis=0,how='any'
