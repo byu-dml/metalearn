@@ -3,6 +3,7 @@ import math
 import json
 import time
 import multiprocessing
+import queue
 from contextlib import redirect_stderr
 import io
 from typing import Dict, List
@@ -96,11 +97,18 @@ class Metafeatures(object):
             timeout,
         )
 
-        if not self.queue.empty():
-            self.computed_metafeatures = self.queue.get()
-            for x in range(self.queue.qsize()):
-                mf, value = self.queue.get()
-                self.computed_metafeatures.at[0, mf] = value
+        try:
+            self.computed_metafeatures = self.queue.get_nowait()
+        except queue.Empty:
+            self.computed_metafeatures = None
+
+        while True:
+            try:
+                mf, value = self.queue.get_nowait()
+            except queue.Empty:
+                break
+            else:
+                self.computed_metafeatures.at[0, mf] = value        
 
         return self.computed_metafeatures
 
