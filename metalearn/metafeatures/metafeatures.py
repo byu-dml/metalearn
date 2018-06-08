@@ -22,9 +22,6 @@ from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
 
-
-
-
 class Metafeatures(object):
     """
     Computes metafeatures on a given tabular dataset (pandas.DataFrame) with
@@ -38,6 +35,8 @@ class Metafeatures(object):
     TIMEOUT_BUFFER = .1
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
+    TIMEOUT = "TIMEOUT"
+    NO_TARGETS = "NO_TARGETS"
 
     def __init__(self):
         self.queue = multiprocessing.Queue()
@@ -62,7 +61,7 @@ class Metafeatures(object):
         return self.metafeatures_list
 
     def compute(
-        self, X: DataFrame, Y: Series, column_types: Dict[str, str] = None,
+        self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
         metafeature_ids: List = None, sample_rows=True, sample_columns=True,
         seed=None, timeout=None
     ) -> DataFrame:
@@ -129,10 +128,36 @@ class Metafeatures(object):
         if not self.error.empty():
             raise self.error.get()
 
+    def _is_target_dependent(self, resource_name):
+        if resource_name=='Y':
+            return True
+        elif resource_name=='XSample':
+            return False
+        else:
+            resource_info = self.resource_info_dict[resource_name]
+            parameters = resource_info.get('parameters', [])
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            function = resource_info['function']
+            parameters = self.function_dict[function]['parameters']
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            return False
+
+    def _get_target_dependent_metafeatures(self):
+        target_dependent_metafeatures = []
+        for mf in self.metafeatures_list:
+            if self._is_target_dependent(mf):
+                target_dependent_metafeatures.append(mf)
+        return target_dependent_metafeatures
+
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
         seed
     ):
+
         try:
             self._validate_compute_arguments(
                 X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
@@ -140,15 +165,13 @@ class Metafeatures(object):
             )
             if column_types is None:
                 column_types = self._infer_column_types(X, Y)
-
             if metafeature_ids is None:
                 metafeature_ids = self.list_metafeatures()
             self._validate_compute_arguments(
                 X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
                 seed
             )
-
-            initialized_df = DataFrame({name:["TIMEOUT"] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
+            initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
             self.queue.put(initialized_df)
 
             X_raw = X
@@ -166,6 +189,16 @@ class Metafeatures(object):
                     self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
                 }
             }
+            if Y is None:
+                target_dependent_metafeatures = self._get_target_dependent_metafeatures()
+                # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
+                for metafeature_id in target_dependent_metafeatures:
+                    if metafeature_id in metafeature_ids:
+                        self.queue.put((metafeature_id,self.NO_TARGETS))
+                        metafeature_time_id = metafeature_id + "_Time"
+                        self.queue.put((metafeature_time_id,self.NO_TARGETS))
+                # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
+                metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
             self._compute_metafeatures(metafeature_ids)
         except Exception as e:
             self.error.put(e)
@@ -185,28 +218,35 @@ class Metafeatures(object):
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
-        if not isinstance(Y, pd.Series):
+        if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
         if column_types is not None:
-            if len(column_types.keys()) != len(X.columns) + 1:
-                raise ValueError(
-                    "The number of column_types does not match the number of " +
-                    "features plus the target"
-                )
+            if not Y is None:
+                if len(column_types.keys()) != len(X.columns) + 1:
+                    raise ValueError(
+                        "The number of column_types does not match the number of " +
+                        "features plus the target"
+                    )
+                if column_types[Y.name] == self.NUMERIC:
+                    raise TypeError('Regression problems are not supported (target feature is numeric)')
+            else:
+                if len(column_types.keys()) != len(X.columns):
+                    raise ValueError(
+                        "The number of column_types does not match the number of " +
+                        "features"
+                    )
             invalid_column_types = []
             for col_name, col_type in column_types.items():
                 if col_type != self.NUMERIC and col_type != self.CATEGORICAL:
                     invalid_column_types.append((col_name, col_type))
             if len(invalid_column_types) > 0:
                 raise ValueError(
-                    'One or more input column types are not valid: {}. Valid '
+                    'One or more input column types are not valid: {}. Valid '+
                     'types include {} and {}.'.
                     format(
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
                     )
                 )
-            if column_types[Y.name] == self.NUMERIC:
-                raise TypeError('Regression problems are not supported (target feature is numeric)')
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if
@@ -225,10 +265,11 @@ class Metafeatures(object):
                 column_types[col_name] = self.NUMERIC
             else:
                 column_types[col_name] = self.CATEGORICAL
-        if dtype_is_numeric(Y.dtype):
-            column_types[Y.name] = self.NUMERIC
-        else:
-            column_types[Y.name] = self.CATEGORICAL
+        if not Y is None:
+            if dtype_is_numeric(Y.dtype):
+                column_types[Y.name] = self.NUMERIC
+            else:
+                column_types[Y.name] = self.CATEGORICAL
         return column_types
 
     def _compute_metafeatures(self, metafeature_ids):
@@ -328,24 +369,42 @@ class Metafeatures(object):
         min_row_per_class=2
     ):
         if sample_rows == True and X.shape[0] > approximate_max_rows:
-            samples = []
-            total_rows = Y.shape[0]
-            class_groupby = Y.groupby(Y)
-            for group_key in class_groupby.groups:
-                group = class_groupby.get_group(group_key).index
-                num_to_sample = max(
-                    math.floor(
-                        float(group.shape[0]) / float(total_rows) *
-                        approximate_max_rows
-                    ), min_row_per_class
-                )
-                np.random.seed(seed)
-                row_indices = np.random.permutation(group)[:num_to_sample]
-                samples.append(row_indices)
-            row_indices = np.concatenate(samples)
-            return (X.iloc[row_indices], Y.iloc[row_indices])
+            if not Y is None:
+                samples = []
+                total_rows = Y.shape[0]
+                class_groupby = Y.groupby(Y)
+                for group_key in class_groupby.groups:
+                    group = class_groupby.get_group(group_key).index
+                    num_to_sample = max(
+                        math.floor(
+                            float(group.shape[0]) / float(total_rows) *
+                            approximate_max_rows
+                        ), min_row_per_class
+                    )
+                    np.random.seed(seed)
+                    row_indices = np.random.permutation(group)[:num_to_sample]
+                    samples.append(row_indices)
+                row_indices = np.concatenate(samples)
+                return (X.iloc[row_indices], Y.iloc[row_indices])
+            else:
+                row_indices = np.random.choice(X.shape[0], approximate_max_rows, replace=False)
+                return(X.iloc[row_indices], Y)
         else:
             return (X, Y)
+
+    def _get_categorical_features_with_no_missing_values(
+        self, X_sample, column_types
+    ):
+        categorical_features_with_no_missing_values = []
+        for feature in X_sample.columns:
+            if column_types[feature] == self.CATEGORICAL:
+                no_nan_series = X_sample[feature].dropna(
+                    axis=0, how='any'
+                )
+                categorical_features_with_no_missing_values.append(
+                    no_nan_series
+                )
+        return (categorical_features_with_no_missing_values,)
 
     def _get_categorical_features_and_class_with_no_missing_values(
         self, X_sample, Y_sample, column_types
@@ -361,7 +420,32 @@ class Metafeatures(object):
                 )
         return (categorical_features_and_class_with_no_missing_values,)
 
-    def _get_numeric_features_and_class_with_no_missing_values(
+    def _get_numeric_features_with_no_missing_values(
+        self, X_sample, column_types
+    ):
+        numeric_features_with_no_missing_values = []
+        for feature in X_sample.columns:
+            if column_types[feature] == self.NUMERIC:
+                no_nan_series = X_sample[feature].dropna(
+                    axis=0, how='any'
+                )
+                numeric_features_with_no_missing_values.append(
+                    no_nan_series
+                )
+        return (numeric_features_with_no_missing_values,)
+
+    def _get_binned_numeric_features_with_no_missing_values(
+        self, numeric_features_array
+    ):
+        binned_feature_array = [
+            (
+                pd.cut(feature,
+                round(feature.shape[0]**(1./3.)))
+            ) for feature in numeric_features_array
+        ]
+        return (binned_feature_array,)
+
+    def _get_binned_numeric_features_and_class_with_no_missing_values(
         self, X_sample, Y_sample, column_types
     ):
         numeric_features_and_class_with_no_missing_values = []
@@ -373,16 +457,11 @@ class Metafeatures(object):
                 numeric_features_and_class_with_no_missing_values.append(
                     (df[feature],df[Y_sample.name])
                 )
-        return (numeric_features_and_class_with_no_missing_values,)
-
-    def _get_binned_numeric_features_and_class_with_no_missing_values(
-        self, numeric_features_class_array
-    ):
         binned_feature_class_array = [
             (
                 pd.cut(feature_class_pair[0],
                 round(feature_class_pair[0].shape[0]**(1./3.))),
                 feature_class_pair[1]
-            ) for feature_class_pair in numeric_features_class_array
+            ) for feature_class_pair in numeric_features_and_class_with_no_missing_values
         ]
         return (binned_feature_class_array,)

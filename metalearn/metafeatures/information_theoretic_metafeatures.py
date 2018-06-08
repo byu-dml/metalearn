@@ -10,8 +10,8 @@ def get_entropy(col):
 def get_class_entropy(Y_sample):
     return (get_entropy(Y_sample),)
 
-def get_attribute_entropy(feature_class_array):
-    entropies = [get_entropy(feature_class_pair[0]) for feature_class_pair in feature_class_array]
+def get_attribute_entropy(feature_array):
+    entropies = [get_entropy(feature) for feature in feature_array]
     mean_attribute_entropy, _, min_attribute_entropy, quartile1_attribute_entropy, quartile2_attribute_entropy, quartile3_attribute_entropy, max_attribute_entropy = profile_distribution(entropies)
     return (mean_attribute_entropy, min_attribute_entropy, quartile1_attribute_entropy, quartile2_attribute_entropy, quartile3_attribute_entropy, max_attribute_entropy)
 
