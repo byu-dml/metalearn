@@ -228,7 +228,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 if not known_mfs is None:
                     for mf_name, mf_value in df.to_dict('records')[0].items():
                         if not '_Time' in mf_name and mf_value != 'TIMEOUT':
-                            self.assertEqual(mf_value, known_mfs[mf_name], f'Metafeature {mf_name} not computed correctly with timeout enabled')
+                            self.assertTrue(math.isclose(mf_value, known_mfs[mf_name]), f'Metafeature {mf_name} not computed correctly with timeout enabled')
                 self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
                 self.assertEqual(df.shape[1], 2*len(Metafeatures().list_metafeatures()), "Some metafeatures were not returned...")
 
