@@ -1,0 +1,59 @@
+    "MeanClassProbability"
+    "StdevClassProbability"
+
+    "StdevMeansOfNumericFeatures"
+
+    "StdevStdDevOfNumericFeatures"
+
+    "StdevSkewnessOfNumericFeatures"
+
+    "StdevKurtosisOfNumericFeatures"
+
+    "PredPCA1"
+    "PredPCA2"
+    "PredPCA3"
+    "PredEigen1"
+    "PredEigen2"
+    "PredEigen3"
+    "PredDet"
+
+    "MeanCanonicalCorrelation"
+    "StdevCanonicalCorrelation"
+
+    #we calculate both categorical and numeric but they combine them into one metafeature
+    "MeanNumericAttributeEntropy"
+    "MinNumericAttributeEntropy"
+    "Quartile1NumericAttributeEntropy"
+    "Quartile2NumericAttributeEntropy"
+    "Quartile3NumericAttributeEntropy"
+    "MaxNumericAttributeEntropy"
+
+    "MeanCategoricalJointEntropy"
+    "MinCategoricalJointEntropy"
+    "Quartile1CategoricalJointEntropy"
+    "Quartile2CategoricalJointEntropy"
+    "Quartile3CategoricalJointEntropy"
+    "MaxCategoricalJointEntropy"
+    "MeanNumericJointEntropy"
+    "MinNumericJointEntropy"
+    "Quartile1NumericJointEntropy"
+    "Quartile2NumericJointEntropy"
+    "Quartile3NumericJointEntropy"
+    "MaxNumericJointEntropy"
+
+    #we calculate both categorical and numeric but they combine them into one metafeature
+    "MeanNumericMutualInformation"
+    "MinNumericMutualInformation"
+    "Quartile1NumericMutualInformation"
+    "Quartile2NumericMutualInformation"
+    "Quartile3NumericMutualInformation"
+    "MaxNumericMutualInformation"
+
+    #we calculate both categorical and numeric but they combine them into one metafeature
+    "EquivalentNumberOfNumericFeatures"
+
+    #we calculate both categorical and numeric but they combine them into one metafeature
+    "NumericNoiseToSignalRatio"
+
+    "LinearDiscriminantAnalysisErrRate"
+    "LinearDiscriminantAnalysisKappa"
