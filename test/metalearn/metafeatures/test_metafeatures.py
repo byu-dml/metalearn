@@ -40,6 +40,9 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             metafeatures_dict = metafeatures_df.to_dict('records')[0]
             # print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
 
+    def check_correctness(self):
+        pass
+
     def test_correctness(self):
         """ For each dataset that has a corresponding mf (metafeature) file present,
             check differences in columns we do not expect to change.
