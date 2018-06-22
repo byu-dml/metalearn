@@ -232,6 +232,24 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
                 self.assertEqual(df.shape[1], 2*len(Metafeatures().list_metafeatures()), "Some metafeatures were not returned...")
 
+    def test_time_flag(self):
+        ''' Tests whether the Metafeatures.compute function works properly with the time flag set'''
+        for filename, dataset in self.datasets.items():
+            known_mfs = None
+            known_dataset_metafeatures_path = get_dataset_metafeatures_path(filename)
+            if os.path.exists(known_dataset_metafeatures_path):
+                with open(known_dataset_metafeatures_path) as fh:
+                    known_mfs = json.load(fh)
+            mf = Metafeatures()
+            df = mf.compute(X=dataset["X"], Y=dataset["Y"], seed=0, time=False)
+            computed_mfs = df.to_dict('records')[0]
+            if not known_mfs is None:
+                known_mfs = {k: v for k,v in known_mfs.items() if "_Time" not in k}
+            for mf_name, mf_value in computed_mfs.items():
+                self.assertTrue(math.isclose(mf_value, known_mfs[mf_name]), f'Metafeature {mf_name} not computed correctly with "time" flag set')
+            self.assertEqual(len(known_mfs), len(computed_mfs), "Some metafeatures were not returned when computed with 'time' flag set")
+
+
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
 
