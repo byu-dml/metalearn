@@ -10,42 +10,64 @@ from metalearn.metafeatures.common_operations import profile_distribution
 '''
 FEATURES TO IMPLEMENT:
     -tree width
-    -max/min/mean/stdev of nodes in a level
-    -max/min/mean/stdev of branch lengths
 '''
 
-def get_model_info(X,Y):
+def get_level_sizes(adjacencies):
+    curr_level = [0]
+    level_sizes = [1]
+    while len(curr_level) > 0:
+        next_level = []
+        for node in curr_level:
+            if adjacencies[node][0] != adjacencies[node][1]:
+                next_level.append(adjacencies[node][0])
+                next_level.append(adjacencies[node][1])
+        level_sizes.append(len(next_level))
+        curr_level = next_level
+    return level_sizes[:-1]
+
+def get_branch_lengths(adjacencies, leaves):
+    branch_lengths = []
+    for leaf in leaves:
+        curr_node = leaf
+        length = 0
+        while curr_node != 0:
+            parent_node = [parent for parent,children in enumerate(adjacencies) if curr_node in children][0]
+            length += 1
+            curr_node = parent_node
+        branch_lengths.append(length)
+    return branch_lengths
+
+def get_model_info(X,Y, random):
 
     iris = load_iris()
     X = iris.data
     y = iris.target
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 
-    estimator = DecisionTreeClassifier(random_state=0)
+    estimator = DecisionTreeClassifier(random_state=random)
     estimator.fit(X_train, y_train)
 
     n_nodes = estimator.tree_.node_count
     tree_height = estimator.tree_.max_depth + 1
-    leaf_count = 0
-    for feature in estimator.tree_.feature:
-        if feature == -2:
-            leaf_count += 1
-        else:
-            pass
+    
     counts = Counter(estimator.tree_.feature)
     leaf_count = counts[-2]
     del counts[-2]
-    counts = list(counts.values())
+    att_counts = list(counts.values())
+    att_mean, att_stdev, att_min,_,_,_,att_max = profile_distribution(att_counts)
 
-    att_mean, att_stdev, att_min,_,_,_,att_max = profile_distribution(counts)
+    adjacencies = [(left,right) for left,right in zip(estimator.tree_.children_left,estimator.tree_.children_right)]
+    leaves = [node for node,children in enumerate(adjacencies) if children[0] == children[1]]
+    level_mean, level_stdev, level_min,_,_,_, level_max = profile_distribution(get_level_sizes(adjacencies))
+    branch_mean, branch_stdev, branch_min,_,_,_, branch_max = profile_distribution(get_branch_lengths(adjacencies, leaves))    
 
+    print(f'Leaves: {leaf_count}')
+    print(f'Nodes: {n_nodes}')
+    print(f'Tree Height: {tree_height}')
+    print(f'Attribute Occurence: {att_min}(min), {att_max}(max), {att_mean}(mean), {att_stdev}(stdev) ')
+    print(f'Nodes Per Level: {level_min}(min), {level_max}(max), {level_mean}(mean), {level_stdev}(stdev) ')
+    print(f'Branch Lengths: {branch_min}(min), {branch_max}(max), {branch_mean}(mean), {branch_stdev}(stdev) ')
 
-    # print(f'Leaves: {leaf_count}')
-    # print(f'Nodes: {n_nodes}')
-    # print(f'Tree Height: {tree_height}')
-    # print(f'Attribute Occurence: {att_min}(min), {att_max}(max), {att_mean}(mean), {att_stdev}(stdev) ')
-
-    print(estimator.tree_.value)
 
 
 
