@@ -87,6 +87,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
         fails = {}
         for filename, dataset in self.datasets.items():
+
             metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"],seed=random_seed)
             computed_mfs = metafeatures_df.to_dict('records')[0]
             fails.update(self.check_correctness(computed_mfs, filename))
@@ -185,6 +186,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         for filename, dataset in self.datasets.items():
             computed_mfs = Metafeatures().compute(X=dataset["X"],Y=None,seed=random_seed).to_dict('records')[0]
             self.assertEqual(len(Metafeatures().list_metafeatures()*2), len(computed_mfs), "Computed metafeature list does not match correct metafeature list for no_targets test.")
+
             target_dependent_metafeatures = self._get_target_dependent_metafeatures()
             for mf in target_dependent_metafeatures:
                 if not computed_mfs[mf] == 'NO_TARGETS':
@@ -194,6 +196,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             fails.update(self.check_correctness(computed_mfs, filename))
 
         self.process_result(fails, "no_targets")
+
 
     def test_timeout(self):
         '''Tests Metafeatures().compute() with timeout set'''
