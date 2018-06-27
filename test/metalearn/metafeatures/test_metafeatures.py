@@ -5,6 +5,7 @@ import os
 import random
 import unittest
 import time
+import copy
 
 # import openml
 import pandas as pd
@@ -211,6 +212,53 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             with open(fail_report_file,'w') as fh:
                 json.dump(fails, fh, indent=4)
             self.assertTrue(False, "Not all metafeatures matched correct results for no_targets test, output written to {}.".format(fail_report_file))
+
+    def test_compute_effects_on_dataset(self):
+        for dataset in self.datasets.values():
+            dataset_copy = copy.deepcopy(dataset)
+            Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+            if not dataset_copy["X"].equals(dataset["X"]) or not dataset_copy["Y"].equals(dataset["Y"]):
+                self.assertTrue(False, "Input data has changed after Metafeatures.compute")
+
+    def test_compute_effects_on_compute(self):
+
+        random_seed = 0
+        fails = {}
+        for filename, dataset in self.datasets.items():
+            known_dataset_metafeatures_path = get_dataset_metafeatures_path(filename)
+            if os.path.exists(known_dataset_metafeatures_path):
+                with open(known_dataset_metafeatures_path) as fh:
+                    known_mfs = json.load(fh)
+
+                # Explicitly create empty dicts because this provides information about successful tests.
+                fails[known_dataset_metafeatures_path] = {}
+
+                metafeatures_instance = Metafeatures()
+                metafeatures_instance.compute(X=dataset["X"],Y=dataset["Y"],seed=random_seed) #first run
+                metafeatures_df = metafeatures_instance.compute(X=dataset["X"],Y=dataset["Y"],seed=random_seed) #second run
+                computed_mfs = metafeatures_df.to_dict('records')[0]
+                self.assertEqual(len(known_mfs), len(computed_mfs), "Computed metafeature list does not match after multiple computes.")
+                
+                for mf, computed_value in computed_mfs.items():
+                    if '_Time' in mf:
+                        # Timing metafeatures will always differ anyway.
+                        # For now we pay no mind, no matter how big a difference may be.
+                        continue
+                    else:
+                        known_value = known_mfs.get(mf)
+                        if not math.isclose(known_value, computed_value) and not (np.isnan(known_value) and np.isnan(computed_value)):
+                            fails[known_dataset_metafeatures_path][mf] = (known_value, computed_value)
+
+        self.assertGreater(len(fails), 0, "No known results could be loaded, correctness for compute_effects test could not be verified.")
+        if not all(f == {} for f in fails.values()):
+            # Results are no longer correct. Because multiple results that can be wrong are calculated at once,
+            # we want to output all of the wrong results so it might be easier to find out what went wrong.
+            fails = {k:v for (k,v) in fails.items() if v != {}}
+            fail_report_file = './test/metalearn/metafeatures/compute_effects_fails.json'
+            with open(fail_report_file,'w') as fh:
+                json.dump(fails, fh, indent=4)
+            self.assertTrue(False, "Not all metafeatures matched correct results for compute_effects test, output written to {}.".format(fail_report_file)) 
+        
 
     def test_timeout(self):
         '''Tests whether the Metafeatures.compute function returns within the allotted time.'''
