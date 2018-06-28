@@ -3,9 +3,8 @@ import json
 import math
 import os
 import random
-import unittest
 import time
-import warnings
+import unittest
 
 # import openml
 import pandas as pd
