@@ -137,10 +137,6 @@
             "parameters": ["XPreprocessed"],
             "returns": ["PredPCA1","PredPCA2","PredPCA3","PredEigen1","PredEigen2","PredEigen3","PredDet"]
         },
-        "get_correlations": {
-            "parameters": ["XSample", "ColumnTypes"],
-            "returns": ["MeanCanonicalCorrelation","StdevCanonicalCorrelation"]
-        },
         "get_class_entropy": {
             "parameters": ["YSample"],
             "returns": ["ClassEntropy"]
@@ -374,12 +370,6 @@
         },
         "PredDet": {
             "function": "get_pca"
-        },
-        "MeanCanonicalCorrelation": {
-            "function": "get_correlations"
-        },
-        "StdevCanonicalCorrelation": {
-            "function": "get_correlations"
         },
         "ClassEntropy": {
             "function": "get_class_entropy"
