@@ -106,13 +106,14 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         """
         Tests that metafeatures are computed correctly, for known datasets.
         """
+        test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
             metafeatures_df = Metafeatures().compute(
                 X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED
             )
             computed_mfs = metafeatures_df.to_dict("records")[0]
             known_mfs = dataset["known_metafeatures"]
-            self._test_correctness(computed_mfs, known_mfs, inspect.stack()[0][3])
+            self._test_correctness(computed_mfs, known_mfs, test_name)
 
     def test_compare_metafeature_lists(self):
         inconsistencies = {}
@@ -220,7 +221,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = Metafeatures.NO_TARGETS
 
-            self._test_correctness(computed_mfs, known_mfs, inspect.stack()[0][3])
+            self._test_correctness(computed_mfs, known_mfs, test_name)
 
     # temporarily remove timeout due to broken pipe bug
     def _test_timeout(self):
