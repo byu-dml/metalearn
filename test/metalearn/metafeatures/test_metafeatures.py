@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 
 from metalearn.metafeatures.metafeatures import Metafeatures
-from test.config import CORRECTNESS_SEED
+from test.config import CORRECTNESS_SEED, METADATA_PATH
 from test.data.dataset import read_dataset
 from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
 
@@ -22,8 +22,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
     def setUp(self):
         self.datasets = {}
-        self.data_folder = "./test/data/"
-        with open(self.data_folder + "test_dataset_metadata.json", "r") as fh:
+        with open(METADATA_PATH, "r") as fh:
             dataset_descriptions = json.load(fh)
 
         for dataset_description in dataset_descriptions:
@@ -87,12 +86,12 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 }
 
         if test_failures != {}:
-            failure_report_path = f"./correctness_failues_{test_name}.json"
+            failure_report_path = f"./correctness_failures_{test_name}.json"
             with open(failure_report_path, "w") as fh:
                 json.dump(test_failures, fh, indent=4)
             self.assertTrue(
                 False,
-                "Some metafeatures were computed incorrectly." +\
+                "Some metafeatures were computed incorrectly. " +\
                 f"Details have been written in {failure_report_path}."
             )
 
@@ -246,7 +245,12 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                     timeout, compute_time,
                     f"Compute metafeatures exceeded timeout on '{filename}'"
                 )
-                self.assertEqual(df.shape[1], 2*len(Metafeatures().list_metafeatures()), "Some metafeatures were not returned...")
+                n_computed_mfs = len(computed_mfs)
+                n_computable_mfs = len(metafeatures.list_metafeatures())
+                self.assertEqual(
+                    2 * n_computable_mfs, n_computed_mfs,
+                    f"{test_name} computed an incorrect number of metafeatures"
+                )
 
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """

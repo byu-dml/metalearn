@@ -5,12 +5,9 @@ import time
 import pandas as pd
 
 from metalearn.metafeatures.metafeatures import Metafeatures
-from test.config import CORRECTNESS_SEED
+from test.config import CORRECTNESS_SEED, METAFEATURES_DIR, METADATA_PATH
 from .dataset import read_dataset
 
-
-METADATA_PATH = './test/data/test_dataset_metadata.json'
-METAFEATURES_DIR = './test/data/dataset_metafeatures/'
 
 def extract_metafeatures(X, Y, seed=None):
     metafeatures = {}
