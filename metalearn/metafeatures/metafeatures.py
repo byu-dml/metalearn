@@ -15,12 +15,12 @@ from signal import signal, SIGPIPE, SIG_IGN
 # this should cause "BROKEN PIPE ERROR" to be ignored
 signal(SIGPIPE, SIG_IGN)
 
-
 from .common_operations import *
 from .simple_metafeatures import *
 from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
+
 
 class Metafeatures(object):
     """
@@ -37,6 +37,7 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
     TIMEOUT = "TIMEOUT"
     NO_TARGETS = "NO_TARGETS"
+    N_CROSS_VALIDATION_FOLDS = 2
 
     def __init__(self):
         self.queue = multiprocessing.Queue()
@@ -61,25 +62,29 @@ class Metafeatures(object):
         return self.metafeatures_list
 
     def compute(
-        self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
-        metafeature_ids: List = None, sample_rows=True, sample_columns=True,
-        seed=None, timeout=None
+        self, X: DataFrame, Y: Series = None,
+        column_types: Dict[str, str] = None, metafeature_ids: List = None,
+        sample_shape=None, seed=None, timeout=None
     ) -> DataFrame:
         """
         Parameters
         ----------
         X: pandas.DataFrame, the dataset features
         Y: pandas.Seris, the dataset targets
-        column_types: Dict[str, str], dict from column name to column type
-            as "NUMERIC" or "CATEGORICAL", must include Y column
-        metafeature_ids: list, the metafeatures to compute.
-            default of None indicates to compute all metafeatures
-        sample_rows: bool, whether to uniformly sample from the rows
-        sample_columns: bool, whether to uniformly sample from the columns
-        seed: int, the seed used to generate psuedo-random numbers.
-            default is None, a seed will be generated randomly
-        timeout: int, the maximum amount of wall time in seconds used to
-            compute metafeatures
+        column_types: Dict[str, str], dict from column name to column type as
+            "NUMERIC" or "CATEGORICAL", must include Y column
+        metafeature_ids: list, the metafeatures to compute. default of None
+            indicates to compute all metafeatures
+        sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
+            Default is (None, None), indicate not to sample rows or columns.
+        timeout: int, the maximum wall-time in seconds used to compute
+            metafeatures. metafeatures will be computed in order indicated by
+            metafeature_ids. metafeatures not computed due to timeout will be
+            returned with the value "TIMEOUT".
+        seed: int, the seed used to generate psuedo-random numbers. when None
+            is given, a seed will be generated psuedo-randomly. this can be
+            used for reproducibility of metafeatures. a generated seed can be
+            accessed through the 'seed' property, after calling this method.
 
         Returns
         -------
@@ -88,16 +93,17 @@ class Metafeatures(object):
         value
         """
         timeout = None # temporarily remove timeout due to broken pipe bug
+        if sample_shape is None:
+            sample_shape = (None, None)
         if timeout is not None:
             timeout = timeout - self.TIMEOUT_BUFFER
 
         self._threadsafe_timeout_function(
             self._compute,
             (
-                X, Y, column_types, metafeature_ids, sample_rows,
-                sample_columns, seed
+                X, Y, column_types, metafeature_ids, sample_shape, seed
             ),
-            timeout,
+            timeout
         )
 
         try:
@@ -155,39 +161,43 @@ class Metafeatures(object):
         return target_dependent_metafeatures
 
     def _compute(
-        self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-        seed
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed
     ):
-
         try:
             self._validate_compute_arguments(
-                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-                seed
+                X, Y, column_types, metafeature_ids, sample_shape, seed
             )
             if column_types is None:
                 column_types = self._infer_column_types(X, Y)
             if metafeature_ids is None:
                 metafeature_ids = self.list_metafeatures()
             self._validate_compute_arguments(
-                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-                seed
+                X, Y, column_types, metafeature_ids, sample_shape, seed
             )
-            initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
+            initialized_df = DataFrame({
+                name:[self.TIMEOUT] for name in (
+                    metafeature_ids + [
+                        name + "_Time" for name in metafeature_ids
+                    ]
+                )
+            })
             self.queue.put(initialized_df)
 
             X_raw = X
             X = X_raw.dropna(axis=1, how='all')
-            self._set_random_seed(seed)
+            self._set_seed(seed)
             self.resource_results_dict = {
                 'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
                 'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
                 'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
-                'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
-                'SampleRowsFlag': {
-                    self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
+                'ColumnTypes': {
+                    self.VALUE_NAME: column_types, self.TIME_NAME: 0.
                 },
-                'SampleColumnsFlag': {
-                    self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
+                'sample_shape': {
+                    self.VALUE_NAME: sample_shape, self.TIME_NAME: 0.
+                },
+                "n_cross_validation_folds": {
+                    self.VALUE_NAME: self.N_CROSS_VALIDATION_FOLDS, self.TIME_NAME: 0.
                 }
             }
             if Y is None:
@@ -204,18 +214,17 @@ class Metafeatures(object):
         except Exception as e:
             self.error.put(e)
 
-    def _set_random_seed(self, seed):
+    def _set_seed(self, seed):
         if seed is None:
             self.seed = np.random.randint(2**32)
         else:
             self.seed = seed
 
-    def _get_random_seed(self):
+    def _get_seed(self):
         return (self.seed + self.seed_offset,)
 
     def _validate_compute_arguments(
-        self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-        seed
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -258,6 +267,12 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
+        if not sample_shape[0] is None and not Y is None:
+            min_samples = Y.unique().shape[0] * self.N_CROSS_VALIDATION_FOLDS
+            if min_samples > sample_shape[0]:
+                raise ValueError(f"Cannot sample less than {min_samples} rows from Y")
+        if not sample_shape[1] is None and sample_shape[1] < 1:
+            raise ValueError("Cannot sample less than 1 column")
 
     def _infer_column_types(self, X, Y):
         column_types = {}
@@ -347,51 +362,67 @@ class Metafeatures(object):
             num_nan = np.sum(feature_series.isnull())
             np.random.seed(seed)
             col[feature_series.isnull()] = np.random.choice(
-                dropped_nan_series, num_nan
+                dropped_nan_series, size=num_nan
             )
             if column_types[feature_series.name] == self.CATEGORICAL:
                 feature_series = pd.get_dummies(feature_series)
             series_array.append(feature_series)
         return (pd.concat(series_array, axis=1, copy=False),)
 
-    def _get_sample_of_columns(
-        self, X, sample_columns, seed=42, max_columns=150
-    ):
-        if sample_columns and X.shape[1] > max_columns:
+    def _sample_columns(self, X, sample_shape, seed):
+        if sample_shape[1] is None or X.shape[1] <= sample_shape[1]:
+            X_sample = X
+        else:
             np.random.seed(seed)
-            column_indices = np.random.permutation(X.shape[1])[:max_columns]
-            columns = X.columns[column_indices]
-            return (X[columns],)
-        else:
-            return (X,)
+            sampled_column_indices = np.random.choice(
+                X.shape[1], size=sample_shape[1], replace=False
+            )
+            sampled_columns = X.columns[sampled_column_indices]
+            X_sample = X[sampled_columns]
+        return (X_sample,)
 
-    def _get_sample_of_rows(
-        self, X, Y, sample_rows, seed=42, approximate_max_rows=150000,
-        min_row_per_class=2
-    ):
-        if sample_rows == True and X.shape[0] > approximate_max_rows:
-            if not Y is None:
-                samples = []
-                total_rows = Y.shape[0]
-                class_groupby = Y.groupby(Y)
-                for group_key in class_groupby.groups:
-                    group = class_groupby.get_group(group_key).index
-                    num_to_sample = max(
-                        math.floor(
-                            float(group.shape[0]) / float(total_rows) *
-                            approximate_max_rows
-                        ), min_row_per_class
-                    )
-                    np.random.seed(seed)
-                    row_indices = np.random.permutation(group)[:num_to_sample]
-                    samples.append(row_indices)
-                row_indices = np.concatenate(samples)
-                return (X.iloc[row_indices], Y.iloc[row_indices])
-            else:
-                row_indices = np.random.choice(X.shape[0], approximate_max_rows, replace=False)
-                return(X.iloc[row_indices], Y)
+    def _sample_rows(self, X, Y, sample_shape, n_cross_validation_folds, seed):
+        """
+        Stratified uniform sampling of rows, according to the classes in Y.
+        Ensures there are enough samples from each class in Y for cross
+        validation.
+        """
+        np.random.seed(seed)
+        if sample_shape[0] is None or X.shape[0] <= sample_shape[0]:
+            X_sample, Y_sample = X, Y
+        elif Y is None:
+            row_indices = np.random.choice(
+                X.shape[0], size=sample_shape[0], replace=False
+            )
+            X_sample, Y_sample = X.iloc[row_indices], Y
         else:
-            return (X, Y)
+            row_indices = []
+            Y_groupby = Y.groupby(Y)
+            min_class_samples = n_cross_validation_folds
+            n_classes = len(Y_groupby)
+            for class_ in Y_groupby.groups:
+                class_indices = Y_groupby.get_group(class_).index
+                sample_ratio = (len(class_indices) - min_class_samples) / (
+                    Y.shape[0] - min_class_samples*n_classes
+                )
+                sample_ratio = max(0, sample_ratio)
+                n_samples = int(round(
+                    (sample_shape[0] - min_class_samples*n_classes) * sample_ratio + min_class_samples
+                ))
+                replace = False
+                # sample with replacement when data is limited
+                if n_samples > len(class_indices):
+                    replace = True
+                class_row_indices = np.random.choice(
+                    class_indices, size=n_samples, replace=replace
+                )
+                row_indices = np.append(row_indices, class_row_indices)
+            n_sampled_rows = len(row_indices)
+            # todo handle this case internally
+            if n_sampled_rows != sample_shape[0]:
+                raise Exception(f"sample_shape {sample_shape} sampled rows {n_sampled_rows}")
+            X_sample, Y_sample = X.iloc[row_indices], Y.iloc[row_indices]
+        return (X_sample, Y_sample)
 
     def _get_categorical_features_with_no_missing_values(
         self, X_sample, column_types

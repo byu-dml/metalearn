@@ -233,6 +233,13 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
                 self.assertEqual(df.shape[1], 2*len(Metafeatures().list_metafeatures()), "Some metafeatures were not returned...")
 
+    def test_sampling(self):
+        for filename, dataset in self.datasets.items():
+            mf = Metafeatures()
+            df = mf.compute(X=dataset["X"], Y=dataset["Y"], seed=0,
+                sample_shape=(8,2)
+            )
+
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
 
