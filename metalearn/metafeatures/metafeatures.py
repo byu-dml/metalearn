@@ -340,7 +340,7 @@ class Metafeatures(object):
         series_array = []
         for feature in X_sample.columns:
             feature_series = X_sample[feature].copy()
-            col = feature_series.as_matrix()
+            col = feature_series.values
             dropped_nan_series = X_sampled_columns[feature].dropna(
                 axis=0,how='any'
             )
