@@ -36,7 +36,8 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                     metafeatures = json.load(fh)
                 self.datasets[filename] = {
                     "X": X, "Y": Y, "known_metafeatures": metafeatures,
-                    "known_metafeatures_path": known_dataset_metafeatures_path
+                    "known_metafeatures_path": known_dataset_metafeatures_path,
+                    "test": {}
                 }
             else:
                 raise FileNotFoundError(f"{known_dataset_metafeatures_path} does not exist" )
@@ -44,7 +45,19 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
     def tearDown(self):
         del self.datasets
 
-    def _test_correctness(self, computed_mfs, known_mfs, test_name):
+    def _process_results(self, test_failures, test_name):
+        if test_failures != {}:
+            failure_report_path = f"./failures_{test_name}.json"
+            with open(failure_report_path, "w") as fh:
+                json.dump(test_failures, fh, indent=4)
+            self.assertTrue(
+                False,
+                "Some metafeatures were computed incorrectly. " +\
+                f"Details have been written in {failure_report_path}."
+            )
+
+
+    def _check_correctness(self, computed_mfs, known_mfs, filename):
         """
         Tests whether computed_mfs are close to previously computed metafeature
         values. This assumes that the previously computed values are correct
@@ -86,14 +99,16 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 }
 
         if test_failures != {}:
-            failure_report_path = f"./correctness_failures_{test_name}.json"
-            with open(failure_report_path, "w") as fh:
-                json.dump(test_failures, fh, indent=4)
-            self.assertTrue(
-                False,
-                "Some metafeatures were computed incorrectly. " +\
-                f"Details have been written in {failure_report_path}."
-            )
+            test_failures = {filename: {"correctness": test_failures}}
+        return test_failures
+
+    def _perform_checks(self, functions):
+        check = {}
+        for function, args in functions.items():
+            check = function(*args)
+            if check != {}:
+                break
+        return check
 
     def test_run_without_fail(self):
         for dataset_filename, dataset in self.datasets.items():
@@ -105,6 +120,8 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         """
         Tests that metafeatures are computed correctly, for known datasets.
         """
+        required_checks = {}
+        test_failures = {}
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
             metafeatures_df = Metafeatures().compute(
@@ -112,9 +129,14 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             )
             computed_mfs = metafeatures_df.to_dict("records")[0]
             known_mfs = dataset["known_metafeatures"]
-            self._test_correctness(computed_mfs, known_mfs, test_name)
 
-    def test_compare_metafeature_lists(self):
+            required_checks[self._check_correctness] = [computed_mfs, known_mfs, dataset_filename]
+            test_failures.update(self._perform_checks(required_checks))
+
+        self._process_results(test_failures, test_name)
+
+
+    def _test_compare_metafeature_lists(self):
         inconsistencies = {}
         with open("./metalearn/metafeatures/metafeatures.json") as fh:
             master_list = json.load(fh)
@@ -201,26 +223,33 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
     def test_no_targets(self):
         """ Test Metafeatures().compute() without targets
         """
+        required_checks = {}
+        test_failures = {}
         test_name = inspect.stack()[0][3]
-        for filename, dataset in self.datasets.items():
+        for dataset_filename, dataset in self.datasets.items():
             metafeatures = Metafeatures()
             computed_mfs = metafeatures.compute(
                 X=dataset["X"], Y=None, seed=CORRECTNESS_SEED
             ).to_dict("records")[0]
+
+            known_mfs = dataset["known_metafeatures"]
+            target_dependent_metafeatures = self._get_target_dependent_metafeatures()
+            for mf_name in target_dependent_metafeatures:
+                known_mfs[mf_name] = Metafeatures.NO_TARGETS
+ 
             n_computed_mfs = len(computed_mfs)
             n_computable_mfs = len(metafeatures.list_metafeatures())
+
+            required_checks[self._check_correctness] = [computed_mfs, known_mfs, dataset_filename]
+            test_failures.update(self._perform_checks(required_checks))
 
             self.assertEqual(
                 2 * n_computable_mfs, n_computed_mfs,
                 f"{test_name} computed an incorrect number of metafeatures"
             )
 
-            known_mfs = dataset["known_metafeatures"]
-            target_dependent_metafeatures = self._get_target_dependent_metafeatures()
-            for mf_name in target_dependent_metafeatures:
-                known_mfs[mf_name] = Metafeatures.NO_TARGETS
+        self._process_results(test_failures, test_name)
 
-            self._test_correctness(computed_mfs, known_mfs, test_name)
 
     # temporarily remove timeout due to broken pipe bug
     def _test_timeout(self):
@@ -238,7 +267,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 compute_time = time.time() - start_time
                 computed_mfs = df.to_dict("records")[0]
                 known_mfs = dataset["known_metafeatures"]
-                self._test_correctness(
+                self._check_correctness(
                     computed_mfs, known_mfs, test_name + f"_{timeout}"
                 )
                 self.assertGreater(
@@ -377,7 +406,8 @@ class MetaFeaturesTestCase(unittest.TestCase):
             )
 
 def metafeatures_suite():
-    test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
+    # test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
+    test_cases = [MetaFeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
 
 """ === Anything under is line is currently not in use. === """
