@@ -87,43 +87,6 @@ class Metafeatures(object):
         """
         self.computed_metafeatures = DataFrame()
 
-        self._compute(
-            X, Y, column_types, metafeature_ids, sample_rows,
-            sample_columns, seed
-        )
-
-        return self.computed_metafeatures
-
-    def _is_target_dependent(self, resource_name):
-        if resource_name=='Y':
-            return True
-        elif resource_name=='XSample':
-            return False
-        else:
-            resource_info = self.resource_info_dict[resource_name]
-            parameters = resource_info.get('parameters', [])
-            for parameter in parameters:
-                if self._is_target_dependent(parameter):
-                    return True
-            function = resource_info['function']
-            parameters = self.function_dict[function]['parameters']
-            for parameter in parameters:
-                if self._is_target_dependent(parameter):
-                    return True
-            return False
-
-    def _get_target_dependent_metafeatures(self):
-        target_dependent_metafeatures = []
-        for mf in self.metafeatures_list:
-            if self._is_target_dependent(mf):
-                target_dependent_metafeatures.append(mf)
-        return target_dependent_metafeatures
-
-    def _compute(
-        self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-        seed
-    ):
-
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
             seed
@@ -163,6 +126,33 @@ class Metafeatures(object):
             # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
             metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
         self._compute_metafeatures(metafeature_ids)
+
+        return self.computed_metafeatures
+
+    def _is_target_dependent(self, resource_name):
+        if resource_name=='Y':
+            return True
+        elif resource_name=='XSample':
+            return False
+        else:
+            resource_info = self.resource_info_dict[resource_name]
+            parameters = resource_info.get('parameters', [])
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            function = resource_info['function']
+            parameters = self.function_dict[function]['parameters']
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            return False
+
+    def _get_target_dependent_metafeatures(self):
+        target_dependent_metafeatures = []
+        for mf in self.metafeatures_list:
+            if self._is_target_dependent(mf):
+                target_dependent_metafeatures.append(mf)
+        return target_dependent_metafeatures        
 
     def _set_random_seed(self, seed):
         if seed is None:
