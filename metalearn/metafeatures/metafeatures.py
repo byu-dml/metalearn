@@ -2,19 +2,12 @@ import os
 import math
 import json
 import time
-import multiprocessing
-import queue
-from contextlib import redirect_stderr
 import io
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
-from signal import signal, SIGPIPE, SIG_IGN
-# this should cause "BROKEN PIPE ERROR" to be ignored
-signal(SIGPIPE, SIG_IGN)
-
 
 from .common_operations import *
 from .simple_metafeatures import *
