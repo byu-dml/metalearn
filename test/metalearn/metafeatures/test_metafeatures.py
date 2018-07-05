@@ -235,7 +235,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
     def test_model(self):
         for filename, dataset in self.datasets.items():
-            get_model_info(dataset["X"], dataset["Y"])
+            get_model_info(dataset["X"], dataset["Y"], random=0)
 
 
 class MetaFeaturesTestCase(unittest.TestCase):

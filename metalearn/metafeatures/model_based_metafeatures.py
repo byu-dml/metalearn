@@ -44,7 +44,7 @@ def get_model_info(X,Y, random):
     y = iris.target
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 
-    estimator = DecisionTreeClassifier(random_state=random)
+    estimator = DecisionTreeClassifier(random_state=0)
     estimator.fit(X_train, y_train)
 
     n_nodes = estimator.tree_.node_count
