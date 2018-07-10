@@ -13,6 +13,7 @@ from .common_operations import *
 
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
+warnings.filterwarnings("ignore", category=FutureWarning) # suppress sklearn warnings
 
 '''
 

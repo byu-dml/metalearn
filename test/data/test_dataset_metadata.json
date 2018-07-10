@@ -1,0 +1,11 @@
+[
+    {
+        "filename": "38_sick_train_data.csv",
+        "target_class_name": "Class",
+        "index_col_name": "d3mIndex"
+    },
+    {
+        "filename": "small_test_dataset.arff",
+        "target_class_name": "class"
+    }
+]

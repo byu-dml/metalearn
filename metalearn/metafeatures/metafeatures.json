@@ -33,11 +33,17 @@
         "XPreprocessed": {
             "function": "self._get_preprocessed_data"
         },
+        "NoNaNCategoricalFeatures": {
+            "function": "self._get_categorical_features_with_no_missing_values"
+        },
         "NoNaNCategoricalFeaturesAndClass": {
             "function": "self._get_categorical_features_and_class_with_no_missing_values"
         },
-        "NoNaNNumericFeaturesAndClass": {
-            "function": "self._get_numeric_features_and_class_with_no_missing_values"
+        "NoNaNNumericFeatures": {
+            "function": "self._get_numeric_features_with_no_missing_values"
+        },
+        "NoNaNBinnedNumericFeatures": {
+            "function": "self._get_binned_numeric_features_with_no_missing_values"
         },
         "NoNaNBinnedNumericFeaturesAndClass": {
             "function": "self._get_binned_numeric_features_and_class_with_no_missing_values"
@@ -67,21 +73,29 @@
             "seed_offset": 2,
             "returns": ["XPreprocessed"]
         },
+        "self._get_categorical_features_with_no_missing_values": {
+            "parameters": ["XSample", "ColumnTypes"],
+            "returns": ["NoNaNCategoricalFeatures"]
+        },
         "self._get_categorical_features_and_class_with_no_missing_values": {
             "parameters": ["XSample","YSample", "ColumnTypes"],
             "returns": ["NoNaNCategoricalFeaturesAndClass"]
         },
-        "self._get_numeric_features_and_class_with_no_missing_values": {
-            "parameters": ["XSample","YSample", "ColumnTypes"],
-            "returns": ["NoNaNNumericFeaturesAndClass"]
+        "self._get_numeric_features_with_no_missing_values": {
+            "parameters": ["XSample","ColumnTypes"],
+            "returns": ["NoNaNNumericFeatures"]
+        },
+        "self._get_binned_numeric_features_with_no_missing_values": {
+            "parameters": ["NoNaNNumericFeatures"],
+            "returns": ["NoNaNBinnedNumericFeatures"]
         },
         "self._get_binned_numeric_features_and_class_with_no_missing_values": {
-            "parameters": ["NoNaNNumericFeaturesAndClass"],
+            "parameters": ["XSample","YSample","ColumnTypes"],
             "returns": ["NoNaNBinnedNumericFeaturesAndClass"]
         },
         "get_dataset_stats": {
-            "parameters": ["XRaw","Y", "ColumnTypes"],
-            "returns": ["NumberOfInstances","NumberOfFeatures","NumberOfClasses","NumberOfNumericFeatures","NumberOfCategoricalFeatures","RatioOfNumericFeatures","RatioOfCategoricalFeatures"]
+            "parameters": ["XRaw","ColumnTypes"],
+            "returns": ["NumberOfInstances","NumberOfFeatures","NumberOfNumericFeatures","NumberOfCategoricalFeatures","RatioOfNumericFeatures","RatioOfCategoricalFeatures"]
         },
         "get_dimensionality": {
             "parameters": ["NumberOfFeatures","NumberOfInstances"],
@@ -93,7 +107,7 @@
         },
         "get_class_stats": {
             "parameters": ["Y"],
-            "returns": ["MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
+            "returns": ["NumberOfClasses","MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
         },
         "get_categorical_cardinalities": {
             "parameters": ["X", "ColumnTypes"],
@@ -104,28 +118,24 @@
             "returns": ["MeanCardinalityOfNumericFeatures","StdevCardinalityOfNumericFeatures","MinCardinalityOfNumericFeatures","MaxCardinalityOfNumericFeatures"]
         },
         "get_numeric_means": {
-            "parameters": ["NoNaNNumericFeaturesAndClass"],
+            "parameters": ["NoNaNNumericFeatures"],
             "returns": ["MeanMeansOfNumericFeatures","StdevMeansOfNumericFeatures","MinMeansOfNumericFeatures","Quartile1MeansOfNumericFeatures","Quartile2MeansOfNumericFeatures","Quartile3MeansOfNumericFeatures","MaxMeansOfNumericFeatures"]
         },
         "get_numeric_stdev": {
-            "parameters": ["NoNaNNumericFeaturesAndClass"],
+            "parameters": ["NoNaNNumericFeatures"],
             "returns": ["MeanStdDevOfNumericFeatures","StdevStdDevOfNumericFeatures","MinStdDevOfNumericFeatures","Quartile1StdDevOfNumericFeatures","Quartile2StdDevOfNumericFeatures","Quartile3StdDevOfNumericFeatures","MaxStdDevOfNumericFeatures"]
         },
         "get_numeric_skewness": {
-            "parameters": ["NoNaNNumericFeaturesAndClass"],
+            "parameters": ["NoNaNNumericFeatures"],
             "returns": ["MeanSkewnessOfNumericFeatures","StdevSkewnessOfNumericFeatures","MinSkewnessOfNumericFeatures","Quartile1SkewnessOfNumericFeatures","Quartile2SkewnessOfNumericFeatures","Quartile3SkewnessOfNumericFeatures","MaxSkewnessOfNumericFeatures"]
         },
         "get_numeric_kurtosis": {
-            "parameters": ["NoNaNNumericFeaturesAndClass"],
+            "parameters": ["NoNaNNumericFeatures"],
             "returns": ["MeanKurtosisOfNumericFeatures","StdevKurtosisOfNumericFeatures","MinKurtosisOfNumericFeatures","Quartile1KurtosisOfNumericFeatures","Quartile2KurtosisOfNumericFeatures","Quartile3KurtosisOfNumericFeatures","MaxKurtosisOfNumericFeatures"]
         },
         "get_pca": {
             "parameters": ["XPreprocessed"],
             "returns": ["PredPCA1","PredPCA2","PredPCA3","PredEigen1","PredEigen2","PredEigen3","PredDet"]
-        },
-        "get_correlations": {
-            "parameters": ["XSample", "ColumnTypes"],
-            "returns": ["MeanCanonicalCorrelation","StdevCanonicalCorrelation"]
         },
         "get_class_entropy": {
             "parameters": ["YSample"],
@@ -185,7 +195,7 @@
             "function": "get_dataset_stats"
         },
         "NumberOfClasses": {
-            "function": "get_dataset_stats"
+            "function": "get_class_stats"
         },
         "NumberOfNumericFeatures": {
             "function": "get_dataset_stats"
@@ -361,73 +371,67 @@
         "PredDet": {
             "function": "get_pca"
         },
-        "MeanCanonicalCorrelation": {
-            "function": "get_correlations"
-        },
-        "StdevCanonicalCorrelation": {
-            "function": "get_correlations"
-        },
         "ClassEntropy": {
             "function": "get_class_entropy"
         },
         "MeanCategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
+            "parameters": ["NoNaNCategoricalFeatures"],
             "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
         },
         "MinCategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
+            "parameters": ["NoNaNCategoricalFeatures"],
             "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
         },
         "Quartile1CategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
+            "parameters": ["NoNaNCategoricalFeatures"],
             "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
         },
         "Quartile2CategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
+            "parameters": ["NoNaNCategoricalFeatures"],
             "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
         },
         "Quartile3CategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
+            "parameters": ["NoNaNCategoricalFeatures"],
             "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
         },
         "MaxCategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
+            "parameters": ["NoNaNCategoricalFeatures"],
             "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
         },
         "MeanNumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+            "parameters": ["NoNaNBinnedNumericFeatures"],
             "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
         },
         "MinNumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+            "parameters": ["NoNaNBinnedNumericFeatures"],
             "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
         },
         "Quartile1NumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+            "parameters": ["NoNaNBinnedNumericFeatures"],
             "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
         },
         "Quartile2NumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+            "parameters": ["NoNaNBinnedNumericFeatures"],
             "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
         },
         "Quartile3NumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+            "parameters": ["NoNaNBinnedNumericFeatures"],
             "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
         },
         "MaxNumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
+            "parameters": ["NoNaNBinnedNumericFeatures"],
             "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
         },
         "MeanCategoricalJointEntropy": {
