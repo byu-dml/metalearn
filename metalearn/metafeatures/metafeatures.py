@@ -6,7 +6,9 @@ import multiprocessing
 import queue
 from contextlib import redirect_stderr
 import io
+import sys
 from typing import Dict, List
+import traceback
 
 import numpy as np
 import pandas as pd
@@ -21,6 +23,7 @@ from .simple_metafeatures import *
 from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
+from .model_based_metafeatures import *
 
 class Metafeatures(object):
     """

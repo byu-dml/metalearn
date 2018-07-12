@@ -13,7 +13,6 @@ import numpy as np
 from metalearn.metafeatures.metafeatures import Metafeatures
 from test.data.dataset import read_dataset
 from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
-from metalearn.metafeatures.model_based_metafeatures import get_model_info
 
 
 class MetaFeaturesWithDataTestCase(unittest.TestCase):
@@ -233,10 +232,6 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 self.assertGreater(timeout, compute_time, "computing metafeatures exceeded max time. dataset: '{}', max time: {}, actual time: {}".format(filename, timeout, compute_time))
                 self.assertEqual(df.shape[1], 2*len(Metafeatures().list_metafeatures()), "Some metafeatures were not returned...")
 
-    def test_model(self):
-        for filename, dataset in self.datasets.items():
-            get_model_info(dataset["X"], dataset["Y"], random=0)
-
 
 class MetaFeaturesTestCase(unittest.TestCase):
     """ Contains tests for MetaFeatures that can be executed without loading data. """
@@ -363,11 +358,11 @@ class MetaFeaturesTestCase(unittest.TestCase):
             )
 
 def metafeatures_suite():
-    # test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
-    # return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
-    suite = unittest.TestSuite()
-    suite.addTest(MetaFeaturesWithDataTestCase("test_model"))
-    return suite
+    test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
+    return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+    # suite = unittest.TestSuite()
+    # suite.addTest(MetaFeaturesWithDataTestCase("test_model"))
+    # return suite
 
 """ === Anything under is line is currently not in use. === """
 def import_openml_dataset(id=4):

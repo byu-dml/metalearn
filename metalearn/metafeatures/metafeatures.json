@@ -47,6 +47,9 @@
         },
         "NoNaNBinnedNumericFeaturesAndClass": {
             "function": "self._get_binned_numeric_features_and_class_with_no_missing_values"
+        },
+        "DecisionTree": {
+            "function": "get_decision_tree"
         }
     },
     "functions": {
@@ -189,6 +192,27 @@
             "parameters": ["XPreprocessed","YSample", "Seed"],
             "seed_offset": 6,
             "returns": ["LinearDiscriminantAnalysisErrRate","LinearDiscriminantAnalysisKappa"]
+        },
+        "get_decision_tree": {
+            "parameters": ["XPreprocessed", "YSample", "Seed"],
+            "seed_offset": 13,
+            "returns": ["DecisionTree"]
+        },
+        "get_decision_tree_level_sizes": {
+            "parameters": ["DecisionTree"],
+            "returns": ["DecisionTreeLevelMean", "DecisionTreeLevelStdev", "DecisionTreeLevelMin", "DecisionTreeLevelMax"]
+        },
+        "get_decision_tree_branch_lengths": {
+            "parameters": ["DecisionTree"],
+            "returns": ["DecisionTreeBranchMean", "DecisionTreeBranchStdev", "DecisionTreeBranchMin", "DecisionTreeBranchMax"]
+        },
+        "get_decision_tree_general_info": {
+            "parameters": ["DecisionTree"],
+            "returns": ["DecisionTreeNodeCount", "DecisionTreeHeight", "DecisionTreeLeafCount"]
+        },
+        "get_decision_tree_attributes": {
+            "parameters": ["DecisionTree"],
+            "returns": ["DecisionTreeAttributeMean", "DecisionTreeAttributeStdev", "DecisionTreeAttributeMin", "DecisionTreeAttributeMax"]
         }
     },
     "metafeatures": {
@@ -643,6 +667,51 @@
         },
         "LinearDiscriminantAnalysisKappa": {
             "function": "get_lda"
+        },
+        "DecisionTreeLevelMean": {
+            "function": "get_decision_tree_level_sizes"
+        },
+        "DecisionTreeLevelStdev": {
+            "function": "get_decision_tree_level_sizes"
+        },
+        "DecisionTreeLevelMin": {
+            "function": "get_decision_tree_level_sizes"
+        },
+        "DecisionTreeLevelMax": {
+            "function": "get_decision_tree_level_sizes"
+        },
+        "DecisionTreeBranchMean": {
+            "function": "get_decision_tree_branch_lengths"
+        },
+        "DecisionTreeBranchStdev": {
+            "function": "get_decision_tree_branch_lengths"
+        },
+        "DecisionTreeBranchMin": {
+            "function": "get_decision_tree_branch_lengths"
+        },
+        "DecisionTreeBranchMax": {
+            "function": "get_decision_tree_branch_lengths"
+        },
+        "DecisionTreeNodeCount": {
+            "function": "get_decision_tree_general_info"
+        },
+        "DecisionTreeHeight": {
+            "function": "get_decision_tree_general_info"
+        },
+        "DecisionTreeLeafCount": {
+            "function": "get_decision_tree_general_info"
+        },
+        "DecisionTreeAttributeMean": {
+            "function": "get_decision_tree_attributes"
+        },
+        "DecisionTreeAttributeStdev": {
+            "function": "get_decision_tree_attributes"
+        },
+        "DecisionTreeAttributeMin": {
+            "function": "get_decision_tree_attributes"
+        },
+        "DecisionTreeAttributeMax": {
+            "function": "get_decision_tree_attributes"
         }
     }
 }
