@@ -43,7 +43,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         for filename, dataset in self.datasets.items():
             metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
             metafeatures_dict = metafeatures_df.to_dict('records')[0]
-            #print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
+            # print(json.dumps(metafeatures_dict, sort_keys=True, indent=4))
 
     def test_correctness(self):
         """ For each dataset that has a corresponding mf (metafeature) file present,
@@ -92,37 +92,33 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
             self.assertTrue(False, "Not all metafeatures matched previous results, output written to {}.".format(fail_report_file))
 
-    #@unittest.expectedFailure
+    # @unittest.expectedFailure
     def test_compare_openml(self):
 
         def import_openml_datasets():
 
             # get a list of datasets from openml
             datasets_dict = openml.datasets.list_datasets()
-            datasets = list([k for k,v in datasets_dict.items() if v["NumberOfInstances"] <= 50000 and v["NumberOfFeatures"] <= 200])
-            #get a list of filtered dataset ids
-            #rand_dataset_ids = datasets
+            datasets = list([k for k,v in datasets_dict.items() if v["NumberOfInstances"] <= 50000 and
+                             v["NumberOfFeatures"] <= 200])
+            # get a list of filtered dataset ids
+            # rand_dataset_ids = datasets
             rand_dataset_ids = datasets
-            #rand_dataset_ids = [564]
+            # rand_dataset_ids = [564]
 
             # get X, Y, and metafeatures from the datasets
-            oml_datasets = []
             inconsistencies = False
             runs = 0
-            sample_size = 10
+            sample_size = 3
             while runs < sample_size:
                 try:
                     # dataset_id = np.random.choice(datasets, replace = False)
                     dataset_id = 471
-                    print(dataset_id)
                     dataset = openml.datasets.get_dataset(dataset_id)
-                    # print(dir(dataset))
-                    print(dataset.default_target_attribute)
                     target = str(dataset.default_target_attribute).split(",")
                     df = _read_arff_dataset(dataset.data_file)
                     if len(target) <= 1:
                         if target[0] == "None":
-                            print("here")
                             X = df
                             Y = None
                         else:
@@ -135,19 +131,15 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                             inconsistencies = True
                         runs = runs + 1
                         print("Runs: " + str(runs) + "\tid: " + str(dataset_id))
-                except KeyboardInterrupt:
-                    raise KeyboardInterrupt
                 except arff.BadNominalValue:
                     continue
                 except TypeError as t:
-                    raise t;
-                    continue
+                    print(t)
                 except ValueError as v:
                     print(v)
                     continue
                 except IndexError as i:
                     print(i)
-                print(operator.add(1,2))
             self.assertFalse(inconsistencies, "Not all metafeatures matched results from OpenML.")
 
         def compare_with_openml(oml_dataset, dataset_id):
@@ -162,7 +154,6 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             consistentSharedMf = []
             inconsistentSharedMf = []
 
-            similarityQualifier = .05
             for metafeatureName, metafeatureValue in ourMetafeatures.items():
                 if 'int' in str(type(metafeatureValue)):
                     metafeatureValue = int(metafeatureValue)
@@ -183,16 +174,20 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                         print(f"Oml value: {omlMetafeatureValue} Our value: {metafeatureValue}")
                         print()
                         diff = abs(omlMetafeatureValue/multiplier - metafeatureValue)
-                        singleMfDict = {metafeatureName: {"OpenML Value": omlMetafeatureValue/multiplier, "Our Value": metafeatureValue, "Difference": diff}}
+                        singleMfDict = {metafeatureName: {"OpenML Value": omlMetafeatureValue/multiplier,
+                                                          "Our Value": metafeatureValue, "Difference": diff}
+                                        }
                         if diff <= .05:
                             consistentSharedMf.append(singleMfDict)
                         elif diff > .05 or diff == np.isnan(diff):
                             inconsistentSharedMf.append(singleMfDict)
 
+            # write results to json file
+            openmlData = { "INCONSISTENT SHARED METAFEATURES": inconsistentSharedMf,
+                           "CONSISTENT SHARED METAFEATURES": consistentSharedMf,
+                           "OUR EXCLUSIVE METAFEATURES": ourExclusiveMf,
+                           "OPENML EXCLUSIVE METAFEATURES": omlExclusiveMf}
 
-            #write results to json file
-            openmlData = { "INCONSISTENT SHARED METAFEATURES": inconsistentSharedMf, "CONSISTENT SHARED METAFEATURES": consistentSharedMf,
-                "OUR EXCLUSIVE METAFEATURES": ourExclusiveMf, "OPENML EXCLUSIVE METAFEATURES": omlExclusiveMf}
             file_path = './test/metalearn/metafeatures/openmlComparisons/'
             if not os.path.exists(file_path):
                 os.makedirs(file_path)
