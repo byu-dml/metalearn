@@ -90,6 +90,7 @@ class Metafeatures(object):
         one for the value and one for the compute time of that metafeature
         value
         """
+        timeout = None # temporarily remove timeout due to broken pipe bug
         if timeout is not None:
             timeout = timeout - self.TIMEOUT_BUFFER
 
