@@ -112,8 +112,8 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             sample_size = 3
             while runs < sample_size:
                 try:
-                    # dataset_id = np.random.choice(datasets, replace = False)
                     dataset_id = 471
+                    # dataset_id = np.random.choice(datasets, replace = False)
                     dataset = openml.datasets.get_dataset(dataset_id)
                     target = str(dataset.default_target_attribute).split(",")
                     df = _read_arff_dataset(dataset.data_file)
@@ -140,6 +140,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                     continue
                 except IndexError as i:
                     print(i)
+
             self.assertFalse(inconsistencies, "Not all metafeatures matched results from OpenML.")
 
         def compare_with_openml(oml_dataset, dataset_id):
@@ -155,6 +156,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             inconsistentSharedMf = []
 
             for metafeatureName, metafeatureValue in ourMetafeatures.items():
+
                 if 'int' in str(type(metafeatureValue)):
                     metafeatureValue = int(metafeatureValue)
                 elif 'float' in str(type(metafeatureValue)):
@@ -170,9 +172,9 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                         omlExclusiveMf.pop(openmlName)
                         omlMetafeatureValue = oml_dataset["metafeatures"][openmlName]
                         multiplier = mfNameMap[metafeatureName]["multiplier"]
-                        print(metafeatureName)
-                        print(f"Oml value: {omlMetafeatureValue} Our value: {metafeatureValue}")
-                        print()
+                        # print(metafeatureName)
+                        # print(f"Oml value: {omlMetafeatureValue} Our value: {metafeatureValue}")
+                        # print()
                         diff = abs(omlMetafeatureValue/multiplier - metafeatureValue)
                         singleMfDict = {metafeatureName: {"OpenML Value": omlMetafeatureValue/multiplier,
                                                           "Our Value": metafeatureValue, "Difference": diff}
