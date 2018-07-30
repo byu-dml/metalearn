@@ -13,7 +13,7 @@ def extract_metafeatures(X, Y, seed=None):
     metafeatures = {}
     features_df = Metafeatures().compute(X=X, Y=Y, seed=seed)
     for feature in features_df.columns:
-        metafeatures[feature] = features_df[feature].as_matrix()[0]
+        metafeatures[feature] = features_df[feature].values[0]
     return metafeatures
 
 def get_dataset_metafeatures_path(dataset_filename):
