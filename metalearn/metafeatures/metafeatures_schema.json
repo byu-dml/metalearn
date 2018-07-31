@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "definitions": {
+        "dataset_metafeature": {
+            "type": "object",
+            "required": [
+                "value"
+            ],
+            "properties": {
+                "value": {
+                    "type": [
+                        "number", "null"
+                    ]
+                },
+                "compute_time": {
+                    "type": [
+                        "number", "null"
+                    ],
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                }
+            }
+        }
+    },
+    "patternProperties": {
+        "^[a-zA-Z0-9]+$": {
+            "$ref": "#/definitions/dataset_metafeature"
+        }
+    }
+}
