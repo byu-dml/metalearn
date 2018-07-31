@@ -94,6 +94,7 @@ class Metafeatures(object):
         one for the value and one for the compute time of that metafeature
         value
         """
+        timeout = None # temporarily remove timeout due to broken pipe bug
         if timeout is not None:
             timeout = timeout - self.TIMEOUT_BUFFER
 
@@ -339,7 +340,7 @@ class Metafeatures(object):
         series_array = []
         for feature in X_sample.columns:
             feature_series = X_sample[feature].copy()
-            col = feature_series.as_matrix()
+            col = feature_series.values
             dropped_nan_series = X_sampled_columns[feature].dropna(
                 axis=0,how='any'
             )
