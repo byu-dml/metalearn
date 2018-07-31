@@ -37,6 +37,7 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
     TIMEOUT = "TIMEOUT"
     NO_TARGETS = "NO_TARGETS"
+    COMPUTE_TIME_NAME = "_Time"
 
     def __init__(self):
         self.queue = multiprocessing.Queue()
@@ -63,7 +64,7 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
         metafeature_ids: List = None, sample_rows=True, sample_columns=True,
-        seed=None, timeout=None, time=True
+        seed=None, timeout=None, timer=False
     ) -> DataFrame:
         """
         Parameters
@@ -80,6 +81,8 @@ class Metafeatures(object):
             default is None, a seed will be generated randomly
         timeout: int, the maximum amount of wall time in seconds used to
             compute metafeatures
+        timer: bool, whether return the computation time of each metafeature in
+            addition to the value of each metafeature
 
         Returns
         -------
@@ -95,7 +98,7 @@ class Metafeatures(object):
             self._compute,
             (
                 X, Y, column_types, metafeature_ids, sample_rows,
-                sample_columns, seed, time
+                sample_columns, seed, timer
             ),
             timeout,
         )
@@ -155,7 +158,7 @@ class Metafeatures(object):
 
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-        seed, time
+        seed, timer
     ):
 
         try:
@@ -172,8 +175,8 @@ class Metafeatures(object):
                 seed
             )
 
-            if time:
-                initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
+            if timer:
+                initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+self.COMPUTE_TIME_NAME for name in metafeature_ids])})
             else:
                 initialized_df = DataFrame({name:[self.TIMEOUT] for name in metafeature_ids})
             self.queue.put(initialized_df)
@@ -199,12 +202,12 @@ class Metafeatures(object):
                 for metafeature_id in target_dependent_metafeatures:
                     if metafeature_id in metafeature_ids:
                         self.queue.put((metafeature_id,self.NO_TARGETS))
-                        if time:
-                            metafeature_time_id = metafeature_id + "_Time"
+                        if timer:
+                            metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
                             self.queue.put((metafeature_time_id,self.NO_TARGETS))
                 # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
                 metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
-            self._compute_metafeatures(metafeature_ids, time)
+            self._compute_metafeatures(metafeature_ids, timer)
         except Exception as e:
             self.error.put(e)
 
@@ -277,12 +280,12 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _compute_metafeatures(self, metafeature_ids, time):
+    def _compute_metafeatures(self, metafeature_ids, timer):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
             self.queue.put((metafeature_id,value))
-            if time:
-                metafeature_time_id = metafeature_id + "_Time"
+            if timer:
+                metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
                 self.queue.put((metafeature_time_id,time_value))
 
 

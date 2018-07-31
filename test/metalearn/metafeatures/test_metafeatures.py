@@ -68,7 +68,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
         # Since timing metafeatures are always different, ignore them
         computed_mfs = {
-            key: val for key, val in computed_mfs.items() if "_Time" not in key
+            key: val for key, val in computed_mfs.items() if Metafeatures.COMPUTE_TIME_NAME not in key
         }
 
         # this is a work-around to ensure computed_mfs is json serializable
@@ -149,18 +149,18 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
                 inconsistencies[known_dataset_metafeatures_path] = {}
 
-                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"], timer=True)
                 computed_mfs = metafeatures_df.to_dict("records")[0]
 
-                known_names_t = set({x for x in known_mfs.keys() if "_Time" in x})
-                computed_names_t = set({x for x in computed_mfs.keys() if "_Time" in x})
+                known_names_t = set({x for x in known_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME in x})
+                computed_names_t = set({x for x in computed_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME in x})
                 intersect_t = known_names_t.intersection(computed_names_t)
 
                 known_names_t_unique = known_names_t - intersect_t
                 computed_names_t_unique = computed_names_t - intersect_t
 
-                known_names_no_t = set({x for x in known_mfs.keys() if "_Time" not in x})
-                computed_names_no_t = set({x for x in computed_mfs.keys() if "_Time" not in x})
+                known_names_no_t = set({x for x in known_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME not in x})
+                computed_names_no_t = set({x for x in computed_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME not in x})
                 intersect = master_names.intersection(computed_names_no_t.intersection(known_names_no_t))
 
                 master_names_unique = master_names - intersect
@@ -235,7 +235,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             target_dependent_metafeatures = self._get_target_dependent_metafeatures()
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = Metafeatures.NO_TARGETS
- 
+
             n_computed_mfs = len(computed_mfs)
             n_computable_mfs = len(metafeatures.list_metafeatures())
 
@@ -243,7 +243,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             test_failures.update(self._perform_checks(required_checks))
 
             self.assertEqual(
-                2 * n_computable_mfs, n_computed_mfs,
+                n_computable_mfs, n_computed_mfs,
                 f"{test_name} computed an incorrect number of metafeatures"
             )
 
@@ -289,13 +289,13 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 with open(known_dataset_metafeatures_path) as fh:
                     known_mfs = json.load(fh)
             mf = Metafeatures()
-            df = mf.compute(X=dataset["X"], Y=dataset["Y"], seed=0, time=False)
+            df = mf.compute(X=dataset["X"], Y=dataset["Y"], seed=0, timer=False)
             computed_mfs = df.to_dict('records')[0]
             if not known_mfs is None:
-                known_mfs = {k: v for k,v in known_mfs.items() if "_Time" not in k}
+                known_mfs = {k: v for k,v in known_mfs.items() if Metafeatures.COMPUTE_TIME_NAME not in k}
             for mf_name, mf_value in computed_mfs.items():
-                self.assertTrue(math.isclose(mf_value, known_mfs[mf_name]), f'Metafeature {mf_name} not computed correctly with "time" flag set')
-            self.assertEqual(len(known_mfs), len(computed_mfs), "Some metafeatures were not returned when computed with 'time' flag set")
+                self.assertTrue(math.isclose(mf_value, known_mfs[mf_name]), f"Metafeature {mf_name} not computed correctly with 'timer' flag set")
+            self.assertEqual(len(known_mfs), len(computed_mfs), "Some metafeatures were not returned when computed with 'timer' flag set")
 
 
 class MetaFeaturesTestCase(unittest.TestCase):
@@ -526,7 +526,7 @@ def compare_with_openml(dataframe, omlMetafeatures):
 def sort_by_compute_time(metafeatures):
     metafeature_times = {}
     for key in metafeatures:
-        if "_Time" in key:
+        if Metafeatures.COMPUTE_TIME_NAME in key:
             metafeature_times[key] = metafeatures[key]
     return dict(sorted(metafeature_times.items(), key=lambda x: x[1], reverse=True))
 
