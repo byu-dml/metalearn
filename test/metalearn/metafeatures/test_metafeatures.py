@@ -297,28 +297,45 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         self._report_test_failures(test_failures, test_name)
 
     def test_compute_effects_on_dataset(self):
+        """
+        Tests whether computing metafeatures has any side effects on the input
+        X or Y data. Fails if there are any side effects.
+        """
         for dataset in self.datasets.values():
             X_copy, Y_copy = dataset["X"].copy(), dataset["Y"].copy()
             Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
-            if not X_copy.equals(dataset["X"]) or not Y_copy.equals(dataset["Y"]):
-                self.assertTrue(False, "Input data has changed after Metafeatures.compute")
+            if not (
+                X_copy.equals(dataset["X"]) and Y_copy.equals(dataset["Y"])
+            ):
+                self.assertTrue(
+                    False, "Input data has changed after Metafeatures.compute"
+                )
 
     def test_compute_effects_on_compute(self):
-
+        """
+        Tests whether computing metafeatures has any side effects on the
+        instance metafeatures object. Fails if there are any side effects.
+        """
         required_checks = {}
         test_failures = {}
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
-
             metafeatures_instance = Metafeatures()
-            metafeatures_instance.compute(X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED) #first run
-            metafeatures_df = metafeatures_instance.compute(X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED) #second run
+            # first run
+            metafeatures_instance.compute(
+                X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED
+            )
+            # second run
+            metafeatures_df = metafeatures_instance.compute(
+                X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED
+            )
             computed_mfs = metafeatures_df.to_dict('records')[0]
 
             known_mfs = dataset["known_metafeatures"]
-            required_checks[self._check_correctness] = [computed_mfs, known_mfs, dataset_filename]
+            required_checks[self._check_correctness] = [
+                computed_mfs, known_mfs, dataset_filename
+            ]
             test_failures.update(self._perform_checks(required_checks))
-
         self._report_test_failures(test_failures, test_name)
 
     # temporarily remove timeout due to broken pipe bug
