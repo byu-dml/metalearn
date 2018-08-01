@@ -304,7 +304,7 @@ class Metafeatures(object):
             total_time += time_value
         return (retrieved_parameters, total_time)
 
-    def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed=42):
+    def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed):
         series_array = []
         for feature in X_sample.columns:
             feature_series = X_sample[feature].copy()
