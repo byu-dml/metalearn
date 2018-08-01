@@ -1,4 +1,4 @@
-""" Contains unit tests for the MetaFeatures class. """
+""" Contains unit tests for the Metafeatures class. """
 import inspect
 import json
 import math
@@ -19,8 +19,8 @@ from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
 FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
 
-class MetaFeaturesWithDataTestCase(unittest.TestCase):
-    """ Contains tests for MetaFeatures that require loading data first. """
+class MetafeaturesWithDataTestCase(unittest.TestCase):
+    """ Contains tests for Metafeatures that require loading data first. """
 
     def setUp(self):
         self.datasets = {}
@@ -369,8 +369,8 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         self._report_test_failures(test_failures, test_name)
 
 
-class MetaFeaturesTestCase(unittest.TestCase):
-    """ Contains tests for MetaFeatures that can be executed without loading data. """
+class MetafeaturesTestCase(unittest.TestCase):
+    """ Contains tests for Metafeatures that can be executed without loading data. """
 
     def setUp(self):
         self.dummy_features = pd.DataFrame(np.random.rand(50, 50))
@@ -508,7 +508,7 @@ class MetaFeaturesTestCase(unittest.TestCase):
 
 
 def metafeatures_suite():
-    test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]
+    test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
 
 
