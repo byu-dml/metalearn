@@ -62,11 +62,7 @@ class Metafeatures(object):
         return self.metafeatures_list
 
     def list_target_dependent_metafeatures(self):
-        target_dependent_metafeatures = []
-        for mf in self.metafeatures_list:
-            if self._is_target_dependent(mf):
-                target_dependent_metafeatures.append(mf)
-        return target_dependent_metafeatures
+        return list(filter(self._is_target_dependent, self.metafeatures_list))
 
     def compute(
         self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
