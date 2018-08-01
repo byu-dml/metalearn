@@ -280,22 +280,30 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                     f"{test_name} computed an incorrect number of metafeatures"
                 )
 
-    def test_time_flag(self):
-        ''' Tests whether the Metafeatures.compute function works properly with the time flag set'''
-        for filename, dataset in self.datasets.items():
-            known_mfs = None
-            known_dataset_metafeatures_path = get_dataset_metafeatures_path(filename)
-            if os.path.exists(known_dataset_metafeatures_path):
-                with open(known_dataset_metafeatures_path) as fh:
-                    known_mfs = json.load(fh)
-            mf = Metafeatures()
-            df = mf.compute(X=dataset["X"], Y=dataset["Y"], seed=0, timer=False)
-            computed_mfs = df.to_dict('records')[0]
-            if not known_mfs is None:
-                known_mfs = {k: v for k,v in known_mfs.items() if Metafeatures.COMPUTE_TIME_NAME not in k}
-            for mf_name, mf_value in computed_mfs.items():
-                self.assertTrue(math.isclose(mf_value, known_mfs[mf_name]), f"Metafeature {mf_name} not computed correctly with 'timer' flag set")
-            self.assertEqual(len(known_mfs), len(computed_mfs), "Some metafeatures were not returned when computed with 'timer' flag set")
+    def test_timer_flag(self):
+        '''
+        Tests whether the Metafeatures.compute function works properly with and
+        without the timer flag set.
+        '''
+        required_checks = {}
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+
+        for dataset_filename, dataset in self.datasets.items():
+            for timer in [True, False]:
+                mf = Metafeatures()
+                metafeatures_df = mf.compute(
+                    X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                    timer=timer
+                )
+                computed_mfs = metafeatures_df.to_dict('records')[0]
+                known_mfs = dataset["known_metafeatures"]
+                required_checks[self._check_correctness] = (
+                    computed_mfs, known_mfs, dataset_filename
+                )
+                test_failures.update(self._perform_checks(required_checks))
+
+        self._report_test_failures(test_failures, test_name)
 
 
 class MetaFeaturesTestCase(unittest.TestCase):
