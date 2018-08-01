@@ -5,7 +5,6 @@ import math
 import os
 import random
 import time
-import copy
 import unittest
 
 # import openml
@@ -299,9 +298,9 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
     def test_compute_effects_on_dataset(self):
         for dataset in self.datasets.values():
-            dataset_copy = copy.deepcopy(dataset)
+            X_copy, Y_copy = dataset["X"].copy(), dataset["Y"].copy()
             Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
-            if not dataset_copy["X"].equals(dataset["X"]) or not dataset_copy["Y"].equals(dataset["Y"]):
+            if not X_copy.equals(dataset["X"]) or not Y_copy.equals(dataset["Y"]):
                 self.assertTrue(False, "Input data has changed after Metafeatures.compute")
 
     def test_compute_effects_on_compute(self):
