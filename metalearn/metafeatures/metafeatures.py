@@ -2,18 +2,12 @@ import os
 import math
 import json
 import time
-import multiprocessing
-import queue
-from contextlib import redirect_stderr
 import io
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
-from signal import signal, SIGPIPE, SIG_IGN
-# this should cause "BROKEN PIPE ERROR" to be ignored
-signal(SIGPIPE, SIG_IGN)
 
 from .common_operations import *
 from .simple_metafeatures import *
@@ -32,16 +26,13 @@ class Metafeatures(object):
 
     VALUE_NAME = 'value'
     TIME_NAME = 'time'
-    TIMEOUT_BUFFER = .1
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
-    TIMEOUT = "TIMEOUT"
     NO_TARGETS = "NO_TARGETS"
     N_CROSS_VALIDATION_FOLDS = 2
+    COMPUTE_TIME_NAME = "_Time"
 
     def __init__(self):
-        self.queue = multiprocessing.Queue()
-        self.error = multiprocessing.Queue()
         self.resource_info_dict = {}
         self.metafeatures_list = []
         mf_info_file_path = os.path.splitext(__file__)[0] + '.json'
@@ -61,10 +52,13 @@ class Metafeatures(object):
         """
         return self.metafeatures_list
 
+    def list_target_dependent_metafeatures(self):
+        return list(filter(self._is_target_dependent, self.metafeatures_list))
+
     def compute(
         self, X: DataFrame, Y: Series = None,
         column_types: Dict[str, str] = None, metafeature_ids: List = None,
-        sample_shape=None, seed=None, timeout=None
+        sample_shape=None, seed=None, timer=False
     ) -> DataFrame:
         """
         Parameters
@@ -77,14 +71,12 @@ class Metafeatures(object):
             indicates to compute all metafeatures
         sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
             Default is (None, None), indicate not to sample rows or columns.
-        timeout: int, the maximum wall-time in seconds used to compute
-            metafeatures. metafeatures will be computed in order indicated by
-            metafeature_ids. metafeatures not computed due to timeout will be
-            returned with the value "TIMEOUT".
         seed: int, the seed used to generate psuedo-random numbers. when None
             is given, a seed will be generated psuedo-randomly. this can be
             used for reproducibility of metafeatures. a generated seed can be
             accessed through the 'seed' property, after calling this method.
+        timer: bool, whether return the computation time of each metafeature in
+            addition to the value of each metafeature
 
         Returns
         -------
@@ -92,48 +84,52 @@ class Metafeatures(object):
         one for the value and one for the compute time of that metafeature
         value
         """
-        timeout = None # temporarily remove timeout due to broken pipe bug
+        self._validate_compute_arguments(
+            X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+        )
+        if column_types is None:
+            column_types = self._infer_column_types(X, Y)
+        if metafeature_ids is None:
+            metafeature_ids = self.list_metafeatures()
         if sample_shape is None:
             sample_shape = (None, None)
-        if timeout is not None:
-            timeout = timeout - self.TIMEOUT_BUFFER
-
-        self._threadsafe_timeout_function(
-            self._compute,
-            (
-                X, Y, column_types, metafeature_ids, sample_shape, seed
-            ),
-            timeout
+        self._validate_compute_arguments(
+            X, Y, column_types, metafeature_ids, sample_shape, seed, timer
         )
 
-        try:
-            self.computed_metafeatures = self.queue.get_nowait()
-        except queue.Empty:
-            self.computed_metafeatures = None
+        self.computed_metafeatures = DataFrame()
 
-        while True:
-            try:
-                mf, value = self.queue.get_nowait()
-            except queue.Empty:
-                break
-            else:
-                self.computed_metafeatures.at[0, mf] = value
+        X_raw = X
+        X = X_raw.dropna(axis=1, how='all')
+        self._set_seed(seed)
+        self.resource_results_dict = {
+            'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
+            'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
+            'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
+            'ColumnTypes': {
+                self.VALUE_NAME: column_types, self.TIME_NAME: 0.
+            },
+            'sample_shape': {
+                self.VALUE_NAME: sample_shape, self.TIME_NAME: 0.
+            },
+            "n_cross_validation_folds": {
+                self.VALUE_NAME: self.N_CROSS_VALIDATION_FOLDS, self.TIME_NAME: 0.
+            }
+        }
+        if Y is None:
+            target_dependent_metafeatures = self.list_target_dependent_metafeatures()
+            # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
+            for metafeature_id in target_dependent_metafeatures:
+                if metafeature_id in metafeature_ids:
+                    self.computed_metafeatures.at[0, metafeature_id] = self.NO_TARGETS
+                    if timer:
+                        metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
+                        self.computed_metafeatures.at[0, metafeature_time_id] = self.NO_TARGETS
+            # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
+            metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
+        self._compute_metafeatures(metafeature_ids, timer)
 
         return self.computed_metafeatures
-
-    def _threadsafe_timeout_function(self, f, args, timeout):
-        p = multiprocessing.Process(target=f, args=args)
-        p.start()
-        try:
-            p.join(timeout)
-            if p.is_alive():
-                p.terminate()
-                p.join()
-        except multiprocessing.TimeoutError:
-            pass
-
-        if not self.error.empty():
-            raise self.error.get()
 
     def _is_target_dependent(self, resource_name):
         if resource_name=='Y':
@@ -153,67 +149,6 @@ class Metafeatures(object):
                     return True
             return False
 
-    def _get_target_dependent_metafeatures(self):
-        target_dependent_metafeatures = []
-        for mf in self.metafeatures_list:
-            if self._is_target_dependent(mf):
-                target_dependent_metafeatures.append(mf)
-        return target_dependent_metafeatures
-
-    def _compute(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed
-    ):
-        try:
-            self._validate_compute_arguments(
-                X, Y, column_types, metafeature_ids, sample_shape, seed
-            )
-            if column_types is None:
-                column_types = self._infer_column_types(X, Y)
-            if metafeature_ids is None:
-                metafeature_ids = self.list_metafeatures()
-            self._validate_compute_arguments(
-                X, Y, column_types, metafeature_ids, sample_shape, seed
-            )
-            initialized_df = DataFrame({
-                name:[self.TIMEOUT] for name in (
-                    metafeature_ids + [
-                        name + "_Time" for name in metafeature_ids
-                    ]
-                )
-            })
-            self.queue.put(initialized_df)
-
-            X_raw = X
-            X = X_raw.dropna(axis=1, how='all')
-            self._set_seed(seed)
-            self.resource_results_dict = {
-                'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
-                'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
-                'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
-                'ColumnTypes': {
-                    self.VALUE_NAME: column_types, self.TIME_NAME: 0.
-                },
-                'sample_shape': {
-                    self.VALUE_NAME: sample_shape, self.TIME_NAME: 0.
-                },
-                "n_cross_validation_folds": {
-                    self.VALUE_NAME: self.N_CROSS_VALIDATION_FOLDS, self.TIME_NAME: 0.
-                }
-            }
-            if Y is None:
-                target_dependent_metafeatures = self._get_target_dependent_metafeatures()
-                # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
-                for metafeature_id in target_dependent_metafeatures:
-                    if metafeature_id in metafeature_ids:
-                        self.queue.put((metafeature_id,self.NO_TARGETS))
-                        metafeature_time_id = metafeature_id + "_Time"
-                        self.queue.put((metafeature_time_id,self.NO_TARGETS))
-                # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
-                metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
-            self._compute_metafeatures(metafeature_ids)
-        except Exception as e:
-            self.error.put(e)
-
     def _set_seed(self, seed):
         if seed is None:
             self.seed = np.random.randint(2**32)
@@ -224,7 +159,7 @@ class Metafeatures(object):
         return (self.seed + self.seed_offset,)
 
     def _validate_compute_arguments(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -267,12 +202,15 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
-        if not sample_shape[0] is None and not Y is None:
-            min_samples = Y.unique().shape[0] * self.N_CROSS_VALIDATION_FOLDS
-            if min_samples > sample_shape[0]:
-                raise ValueError(f"Cannot sample less than {min_samples} rows from Y")
-        if not sample_shape[1] is None and sample_shape[1] < 1:
-            raise ValueError("Cannot sample less than 1 column")
+        if not sample_shape is None:
+            if not sample_shape[0] is None and not Y is None:
+                min_samples = Y.unique().shape[0] * self.N_CROSS_VALIDATION_FOLDS
+                if min_samples > sample_shape[0]:
+                    raise ValueError(f"Cannot sample less than {min_samples} rows from Y")
+            if not sample_shape[1] is None and sample_shape[1] < 1:
+                raise ValueError("Cannot sample less than 1 column")
+        if not type(timer) is bool:
+            raise ValueError("`timer` must of type `bool`")
 
     def _infer_column_types(self, X, Y):
         column_types = {}
@@ -288,13 +226,13 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _compute_metafeatures(self, metafeature_ids):
+    def _compute_metafeatures(self, metafeature_ids, timer):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
-            self.queue.put((metafeature_id,value))
-            metafeature_time_id = metafeature_id + "_Time"
-            self.queue.put((metafeature_time_id,time_value))
-
+            self.computed_metafeatures.at[0, metafeature_id] = value
+            if timer:
+                metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
+                self.computed_metafeatures.at[0, metafeature_time_id] = time_value
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:
@@ -355,7 +293,7 @@ class Metafeatures(object):
         series_array = []
         for feature in X_sample.columns:
             feature_series = X_sample[feature].copy()
-            col = feature_series.as_matrix()
+            col = feature_series.values
             dropped_nan_series = X_sampled_columns[feature].dropna(
                 axis=0,how='any'
             )
