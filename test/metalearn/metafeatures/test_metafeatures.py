@@ -495,6 +495,17 @@ class MetaFeaturesTestCase(unittest.TestCase):
                 "Invalid number of column types test failed"
             )
 
+    def test_timer_type_input(self):
+        Metafeatures().compute(self.dummy_features, self.dummy_target, timer=True)
+        Metafeatures().compute(self.dummy_features, self.dummy_target, timer=False)
+        for timer in ["bad_timer", ["bad_timer"], {"bad_timer": True}, [True], set([False])]:
+            with self.assertRaises(ValueError) as cm:
+                Metafeatures().compute(self.dummy_features, self.dummy_target, timer=timer)
+                self.assertEqual(
+                    str(cm.exception),
+                    "`timer` must of type `bool`"
+                )
+
 
 def metafeatures_suite():
     test_cases = [MetaFeaturesTestCase, MetaFeaturesWithDataTestCase]

@@ -84,7 +84,7 @@ class Metafeatures(object):
 
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-            seed
+            seed, timer
         )
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
@@ -92,7 +92,7 @@ class Metafeatures(object):
             metafeature_ids = self.list_metafeatures()
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-            seed
+            seed, timer
         )
 
         X_raw = X
@@ -154,7 +154,7 @@ class Metafeatures(object):
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-        seed
+        seed, timer
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -197,6 +197,8 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
+        if not type(timer) is bool:
+            raise ValueError("`timer` must of type `bool`")
 
     def _infer_column_types(self, X, Y):
         column_types = {}
