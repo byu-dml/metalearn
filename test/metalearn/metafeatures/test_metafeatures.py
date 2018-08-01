@@ -154,9 +154,13 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 break
         return check
 
-    def test_run_without_fail(self):
-        for dataset_filename, dataset in self.datasets.items():
-            Metafeatures().compute(X=dataset["X"], Y=dataset["Y"])
+    def test_run_without_exception(self):
+        try:
+            for dataset_filename, dataset in self.datasets.items():
+                Metafeatures().compute(X=dataset["X"], Y=dataset["Y"])
+        except Exception as e:
+            exc_type = type(e).__name__
+            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
 
     def test_correctness(self):
         """Tests that metafeatures are computed correctly, for known datasets.
