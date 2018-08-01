@@ -71,7 +71,7 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
 
         # Since timing metafeatures are always different, ignore them
         computed_mfs = {
-            key: val for key, val in computed_mfs.items() if "_Time" not in key
+            key: val for key, val in computed_mfs.items() if Metafeatures.COMPUTE_TIME_NAME not in key
         }
 
         # this is a work-around to ensure computed_mfs is json serializable
@@ -166,18 +166,103 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
             metafeatures_df = Metafeatures().compute(
-                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED, timer=True
             )
             computed_mfs = metafeatures_df.to_dict("records")[0]
+            copmuted_mfs_no_time = {key: value for key, value in computed_mfs.items() if not Metafeatures.COMPUTE_TIME_NAME in key}
             known_mfs = dataset["known_metafeatures"]
 
-            required_checks[self._check_correctness] = [computed_mfs, known_mfs, dataset_filename]
+            required_checks[self._check_correctness] = [copmuted_mfs_no_time, known_mfs, dataset_filename]
             required_checks[self._check_compare_metafeature_lists] = [
                 computed_mfs, known_mfs, dataset_filename
             ]
             test_failures.update(self._perform_checks(required_checks))
 
         self._report_test_failures(test_failures, test_name)
+
+    def test_compare_metafeature_lists(self):
+        inconsistencies = {}
+        with open("./metalearn/metafeatures/metafeatures.json") as fh:
+            master_list = json.load(fh)
+        master_names = set(master_list["metafeatures"].keys())
+        for filename, dataset in self.datasets.items():
+            known_dataset_metafeatures_path = get_dataset_metafeatures_path(filename)
+
+            if os.path.exists(known_dataset_metafeatures_path):
+                with open(known_dataset_metafeatures_path) as fh:
+                    known_mfs = json.load(fh)
+
+                inconsistencies[known_dataset_metafeatures_path] = {}
+
+                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"], timer=True)
+                computed_mfs = metafeatures_df.to_dict("records")[0]
+
+                known_names_t = set({x for x in known_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME in x})
+                computed_names_t = set({x for x in computed_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME in x})
+                intersect_t = known_names_t.intersection(computed_names_t)
+
+                known_names_t_unique = known_names_t - intersect_t
+                computed_names_t_unique = computed_names_t - intersect_t
+
+                known_names_no_t = set({x for x in known_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME not in x})
+                computed_names_no_t = set({x for x in computed_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME not in x})
+                intersect = master_names.intersection(computed_names_no_t.intersection(known_names_no_t))
+
+                master_names_unique = master_names - intersect
+                known_names_unique = (known_names_no_t - intersect).union(known_names_t_unique)
+                computed_names_unique = (computed_names_no_t - intersect).union(computed_names_t_unique)
+
+                if len(known_names_unique) > 0:
+                    inconsistencies[known_dataset_metafeatures_path]["Known Metafeatures"] = list(known_names_unique)
+                if len(computed_names_unique) > 0:
+                    inconsistencies[known_dataset_metafeatures_path]["Computed Metafeatures"] = list(computed_names_unique)
+                if len(master_names_unique) > 0:
+                    inconsistencies[known_dataset_metafeatures_path]["Master List Metafeatures"] = list(master_names_unique)
+
+        self.assertGreater(len(inconsistencies), 0, "No known results could be loaded, metafeature lists could not be compared.")
+        if not all(i == {} for i in inconsistencies.values()):
+            inconsistencies = {k:v for (k,v) in inconsistencies.items() if v != {}}
+            inconsistency_report_file = "./test/metalearn/metafeatures/mf_inconsistencies.json"
+            with open(inconsistency_report_file, "w") as fh:
+                json.dump(inconsistencies, fh, indent=4)
+            self.assertTrue(False, "Metafeature lists do not match, output written to {}.".format(inconsistency_report_file))
+
+    def _is_target_dependent(self, resource_name):
+        if resource_name=="Y":
+            return True
+        elif resource_name=="XSample":
+            return False
+        else:
+            resource_info = self.resource_info_dict[resource_name]
+            parameters = resource_info.get("parameters", [])
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            function = resource_info["function"]
+            parameters = self.function_dict[function]["parameters"]
+            for parameter in parameters:
+                if self._is_target_dependent(parameter):
+                    return True
+            return False
+
+    def _get_target_dependent_metafeatures(self):
+        self.resource_info_dict = {}
+        metafeatures_list = []
+        mf_info_file_path = "./metalearn/metafeatures/metafeatures.json"
+        with open(mf_info_file_path, "r") as f:
+            mf_info_json = json.load(f)
+            self.function_dict = mf_info_json["functions"]
+            json_metafeatures_dict = mf_info_json["metafeatures"]
+            json_resources_dict = mf_info_json["resources"]
+            metafeatures_list = list(json_metafeatures_dict.keys())
+            combined_dict = {**json_metafeatures_dict, **json_resources_dict}
+            for key in combined_dict:
+                self.resource_info_dict[key] = combined_dict[key]
+        target_dependent_metafeatures = []
+        for mf in metafeatures_list:
+            if self._is_target_dependent(mf):
+                target_dependent_metafeatures.append(mf)
+        return target_dependent_metafeatures
 
     def test_no_targets(self):
         """ Test Metafeatures().compute() without targets
@@ -188,19 +273,27 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
         for dataset_filename, dataset in self.datasets.items():
             metafeatures = Metafeatures()
             computed_mfs = metafeatures.compute(
-                X=dataset["X"], Y=None, seed=CORRECTNESS_SEED
+                X=dataset["X"], Y=None, seed=CORRECTNESS_SEED, timer=True
             ).to_dict("records")[0]
-
+            copmuted_mfs_no_time = {key: value for key, value in computed_mfs.items() if not Metafeatures.COMPUTE_TIME_NAME in key}
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures().list_target_dependent_metafeatures()
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = Metafeatures.NO_TARGETS
 
-            required_checks[self._check_correctness] = [computed_mfs, known_mfs, dataset_filename]
+            n_computed_mfs = len(computed_mfs)
+            n_computable_mfs = len(metafeatures.list_metafeatures())
+
+            required_checks[self._check_correctness] = [copmuted_mfs_no_time, known_mfs, dataset_filename]
             required_checks[self._check_compare_metafeature_lists] = [
                 computed_mfs, known_mfs, dataset_filename
             ]
             test_failures.update(self._perform_checks(required_checks))
+
+            self.assertEqual(
+                2*n_computable_mfs, n_computed_mfs, # times 2 to include times
+                f"{test_name} computed an incorrect number of metafeatures"
+            )
 
         self._report_test_failures(test_failures, test_name)
 
@@ -231,6 +324,36 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                 self._test_compare_metafeature_lists(
                     computed_mfs, known_mfs, test_name + f"_{timeout}"
                 )
+
+    def test_timer_flag(self):
+        '''
+        Tests whether the Metafeatures.compute function works properly with and
+        without the timer flag set.
+        '''
+        required_checks = {}
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+
+        for dataset_filename, dataset in self.datasets.items():
+            for timer in [True, False]:
+                mf = Metafeatures()
+                metafeatures_df = mf.compute(
+                    X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                    timer=timer
+                )
+                computed_mfs = metafeatures_df.to_dict('records')[0]
+                known_mfs = dataset["known_metafeatures"]
+                required_checks[self._check_correctness] = (
+                    computed_mfs, known_mfs, dataset_filename
+                )
+                test_failures.update(self._perform_checks(required_checks))
+                if timer == True:
+                    multiplier = 1
+                else:
+                    multiplier = 2
+                self.assertEqual(multiplier * len(computed_mfs), len(known_mfs), f"Did not compute the correct number of metafeatures with `timer={timer}`")
+
+        self._report_test_failures(test_failures, test_name)
 
 
 class MetaFeaturesTestCase(unittest.TestCase):
@@ -468,7 +591,7 @@ def compare_with_openml(dataframe, omlMetafeatures):
 def sort_by_compute_time(metafeatures):
     metafeature_times = {}
     for key in metafeatures:
-        if "_Time" in key:
+        if Metafeatures.COMPUTE_TIME_NAME in key:
             metafeature_times[key] = metafeatures[key]
     return dict(sorted(metafeature_times.items(), key=lambda x: x[1], reverse=True))
 
