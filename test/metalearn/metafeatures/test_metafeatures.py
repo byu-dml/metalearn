@@ -227,43 +227,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 json.dump(inconsistencies, fh, indent=4)
             self.assertTrue(False, "Metafeature lists do not match, output written to {}.".format(inconsistency_report_file))
 
-    def _is_target_dependent(self, resource_name):
-        if resource_name=="Y":
-            return True
-        elif resource_name=="XSample":
-            return False
-        else:
-            resource_info = self.resource_info_dict[resource_name]
-            parameters = resource_info.get("parameters", [])
-            for parameter in parameters:
-                if self._is_target_dependent(parameter):
-                    return True
-            function = resource_info["function"]
-            parameters = self.function_dict[function]["parameters"]
-            for parameter in parameters:
-                if self._is_target_dependent(parameter):
-                    return True
-            return False
-
-    def _get_target_dependent_metafeatures(self):
-        self.resource_info_dict = {}
-        metafeatures_list = []
-        mf_info_file_path = "./metalearn/metafeatures/metafeatures.json"
-        with open(mf_info_file_path, "r") as f:
-            mf_info_json = json.load(f)
-            self.function_dict = mf_info_json["functions"]
-            json_metafeatures_dict = mf_info_json["metafeatures"]
-            json_resources_dict = mf_info_json["resources"]
-            metafeatures_list = list(json_metafeatures_dict.keys())
-            combined_dict = {**json_metafeatures_dict, **json_resources_dict}
-            for key in combined_dict:
-                self.resource_info_dict[key] = combined_dict[key]
-        target_dependent_metafeatures = []
-        for mf in metafeatures_list:
-            if self._is_target_dependent(mf):
-                target_dependent_metafeatures.append(mf)
-        return target_dependent_metafeatures
-
     def test_no_targets(self):
         """ Test Metafeatures().compute() without targets
         """
