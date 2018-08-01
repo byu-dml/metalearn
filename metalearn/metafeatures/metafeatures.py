@@ -30,6 +30,7 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
     TIMEOUT = "TIMEOUT"
     NO_TARGETS = "NO_TARGETS"
+    COMPUTE_TIME_NAME = "_Time"
 
     def __init__(self):
         self.resource_info_dict = {}
@@ -51,10 +52,13 @@ class Metafeatures(object):
         """
         return self.metafeatures_list
 
+    def list_target_dependent_metafeatures(self):
+        return list(filter(self._is_target_dependent, self.metafeatures_list))
+
     def compute(
         self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
         metafeature_ids: List = None, sample_rows=True, sample_columns=True,
-        seed=None, timeout=None
+        seed=None, timeout=None, timer=False
     ) -> DataFrame:
         """
         Parameters
@@ -71,6 +75,8 @@ class Metafeatures(object):
             default is None, a seed will be generated randomly
         timeout: int, the maximum amount of wall time in seconds used to
             compute metafeatures
+        timer: bool, whether return the computation time of each metafeature in
+            addition to the value of each metafeature
 
         Returns
         -------
@@ -109,16 +115,17 @@ class Metafeatures(object):
             }
         }
         if Y is None:
-            target_dependent_metafeatures = self._get_target_dependent_metafeatures()
+            target_dependent_metafeatures = self.list_target_dependent_metafeatures()
             # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
             for metafeature_id in target_dependent_metafeatures:
                 if metafeature_id in metafeature_ids:
                     self.computed_metafeatures.at[0, metafeature_id] = self.NO_TARGETS
-                    metafeature_time_id = metafeature_id + "_Time"
-                    self.computed_metafeatures.at[0, metafeature_time_id] = self.NO_TARGETS
+                    if timer:
+                        metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
+                        self.computed_metafeatures.at[0, metafeature_time_id] = self.NO_TARGETS
             # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
             metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
-        self._compute_metafeatures(metafeature_ids)
+        self._compute_metafeatures(metafeature_ids, timer)
 
         return self.computed_metafeatures
 
@@ -139,13 +146,6 @@ class Metafeatures(object):
                 if self._is_target_dependent(parameter):
                     return True
             return False
-
-    def _get_target_dependent_metafeatures(self):
-        target_dependent_metafeatures = []
-        for mf in self.metafeatures_list:
-            if self._is_target_dependent(mf):
-                target_dependent_metafeatures.append(mf)
-        return target_dependent_metafeatures        
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -216,13 +216,13 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _compute_metafeatures(self, metafeature_ids):
+    def _compute_metafeatures(self, metafeature_ids, timer):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
             self.computed_metafeatures.at[0, metafeature_id] = value
-            metafeature_time_id = metafeature_id + "_Time"
-            self.computed_metafeatures.at[0, metafeature_time_id] = time_value
-
+            if timer:
+                metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
+                self.computed_metafeatures.at[0, metafeature_time_id] = time_value
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:
