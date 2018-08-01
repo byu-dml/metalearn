@@ -2,19 +2,12 @@ import os
 import math
 import json
 import time
-import multiprocessing
-import queue
-from contextlib import redirect_stderr
 import io
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
-from signal import signal, SIGPIPE, SIG_IGN
-# this should cause "BROKEN PIPE ERROR" to be ignored
-signal(SIGPIPE, SIG_IGN)
-
 
 from .common_operations import *
 from .simple_metafeatures import *
@@ -32,16 +25,12 @@ class Metafeatures(object):
 
     VALUE_NAME = 'value'
     TIME_NAME = 'time'
-    TIMEOUT_BUFFER = .1
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
-    TIMEOUT = "TIMEOUT"
     NO_TARGETS = "NO_TARGETS"
     COMPUTE_TIME_NAME = "_Time"
 
     def __init__(self):
-        self.queue = multiprocessing.Queue()
-        self.error = multiprocessing.Queue()
         self.resource_info_dict = {}
         self.metafeatures_list = []
         mf_info_file_path = os.path.splitext(__file__)[0] + '.json'
@@ -67,7 +56,7 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
         metafeature_ids: List = None, sample_rows=True, sample_columns=True,
-        seed=None, timeout=None, timer=False
+        seed=None, timer=False
     ) -> DataFrame:
         """
         Parameters
@@ -82,8 +71,6 @@ class Metafeatures(object):
         sample_columns: bool, whether to uniformly sample from the columns
         seed: int, the seed used to generate psuedo-random numbers.
             default is None, a seed will be generated randomly
-        timeout: int, the maximum amount of wall time in seconds used to
-            compute metafeatures
         timer: bool, whether return the computation time of each metafeature in
             addition to the value of each metafeature
 
@@ -93,46 +80,50 @@ class Metafeatures(object):
         one for the value and one for the compute time of that metafeature
         value
         """
-        timeout = None # temporarily remove timeout due to broken pipe bug
-        if timeout is not None:
-            timeout = timeout - self.TIMEOUT_BUFFER
+        self.computed_metafeatures = DataFrame()
 
-        self._threadsafe_timeout_function(
-            self._compute,
-            (
-                X, Y, column_types, metafeature_ids, sample_rows,
-                sample_columns, seed, timer
-            ),
-            timeout,
+        self._validate_compute_arguments(
+            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+            seed
+        )
+        if column_types is None:
+            column_types = self._infer_column_types(X, Y)
+        if metafeature_ids is None:
+            metafeature_ids = self.list_metafeatures()
+        self._validate_compute_arguments(
+            X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
+            seed
         )
 
-        try:
-            self.computed_metafeatures = self.queue.get_nowait()
-        except queue.Empty:
-            self.computed_metafeatures = None
+        X_raw = X
+        X = X_raw.dropna(axis=1, how='all')
+        self._set_random_seed(seed)
+        self.resource_results_dict = {
+            'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
+            'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
+            'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
+            'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
+            'SampleRowsFlag': {
+                self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
+            },
+            'SampleColumnsFlag': {
+                self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
+            }
+        }
+        if Y is None:
+            target_dependent_metafeatures = self.list_target_dependent_metafeatures()
+            # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
+            for metafeature_id in target_dependent_metafeatures:
+                if metafeature_id in metafeature_ids:
+                    self.computed_metafeatures.at[0, metafeature_id] = self.NO_TARGETS
+                    if timer:
+                        metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
+                        self.computed_metafeatures.at[0, metafeature_time_id] = self.NO_TARGETS
+            # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
+            metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
+        self._compute_metafeatures(metafeature_ids, timer)
 
-        while True:
-            try:
-                mf, value = self.queue.get_nowait()
-            except queue.Empty:
-                break
-            else:
-                self.computed_metafeatures.at[0, mf] = value
         return self.computed_metafeatures
-
-    def _threadsafe_timeout_function(self, f, args, timeout):
-        p = multiprocessing.Process(target=f, args=args)
-        p.start()
-        try:
-            p.join(timeout)
-            if p.is_alive():
-                p.terminate()
-                p.join()
-        except multiprocessing.TimeoutError:
-            pass
-
-        if not self.error.empty():
-            raise self.error.get()
 
     def _is_target_dependent(self, resource_name):
         if resource_name=='Y':
@@ -151,61 +142,6 @@ class Metafeatures(object):
                 if self._is_target_dependent(parameter):
                     return True
             return False
-
-    def _compute(
-        self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-        seed, timer
-    ):
-
-        try:
-            self._validate_compute_arguments(
-                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-                seed
-            )
-            if column_types is None:
-                column_types = self._infer_column_types(X, Y)
-            if metafeature_ids is None:
-                metafeature_ids = self.list_metafeatures()
-            self._validate_compute_arguments(
-                X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-                seed
-            )
-
-            if timer:
-                initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+self.COMPUTE_TIME_NAME for name in metafeature_ids])})
-            else:
-                initialized_df = DataFrame({name:[self.TIMEOUT] for name in metafeature_ids})
-            self.queue.put(initialized_df)
-
-            X_raw = X
-            X = X_raw.dropna(axis=1, how='all')
-            self._set_random_seed(seed)
-            self.resource_results_dict = {
-                'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
-                'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
-                'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
-                'ColumnTypes': {self.VALUE_NAME: column_types, self.TIME_NAME: 0.},
-                'SampleRowsFlag': {
-                    self.VALUE_NAME: sample_rows, self.TIME_NAME: 0.
-                },
-                'SampleColumnsFlag': {
-                    self.VALUE_NAME: sample_columns, self.TIME_NAME: 0.
-                }
-            }
-            if Y is None:
-                target_dependent_metafeatures = self.list_target_dependent_metafeatures()
-                # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
-                for metafeature_id in target_dependent_metafeatures:
-                    if metafeature_id in metafeature_ids:
-                        self.queue.put((metafeature_id,self.NO_TARGETS))
-                        if timer:
-                            metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
-                            self.queue.put((metafeature_time_id,self.NO_TARGETS))
-                # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
-                metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
-            self._compute_metafeatures(metafeature_ids, timer)
-        except Exception as e:
-            self.error.put(e)
 
     def _set_random_seed(self, seed):
         if seed is None:
@@ -279,11 +215,10 @@ class Metafeatures(object):
     def _compute_metafeatures(self, metafeature_ids, timer):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
-            self.queue.put((metafeature_id,value))
+            self.computed_metafeatures.at[0, metafeature_id] = value
             if timer:
                 metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
-                self.queue.put((metafeature_time_id,time_value))
-
+                self.computed_metafeatures.at[0, metafeature_time_id] = time_value
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:

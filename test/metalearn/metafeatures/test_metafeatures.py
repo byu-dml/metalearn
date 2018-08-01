@@ -338,34 +338,6 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
             test_failures.update(self._perform_checks(required_checks))
         self._report_test_failures(test_failures, test_name)
 
-    # temporarily remove timeout due to broken pipe bug
-    def _test_timeout(self):
-        """Tests Metafeatures().compute() with timeout set"""
-        test_name = inspect.stack()[0][3]
-        for timeout in [3, 5, 10]:
-
-            test_failures = {}
-            for filename, dataset in self.datasets.items():
-                metafeatures = Metafeatures()
-                start_time = time.time()
-                df = metafeatures.compute(
-                    X=dataset["X"], Y=dataset["Y"], timeout=timeout,
-                    seed=CORRECTNESS_SEED
-                )
-                compute_time = time.time() - start_time
-                computed_mfs = df.to_dict("records")[0]
-                known_mfs = dataset["known_metafeatures"]
-                self._check_correctness(
-                    computed_mfs, known_mfs, test_name + f"_{timeout}"
-                )
-                self.assertGreater(
-                    timeout, compute_time,
-                    f"Compute metafeatures exceeded timeout on '{filename}'"
-                )
-                self._test_compare_metafeature_lists(
-                    computed_mfs, known_mfs, test_name + f"_{timeout}"
-                )
-
     def test_timer_flag(self):
         '''
         Tests whether the Metafeatures.compute function works properly with and
