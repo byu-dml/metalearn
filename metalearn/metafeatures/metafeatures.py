@@ -25,10 +25,8 @@ class Metafeatures(object):
 
     VALUE_NAME = 'value'
     TIME_NAME = 'time'
-    TIMEOUT_BUFFER = .1
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
-    TIMEOUT = "TIMEOUT"
     NO_TARGETS = "NO_TARGETS"
     COMPUTE_TIME_NAME = "_Time"
 
@@ -58,7 +56,7 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
         metafeature_ids: List = None, sample_rows=True, sample_columns=True,
-        seed=None, timeout=None, timer=False
+        seed=None, timer=False
     ) -> DataFrame:
         """
         Parameters
@@ -73,8 +71,6 @@ class Metafeatures(object):
         sample_columns: bool, whether to uniformly sample from the columns
         seed: int, the seed used to generate psuedo-random numbers.
             default is None, a seed will be generated randomly
-        timeout: int, the maximum amount of wall time in seconds used to
-            compute metafeatures
         timer: bool, whether return the computation time of each metafeature in
             addition to the value of each metafeature
 
