@@ -302,6 +302,11 @@ class MetaFeaturesWithDataTestCase(unittest.TestCase):
                     computed_mfs, known_mfs, dataset_filename
                 )
                 test_failures.update(self._perform_checks(required_checks))
+                if timer == True:
+                    multiplier = 1
+                else:
+                    multiplier = 2
+                self.assertEqual(multiplier * len(computed_mfs), len(known_mfs), f"Did not compute the correct number of metafeatures with `timer={timer}`")
 
         self._report_test_failures(test_failures, test_name)
 
