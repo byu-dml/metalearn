@@ -305,13 +305,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             test_failures.update(self._perform_checks(required_checks))
         self._report_test_failures(test_failures, test_name)
 
-    def test_sampling(self):
-        for filename, dataset in self.datasets.items():
-            mf = Metafeatures()
-            df = mf.compute(X=dataset["X"], Y=dataset["Y"], seed=0,
-                sample_shape=(8,2)
-            )
-
     def test_timer_flag(self):
         '''
         Tests whether the Metafeatures.compute function works properly with and
@@ -480,6 +473,70 @@ class MetafeaturesTestCase(unittest.TestCase):
                 "`timer` must of type `bool`"
             )
 
+    def test_sampling_shape_no_exception(self):
+        try:
+            Metafeatures().compute(
+                self.dummy_features, self.dummy_target, sample_shape=(10,10)
+            )
+        except Exception as e:
+            exc_type = type(e).__name__
+            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+
+    def test_sampling_shape_correctness(self):
+        sample_shape = (7,13)
+        metafeatures = Metafeatures()
+        dummy_mf_df = metafeatures.compute(
+            self.dummy_features, self.dummy_target, sample_shape=sample_shape
+        )
+        X_sample = metafeatures.resource_results_dict["XSample"]["value"]
+        self.assertEqual(
+            X_sample.shape, sample_shape,
+            f"Sampling produced incorrect shape {X_sample.shape}; should have" +
+            f" been {sample_shape}."
+        )
+
+    def test_sampling_shape_invalid_input(self):
+        error_tests = [
+            {
+                "sample_shape": "bad_shape",
+                "message": "`sample_shape` must be of type `tuple` or `list`"
+            },
+            {
+                "sample_shape": {0:"bad", 1:"shape"},
+                "message": "`sample_shape` must be of type `tuple` or `list`"
+            },
+            {
+                "sample_shape": (2,2,2),
+                "message": "`sample_shape` must be of length 2"
+            },
+            {
+                "sample_shape": [1],
+                "message": "`sample_shape` must be of length 2"
+            },
+            {
+                "sample_shape": (0,1),
+                "message": "Cannot sample less than one row"
+            },
+            {
+                "sample_shape": (1,0),
+                "message": "Cannot sample less than 1 column"
+            },
+            {
+                "sample_shape": (3,10),
+                # 4 based on self.dummy_target
+                "message": "Cannot sample less than 4 rows from Y"
+            }
+        ]
+        for test in error_tests:
+            with self.assertRaises(ValueError) as cm:
+                Metafeatures().compute(
+                    self.dummy_features, self.dummy_target,
+                    sample_shape=test["sample_shape"]
+                )
+            self.assertEqual(
+                str(cm.exception),
+                test["message"]
+            )
 
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]

@@ -202,15 +202,30 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
-        if not sample_shape is None:
-            if not sample_shape[0] is None and not Y is None:
-                min_samples = Y.unique().shape[0] * self.N_CROSS_VALIDATION_FOLDS
-                if min_samples > sample_shape[0]:
-                    raise ValueError(f"Cannot sample less than {min_samples} rows from Y")
-            if not sample_shape[1] is None and sample_shape[1] < 1:
-                raise ValueError("Cannot sample less than 1 column")
+        self._validate_sample_shape(
+            X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+        )
         if not type(timer) is bool:
             raise ValueError("`timer` must of type `bool`")
+
+    def _validate_sample_shape(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+    ):
+        if not sample_shape is None:
+            if not type(sample_shape) in [tuple, list]:
+                raise ValueError(
+                    "`sample_shape` must be of type `tuple` or `list`"
+                )
+            if len(sample_shape) != 2:
+                raise ValueError("`sample_shape` must be of length 2")
+            if not sample_shape[0] is None and sample_shape[0] < 1:
+                raise ValueError("Cannot sample less than one row")
+            if not sample_shape[1] is None and sample_shape[1] < 1:
+                raise ValueError("Cannot sample less than 1 column")
+            if not sample_shape[0] is None and not Y is None:
+                    min_samples = Y.unique().shape[0] * self.N_CROSS_VALIDATION_FOLDS
+                    if min_samples > sample_shape[0]:
+                        raise ValueError(f"Cannot sample less than {min_samples} rows from Y")
 
     def _infer_column_types(self, X, Y):
         column_types = {}
