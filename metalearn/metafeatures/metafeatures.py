@@ -37,6 +37,7 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
     TIMEOUT = "TIMEOUT"
     NO_TARGETS = "NO_TARGETS"
+    COMPUTE_TIME_NAME = "_Time"
 
     def __init__(self):
         self.queue = multiprocessing.Queue()
@@ -60,10 +61,13 @@ class Metafeatures(object):
         """
         return self.metafeatures_list
 
+    def list_target_dependent_metafeatures(self):
+        return list(filter(self._is_target_dependent, self.metafeatures_list))
+
     def compute(
         self, X: DataFrame, Y: Series = None, column_types: Dict[str, str] = None,
         metafeature_ids: List = None, sample_rows=True, sample_columns=True,
-        seed=None, timeout=None
+        seed=None, timeout=None, timer=False
     ) -> DataFrame:
         """
         Parameters
@@ -80,6 +84,8 @@ class Metafeatures(object):
             default is None, a seed will be generated randomly
         timeout: int, the maximum amount of wall time in seconds used to
             compute metafeatures
+        timer: bool, whether return the computation time of each metafeature in
+            addition to the value of each metafeature
 
         Returns
         -------
@@ -95,7 +101,7 @@ class Metafeatures(object):
             self._compute,
             (
                 X, Y, column_types, metafeature_ids, sample_rows,
-                sample_columns, seed
+                sample_columns, seed, timer
             ),
             timeout,
         )
@@ -112,7 +118,6 @@ class Metafeatures(object):
                 break
             else:
                 self.computed_metafeatures.at[0, mf] = value
-
         return self.computed_metafeatures
 
     def _threadsafe_timeout_function(self, f, args, timeout):
@@ -147,16 +152,9 @@ class Metafeatures(object):
                     return True
             return False
 
-    def _get_target_dependent_metafeatures(self):
-        target_dependent_metafeatures = []
-        for mf in self.metafeatures_list:
-            if self._is_target_dependent(mf):
-                target_dependent_metafeatures.append(mf)
-        return target_dependent_metafeatures
-
     def _compute(
         self, X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
-        seed
+        seed, timer
     ):
 
         try:
@@ -172,7 +170,11 @@ class Metafeatures(object):
                 X, Y, column_types, metafeature_ids, sample_rows, sample_columns,
                 seed
             )
-            initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+"_Time" for name in metafeature_ids])})
+
+            if timer:
+                initialized_df = DataFrame({name:[self.TIMEOUT] for name in (metafeature_ids + [name+self.COMPUTE_TIME_NAME for name in metafeature_ids])})
+            else:
+                initialized_df = DataFrame({name:[self.TIMEOUT] for name in metafeature_ids})
             self.queue.put(initialized_df)
 
             X_raw = X
@@ -191,16 +193,17 @@ class Metafeatures(object):
                 }
             }
             if Y is None:
-                target_dependent_metafeatures = self._get_target_dependent_metafeatures()
+                target_dependent_metafeatures = self.list_target_dependent_metafeatures()
                 # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
                 for metafeature_id in target_dependent_metafeatures:
                     if metafeature_id in metafeature_ids:
                         self.queue.put((metafeature_id,self.NO_TARGETS))
-                        metafeature_time_id = metafeature_id + "_Time"
-                        self.queue.put((metafeature_time_id,self.NO_TARGETS))
+                        if timer:
+                            metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
+                            self.queue.put((metafeature_time_id,self.NO_TARGETS))
                 # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
                 metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
-            self._compute_metafeatures(metafeature_ids)
+            self._compute_metafeatures(metafeature_ids, timer)
         except Exception as e:
             self.error.put(e)
 
@@ -273,12 +276,13 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _compute_metafeatures(self, metafeature_ids):
+    def _compute_metafeatures(self, metafeature_ids, timer):
         for metafeature_id in metafeature_ids:
             value, time_value = self._retrieve_resource(metafeature_id)
             self.queue.put((metafeature_id,value))
-            metafeature_time_id = metafeature_id + "_Time"
-            self.queue.put((metafeature_time_id,time_value))
+            if timer:
+                metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
+                self.queue.put((metafeature_time_id,time_value))
 
 
     def _retrieve_resource(self, resource_name):
