@@ -433,12 +433,12 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(
                 self.dummy_features, self.dummy_target, column_types
             )
-            self.assertTrue(
-                str(cm.exception).startswith(
-                    "One or more input column types are not valid:"
-                ),
-                "Some invalid column types test failed"
-            )
+        self.assertTrue(
+            str(cm.exception).startswith(
+                "One or more input column types are not valid:"
+            ),
+            "Some invalid column types test failed"
+        )
         # all invalid
         column_types = {feature: "INVALID_TYPE" for feature in self.dummy_features.columns}
         column_types[self.dummy_target.name] = "INVALID"
@@ -446,24 +446,24 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(
                 self.dummy_features, self.dummy_target, column_types
             )
-            self.assertTrue(
-                str(cm.exception).startswith(
-                    "One or more input column types are not valid:"
-                ),
-                "All invalid column types test failed"
-            )
+        self.assertTrue(
+            str(cm.exception).startswith(
+                "One or more input column types are not valid:"
+            ),
+            "All invalid column types test failed"
+        )
         # invalid number of column types
         del column_types[self.dummy_features.columns[0]]
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(
                 self.dummy_features, self.dummy_target, column_types
             )
-            self.assertEqual(
-                str(cm.exception),
-                "The number of column_types does not match the number of" +
-                "features plus the target",
-                "Invalid number of column types test failed"
-            )
+        self.assertEqual(
+            str(cm.exception),
+            "The number of column_types does not match the number of " +
+            "features plus the target",
+            "Invalid number of column types test failed"
+        )
 
     def test_timer_type_input(self):
         Metafeatures().compute(self.dummy_features, self.dummy_target, timer=True)
@@ -471,10 +471,10 @@ class MetafeaturesTestCase(unittest.TestCase):
         for timer in ["bad_timer", ["bad_timer"], {"bad_timer": True}, [True], set([False])]:
             with self.assertRaises(ValueError) as cm:
                 Metafeatures().compute(self.dummy_features, self.dummy_target, timer=timer)
-                self.assertEqual(
-                    str(cm.exception),
-                    "`timer` must of type `bool`"
-                )
+            self.assertEqual(
+                str(cm.exception),
+                "`timer` must of type `bool`"
+            )
 
 
 def metafeatures_suite():
