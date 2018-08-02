@@ -538,6 +538,44 @@ class MetafeaturesTestCase(unittest.TestCase):
                 test["message"]
             )
 
+    def test_n_folds_invalid_input(self):
+        tests = [
+            {
+                "n_folds": 0,
+                "message": "`n_folds` must be >= 2, but was 0"
+            },
+            {
+                "n_folds": 1,
+                "message": "`n_folds` must be >= 2, but was 1"
+            },
+            {
+                "n_folds": 2.1,
+                "message": "`n_folds` must be an integer, not 2.1"
+            },
+            {
+                "n_folds": "hello",
+                "message": "`n_folds` must be an integer, not hello"
+            },
+            {
+                "n_folds": [3],
+                "message": "`n_folds` must be an integer, not [3]"
+            },
+            {
+                "n_folds": {5:7},
+                "message": "`n_folds` must be an integer, not {5: 7}"
+            }
+        ]
+        for test in tests:
+            with self.assertRaises(ValueError) as cm:
+                Metafeatures().compute(
+                    self.dummy_features, self.dummy_target,
+                    n_folds=test["n_folds"]
+                )
+            self.assertEqual(
+                str(cm.exception),
+                test["message"]
+            )
+
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))

@@ -15,7 +15,7 @@
         "sample_shape": {
             "function": ""
         },
-        "n_cross_validation_folds": {
+        "n_folds": {
             "funtion": ""
         },
         "seed": {
@@ -65,8 +65,7 @@
         },
         "self._sample_rows": {
             "parameters": [
-                "XSampledColumns", "Y", "sample_shape",
-                "n_cross_validation_folds", "seed"
+                "XSampledColumns", "Y", "sample_shape", "n_folds", "seed"
             ],
             "seed_offset": 1,
             "returns": ["XSample","YSample"]
@@ -165,17 +164,17 @@
             "returns": []
         },
         "get_naive_bayes": {
-            "parameters": ["XPreprocessed","YSample", "seed"],
+            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
             "seed_offset": 3,
             "returns": ["NaiveBayesErrRate","NaiveBayesKappa"]
         },
         "get_knn_1": {
-            "parameters": ["XPreprocessed","YSample", "seed"],
+            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
             "seed_offset": 4,
             "returns": ["kNN1NErrRate","kNN1NKappa"]
         },
         "get_decision_stump": {
-            "parameters": ["XPreprocessed","YSample","seed"],
+            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
             "seed_offset": 5,
             "returns": ["DecisionStumpErrRate","DecisionStumpKappa"]
         },
@@ -185,7 +184,7 @@
             "returns": []
         },
         "get_lda": {
-            "parameters": ["XPreprocessed","YSample", "seed"],
+            "parameters": ["XPreprocessed","YSample", "n_folds", "seed"],
             "seed_offset": 6,
             "returns": ["LinearDiscriminantAnalysisErrRate","LinearDiscriminantAnalysisKappa"]
         }
@@ -597,37 +596,37 @@
         },
         "RandomTreeDepth1ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",1,"seed"],
+            "parameters": ["XPreprocessed", "YSample", 1, "n_folds", "seed"],
             "seed_offset": 7,
             "returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
         },
         "RandomTreeDepth1Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",1,"seed"],
+            "parameters": ["XPreprocessed", "YSample", 1, "n_folds", "seed"],
             "seed_offset": 8,
             "returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
         },
         "RandomTreeDepth2ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",2,"seed"],
+            "parameters": ["XPreprocessed", "YSample", 2, "n_folds", "seed"],
             "seed_offset": 9,
             "returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
         },
         "RandomTreeDepth2Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",2,"seed"],
+            "parameters": ["XPreprocessed", "YSample", 2, "n_folds", "seed"],
             "seed_offset": 10,
             "returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
         },
         "RandomTreeDepth3ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",3,"seed"],
+            "parameters": ["XPreprocessed", "YSample", 3, "n_folds", "seed"],
             "seed_offset": 11,
             "returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
         },
         "RandomTreeDepth3Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",3,"seed"],
+            "parameters": ["XPreprocessed", "YSample", 3, "n_folds", "seed"],
             "seed_offset": 12,
             "returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
         },

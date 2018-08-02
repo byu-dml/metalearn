@@ -29,7 +29,6 @@ class Metafeatures(object):
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
     NO_TARGETS = "NO_TARGETS"
-    N_CROSS_VALIDATION_FOLDS = 2
     COMPUTE_TIME_NAME = "_Time"
 
     def __init__(self):
@@ -58,7 +57,7 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series = None,
         column_types: Dict[str, str] = None, metafeature_ids: List = None,
-        sample_shape=None, seed=None, timer=False
+        sample_shape=None, seed=None, timer=False, n_folds=2
     ) -> DataFrame:
         """
         Parameters
@@ -77,6 +76,8 @@ class Metafeatures(object):
             accessed through the 'seed' property, after calling this method.
         timer: bool, whether return the computation time of each metafeature in
             addition to the value of each metafeature
+        n_folds: int, the number of cross validation folds used by the
+            landmarking metafeatures. also affects the sample_shape validation
 
         Returns
         -------
@@ -85,7 +86,8 @@ class Metafeatures(object):
         value
         """
         self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
+            n_folds
         )
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
@@ -94,7 +96,8 @@ class Metafeatures(object):
         if sample_shape is None:
             sample_shape = (None, None)
         self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
+            n_folds
         )
 
         self.computed_metafeatures = DataFrame()
@@ -112,8 +115,8 @@ class Metafeatures(object):
             'sample_shape': {
                 self.VALUE_NAME: sample_shape, self.TIME_NAME: 0.
             },
-            "n_cross_validation_folds": {
-                self.VALUE_NAME: self.N_CROSS_VALIDATION_FOLDS, self.TIME_NAME: 0.
+            "n_folds": {
+                self.VALUE_NAME: n_folds, self.TIME_NAME: 0.
             }
         }
         if Y is None:
@@ -159,7 +162,8 @@ class Metafeatures(object):
         return (self.seed + self.seed_offset,)
 
     def _validate_compute_arguments(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
+        n_folds
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -203,13 +207,19 @@ class Metafeatures(object):
                     format(invalid_metafeature_ids)
                 )
         self._validate_sample_shape(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
+            n_folds
         )
         if not type(timer) is bool:
             raise ValueError("`timer` must of type `bool`")
+        self._validate_n_folds(
+            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
+            n_folds
+        )
 
     def _validate_sample_shape(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
+        n_folds
     ):
         if not sample_shape is None:
             if not type(sample_shape) in [tuple, list]:
@@ -223,9 +233,20 @@ class Metafeatures(object):
             if not sample_shape[1] is None and sample_shape[1] < 1:
                 raise ValueError("Cannot sample less than 1 column")
             if not sample_shape[0] is None and not Y is None:
-                    min_samples = Y.unique().shape[0] * self.N_CROSS_VALIDATION_FOLDS
-                    if min_samples > sample_shape[0]:
-                        raise ValueError(f"Cannot sample less than {min_samples} rows from Y")
+                min_samples = Y.unique().shape[0] * n_folds
+                if min_samples > sample_shape[0]:
+                    raise ValueError(
+                        f"Cannot sample less than {min_samples} rows from Y"
+                    )
+
+    def _validate_n_folds(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
+        n_folds
+    ):
+        if not dtype_is_numeric(type(n_folds)) or (n_folds != int(n_folds)):
+            raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
+        if n_folds < 2:
+            raise ValueError(f"`n_folds` must be >= 2, but was {n_folds}")
 
     def _infer_column_types(self, X, Y):
         column_types = {}
@@ -334,7 +355,7 @@ class Metafeatures(object):
             X_sample = X[sampled_columns]
         return (X_sample,)
 
-    def _sample_rows(self, X, Y, sample_shape, n_cross_validation_folds, seed):
+    def _sample_rows(self, X, Y, sample_shape, n_folds, seed):
         """
         Stratified uniform sampling of rows, according to the classes in Y.
         Ensures there are enough samples from each class in Y for cross
@@ -351,7 +372,7 @@ class Metafeatures(object):
         else:
             row_indices = []
             Y_groupby = Y.groupby(Y)
-            min_class_samples = n_cross_validation_folds
+            min_class_samples = n_folds
             n_classes = len(Y_groupby)
             for class_ in Y_groupby.groups:
                 class_indices = Y_groupby.get_group(class_).index
@@ -373,7 +394,10 @@ class Metafeatures(object):
             n_sampled_rows = len(row_indices)
             # todo handle this case internally
             if n_sampled_rows != sample_shape[0]:
-                raise Exception(f"sample_shape {sample_shape} sampled rows {n_sampled_rows}")
+                raise Exception(
+                    f"sample_shape {sample_shape} does not match sampled rows "+
+                    f"{n_sampled_rows}"
+                )
             X_sample, Y_sample = X.iloc[row_indices], Y.iloc[row_indices]
         return (X_sample, Y_sample)
 
