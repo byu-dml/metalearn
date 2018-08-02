@@ -45,11 +45,19 @@ class Metafeatures(object):
             for key in combined_dict:
                 self.resource_info_dict[key] = combined_dict[key]
 
-    def list_metafeatures(self):
+    def list_metafeatures(self, group="all"):
         """
         Returns a list of metafeatures computable by the Metafeatures class.
         """
-        return self.metafeatures_list
+        if group == "all":
+            return self.metafeatures_list
+        elif group == "landmarking":
+            return list(filter(
+                lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id,
+                self.metafeatures_list
+            ))
+        else:
+            raise ValueError(f"Unknown group {group}")
 
     def list_target_dependent_metafeatures(self):
         return list(filter(self._is_target_dependent, self.metafeatures_list))
