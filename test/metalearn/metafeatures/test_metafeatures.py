@@ -571,10 +571,39 @@ class MetafeaturesTestCase(unittest.TestCase):
                     self.dummy_features, self.dummy_target,
                     n_folds=test["n_folds"]
                 )
-            self.assertEqual(
-                str(cm.exception),
-                test["message"]
+            self.assertEqual(str(cm.exception), test["message"])
+
+    def test_n_folds_with_small_dataset(self):
+        # should raise error with small (few instances) dataset
+        # unless not computing landmarking mfs
+        X_small = pd.DataFrame(np.random.rand(3, 7))
+        Y_small = pd.Series([0,1,0], name="target").astype("str")
+        metafeatures = Metafeatures()
+
+        with self.assertRaises(ValueError) as cm:
+            metafeatures.compute(X_small, Y_small, n_folds=2)
+        self.assertEqual(
+            str(cm.exception),
+            "The minimum number of instances in each class of Y is n_folds=2." +
+            " Class 1 has 1."
+        )
+
+    def test_n_folds_with_small_dataset_no_landmarkers(self):
+        # should raise error with small (few instances) dataset
+        # unless not computing landmarking mfs
+        X_small = pd.DataFrame(np.random.rand(3, 7))
+        Y_small = pd.Series([0,1,0], name="target").astype("str")
+        metafeature_ids = [
+            "NumberOfInstances", "NumberOfFeatures", "NumberOfClasses",
+            "NumberOfNumericFeatures", "NumberOfCategoricalFeatures"
+        ]
+        try:
+            Metafeatures().compute(
+                X_small, Y_small, metafeature_ids=metafeature_ids, n_folds=2
             )
+        except Exception as e:
+           exc_type = type(e).__name__
+           self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
 
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]

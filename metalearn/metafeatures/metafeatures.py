@@ -8,6 +8,7 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
+from sklearn.model_selection import StratifiedShuffleSplit
 
 from .common_operations import *
 from .simple_metafeatures import *
@@ -242,7 +243,7 @@ class Metafeatures(object):
                 raise ValueError("Cannot sample less than 1 column")
             if not sample_shape[0] is None and not Y is None:
                 min_samples = Y.unique().shape[0] * n_folds
-                if min_samples > sample_shape[0]:
+                if sample_shape[0] < min_samples:
                     raise ValueError(
                         f"Cannot sample less than {min_samples} rows from Y"
                     )
@@ -255,6 +256,21 @@ class Metafeatures(object):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
         if n_folds < 2:
             raise ValueError(f"`n_folds` must be >= 2, but was {n_folds}")
+        if not Y is None and metafeature_ids is not None:
+            # when computing landmarking metafeatures, there must be at least
+            # n_folds instances of each class of Y
+            landmarking_mfs = self.list_metafeatures(group="landmarking")
+            if len(list(filter(
+                lambda mf_id: mf_id in landmarking_mfs,metafeature_ids
+            ))):
+                Y_grouped = Y.groupby(Y)
+                for group_id, group in Y_grouped:
+                    if group.shape[0] < n_folds:
+                        raise ValueError(
+                            "The minimum number of instances in each class of" +
+                            f" Y is n_folds={n_folds}. Class {group_id} has " +
+                            f"{group.shape[0]}."
+                        )
 
     def _infer_column_types(self, X, Y):
         column_types = {}
@@ -369,43 +385,21 @@ class Metafeatures(object):
         Ensures there are enough samples from each class in Y for cross
         validation.
         """
-        np.random.seed(seed)
         if sample_shape[0] is None or X.shape[0] <= sample_shape[0]:
             X_sample, Y_sample = X, Y
         elif Y is None:
+            np.random.seed(seed)
             row_indices = np.random.choice(
                 X.shape[0], size=sample_shape[0], replace=False
             )
             X_sample, Y_sample = X.iloc[row_indices], Y
         else:
-            row_indices = []
-            Y_groupby = Y.groupby(Y)
-            min_class_samples = n_folds
-            n_classes = len(Y_groupby)
-            for class_ in Y_groupby.groups:
-                class_indices = Y_groupby.get_group(class_).index
-                sample_ratio = (len(class_indices) - min_class_samples) / (
-                    Y.shape[0] - min_class_samples*n_classes
-                )
-                sample_ratio = max(0, sample_ratio)
-                n_samples = int(round(
-                    (sample_shape[0] - min_class_samples*n_classes) * sample_ratio + min_class_samples
-                ))
-                replace = False
-                # sample with replacement when data is limited
-                if n_samples > len(class_indices):
-                    replace = True
-                class_row_indices = np.random.choice(
-                    class_indices, size=n_samples, replace=replace
-                )
-                row_indices = np.append(row_indices, class_row_indices)
-            n_sampled_rows = len(row_indices)
-            # todo handle this case internally
-            if n_sampled_rows != sample_shape[0]:
-                raise Exception(
-                    f"sample_shape {sample_shape} does not match sampled rows "+
-                    f"{n_sampled_rows}"
-                )
+            drop_size = X.shape[0] - sample_shape[0]
+            sample_size = sample_shape[0]
+            sss = StratifiedShuffleSplit(
+                n_splits=2, test_size=drop_size, train_size=sample_size, random_state=seed
+            )
+            row_indices, _ = next(sss.split(X, Y))
             X_sample, Y_sample = X.iloc[row_indices], Y.iloc[row_indices]
         return (X_sample, Y_sample)
 
