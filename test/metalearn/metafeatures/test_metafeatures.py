@@ -256,6 +256,17 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     "conform to schema"
                 )
 
+    def test_output_json_compatibility(self):
+        with open("./metalearn/metafeatures/metafeatures_schema.json") as f:
+            mf_schema = json.load(f)
+        for dataset_filename, dataset in self.datasets.items():
+            computed_mfs = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+            try:
+                json_computed_mfs = json.dumps(computed_mfs)
+            except Exception as e:
+                self.fail(
+                    f"Failed to convert metafeature output to json: {str(e)}"
+                )
 
 
 class MetafeaturesTestCase(unittest.TestCase):
