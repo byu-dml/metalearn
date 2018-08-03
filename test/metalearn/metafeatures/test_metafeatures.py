@@ -184,53 +184,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         self._report_test_failures(test_failures, test_name)
 
-    def test_compare_metafeature_lists(self):
-        inconsistencies = {}
-        with open("./metalearn/metafeatures/metafeatures.json") as fh:
-            master_list = json.load(fh)
-        master_names = set(master_list["metafeatures"].keys())
-        for filename, dataset in self.datasets.items():
-            known_dataset_metafeatures_path = get_dataset_metafeatures_path(filename)
-
-            if os.path.exists(known_dataset_metafeatures_path):
-                with open(known_dataset_metafeatures_path) as fh:
-                    known_mfs = json.load(fh)
-
-                inconsistencies[known_dataset_metafeatures_path] = {}
-
-                metafeatures_df = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"], timer=True)
-                computed_mfs = metafeatures_df.to_dict("records")[0]
-
-                known_names_t = set({x for x in known_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME in x})
-                computed_names_t = set({x for x in computed_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME in x})
-                intersect_t = known_names_t.intersection(computed_names_t)
-
-                known_names_t_unique = known_names_t - intersect_t
-                computed_names_t_unique = computed_names_t - intersect_t
-
-                known_names_no_t = set({x for x in known_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME not in x})
-                computed_names_no_t = set({x for x in computed_mfs.keys() if Metafeatures.COMPUTE_TIME_NAME not in x})
-                intersect = master_names.intersection(computed_names_no_t.intersection(known_names_no_t))
-
-                master_names_unique = master_names - intersect
-                known_names_unique = (known_names_no_t - intersect).union(known_names_t_unique)
-                computed_names_unique = (computed_names_no_t - intersect).union(computed_names_t_unique)
-
-                if len(known_names_unique) > 0:
-                    inconsistencies[known_dataset_metafeatures_path]["Known Metafeatures"] = list(known_names_unique)
-                if len(computed_names_unique) > 0:
-                    inconsistencies[known_dataset_metafeatures_path]["Computed Metafeatures"] = list(computed_names_unique)
-                if len(master_names_unique) > 0:
-                    inconsistencies[known_dataset_metafeatures_path]["Master List Metafeatures"] = list(master_names_unique)
-
-        self.assertGreater(len(inconsistencies), 0, "No known results could be loaded, metafeature lists could not be compared.")
-        if not all(i == {} for i in inconsistencies.values()):
-            inconsistencies = {k:v for (k,v) in inconsistencies.items() if v != {}}
-            inconsistency_report_file = "./test/metalearn/metafeatures/mf_inconsistencies.json"
-            with open(inconsistency_report_file, "w") as fh:
-                json.dump(inconsistencies, fh, indent=4)
-            self.assertTrue(False, "Metafeature lists do not match, output written to {}.".format(inconsistency_report_file))
-
     def test_no_targets(self):
         """ Test Metafeatures().compute() without targets
         """
