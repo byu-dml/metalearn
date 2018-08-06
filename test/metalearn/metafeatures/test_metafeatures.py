@@ -72,7 +72,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         for mf_id, result in computed_mfs.items():
             computed_value = result[Metafeatures.VALUE_KEY]
-            known_value = known_mfs.get(mf_id, None)
+            known_value = known_mfs[mf_id][Metafeatures.VALUE_KEY]
             correct = True
             if known_value is None:
                 correct = False
@@ -183,7 +183,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 "target_dependent"
             )
             for mf_name in target_dependent_metafeatures:
-                known_mfs[mf_name] = Metafeatures.NO_TARGETS
+                known_mfs[mf_name] = {
+                    Metafeatures.VALUE_KEY: Metafeatures.NO_TARGETS,
+                    Metafeatures.COMPUTE_TIME_KEY: 0.
+                }
 
             n_computed_mfs = len(computed_mfs)
             n_computable_mfs = len(metafeatures.list_metafeatures())
