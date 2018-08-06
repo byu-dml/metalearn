@@ -179,7 +179,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 X=dataset["X"], Y=None, seed=CORRECTNESS_SEED
             )
             known_mfs = dataset["known_metafeatures"]
-            target_dependent_metafeatures = Metafeatures().list_target_dependent_metafeatures()
+            target_dependent_metafeatures = Metafeatures().list_metafeatures(
+                "target_dependent"
+            )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = Metafeatures.NO_TARGETS
 

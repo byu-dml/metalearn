@@ -56,11 +56,12 @@ class Metafeatures(object):
                 lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id,
                 self.metafeatures_list
             ))
+        elif group == "target_dependent":
+            return list(filter(
+                self._is_target_dependent, self.metafeatures_list
+            ))
         else:
             raise ValueError(f"Unknown group {group}")
-
-    def list_target_dependent_metafeatures(self):
-        return list(filter(self._is_target_dependent, self.metafeatures_list))
 
     def compute(
         self, X: DataFrame, Y: Series = None,
