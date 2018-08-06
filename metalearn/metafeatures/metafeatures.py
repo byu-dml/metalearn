@@ -25,12 +25,11 @@ class Metafeatures(object):
     meta-learning applications.
     """
 
-    VALUE_NAME = 'value'
-    TIME_NAME = 'time'
+    VALUE_KEY = 'value'
+    COMPUTE_TIME_KEY = 'compute_time'
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
     NO_TARGETS = "NO_TARGETS"
-    COMPUTE_TIME_NAME = "_Time"
 
     def __init__(self):
         self.resource_info_dict = {}
@@ -66,8 +65,8 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series = None,
         column_types: Dict[str, str] = None, metafeature_ids: List = None,
-        sample_shape=None, seed=None, timer=False, n_folds=2
-    ) -> DataFrame:
+        sample_shape=None, seed=None, n_folds=2
+    ) -> dict:
         """
         Parameters
         ----------
@@ -83,20 +82,18 @@ class Metafeatures(object):
             is given, a seed will be generated psuedo-randomly. this can be
             used for reproducibility of metafeatures. a generated seed can be
             accessed through the 'seed' property, after calling this method.
-        timer: bool, whether return the computation time of each metafeature in
-            addition to the value of each metafeature
         n_folds: int, the number of cross validation folds used by the
             landmarking metafeatures. also affects the sample_shape validation
 
         Returns
         -------
-        A dataframe containing one row and two columns for each metafeature:
-        one for the value and one for the compute time of that metafeature
-        value
+        A dictionary mapping the metafeature id to another dictionary containing
+        the `value` and `compute_time` (if requested) of the referencing
+        metafeature. The value is typically a number, but can be a string
+        indicating a reason why the value could not be computed.
         """
         self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
-            n_folds
+            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
@@ -105,42 +102,56 @@ class Metafeatures(object):
         if sample_shape is None:
             sample_shape = (None, None)
         self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
-            n_folds
+            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
 
-        self.computed_metafeatures = DataFrame()
-
-        X_raw = X
-        X = X_raw.dropna(axis=1, how='all')
         self._set_seed(seed)
+
+        # todo refactor to separate function
         self.resource_results_dict = {
-            'XRaw': {self.VALUE_NAME: X_raw, self.TIME_NAME: 0.},
-            'X': {self.VALUE_NAME: X, self.TIME_NAME: 0.},
-            'Y': {self.VALUE_NAME: Y, self.TIME_NAME: 0.},
-            'ColumnTypes': {
-                self.VALUE_NAME: column_types, self.TIME_NAME: 0.
+            "XRaw": {
+                self.VALUE_KEY: X,
+                self.COMPUTE_TIME_KEY: 0.
             },
-            'sample_shape': {
-                self.VALUE_NAME: sample_shape, self.TIME_NAME: 0.
+            "X": {
+                self.VALUE_KEY: X.dropna(axis=1, how="all"),
+                self.COMPUTE_TIME_KEY: 0.
+            },
+            "Y": {
+                self.VALUE_KEY: Y,
+                self.COMPUTE_TIME_KEY: 0.
+            },
+            "ColumnTypes": {
+                self.VALUE_KEY: column_types,
+                self.COMPUTE_TIME_KEY: 0.
+            },
+            "sample_shape": {
+                self.VALUE_KEY: sample_shape,
+                self.COMPUTE_TIME_KEY: 0.
             },
             "n_folds": {
-                self.VALUE_NAME: n_folds, self.TIME_NAME: 0.
+                self.VALUE_KEY: n_folds,
+                self.COMPUTE_TIME_KEY: 0.
             }
         }
-        if Y is None:
-            target_dependent_metafeatures = self.list_target_dependent_metafeatures()
-            # set every target-dependent metafeature that was requested by the user to "NO_TARGETS"
-            for metafeature_id in target_dependent_metafeatures:
-                if metafeature_id in metafeature_ids:
-                    self.computed_metafeatures.at[0, metafeature_id] = self.NO_TARGETS
-                    if timer:
-                        metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
-                        self.computed_metafeatures.at[0, metafeature_time_id] = self.NO_TARGETS
-            # remove any target-dependent metafeatures from metafeature_ids so there is no attempt to compute them
-            metafeature_ids = [mf for mf in metafeature_ids if mf not in target_dependent_metafeatures]
-        self._compute_metafeatures(metafeature_ids, timer)
 
+        self.computed_metafeatures = {}
+        if Y is None:
+            # todo refactor to separate function, perhaps combine with _compute_metafeatures
+            # set every target-dependent metafeature that was requested by the
+            # user to "NO_TARGETS"
+            copmutable_metafeature_ids = []
+            for metafeature_id in metafeature_ids:
+                if self._is_target_dependent(metafeature_id):
+                    self.computed_metafeatures[metafeature_id] = {
+                        self.VALUE_KEY: self.NO_TARGETS,
+                        self.COMPUTE_TIME_KEY: None
+                    }
+                else:
+                    copmutable_metafeature_ids.append(metafeature_id)
+            metafeature_ids = copmutable_metafeature_ids
+
+        self._compute_metafeatures(metafeature_ids)
         return self.computed_metafeatures
 
     def _is_target_dependent(self, resource_name):
@@ -171,8 +182,7 @@ class Metafeatures(object):
         return (self.seed + self.seed_offset,)
 
     def _validate_compute_arguments(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
-        n_folds
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -216,19 +226,14 @@ class Metafeatures(object):
                     format(invalid_metafeature_ids)
                 )
         self._validate_sample_shape(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
-            n_folds
+            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
-        if not type(timer) is bool:
-            raise ValueError("`timer` must of type `bool`")
         self._validate_n_folds(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
-            n_folds
+            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
 
     def _validate_sample_shape(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
-        n_folds
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
     ):
         if not sample_shape is None:
             if not type(sample_shape) in [tuple, list]:
@@ -249,8 +254,7 @@ class Metafeatures(object):
                     )
 
     def _validate_n_folds(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, timer,
-        n_folds
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
     ):
         if not dtype_is_numeric(type(n_folds)) or (n_folds != int(n_folds)):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
@@ -286,13 +290,13 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _compute_metafeatures(self, metafeature_ids, timer):
+    def _compute_metafeatures(self, metafeature_ids):
         for metafeature_id in metafeature_ids:
-            value, time_value = self._retrieve_resource(metafeature_id)
-            self.computed_metafeatures.at[0, metafeature_id] = value
-            if timer:
-                metafeature_time_id = metafeature_id + self.COMPUTE_TIME_NAME
-                self.computed_metafeatures.at[0, metafeature_time_id] = time_value
+            value, compute_time = self._retrieve_resource(metafeature_id)
+            self.computed_metafeatures[metafeature_id] = {
+                self.VALUE_KEY: value,
+                self.COMPUTE_TIME_KEY: compute_time
+            }
 
     def _retrieve_resource(self, resource_name):
         if resource_name not in self.resource_results_dict:
@@ -318,10 +322,11 @@ class Metafeatures(object):
                 result = results[i]
                 result_name = returns[i]
                 self.resource_results_dict[result_name] = {
-                    self.VALUE_NAME: result, self.TIME_NAME: total_time
+                    self.VALUE_KEY: result,
+                    self.COMPUTE_TIME_KEY: total_time
                 }
-        value = self.resource_results_dict[resource_name][self.VALUE_NAME]
-        total_time = self.resource_results_dict[resource_name][self.TIME_NAME]
+        value = self.resource_results_dict[resource_name][self.VALUE_KEY]
+        total_time = self.resource_results_dict[resource_name][self.COMPUTE_TIME_KEY]
         return (value, total_time)
 
     def _retrieve_parameters(self, resource_name):
