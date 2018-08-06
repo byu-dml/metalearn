@@ -12,7 +12,7 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from metalearn.metafeatures.metafeatures import Metafeatures
+from metalearn import Metafeatures
 from test.config import CORRECTNESS_SEED, METADATA_PATH
 from test.data.dataset import read_dataset
 from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
