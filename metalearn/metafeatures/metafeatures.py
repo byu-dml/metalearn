@@ -30,6 +30,7 @@ class Metafeatures(object):
     NUMERIC = "NUMERIC"
     CATEGORICAL = "CATEGORICAL"
     NO_TARGETS = "NO_TARGETS"
+    NUMERIC_TARGETS = "NUMERIC_TARGETS"
 
     def __init__(self):
         self.resource_info_dict = {}
@@ -137,15 +138,19 @@ class Metafeatures(object):
         }
 
         self.computed_metafeatures = {}
-        if Y is None:
+        if Y is None or column_types[Y.name] == self.NUMERIC:
             # todo refactor to separate function, perhaps combine with _compute_metafeatures
             # set every target-dependent metafeature that was requested by the
             # user to "NO_TARGETS"
+            if Y is None:
+                placeholder = self.NO_TARGETS
+            else:
+                placeholder = self.NUMERIC_TARGETS
             copmutable_metafeature_ids = []
             for metafeature_id in metafeature_ids:
                 if self._is_target_dependent(metafeature_id):
                     self.computed_metafeatures[metafeature_id] = {
-                        self.VALUE_KEY: self.NO_TARGETS,
+                        self.VALUE_KEY: placeholder,
                         self.COMPUTE_TIME_KEY: None
                     }
                 else:
@@ -190,19 +195,17 @@ class Metafeatures(object):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
         if column_types is not None:
-            if not Y is None:
-                if len(column_types.keys()) != len(X.columns) + 1:
-                    raise ValueError(
-                        "The number of column_types does not match the number of " +
-                        "features plus the target"
-                    )
-                if column_types[Y.name] == self.NUMERIC:
-                    raise TypeError('Regression problems are not supported (target feature is numeric)')
-            else:
+            if Y is None:
                 if len(column_types.keys()) != len(X.columns):
                     raise ValueError(
-                        "The number of column_types does not match the number of " +
-                        "features"
+                        "The number of column_types does not match the number" +
+                        " of features"
+                    )
+            else:
+                if len(column_types.keys()) != len(X.columns) + 1:
+                    raise ValueError(
+                        "The number of column_types does not match the number" +
+                        " of features plus the target"
                     )
             invalid_column_types = []
             for col_name, col_type in column_types.items():

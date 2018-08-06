@@ -292,8 +292,6 @@ class MetafeaturesTestCase(unittest.TestCase):
         fail_message1 = "We expect a user friendly message when the features passed to compute is not a Pandas.DataFrame."
         expected_error_message2 = "Y must be of type pandas.Series"
         fail_message2 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
-        expected_error_message3 = "Regression problems are not supported (target feature is numeric)"
-        fail_message3 = "We expect a user friendly message when the DataFrame passed to compute is a regression problem"
         # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
 
         with self.assertRaises(TypeError) as cm:
@@ -307,10 +305,6 @@ class MetafeaturesTestCase(unittest.TestCase):
         with self.assertRaises(TypeError) as cm:
             Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.zeros(500))
         self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
-
-        with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target.astype("float32"))
-        self.assertEqual(str(cm.exception), expected_error_message3, fail_message3)
 
     def _check_invalid_metafeature_exception_string(self, exception_str, invalid_metafeatures):
         """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
