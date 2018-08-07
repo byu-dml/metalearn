@@ -32,34 +32,29 @@ class Metafeatures(object):
     NO_TARGETS = "NO_TARGETS"
     NUMERIC_TARGETS = "NUMERIC_TARGETS"
 
-    def __init__(self):
-        self.resource_info_dict = {}
-        self.metafeatures_list = []
-        mf_info_file_path = os.path.splitext(__file__)[0] + '.json'
-        with open(mf_info_file_path, 'r') as f:
-            mf_info_json = json.load(f)
-            self.function_dict = mf_info_json['functions']
-            json_metafeatures_dict = mf_info_json['metafeatures']
-            json_resources_dict = mf_info_json['resources']
-            self.metafeatures_list = list(json_metafeatures_dict.keys())
-            combined_dict = {**json_metafeatures_dict, **json_resources_dict}
-            for key in combined_dict:
-                self.resource_info_dict[key] = combined_dict[key]
+    _metadata_path = os.path.splitext(__file__)[0] + ".json"
+    with open(_metadata_path, 'r') as f:
+        _metadata = json.load(f)
+    IDS = _metadata["metafeatures"].keys()
+    _functions = _metadata["functions"]
+    _resource_info = {}
+    _resource_info.update(_metadata["resources"])
+    _resource_info.update(_metadata["metafeatures"])
 
-    def list_metafeatures(self, group="all"):
+    @classmethod
+    def list_metafeatures(cls, group="all"):
         """
         Returns a list of metafeatures computable by the Metafeatures class.
         """
         if group == "all":
-            return self.metafeatures_list
+            return cls.IDS
         elif group == "landmarking":
             return list(filter(
-                lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id,
-                self.metafeatures_list
+                lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id, cls.IDS
             ))
         elif group == "target_dependent":
             return list(filter(
-                self._is_target_dependent, self.metafeatures_list
+                cls._is_target_dependent, cls.IDS
             ))
         else:
             raise ValueError(f"Unknown group {group}")
@@ -160,21 +155,22 @@ class Metafeatures(object):
         self._compute_metafeatures(metafeature_ids)
         return self.computed_metafeatures
 
-    def _is_target_dependent(self, resource_name):
+    @classmethod
+    def _is_target_dependent(cls, resource_name):
         if resource_name=='Y':
             return True
         elif resource_name=='XSample':
             return False
         else:
-            resource_info = self.resource_info_dict[resource_name]
+            resource_info = cls._resource_info[resource_name]
             parameters = resource_info.get('parameters', [])
             for parameter in parameters:
-                if self._is_target_dependent(parameter):
+                if cls._is_target_dependent(parameter):
                     return True
             function = resource_info['function']
-            parameters = self.function_dict[function]['parameters']
+            parameters = cls._functions[function]['parameters']
             for parameter in parameters:
-                if self._is_target_dependent(parameter):
+                if cls._is_target_dependent(parameter):
                     return True
             return False
 
@@ -221,8 +217,7 @@ class Metafeatures(object):
                 )
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
-                mf for mf in metafeature_ids if
-                mf not in self.resource_info_dict
+                mf for mf in metafeature_ids if mf not in self._resource_info
             ]
             if len(invalid_metafeature_ids) > 0:
                 raise ValueError(
@@ -307,12 +302,12 @@ class Metafeatures(object):
             retrieved_parameters, total_time = self._retrieve_parameters(
                 resource_name
             )
-            resource_info = self.resource_info_dict[resource_name]
+            resource_info = self._resource_info[resource_name]
             f = resource_info['function']
             if 'returns' in resource_info:
                 returns = resource_info['returns']
             else:
-                returns = self.function_dict[f]['returns']
+                returns = self._functions[f]['returns']
             if retrieved_parameters is None:
                 results = tuple([np.nan] * len(returns))
                 total_time = np.nan
@@ -336,16 +331,16 @@ class Metafeatures(object):
     def _retrieve_parameters(self, resource_name):
         total_time = 0.0
         retrieved_parameters = []
-        resource_info = self.resource_info_dict[resource_name]
+        resource_info = self._resource_info[resource_name]
         f = resource_info['function']
         if 'parameters' in resource_info:
             parameters = resource_info['parameters']
         else:
-            parameters = self.function_dict[f]['parameters']
+            parameters = self._functions[f]['parameters']
         if 'seed_offset' in resource_info:
             self.seed_offset = resource_info['seed_offset']
-        elif 'seed_offset' in self.function_dict[f]:
-            self.seed_offset = self.function_dict[f]['seed_offset']
+        elif 'seed_offset' in self._functions[f]:
+            self.seed_offset = self._functions[f]['seed_offset']
         for parameter in parameters:
             if isinstance(parameter, float) or isinstance(parameter, int):
                 value, time_value = parameter, 0.

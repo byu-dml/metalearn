@@ -179,7 +179,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 X=dataset["X"], Y=None, seed=CORRECTNESS_SEED
             )
             known_mfs = dataset["known_metafeatures"]
-            target_dependent_metafeatures = Metafeatures().list_metafeatures(
+            target_dependent_metafeatures = Metafeatures.list_metafeatures(
                 "target_dependent"
             )
             for mf_name in target_dependent_metafeatures:
@@ -189,7 +189,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 }
 
             n_computed_mfs = len(computed_mfs)
-            n_computable_mfs = len(metafeatures.list_metafeatures())
+            n_computable_mfs = len(Metafeatures.IDS)
 
             required_checks = {
                 self._check_correctness: [
