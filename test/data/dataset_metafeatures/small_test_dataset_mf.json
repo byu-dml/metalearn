@@ -219,6 +219,10 @@
         "compute_time": 4.267692565917969e-05,
         "value": 5
     },
+    "NumberOfFeaturesWithMissingValues": {
+        "compute_time": 0.0022878646850585938,
+        "value": 4
+    },
     "NumberOfInstances": {
         "compute_time": 4.267692565917969e-05,
         "value": 10
@@ -414,6 +418,10 @@
     "RatioOfCategoricalFeatures": {
         "compute_time": 4.267692565917969e-05,
         "value": 0.6
+    },
+    "RatioOfFeaturesWithMissingValues": {
+        "compute_time": 0.0022878646850585938,
+        "value": 0.8
     },
     "RatioOfInstancesWithMissingValues": {
         "compute_time": 0.0008313655853271484,

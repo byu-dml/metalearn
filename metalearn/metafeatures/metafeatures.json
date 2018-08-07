@@ -105,7 +105,7 @@
         },
         "get_missing_values": {
             "parameters": ["XRaw"],
-            "returns": ["NumberOfMissingValues","RatioOfMissingValues","NumberOfInstancesWithMissingValues","RatioOfInstancesWithMissingValues"]
+            "returns": ["NumberOfMissingValues","RatioOfMissingValues","NumberOfInstancesWithMissingValues","RatioOfInstancesWithMissingValues", "NumberOfFeaturesWithMissingValues", "RatioOfFeaturesWithMissingValues"]
         },
         "get_class_stats": {
             "parameters": ["Y"],
@@ -224,6 +224,12 @@
             "function": "get_missing_values"
         },
         "RatioOfInstancesWithMissingValues": {
+            "function": "get_missing_values"
+        },
+        "NumberOfFeaturesWithMissingValues": {
+            "function": "get_missing_values"
+        },
+        "RatioOfFeaturesWithMissingValues": {
             "function": "get_missing_values"
         },
         "MeanClassProbability": {
