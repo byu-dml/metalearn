@@ -188,10 +188,28 @@ class Metafeatures(object):
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
     ):
+        for f in [
+            self._validate_X, self._validate_Y, self._validate_column_types,
+            self._validate_metafeature_ids, self._validate_sample_shape,
+            self._validate_n_folds
+        ]:
+            f(X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds)
+
+    def _validate_X(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+    ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
+
+    def _validate_Y(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+    ):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
+
+    def _validate_column_types(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+    ):
         if column_types is not None:
             if Y is None:
                 if len(column_types.keys()) != len(X.columns):
@@ -217,6 +235,10 @@ class Metafeatures(object):
                         invalid_column_types, self.NUMERIC, self.CATEGORICAL
                     )
                 )
+
+    def _validate_metafeature_ids(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+    ):
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if mf not in self._resource_info
@@ -226,12 +248,6 @@ class Metafeatures(object):
                     'One or more requested metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
-        self._validate_sample_shape(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
-        )
-        self._validate_n_folds(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
-        )
 
     def _validate_sample_shape(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
