@@ -28,12 +28,11 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         with open(METADATA_PATH, "r") as fh:
             dataset_descriptions = json.load(fh)
         for dataset_description in dataset_descriptions:
+            X, Y, column_types = read_dataset(dataset_description)
             filename = dataset_description["filename"]
-            target_class_name = dataset_description["target_class_name"]
-            index_col_name = dataset_description.get("index_col_name", None)
-            X, Y, column_types = read_dataset(filename, index_col_name, target_class_name)
-
-            known_dataset_metafeatures_path = get_dataset_metafeatures_path(filename)
+            known_dataset_metafeatures_path = get_dataset_metafeatures_path(
+                filename
+            )
             if os.path.exists(known_dataset_metafeatures_path):
                 with open(known_dataset_metafeatures_path) as fh:
                     metafeatures = json.load(fh)
