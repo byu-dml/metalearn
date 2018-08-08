@@ -34,7 +34,7 @@ def run_metafeature_benchmark(benchmark_name, iters=100):
         init_times = []
         total_compute_times = []
         metafeature_compute_times = {
-            mf_id: [] for mf_id in Metafeatures().list_metafeatures()
+            mf_id: [] for mf_id in Metafeatures.IDS
         }
         for i in range(iters):
             print(f"iter {i}")
