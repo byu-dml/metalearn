@@ -102,10 +102,35 @@ class Metafeatures(object):
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
 
-        self._set_seed(seed)
+        self._init_resources(
+            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+        )
 
-        # todo refactor to separate function
-        self.resource_results_dict = {
+        computed_metafeatures = {}
+        for metafeature_id in metafeature_ids:
+            if self._is_target_dependent(metafeature_id) and (
+                Y is None or column_types[Y.name] == self.NUMERIC
+            ):
+                if Y is None:
+                    value = self.NO_TARGETS
+                else:
+                    value = self.NUMERIC_TARGETS
+                compute_time = None
+            else:
+                value, compute_time = self._retrieve_resource(metafeature_id)
+
+            computed_metafeatures[metafeature_id] = {
+                self.VALUE_KEY: value,
+                self.COMPUTE_TIME_KEY: compute_time
+            }
+
+        return computed_metafeatures
+
+    def _init_resources(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+    ):
+        self._set_seed(seed)
+        self._resources = {
             "XRaw": {
                 self.VALUE_KEY: X,
                 self.COMPUTE_TIME_KEY: 0.
@@ -131,29 +156,6 @@ class Metafeatures(object):
                 self.COMPUTE_TIME_KEY: 0.
             }
         }
-
-        self.computed_metafeatures = {}
-        if Y is None or column_types[Y.name] == self.NUMERIC:
-            # todo refactor to separate function, perhaps combine with _compute_metafeatures
-            # set every target-dependent metafeature that was requested by the
-            # user to "NO_TARGETS"
-            if Y is None:
-                placeholder = self.NO_TARGETS
-            else:
-                placeholder = self.NUMERIC_TARGETS
-            copmutable_metafeature_ids = []
-            for metafeature_id in metafeature_ids:
-                if self._is_target_dependent(metafeature_id):
-                    self.computed_metafeatures[metafeature_id] = {
-                        self.VALUE_KEY: placeholder,
-                        self.COMPUTE_TIME_KEY: None
-                    }
-                else:
-                    copmutable_metafeature_ids.append(metafeature_id)
-            metafeature_ids = copmutable_metafeature_ids
-
-        self._compute_metafeatures(metafeature_ids)
-        return self.computed_metafeatures
 
     @classmethod
     def _is_target_dependent(cls, resource_name):
@@ -289,16 +291,8 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _compute_metafeatures(self, metafeature_ids):
-        for metafeature_id in metafeature_ids:
-            value, compute_time = self._retrieve_resource(metafeature_id)
-            self.computed_metafeatures[metafeature_id] = {
-                self.VALUE_KEY: value,
-                self.COMPUTE_TIME_KEY: compute_time
-            }
-
     def _retrieve_resource(self, resource_name):
-        if resource_name not in self.resource_results_dict:
+        if resource_name not in self._resources:
             retrieved_parameters, total_time = self._retrieve_parameters(
                 resource_name
             )
@@ -320,12 +314,12 @@ class Metafeatures(object):
             for i in range(len(results)):
                 result = results[i]
                 result_name = returns[i]
-                self.resource_results_dict[result_name] = {
+                self._resources[result_name] = {
                     self.VALUE_KEY: result,
                     self.COMPUTE_TIME_KEY: total_time
                 }
-        value = self.resource_results_dict[resource_name][self.VALUE_KEY]
-        total_time = self.resource_results_dict[resource_name][self.COMPUTE_TIME_KEY]
+        value = self._resources[resource_name][self.VALUE_KEY]
+        total_time = self._resources[resource_name][self.COMPUTE_TIME_KEY]
         return (value, total_time)
 
     def _retrieve_parameters(self, resource_name):

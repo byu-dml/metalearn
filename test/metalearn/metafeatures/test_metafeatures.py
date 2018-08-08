@@ -408,7 +408,7 @@ class MetafeaturesTestCase(unittest.TestCase):
         dummy_mf_df = metafeatures.compute(
             self.dummy_features, self.dummy_target, sample_shape=sample_shape
         )
-        X_sample = metafeatures.resource_results_dict["XSample"]["value"]
+        X_sample = metafeatures._resources["XSample"]["value"]
         self.assertEqual(
             X_sample.shape, sample_shape,
             f"Sampling produced incorrect shape {X_sample.shape}; should have" +
