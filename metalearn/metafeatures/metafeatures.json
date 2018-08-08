@@ -16,7 +16,7 @@
             "function": ""
         },
         "n_folds": {
-            "funtion": ""
+            "function": ""
         },
         "seed": {
             "function": "self._get_seed"
