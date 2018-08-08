@@ -80,9 +80,11 @@ def compare_metafeature_benchmarks(bm_1_name, bm_2_name, n_std_dev=3):
 
     def compare(item_name, bm_1, bm_2):
         if (bm_2["mean"] - bm_1["mean"]) < -bm_1["std_dev"] * n_std_dev:
-            print(f"{bm_2_name} significantly faster on {item_name}")
+            rel_imp = (bm_2["mean"] - bm_1["mean"]) / -bm_1["std_dev"]
+            print(f"{bm_2_name} significantly faster on {item_name} by {rel_imp} standard deviations")
         if (bm_1["mean"] - bm_2["mean"]) < -bm_2["std_dev"] * n_std_dev:
-            print(f"{bm_1_name} significantly faster on {item_name}")
+            rel_imp = (bm_1["mean"] - bm_2["mean"]) / -bm_2["std_dev"]
+            print(f"{bm_1_name} significantly faster on {item_name} by {rel_imp} standard deviations")
 
     bm_1_data = read_benchmark_data(bm_1_name)
     bm_2_data = read_benchmark_data(bm_2_name)
