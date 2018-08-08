@@ -17,8 +17,6 @@ def compute_dataset_metafeatures():
     metadata = json.load(open(METADATA_PATH, "r"))
     for dataset_metadata in metadata:
         dataset_filename = dataset_metadata["filename"]
-        target_class_name = dataset_metadata["target_class_name"]
-        index_col_name = dataset_metadata.get("index_col_name", None)
 
         choice = None
         while not choice in ["y", "v", "n"]:
@@ -27,7 +25,7 @@ def compute_dataset_metafeatures():
         if choice == "n":
             continue
 
-        X, Y, column_types = read_dataset(dataset_filename, index_col_name, target_class_name)
+        X, Y, column_types = read_dataset(dataset_metadata)
 
         start_time = time.time()
         metafeatures = Metafeatures().compute(X=X, Y=Y, seed=CORRECTNESS_SEED)
