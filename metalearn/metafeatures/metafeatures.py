@@ -117,7 +117,7 @@ class Metafeatures(object):
                     value = self.NUMERIC_TARGETS
                 compute_time = None
             else:
-                value, compute_time = self._retrieve_resource(metafeature_id)
+                value, compute_time = self._get_resource(metafeature_id)
 
             computed_metafeatures[metafeature_id] = {
                 self.VALUE_KEY: value,
@@ -291,29 +291,25 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _retrieve_resource(self, resource_name):
-        if resource_name not in self._resources:
-            retrieved_parameters, total_time = self._retrieve_parameters(
-                resource_name
-            )
+    def _get_resource(self, resource_name):
+        if not resource_name in self._resources:
             resource_info = self._resource_info[resource_name]
             f = resource_info['function']
             if 'returns' in resource_info:
                 returns = resource_info['returns']
             else:
                 returns = self._functions[f]['returns']
-            if retrieved_parameters is None:
+            parameters, total_time = self._get_parameters(resource_name)
+            if parameters is None:
                 results = tuple([np.nan] * len(returns))
                 total_time = np.nan
             else:
                 start = time.time()
-                results = eval(f)(*retrieved_parameters)
+                results = eval(f)(*parameters)
                 end = time.time()
                 elapsed_time = end - start
                 total_time += elapsed_time
-            for i in range(len(results)):
-                result = results[i]
-                result_name = returns[i]
+            for result_name, result in zip(returns, results):
                 self._resources[result_name] = {
                     self.VALUE_KEY: result,
                     self.COMPUTE_TIME_KEY: total_time
@@ -322,9 +318,7 @@ class Metafeatures(object):
         total_time = self._resources[resource_name][self.COMPUTE_TIME_KEY]
         return (value, total_time)
 
-    def _retrieve_parameters(self, resource_name):
-        total_time = 0.0
-        retrieved_parameters = []
+    def _get_parameters(self, resource_name):
         resource_info = self._resource_info[resource_name]
         f = resource_info['function']
         if 'parameters' in resource_info:
@@ -335,11 +329,13 @@ class Metafeatures(object):
             self.seed_offset = resource_info['seed_offset']
         elif 'seed_offset' in self._functions[f]:
             self.seed_offset = self._functions[f]['seed_offset']
+        retrieved_parameters = []
+        total_time = 0.0
         for parameter in parameters:
-            if isinstance(parameter, float) or isinstance(parameter, int):
+            if dtype_is_numeric(type(parameter)):
                 value, time_value = parameter, 0.
             else:
-                value, time_value = self._retrieve_resource(parameter)
+                value, time_value = self._get_resource(parameter)
             if value is np.nan:
                 retrieved_parameters = None
                 break
