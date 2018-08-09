@@ -46,6 +46,11 @@ class Metafeatures(object):
         """
         Returns a list of metafeatures computable by the Metafeatures class.
         """
+        # todo make group for intractable metafeatures for wide datasets or
+        # datasets with high cardinality categorical columns:
+        # PredPCA1, PredPCA2, PredPCA3, PredEigen1, PredEigen2, PredEigen3,
+        # PredDet, kNN1NErrRate, kNN1NKappa, LinearDiscriminantAnalysisKappa,
+        # LinearDiscriminantAnalysisErrRate
         if group == "all":
             return cls.IDS
         elif group == "landmarking":
