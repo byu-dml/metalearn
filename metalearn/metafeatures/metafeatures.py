@@ -382,7 +382,7 @@ class Metafeatures(object):
             X_sample = X[sampled_columns]
         return (X_sample,)
 
-    def _sample_rows(self, X, Y, sample_shape, n_folds, seed):
+    def _sample_rows(self, X, Y, sample_shape, seed):
         """
         Stratified uniform sampling of rows, according to the classes in Y.
         Ensures there are enough samples from each class in Y for cross
