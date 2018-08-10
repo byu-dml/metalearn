@@ -35,7 +35,7 @@ class Metafeatures(object):
     _metadata_path = os.path.splitext(__file__)[0] + ".json"
     with open(_metadata_path, 'r') as f:
         _metadata = json.load(f)
-    IDS = _metadata["metafeatures"].keys()
+    IDS = list(_metadata["metafeatures"].keys())
     _resources_info = {}
     _resources_info.update(_metadata["resources"])
     _resources_info.update(_metadata["metafeatures"])

@@ -31,7 +31,6 @@ def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
     )
     err_rate = 1. - np.mean(scores['test_accuracy'])
     kappa = np.mean(scores['test_kappa'])
-
     return (err_rate, kappa)
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
