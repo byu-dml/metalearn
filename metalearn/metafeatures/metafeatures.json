@@ -1,646 +1,1793 @@
 {
     "resources": {
-        "XRaw": {
-            "function": ""
+        "X_raw": {
+            "function": "",
+            "arguments": {}
         },
         "X": {
-            "function": ""
+            "function": "",
+            "arguments": {}
         },
         "Y": {
-            "function": ""
+            "function": "",
+            "arguments": {}
         },
-        "ColumnTypes": {
-            "function": ""
+        "column_types": {
+            "function": "",
+            "arguments": {}
         },
         "sample_shape": {
-            "function": ""
+            "function": "",
+            "arguments": {}
+        },
+        "seed_base": {
+            "function": "",
+            "arguments": {}
         },
         "n_folds": {
-            "function": ""
-        },
-        "seed": {
-            "function": "self._get_seed"
+            "function": "",
+            "arguments": {}
         },
         "XSampledColumns": {
-            "function": "self._sample_columns"
+            "function": "self._sample_columns",
+            "arguments": {
+                "X": "X",
+                "sample_shape": "sample_shape",
+                "seed": 0
+            },
+            "returns": [
+                "XSampledColumns"
+            ]
         },
         "XSample": {
-            "function": "self._sample_rows"
+            "function": "self._sample_rows",
+            "arguments": {
+                "X": "XSampledColumns",
+                "Y": "Y",
+                "sample_shape": "sample_shape",
+                "n_folds": "n_folds",
+                "seed": 1
+            },
+            "returns": [
+                "XSample",
+                "YSample"
+            ]
         },
         "YSample": {
-            "function": "self._sample_rows"
+            "function": "self._sample_rows",
+            "arguments": {
+                "X": "XSampledColumns",
+                "Y": "Y",
+                "sample_shape": "sample_shape",
+                "n_folds": "n_folds",
+                "seed": 1
+            },
+            "returns": [
+                "XSample",
+                "YSample"
+            ]
         },
         "XPreprocessed": {
-            "function": "self._get_preprocessed_data"
+            "function": "self._get_preprocessed_data",
+            "arguments": {
+                "X_sample": "XSample",
+                "X_sampled_columns": "XSampledColumns",
+                "column_types": "column_types",
+                "seed": 2
+            },
+            "returns": [
+                "XPreprocessed"
+            ]
         },
         "NoNaNCategoricalFeatures": {
-            "function": "self._get_categorical_features_with_no_missing_values"
+            "function": "self._get_categorical_features_with_no_missing_values",
+            "arguments": {
+                "X_sample": "XSample",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NoNaNCategoricalFeatures"
+            ]
         },
         "NoNaNCategoricalFeaturesAndClass": {
-            "function": "self._get_categorical_features_and_class_with_no_missing_values"
+            "function": "self._get_categorical_features_and_class_with_no_missing_values",
+            "arguments": {
+                "X_sample": "XSample",
+                "Y_sample": "YSample",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NoNaNCategoricalFeaturesAndClass"
+            ]
         },
         "NoNaNNumericFeatures": {
-            "function": "self._get_numeric_features_with_no_missing_values"
+            "function": "self._get_numeric_features_with_no_missing_values",
+            "arguments": {
+                "X_sample": "XSample",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NoNaNNumericFeatures"
+            ]
         },
         "NoNaNBinnedNumericFeatures": {
-            "function": "self._get_binned_numeric_features_with_no_missing_values"
+            "function": "self._get_binned_numeric_features_with_no_missing_values",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "NoNaNBinnedNumericFeatures"
+            ]
         },
         "NoNaNBinnedNumericFeaturesAndClass": {
-            "function": "self._get_binned_numeric_features_and_class_with_no_missing_values"
-        }
-    },
-    "functions": {
-        "": {
-            "parameters": [],
-            "returns": []
-        },
-        "self._get_seed":{
-            "parameters": [],
-            "returns": ["seed"]
-        },
-        "self._sample_columns": {
-            "parameters": ["X","sample_shape","seed"],
-            "seed_offset": 0,
-            "returns": ["XSampledColumns"]
-        },
-        "self._sample_rows": {
-            "parameters": [
-                "XSampledColumns", "Y", "sample_shape", "n_folds", "seed"
-            ],
-            "seed_offset": 1,
-            "returns": ["XSample","YSample"]
-        },
-        "self._get_preprocessed_data": {
-            "parameters": ["XSample","XSampledColumns", "ColumnTypes", "seed"],
-            "seed_offset": 2,
-            "returns": ["XPreprocessed"]
-        },
-        "self._get_categorical_features_with_no_missing_values": {
-            "parameters": ["XSample", "ColumnTypes"],
-            "returns": ["NoNaNCategoricalFeatures"]
-        },
-        "self._get_categorical_features_and_class_with_no_missing_values": {
-            "parameters": ["XSample","YSample", "ColumnTypes"],
-            "returns": ["NoNaNCategoricalFeaturesAndClass"]
-        },
-        "self._get_numeric_features_with_no_missing_values": {
-            "parameters": ["XSample","ColumnTypes"],
-            "returns": ["NoNaNNumericFeatures"]
-        },
-        "self._get_binned_numeric_features_with_no_missing_values": {
-            "parameters": ["NoNaNNumericFeatures"],
-            "returns": ["NoNaNBinnedNumericFeatures"]
-        },
-        "self._get_binned_numeric_features_and_class_with_no_missing_values": {
-            "parameters": ["XSample","YSample","ColumnTypes"],
-            "returns": ["NoNaNBinnedNumericFeaturesAndClass"]
-        },
-        "get_dataset_stats": {
-            "parameters": ["XRaw","ColumnTypes"],
-            "returns": ["NumberOfInstances","NumberOfFeatures","NumberOfNumericFeatures","NumberOfCategoricalFeatures","RatioOfNumericFeatures","RatioOfCategoricalFeatures"]
-        },
-        "get_dimensionality": {
-            "parameters": ["NumberOfFeatures","NumberOfInstances"],
-            "returns": ["Dimensionality"]
-        },
-        "get_missing_values": {
-            "parameters": ["XRaw"],
-            "returns": ["NumberOfMissingValues","RatioOfMissingValues","NumberOfInstancesWithMissingValues","RatioOfInstancesWithMissingValues", "NumberOfFeaturesWithMissingValues", "RatioOfFeaturesWithMissingValues"]
-        },
-        "get_class_stats": {
-            "parameters": ["Y"],
-            "returns": ["NumberOfClasses","MeanClassProbability","StdevClassProbability","MinClassProbability","MaxClassProbability","MinorityClassSize","MajorityClassSize"]
-        },
-        "get_categorical_cardinalities": {
-            "parameters": ["X", "ColumnTypes"],
-            "returns": ["MeanCardinalityOfCategoricalFeatures","StdevCardinalityOfCategoricalFeatures","MinCardinalityOfCategoricalFeatures","MaxCardinalityOfCategoricalFeatures"]
-        },
-        "get_numeric_cardinalities": {
-            "parameters": ["X", "ColumnTypes"],
-            "returns": ["MeanCardinalityOfNumericFeatures","StdevCardinalityOfNumericFeatures","MinCardinalityOfNumericFeatures","MaxCardinalityOfNumericFeatures"]
-        },
-        "get_numeric_means": {
-            "parameters": ["NoNaNNumericFeatures"],
-            "returns": ["MeanMeansOfNumericFeatures","StdevMeansOfNumericFeatures","MinMeansOfNumericFeatures","Quartile1MeansOfNumericFeatures","Quartile2MeansOfNumericFeatures","Quartile3MeansOfNumericFeatures","MaxMeansOfNumericFeatures"]
-        },
-        "get_numeric_stdev": {
-            "parameters": ["NoNaNNumericFeatures"],
-            "returns": ["MeanStdDevOfNumericFeatures","StdevStdDevOfNumericFeatures","MinStdDevOfNumericFeatures","Quartile1StdDevOfNumericFeatures","Quartile2StdDevOfNumericFeatures","Quartile3StdDevOfNumericFeatures","MaxStdDevOfNumericFeatures"]
-        },
-        "get_numeric_skewness": {
-            "parameters": ["NoNaNNumericFeatures"],
-            "returns": ["MeanSkewnessOfNumericFeatures","StdevSkewnessOfNumericFeatures","MinSkewnessOfNumericFeatures","Quartile1SkewnessOfNumericFeatures","Quartile2SkewnessOfNumericFeatures","Quartile3SkewnessOfNumericFeatures","MaxSkewnessOfNumericFeatures"]
-        },
-        "get_numeric_kurtosis": {
-            "parameters": ["NoNaNNumericFeatures"],
-            "returns": ["MeanKurtosisOfNumericFeatures","StdevKurtosisOfNumericFeatures","MinKurtosisOfNumericFeatures","Quartile1KurtosisOfNumericFeatures","Quartile2KurtosisOfNumericFeatures","Quartile3KurtosisOfNumericFeatures","MaxKurtosisOfNumericFeatures"]
-        },
-        "get_pca": {
-            "parameters": ["XPreprocessed"],
-            "returns": ["PredPCA1","PredPCA2","PredPCA3","PredEigen1","PredEigen2","PredEigen3","PredDet"]
-        },
-        "get_class_entropy": {
-            "parameters": ["YSample"],
-            "returns": ["ClassEntropy"]
-        },
-        "get_attribute_entropy": {
-            "parameters": [],
-            "returns": []
-        },
-        "get_joint_entropy": {
-            "parameters": [],
-            "returns": []
-        },
-        "get_mutual_information": {
-            "parameters": [],
-            "returns": []
-        },
-        "get_equivalent_number_features": {
-            "parameters": [],
-            "returns": []
-        },
-        "get_noise_signal_ratio": {
-            "parameters": [],
-            "returns": []
-        },
-        "get_naive_bayes": {
-            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
-            "seed_offset": 3,
-            "returns": ["NaiveBayesErrRate","NaiveBayesKappa"]
-        },
-        "get_knn_1": {
-            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
-            "seed_offset": 4,
-            "returns": ["kNN1NErrRate","kNN1NKappa"]
-        },
-        "get_decision_stump": {
-            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
-            "seed_offset": 5,
-            "returns": ["DecisionStumpErrRate","DecisionStumpKappa"]
-        },
-        "get_random_tree": {
-            "parameters": [],
-            "seed_offset": null,
-            "returns": []
-        },
-        "get_lda": {
-            "parameters": ["XPreprocessed","YSample", "n_folds", "seed"],
-            "seed_offset": 6,
-            "returns": ["LinearDiscriminantAnalysisErrRate","LinearDiscriminantAnalysisKappa"]
+            "function": "self._get_binned_numeric_features_and_class_with_no_missing_values",
+            "arguments": {
+                "X_sample": "XSample",
+                "Y_sample": "YSample",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NoNaNBinnedNumericFeaturesAndClass"
+            ]
         }
     },
     "metafeatures": {
         "NumberOfInstances": {
-            "function": "get_dataset_stats"
+            "function": "get_dataset_stats",
+            "arguments": {
+                "X": "X_raw",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NumberOfInstances",
+                "NumberOfFeatures",
+                "NumberOfNumericFeatures",
+                "NumberOfCategoricalFeatures",
+                "RatioOfNumericFeatures",
+                "RatioOfCategoricalFeatures"
+            ]
         },
         "NumberOfFeatures": {
-            "function": "get_dataset_stats"
+            "function": "get_dataset_stats",
+            "arguments": {
+                "X": "X_raw",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NumberOfInstances",
+                "NumberOfFeatures",
+                "NumberOfNumericFeatures",
+                "NumberOfCategoricalFeatures",
+                "RatioOfNumericFeatures",
+                "RatioOfCategoricalFeatures"
+            ]
         },
         "NumberOfClasses": {
-            "function": "get_class_stats"
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "MinClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
         },
         "NumberOfNumericFeatures": {
-            "function": "get_dataset_stats"
+            "function": "get_dataset_stats",
+            "arguments": {
+                "X": "X_raw",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NumberOfInstances",
+                "NumberOfFeatures",
+                "NumberOfNumericFeatures",
+                "NumberOfCategoricalFeatures",
+                "RatioOfNumericFeatures",
+                "RatioOfCategoricalFeatures"
+            ]
         },
         "NumberOfCategoricalFeatures": {
-            "function": "get_dataset_stats"
+            "function": "get_dataset_stats",
+            "arguments": {
+                "X": "X_raw",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NumberOfInstances",
+                "NumberOfFeatures",
+                "NumberOfNumericFeatures",
+                "NumberOfCategoricalFeatures",
+                "RatioOfNumericFeatures",
+                "RatioOfCategoricalFeatures"
+            ]
         },
         "RatioOfNumericFeatures": {
-            "function": "get_dataset_stats"
+            "function": "get_dataset_stats",
+            "arguments": {
+                "X": "X_raw",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NumberOfInstances",
+                "NumberOfFeatures",
+                "NumberOfNumericFeatures",
+                "NumberOfCategoricalFeatures",
+                "RatioOfNumericFeatures",
+                "RatioOfCategoricalFeatures"
+            ]
         },
         "RatioOfCategoricalFeatures": {
-            "function": "get_dataset_stats"
+            "function": "get_dataset_stats",
+            "arguments": {
+                "X": "X_raw",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NumberOfInstances",
+                "NumberOfFeatures",
+                "NumberOfNumericFeatures",
+                "NumberOfCategoricalFeatures",
+                "RatioOfNumericFeatures",
+                "RatioOfCategoricalFeatures"
+            ]
         },
         "Dimensionality": {
-            "function": "get_dimensionality"
+            "function": "get_dimensionality",
+            "arguments": {
+                "number_of_features": "NumberOfFeatures",
+                "number_of_instances": "NumberOfInstances"
+            },
+            "returns": [
+                "Dimensionality"
+            ]
         },
         "NumberOfMissingValues": {
-            "function": "get_missing_values"
+            "function": "get_missing_values",
+            "arguments": {
+                "X": "X_raw"
+            },
+            "returns": [
+                "NumberOfMissingValues",
+                "RatioOfMissingValues",
+                "NumberOfInstancesWithMissingValues",
+                "RatioOfInstancesWithMissingValues",
+                "NumberOfFeaturesWithMissingValues",
+                "RatioOfFeaturesWithMissingValues"
+            ]
         },
         "RatioOfMissingValues": {
-            "function": "get_missing_values"
+            "function": "get_missing_values",
+            "arguments": {
+                "X": "X_raw"
+            },
+            "returns": [
+                "NumberOfMissingValues",
+                "RatioOfMissingValues",
+                "NumberOfInstancesWithMissingValues",
+                "RatioOfInstancesWithMissingValues",
+                "NumberOfFeaturesWithMissingValues",
+                "RatioOfFeaturesWithMissingValues"
+            ]
         },
         "NumberOfInstancesWithMissingValues": {
-            "function": "get_missing_values"
+            "function": "get_missing_values",
+            "arguments": {
+                "X": "X_raw"
+            },
+            "returns": [
+                "NumberOfMissingValues",
+                "RatioOfMissingValues",
+                "NumberOfInstancesWithMissingValues",
+                "RatioOfInstancesWithMissingValues",
+                "NumberOfFeaturesWithMissingValues",
+                "RatioOfFeaturesWithMissingValues"
+            ]
         },
         "RatioOfInstancesWithMissingValues": {
-            "function": "get_missing_values"
+            "function": "get_missing_values",
+            "arguments": {
+                "X": "X_raw"
+            },
+            "returns": [
+                "NumberOfMissingValues",
+                "RatioOfMissingValues",
+                "NumberOfInstancesWithMissingValues",
+                "RatioOfInstancesWithMissingValues",
+                "NumberOfFeaturesWithMissingValues",
+                "RatioOfFeaturesWithMissingValues"
+            ]
         },
         "NumberOfFeaturesWithMissingValues": {
-            "function": "get_missing_values"
+            "function": "get_missing_values",
+            "arguments": {
+                "X": "X_raw"
+            },
+            "returns": [
+                "NumberOfMissingValues",
+                "RatioOfMissingValues",
+                "NumberOfInstancesWithMissingValues",
+                "RatioOfInstancesWithMissingValues",
+                "NumberOfFeaturesWithMissingValues",
+                "RatioOfFeaturesWithMissingValues"
+            ]
         },
         "RatioOfFeaturesWithMissingValues": {
-            "function": "get_missing_values"
+            "function": "get_missing_values",
+            "arguments": {
+                "X": "X_raw"
+            },
+            "returns": [
+                "NumberOfMissingValues",
+                "RatioOfMissingValues",
+                "NumberOfInstancesWithMissingValues",
+                "RatioOfInstancesWithMissingValues",
+                "NumberOfFeaturesWithMissingValues",
+                "RatioOfFeaturesWithMissingValues"
+            ]
         },
         "MeanClassProbability": {
-            "function": "get_class_stats"
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "MinClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
         },
         "StdevClassProbability": {
-            "function": "get_class_stats"
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "MinClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
         },
         "MinClassProbability": {
-            "function": "get_class_stats"
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "MinClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
         },
         "MaxClassProbability": {
-            "function": "get_class_stats"
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "MinClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
         },
         "MinorityClassSize": {
-            "function": "get_class_stats"
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "MinClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
         },
         "MajorityClassSize": {
-            "function": "get_class_stats"
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "MinClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
         },
         "MeanCardinalityOfCategoricalFeatures": {
-            "function": "get_categorical_cardinalities"
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
         },
         "StdevCardinalityOfCategoricalFeatures": {
-            "function": "get_categorical_cardinalities"
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
         },
         "MinCardinalityOfCategoricalFeatures": {
-            "function": "get_categorical_cardinalities"
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
         },
         "MaxCardinalityOfCategoricalFeatures": {
-            "function": "get_categorical_cardinalities"
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
         },
         "MeanCardinalityOfNumericFeatures": {
-            "function": "get_numeric_cardinalities"
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
         },
         "StdevCardinalityOfNumericFeatures": {
-            "function": "get_numeric_cardinalities"
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
         },
         "MinCardinalityOfNumericFeatures": {
-            "function": "get_numeric_cardinalities"
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
         },
         "MaxCardinalityOfNumericFeatures": {
-            "function": "get_numeric_cardinalities"
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
         },
         "MeanMeansOfNumericFeatures": {
-            "function": "get_numeric_means"
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
         },
         "StdevMeansOfNumericFeatures": {
-            "function": "get_numeric_means"
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
         },
         "MinMeansOfNumericFeatures": {
-            "function": "get_numeric_means"
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
         },
         "MaxMeansOfNumericFeatures": {
-            "function": "get_numeric_means"
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
         },
         "Quartile1MeansOfNumericFeatures": {
-            "function": "get_numeric_means"
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
         },
         "Quartile2MeansOfNumericFeatures": {
-            "function": "get_numeric_means"
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
         },
         "Quartile3MeansOfNumericFeatures": {
-            "function": "get_numeric_means"
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
         },
         "MeanStdDevOfNumericFeatures": {
-            "function": "get_numeric_stdev"
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
         },
         "StdevStdDevOfNumericFeatures": {
-            "function": "get_numeric_stdev"
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
         },
         "MinStdDevOfNumericFeatures": {
-            "function": "get_numeric_stdev"
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
         },
         "MaxStdDevOfNumericFeatures": {
-            "function": "get_numeric_stdev"
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
         },
         "Quartile1StdDevOfNumericFeatures": {
-            "function": "get_numeric_stdev"
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
         },
         "Quartile2StdDevOfNumericFeatures": {
-            "function": "get_numeric_stdev"
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
         },
         "Quartile3StdDevOfNumericFeatures": {
-            "function": "get_numeric_stdev"
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
         },
         "MeanSkewnessOfNumericFeatures": {
-            "function": "get_numeric_skewness"
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
         },
         "StdevSkewnessOfNumericFeatures": {
-            "function": "get_numeric_skewness"
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
         },
         "MinSkewnessOfNumericFeatures": {
-            "function": "get_numeric_skewness"
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
         },
         "MaxSkewnessOfNumericFeatures": {
-            "function": "get_numeric_skewness"
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
         },
         "Quartile1SkewnessOfNumericFeatures": {
-            "function": "get_numeric_skewness"
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
         },
         "Quartile2SkewnessOfNumericFeatures": {
-            "function": "get_numeric_skewness"
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
         },
         "Quartile3SkewnessOfNumericFeatures": {
-            "function": "get_numeric_skewness"
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
         },
         "MeanKurtosisOfNumericFeatures": {
-            "function": "get_numeric_kurtosis"
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+            "MeanKurtosisOfNumericFeatures",
+            "StdevKurtosisOfNumericFeatures",
+            "MinKurtosisOfNumericFeatures",
+            "Quartile1KurtosisOfNumericFeatures",
+            "Quartile2KurtosisOfNumericFeatures",
+            "Quartile3KurtosisOfNumericFeatures",
+            "MaxKurtosisOfNumericFeatures"
+        ]
         },
         "StdevKurtosisOfNumericFeatures": {
-            "function": "get_numeric_kurtosis"
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
         },
         "MinKurtosisOfNumericFeatures": {
-            "function": "get_numeric_kurtosis"
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
         },
         "MaxKurtosisOfNumericFeatures": {
-            "function": "get_numeric_kurtosis"
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
         },
         "Quartile1KurtosisOfNumericFeatures": {
-            "function": "get_numeric_kurtosis"
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
         },
         "Quartile2KurtosisOfNumericFeatures": {
-            "function": "get_numeric_kurtosis"
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
         },
         "Quartile3KurtosisOfNumericFeatures": {
-            "function": "get_numeric_kurtosis"
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
         },
         "PredPCA1": {
-            "function": "get_pca"
+            "function": "get_pca",
+            "arguments": {
+                "X_preprocessed": "XPreprocessed"
+            },
+            "returns": [
+                "PredPCA1",
+                "PredPCA2",
+                "PredPCA3",
+                "PredEigen1",
+                "PredEigen2",
+                "PredEigen3",
+                "PredDet"
+            ]
         },
         "PredPCA2": {
-            "function": "get_pca"
+            "function": "get_pca",
+            "arguments": {
+                "X_preprocessed": "XPreprocessed"
+            },
+            "returns": [
+                "PredPCA1",
+                "PredPCA2",
+                "PredPCA3",
+                "PredEigen1",
+                "PredEigen2",
+                "PredEigen3",
+                "PredDet"
+            ]
         },
         "PredPCA3": {
-            "function": "get_pca"
+            "function": "get_pca",
+            "arguments": {
+                "X_preprocessed": "XPreprocessed"
+            },
+            "returns": [
+                "PredPCA1",
+                "PredPCA2",
+                "PredPCA3",
+                "PredEigen1",
+                "PredEigen2",
+                "PredEigen3",
+                "PredDet"
+            ]
         },
         "PredEigen1": {
-            "function": "get_pca"
+            "function": "get_pca",
+            "arguments": {
+                "X_preprocessed": "XPreprocessed"
+            },
+            "returns": [
+                "PredPCA1",
+                "PredPCA2",
+                "PredPCA3",
+                "PredEigen1",
+                "PredEigen2",
+                "PredEigen3",
+                "PredDet"
+            ]
         },
         "PredEigen2": {
-            "function": "get_pca"
+            "function": "get_pca",
+            "arguments": {
+                "X_preprocessed": "XPreprocessed"
+            },
+            "returns": [
+                "PredPCA1",
+                "PredPCA2",
+                "PredPCA3",
+                "PredEigen1",
+                "PredEigen2",
+                "PredEigen3",
+                "PredDet"
+            ]
         },
         "PredEigen3": {
-            "function": "get_pca"
+            "function": "get_pca",
+            "arguments": {
+                "X_preprocessed": "XPreprocessed"
+            },
+            "returns": [
+                "PredPCA1",
+                "PredPCA2",
+                "PredPCA3",
+                "PredEigen1",
+                "PredEigen2",
+                "PredEigen3",
+                "PredDet"
+            ]
         },
         "PredDet": {
-            "function": "get_pca"
+            "function": "get_pca",
+            "arguments": {
+                "X_preprocessed": "XPreprocessed"
+            },
+            "returns": [
+                "PredPCA1",
+                "PredPCA2",
+                "PredPCA3",
+                "PredEigen1",
+                "PredEigen2",
+                "PredEigen3",
+                "PredDet"
+            ]
         },
         "ClassEntropy": {
-            "function": "get_class_entropy"
+            "function": "get_class_entropy",
+            "arguments": {
+                "Y_sample": "YSample"
+            },
+            "returns": [
+                "ClassEntropy"
+            ]
         },
         "MeanCategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeatures"],
-            "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
         },
         "MinCategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeatures"],
-            "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
         },
         "Quartile1CategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeatures"],
-            "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
         },
         "Quartile2CategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeatures"],
-            "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
         },
         "Quartile3CategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeatures"],
-            "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
         },
         "MaxCategoricalAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNCategoricalFeatures"],
-            "returns": ["MeanCategoricalAttributeEntropy","MinCategoricalAttributeEntropy","Quartile1CategoricalAttributeEntropy","Quartile2CategoricalAttributeEntropy","Quartile3CategoricalAttributeEntropy","MaxCategoricalAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
         },
         "MeanNumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeatures"],
-            "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
         },
         "MinNumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeatures"],
-            "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
         },
         "Quartile1NumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeatures"],
-            "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
         },
         "Quartile2NumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeatures"],
-            "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
         },
         "Quartile3NumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeatures"],
-            "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
         },
         "MaxNumericAttributeEntropy": {
             "function": "get_attribute_entropy",
-            "parameters": ["NoNaNBinnedNumericFeatures"],
-            "returns": ["MeanNumericAttributeEntropy","MinNumericAttributeEntropy","Quartile1NumericAttributeEntropy","Quartile2NumericAttributeEntropy","Quartile3NumericAttributeEntropy","MaxNumericAttributeEntropy"]
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
         },
         "MeanCategoricalJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
         },
         "MinCategoricalJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
         },
         "Quartile1CategoricalJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
         },
         "Quartile2CategoricalJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
         },
         "Quartile3CategoricalJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
         },
         "MaxCategoricalJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalJointEntropy","MinCategoricalJointEntropy","Quartile1CategoricalJointEntropy","Quartile2CategoricalJointEntropy","Quartile3CategoricalJointEntropy","MaxCategoricalJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": ["MeanCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
         },
         "MeanNumericJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
         },
         "MinNumericJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
         },
         "Quartile1NumericJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
         },
         "Quartile2NumericJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
         },
         "Quartile3NumericJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
         },
         "MaxNumericJointEntropy": {
             "function": "get_joint_entropy",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericJointEntropy","MinNumericJointEntropy","Quartile1NumericJointEntropy","Quartile2NumericJointEntropy","Quartile3NumericJointEntropy","MaxNumericJointEntropy"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
         },
         "MeanCategoricalMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
         },
         "MinCategoricalMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
         },
         "Quartile1CategoricalMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
         },
         "Quartile2CategoricalMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
         },
         "Quartile3CategoricalMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
         },
         "MaxCategoricalMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNCategoricalFeaturesAndClass"],
-            "returns": ["MeanCategoricalMutualInformation","MinCategoricalMutualInformation","Quartile1CategoricalMutualInformation","Quartile2CategoricalMutualInformation","Quartile3CategoricalMutualInformation","MaxCategoricalMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
         },
         "MeanNumericMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
         },
         "MinNumericMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
         },
         "Quartile1NumericMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
         },
         "Quartile2NumericMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
         },
         "Quartile3NumericMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
         },
         "MaxNumericMutualInformation": {
             "function": "get_mutual_information",
-            "parameters": ["NoNaNBinnedNumericFeaturesAndClass"],
-            "returns": ["MeanNumericMutualInformation","MinNumericMutualInformation","Quartile1NumericMutualInformation","Quartile2NumericMutualInformation","Quartile3NumericMutualInformation","MaxNumericMutualInformation"]
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
         },
         "EquivalentNumberOfCategoricalFeatures": {
             "function": "get_equivalent_number_features",
-            "parameters": ["ClassEntropy","MeanCategoricalMutualInformation"],
-            "returns": ["EquivalentNumberOfCategoricalFeatures"]
+            "arguments": {
+                "class_entropy": "ClassEntropy",
+                "mutual_information": "MeanCategoricalMutualInformation"
+            },
+            "returns": [
+                "EquivalentNumberOfCategoricalFeatures"
+            ]
         },
         "EquivalentNumberOfNumericFeatures": {
             "function": "get_equivalent_number_features",
-            "parameters": ["ClassEntropy","MeanNumericMutualInformation"],
-            "returns": ["EquivalentNumberOfNumericFeatures"]
+            "arguments": {
+                "class_entropy": "ClassEntropy",
+                "mutual_information": "MeanNumericMutualInformation"
+            },
+            "returns": [
+                "EquivalentNumberOfNumericFeatures"
+            ]
         },
         "CategoricalNoiseToSignalRatio": {
             "function": "get_noise_signal_ratio",
-            "parameters": ["MeanCategoricalAttributeEntropy","MeanCategoricalMutualInformation"],
-            "returns": ["CategoricalNoiseToSignalRatio"]
+            "arguments": {
+                "attribute_entropy": "MeanCategoricalAttributeEntropy",
+                "mutual_information": "MeanCategoricalMutualInformation"
+            },
+            "returns": [
+                "CategoricalNoiseToSignalRatio"
+            ]
         },
         "NumericNoiseToSignalRatio": {
             "function": "get_noise_signal_ratio",
-            "parameters": ["MeanNumericAttributeEntropy","MeanNumericMutualInformation"],
-            "returns": ["NumericNoiseToSignalRatio"]
+            "arguments": {
+                "attribute_entropy": "MeanNumericAttributeEntropy",
+                "mutual_information": "MeanNumericMutualInformation"
+            },
+            "returns": [
+                "NumericNoiseToSignalRatio"]
         },
         "NaiveBayesErrRate": {
-            "function": "get_naive_bayes"
+            "function": "get_naive_bayes",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "n_folds": "n_folds",
+                "seed": 3
+            },
+            "returns": [
+                "NaiveBayesErrRate",
+                "NaiveBayesKappa"
+            ]
         },
         "NaiveBayesKappa": {
-            "function": "get_naive_bayes"
+            "function": "get_naive_bayes",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "n_folds": "n_folds",
+                "seed": 3
+            },
+            "returns": [
+                "NaiveBayesErrRate",
+                "NaiveBayesKappa"
+            ]
         },
         "kNN1NErrRate": {
-            "function": "get_knn_1"
+            "function": "get_knn_1",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "n_folds": "n_folds",
+                "seed": 4
+            },
+            "returns": [
+                "kNN1NErrRate",
+                "kNN1NKappa"
+            ]
         },
         "kNN1NKappa": {
-            "function": "get_knn_1"
+            "function": "get_knn_1",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "n_folds": "n_folds",
+                "seed": 4
+            },
+            "returns": [
+                "kNN1NErrRate",
+                "kNN1NKappa"
+            ]
         },
         "DecisionStumpErrRate": {
-            "function": "get_decision_stump"
+            "function": "get_decision_stump",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 5,
+                "n_folds": "n_folds"
+            },
+            "returns": [
+                "DecisionStumpErrRate",
+                "DecisionStumpKappa"
+            ]
         },
         "DecisionStumpKappa": {
-            "function": "get_decision_stump"
+            "function": "get_decision_stump",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 5,
+                "n_folds": "n_folds"
+            },
+            "returns": [
+                "DecisionStumpErrRate",
+                "DecisionStumpKappa"
+            ]
         },
         "RandomTreeDepth1ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed", "YSample", 1, "n_folds", "seed"],
-            "seed_offset": 7,
-            "returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "depth": 1,
+                "n_folds": "n_folds",
+                "seed": 7
+            },
+            "returns": [
+                "RandomTreeDepth1ErrRate",
+                "RandomTreeDepth1Kappa"
+            ]
         },
         "RandomTreeDepth1Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed", "YSample", 1, "n_folds", "seed"],
-            "seed_offset": 8,
-            "returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "depth": 1,
+                "n_folds": "n_folds",
+                "seed": 8
+            },
+            "returns": [
+                "RandomTreeDepth1ErrRate",
+                "RandomTreeDepth1Kappa"
+            ]
         },
         "RandomTreeDepth2ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed", "YSample", 2, "n_folds", "seed"],
-            "seed_offset": 9,
-            "returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "depth": 2,
+                "n_folds": "n_folds",
+                "seed": 9
+            },
+            "returns": [
+                "RandomTreeDepth2ErrRate",
+                "RandomTreeDepth2Kappa"
+            ]
         },
         "RandomTreeDepth2Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed", "YSample", 2, "n_folds", "seed"],
-            "seed_offset": 10,
-            "returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "depth": 2,
+                "n_folds": "n_folds",
+                "seed": 10
+            },
+            "returns": [
+                "RandomTreeDepth2ErrRate",
+                "RandomTreeDepth2Kappa"
+            ]
         },
         "RandomTreeDepth3ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed", "YSample", 3, "n_folds", "seed"],
-            "seed_offset": 11,
-            "returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "depth": 3,
+                "n_folds": "n_folds",
+                "seed": 11
+            },
+            "returns": [
+                "RandomTreeDepth3ErrRate",
+                "RandomTreeDepth3Kappa"
+            ]
         },
         "RandomTreeDepth3Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed", "YSample", 3, "n_folds", "seed"],
-            "seed_offset": 12,
-            "returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "depth": 3,
+                "n_folds": "n_folds",
+                "seed": 12
+            },
+            "returns": [
+                "RandomTreeDepth3ErrRate",
+                "RandomTreeDepth3Kappa"
+            ]
         },
         "LinearDiscriminantAnalysisErrRate": {
-            "function": "get_lda"
+            "function": "get_lda",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "n_folds": "n_folds",
+                "seed": 6
+            },
+            "returns": [
+                "LinearDiscriminantAnalysisErrRate",
+                "LinearDiscriminantAnalysisKappa"
+            ]
         },
         "LinearDiscriminantAnalysisKappa": {
-            "function": "get_lda"
+            "function": "get_lda",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "n_folds": "n_folds",
+                "seed": 6
+            },
+            "returns": [
+                "LinearDiscriminantAnalysisErrRate",
+                "LinearDiscriminantAnalysisKappa"
+            ]
         }
     }
 }

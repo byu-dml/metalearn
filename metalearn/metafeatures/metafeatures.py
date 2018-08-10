@@ -36,10 +36,9 @@ class Metafeatures(object):
     with open(_metadata_path, 'r') as f:
         _metadata = json.load(f)
     IDS = _metadata["metafeatures"].keys()
-    _functions = _metadata["functions"]
-    _resource_info = {}
-    _resource_info.update(_metadata["resources"])
-    _resource_info.update(_metadata["metafeatures"])
+    _resources_info = {}
+    _resources_info.update(_metadata["resources"])
+    _resources_info.update(_metadata["metafeatures"])
 
     @classmethod
     def list_metafeatures(cls, group="all"):
@@ -59,7 +58,7 @@ class Metafeatures(object):
             ))
         elif group == "target_dependent":
             return list(filter(
-                cls._is_target_dependent, cls.IDS
+                cls._resource_is_target_dependent, cls.IDS
             ))
         else:
             raise ValueError(f"Unknown group {group}")
@@ -103,6 +102,8 @@ class Metafeatures(object):
             metafeature_ids = self.list_metafeatures()
         if sample_shape is None:
             sample_shape = (None, None)
+        if seed is None:
+            seed = np.random.randint(2**32)
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
@@ -113,7 +114,7 @@ class Metafeatures(object):
 
         computed_metafeatures = {}
         for metafeature_id in metafeature_ids:
-            if self._is_target_dependent(metafeature_id) and (
+            if self._resource_is_target_dependent(metafeature_id) and (
                 Y is None or column_types[Y.name] == self.NUMERIC
             ):
                 if Y is None:
@@ -134,9 +135,8 @@ class Metafeatures(object):
     def _init_resources(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
     ):
-        self._set_seed(seed)
         self._resources = {
-            "XRaw": {
+            "X_raw": {
                 self.VALUE_KEY: X,
                 self.COMPUTE_TIME_KEY: 0.
             },
@@ -148,12 +148,16 @@ class Metafeatures(object):
                 self.VALUE_KEY: Y,
                 self.COMPUTE_TIME_KEY: 0.
             },
-            "ColumnTypes": {
+            "column_types": {
                 self.VALUE_KEY: column_types,
                 self.COMPUTE_TIME_KEY: 0.
             },
             "sample_shape": {
                 self.VALUE_KEY: sample_shape,
+                self.COMPUTE_TIME_KEY: 0.
+            },
+            "seed_base": {
+                self.VALUE_KEY: seed,
                 self.COMPUTE_TIME_KEY: 0.
             },
             "n_folds": {
@@ -163,32 +167,24 @@ class Metafeatures(object):
         }
 
     @classmethod
-    def _is_target_dependent(cls, resource_name):
-        if resource_name=='Y':
+    def _resource_is_target_dependent(cls, resource_id):
+        if resource_id=='Y':
             return True
-        elif resource_name=='XSample':
+        elif resource_id=='XSample':
             return False
         else:
-            resource_info = cls._resource_info[resource_name]
-            parameters = resource_info.get('parameters', [])
-            for parameter in parameters:
-                if cls._is_target_dependent(parameter):
-                    return True
-            function = resource_info['function']
-            parameters = cls._functions[function]['parameters']
-            for parameter in parameters:
-                if cls._is_target_dependent(parameter):
+            resource_info = cls._resources_info[resource_id]
+            function = resource_info["function"]
+            args = resource_info["arguments"]
+            for parameter, argument in args.items():
+                if (argument in cls._resources_info and
+                    cls._resource_is_target_dependent(argument)
+                ):
                     return True
             return False
 
-    def _set_seed(self, seed):
-        if seed is None:
-            self.seed = np.random.randint(2**32)
-        else:
-            self.seed = seed
-
-    def _get_seed(self):
-        return (self.seed + self.seed_offset,)
+    def _get_cv_seed(self, seed_base, seed_offset):
+        return (seed_base + seed_offset,)
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
@@ -246,7 +242,7 @@ class Metafeatures(object):
     ):
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
-                mf for mf in metafeature_ids if mf not in self._resource_info
+                mf for mf in metafeature_ids if mf not in self._resources_info
             ]
             if len(invalid_metafeature_ids) > 0:
                 raise ValueError(
@@ -312,57 +308,49 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _get_resource(self, resource_name):
-        if not resource_name in self._resources:
-            resource_info = self._resource_info[resource_name]
-            f = resource_info['function']
-            if 'returns' in resource_info:
-                returns = resource_info['returns']
-            else:
-                returns = self._functions[f]['returns']
-            parameters, total_time = self._get_parameters(resource_name)
-            if parameters is None:
-                results = tuple([np.nan] * len(returns))
-                total_time = np.nan
-            else:
-                start = time.time()
-                results = eval(f)(*parameters)
-                end = time.time()
-                elapsed_time = end - start
-                total_time += elapsed_time
-            for result_name, result in zip(returns, results):
-                self._resources[result_name] = {
-                    self.VALUE_KEY: result,
+    def _get_resource(self, resource_id):
+        if not resource_id in self._resources:
+            resource_info = self._resources_info[resource_id]
+            f = resource_info["function"]
+            args, total_time = self._get_arguments(resource_id)
+            return_resources = resource_info["returns"]
+            start_timestamp = time.time()
+            computed_resources = eval(f)(**args)
+            compute_time = time.time() - start_timestamp
+            total_time += compute_time
+            for res_id, computed_resource in zip(
+                return_resources, computed_resources
+            ):
+                self._resources[res_id] = {
+                    self.VALUE_KEY: computed_resource,
                     self.COMPUTE_TIME_KEY: total_time
                 }
-        value = self._resources[resource_name][self.VALUE_KEY]
-        total_time = self._resources[resource_name][self.COMPUTE_TIME_KEY]
-        return (value, total_time)
+        resource = self._resources[resource_id]
+        return resource[self.VALUE_KEY], resource[self.COMPUTE_TIME_KEY]
 
-    def _get_parameters(self, resource_name):
-        resource_info = self._resource_info[resource_name]
-        f = resource_info['function']
-        if 'parameters' in resource_info:
-            parameters = resource_info['parameters']
-        else:
-            parameters = self._functions[f]['parameters']
-        if 'seed_offset' in resource_info:
-            self.seed_offset = resource_info['seed_offset']
-        elif 'seed_offset' in self._functions[f]:
-            self.seed_offset = self._functions[f]['seed_offset']
-        retrieved_parameters = []
+    def _get_arguments(self, resource_id):
+        resource_info = self._resources_info[resource_id]
+        function = resource_info["function"]
+        args = resource_info["arguments"]
+        resolved_parameters = {}
         total_time = 0.0
-        for parameter in parameters:
-            if dtype_is_numeric(type(parameter)):
-                value, time_value = parameter, 0.
+        for parameter, argument in args.items():
+            argument_type = type(argument)
+            if parameter == "seed":
+                seed_base, compute_time = self._get_resource("seed_base")
+                argument += seed_base
+            elif argument_type is str:
+                if argument in self._resources_info:
+                    argument, compute_time = self._get_resource(argument)
+                else:
+                    compute_time = 0
+            elif dtype_is_numeric(argument_type):
+                compute_time = 0
             else:
-                value, time_value = self._get_resource(parameter)
-            if value is np.nan:
-                retrieved_parameters = None
-                break
-            retrieved_parameters.append(value)
-            total_time += time_value
-        return (retrieved_parameters, total_time)
+                raise Exception("unhandled argument type")
+            resolved_parameters[parameter] = argument
+            total_time += compute_time
+        return (resolved_parameters, total_time)
 
     def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed):
         series_array = []
