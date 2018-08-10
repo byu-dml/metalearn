@@ -73,7 +73,7 @@
                 "X_sample": "XSample",
                 "X_sampled_columns": "XSampledColumns",
                 "column_types": "column_types",
-                "seed": 2
+                "seed": 0
             },
             "returns": [
                 "XPreprocessed"
@@ -1607,7 +1607,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "seed": 3
+                "seed": 0
             },
             "returns": [
                 "NaiveBayesErrRate",
@@ -1620,7 +1620,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "seed": 3
+                "seed": 0
             },
             "returns": [
                 "NaiveBayesErrRate",
@@ -1633,7 +1633,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "seed": 4
+                "seed": 0
             },
             "returns": [
                 "kNN1NErrRate",
@@ -1646,7 +1646,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "seed": 4
+                "seed": 0
             },
             "returns": [
                 "kNN1NErrRate",
@@ -1658,7 +1658,7 @@
             "arguments": {
                 "X": "XPreprocessed",
                 "Y": "YSample",
-                "seed": 5,
+                "seed": 0,
                 "n_folds": "n_folds"
             },
             "returns": [
@@ -1671,7 +1671,7 @@
             "arguments": {
                 "X": "XPreprocessed",
                 "Y": "YSample",
-                "seed": 5,
+                "seed": 0,
                 "n_folds": "n_folds"
             },
             "returns": [
@@ -1686,7 +1686,7 @@
                 "Y": "YSample",
                 "depth": 1,
                 "n_folds": "n_folds",
-                "seed": 7
+                "seed": 0
             },
             "returns": [
                 "RandomTreeDepth1ErrRate",
@@ -1700,7 +1700,7 @@
                 "Y": "YSample",
                 "depth": 1,
                 "n_folds": "n_folds",
-                "seed": 8
+                "seed": 0
             },
             "returns": [
                 "RandomTreeDepth1ErrRate",
@@ -1714,7 +1714,7 @@
                 "Y": "YSample",
                 "depth": 2,
                 "n_folds": "n_folds",
-                "seed": 9
+                "seed": 0
             },
             "returns": [
                 "RandomTreeDepth2ErrRate",
@@ -1728,7 +1728,7 @@
                 "Y": "YSample",
                 "depth": 2,
                 "n_folds": "n_folds",
-                "seed": 10
+                "seed": 0
             },
             "returns": [
                 "RandomTreeDepth2ErrRate",
@@ -1742,7 +1742,7 @@
                 "Y": "YSample",
                 "depth": 3,
                 "n_folds": "n_folds",
-                "seed": 11
+                "seed": 0
             },
             "returns": [
                 "RandomTreeDepth3ErrRate",
@@ -1756,7 +1756,7 @@
                 "Y": "YSample",
                 "depth": 3,
                 "n_folds": "n_folds",
-                "seed": 12
+                "seed": 0
             },
             "returns": [
                 "RandomTreeDepth3ErrRate",
@@ -1769,7 +1769,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "seed": 6
+                "seed": 0
             },
             "returns": [
                 "LinearDiscriminantAnalysisErrRate",
@@ -1782,7 +1782,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "seed": 6
+                "seed": 0
             },
             "returns": [
                 "LinearDiscriminantAnalysisErrRate",
