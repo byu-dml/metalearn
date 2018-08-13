@@ -311,11 +311,12 @@ class Metafeatures(object):
     def _get_resource(self, resource_id):
         if not resource_id in self._resources:
             resource_info = self._resources_info[resource_id]
-            f = resource_info["function"]
+            f_name = resource_info["function"]
+            f = self._get_function(f_name)
             args, total_time = self._get_arguments(resource_id)
             return_resources = resource_info["returns"]
             start_timestamp = time.time()
-            computed_resources = eval(f)(**args)
+            computed_resources = f(**args)
             compute_time = time.time() - start_timestamp
             total_time += compute_time
             for res_id, computed_resource in zip(
@@ -328,9 +329,14 @@ class Metafeatures(object):
         resource = self._resources[resource_id]
         return resource[self.VALUE_KEY], resource[self.COMPUTE_TIME_KEY]
 
+    def _get_function(self, f_name):
+        if f_name.startswith("self."):
+            return getattr(self, f_name[len("self."):])
+        else:
+            return globals()[f_name]
+
     def _get_arguments(self, resource_id):
         resource_info = self._resources_info[resource_id]
-        function = resource_info["function"]
         args = resource_info["arguments"]
         resolved_parameters = {}
         total_time = 0.0
