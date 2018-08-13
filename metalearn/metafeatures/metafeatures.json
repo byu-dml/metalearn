@@ -32,7 +32,7 @@
             "function": "self._get_cv_seed",
             "arguments": {
                 "seed_base": "seed_base",
-                "seed_offset": 0
+                "seed_offset": 1
             },
             "returns": [
                 "cv_seed"
@@ -43,7 +43,7 @@
             "arguments": {
                 "X": "X",
                 "sample_shape": "sample_shape",
-                "seed": 0
+                "seed": 2
             },
             "returns": [
                 "XSampledColumns"
@@ -55,7 +55,7 @@
                 "X": "XSampledColumns",
                 "Y": "Y",
                 "sample_shape": "sample_shape",
-                "seed": 1
+                "seed": 3
             },
             "returns": [
                 "XSample",
@@ -69,7 +69,7 @@
                 "Y": "Y",
                 "sample_shape": "sample_shape",
                 "n_folds": "n_folds",
-                "seed": 1
+                "seed": 3
             },
             "returns": [
                 "XSample",
@@ -82,7 +82,7 @@
                 "X_sample": "XSample",
                 "X_sampled_columns": "XSampledColumns",
                 "column_types": "column_types",
-                "seed": 0
+                "seed": 4
             },
             "returns": [
                 "XPreprocessed"
@@ -1667,7 +1667,7 @@
             "arguments": {
                 "X": "XPreprocessed",
                 "Y": "YSample",
-                "seed": 0,
+                "seed": 5,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
@@ -1681,7 +1681,7 @@
             "arguments": {
                 "X": "XPreprocessed",
                 "Y": "YSample",
-                "seed": 0,
+                "seed": 5,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
@@ -1696,7 +1696,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "depth": 1,
-                "seed": 0,
+                "seed": 6,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
@@ -1711,7 +1711,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "depth": 1,
-                "seed": 0,
+                "seed": 6,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
@@ -1726,7 +1726,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "depth": 2,
-                "seed": 0,
+                "seed": 7,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
@@ -1741,7 +1741,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "depth": 2,
-                "seed": 0,
+                "seed": 7,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
@@ -1756,7 +1756,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "depth": 3,
-                "seed": 0,
+                "seed": 8,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
@@ -1771,7 +1771,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "depth": 3,
-                "seed": 0,
+                "seed": 8,
                 "n_folds": "n_folds",
                 "cv_seed": "cv_seed"
             },
