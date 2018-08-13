@@ -1698,7 +1698,7 @@
                 "depth": 1,
                 "seed": 0,
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "RandomTreeDepth1ErrRate",
@@ -1713,7 +1713,7 @@
                 "depth": 1,
                 "seed": 0,
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "RandomTreeDepth1ErrRate",
@@ -1728,7 +1728,7 @@
                 "depth": 2,
                 "seed": 0,
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "RandomTreeDepth2ErrRate",
@@ -1743,7 +1743,7 @@
                 "depth": 2,
                 "seed": 0,
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "RandomTreeDepth2ErrRate",
@@ -1758,7 +1758,7 @@
                 "depth": 3,
                 "seed": 0,
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "RandomTreeDepth3ErrRate",
@@ -1773,7 +1773,7 @@
                 "depth": 3,
                 "seed": 0,
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "RandomTreeDepth3ErrRate",
@@ -1786,7 +1786,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "LinearDiscriminantAnalysisErrRate",
@@ -1799,7 +1799,7 @@
                 "X": "XPreprocessed",
                 "Y": "YSample",
                 "n_folds": "n_folds",
-                "cv_seed": 0
+                "cv_seed": "cv_seed"
             },
             "returns": [
                 "LinearDiscriminantAnalysisErrRate",
