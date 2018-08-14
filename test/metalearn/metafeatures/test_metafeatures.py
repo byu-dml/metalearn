@@ -206,6 +206,23 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
         self._report_test_failures(test_failures, test_name)
 
+    def test_request_metafeatures(self):
+        SUBSET_LENGTH = 20
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            metafeature_ids = random.sample(Metafeatures().list_metafeatures(), SUBSET_LENGTH)
+            computed_mfs = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"], seed=CORRECTNESS_SEED, metafeature_ids=metafeature_ids)
+            known_mfs = {k:v for k,v in dataset["known_metafeatures"].items() if k in metafeature_ids}
+            required_checks = {
+                self._check_correctness: [
+                    computed_mfs, known_mfs, dataset_filename
+                ]
+            }
+            test_failures.update(self._perform_checks(required_checks))
+            self.assertEqual(metafeature_ids, list(computed_mfs.keys()), "Compute did not return requested metafeatures")
+        self._report_test_failures(test_failures, test_name)
+
     def test_compute_effects_on_dataset(self):
         """
         Tests whether computing metafeatures has any side effects on the input
