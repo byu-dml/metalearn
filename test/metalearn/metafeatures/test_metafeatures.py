@@ -19,6 +19,7 @@ from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
 
 FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
+TEST_NAME = "test_name"
 
 class MetafeaturesWithDataTestCase(unittest.TestCase):
     """ Contains tests for Metafeatures that require loading data first. """
@@ -49,13 +50,12 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
     def _report_test_failures(self, test_failures, test_name):
         if test_failures != {}:
-            failure_report_path = f"./failures_{test_name}.json"
-            with open(failure_report_path, "w") as fh:
-                json.dump(test_failures[FAIL_REPORT], fh, indent=4)
-            self.assertTrue(
-                False,
-                test_failures[FAIL_MESSAGE] + " " +\
-                f"Details have been written in {failure_report_path}."
+            report_path = f"./failures_{test_name}.json"
+            with open(report_path, "w") as fh:
+                json.dump(test_failures, fh, indent=4)
+            message = next(iter(dictionary.values()))[FAIL_MESSAGE]
+            self.fail(
+                f"{message} Details have been written in {report_path}."
             )
 
     def _check_correctness(self, computed_mfs, known_mfs, filename):
@@ -85,12 +85,23 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     "computed_value": computed_value
                 }
 
-        if test_failures != {}:
-            test_failures = {
-                FAIL_MESSAGE: fail_message,
-                FAIL_REPORT: {filename: {"correctness": test_failures}},
+        return self._format_check_report(
+            "correctness", fail_message, test_failures, filename
+        )
+
+    def _format_check_report(
+        self, test_name, fail_message, test_failures, filename
+    ):
+        if test_failures == {}:
+            return test_failures
+        else:
+            return {
+                filename: {
+                    TEST_NAME: test_name,
+                    FAIL_MESSAGE: fail_message,
+                    FAIL_REPORT: test_failures
+                }
             }
-        return test_failures
 
     def _check_compare_metafeature_lists(self, computed_mfs, known_mfs, filename):
         """
@@ -122,12 +133,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         if len(computed_diffs) > 0:
             test_failures["computed_differences"] = list(computed_names_unique)
 
-        if test_failures != {}:
-            test_failures = {
-                FAIL_MESSAGE: fail_message,
-                FAIL_REPORT: {filename: {"compare_mf_lists": test_failures}},
-            }
-        return test_failures
+        return self._format_check_report(
+            "metafeature_lists", fail_message, test_failures, filename
+        )
 
     def _perform_checks(self, functions):
         check = {}
