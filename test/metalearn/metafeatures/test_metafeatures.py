@@ -53,7 +53,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             report_path = f"./failures_{test_name}.json"
             with open(report_path, "w") as fh:
                 json.dump(test_failures, fh, indent=4)
-            message = next(iter(dictionary.values()))[FAIL_MESSAGE]
+            message = next(iter(test_failures.values()))[FAIL_MESSAGE]
             self.fail(
                 f"{message} Details have been written in {report_path}."
             )
