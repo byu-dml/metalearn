@@ -167,6 +167,26 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         self._report_test_failures(test_failures, test_name)
 
+    def test_individual_metafeature_correctness(self):
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            known_mfs = dataset["known_metafeatures"]
+            for mf_id in Metafeatures.IDS:
+                print(mf_id)
+                computed_mfs = Metafeatures().compute(
+                    X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                    metafeature_ids=[mf_id]
+                )
+                required_checks = {
+                    self._check_correctness: [
+                        computed_mfs, known_mfs, dataset_filename
+                    ]
+                }
+                test_failures.update(self._perform_checks(required_checks))
+
+        self._report_test_failures(test_failures, test_name)
+
     def test_no_targets(self):
         """ Test Metafeatures().compute() without targets
         """
