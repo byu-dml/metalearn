@@ -12,23 +12,23 @@
         "ColumnTypes": {
             "function": ""
         },
-        "SampleRowsFlag": {
+        "sample_shape": {
             "function": ""
         },
-        "SampleColumnsFlag": {
+        "n_folds": {
             "function": ""
         },
-        "Seed": {
-            "function": "self._get_random_seed"
+        "seed": {
+            "function": "self._get_seed"
         },
         "XSampledColumns": {
-            "function": "self._get_sample_of_columns"
+            "function": "self._sample_columns"
         },
         "XSample": {
-            "function": "self._get_sample_of_rows"
+            "function": "self._sample_rows"
         },
         "YSample": {
-            "function": "self._get_sample_of_rows"
+            "function": "self._sample_rows"
         },
         "XPreprocessed": {
             "function": "self._get_preprocessed_data"
@@ -57,22 +57,24 @@
             "parameters": [],
             "returns": []
         },
-        "self._get_random_seed":{
+        "self._get_seed":{
             "parameters": [],
-            "returns": ["Seed"]
+            "returns": ["seed"]
         },
-        "self._get_sample_of_columns": {
-            "parameters": ["X","SampleColumnsFlag","Seed"],
+        "self._sample_columns": {
+            "parameters": ["X","sample_shape","seed"],
             "seed_offset": 0,
             "returns": ["XSampledColumns"]
         },
-        "self._get_sample_of_rows": {
-            "parameters": ["XSampledColumns","Y","SampleRowsFlag", "Seed"],
+        "self._sample_rows": {
+            "parameters": [
+                "XSampledColumns", "Y", "sample_shape", "n_folds", "seed"
+            ],
             "seed_offset": 1,
             "returns": ["XSample","YSample"]
         },
         "self._get_preprocessed_data": {
-            "parameters": ["XSample","XSampledColumns", "ColumnTypes", "Seed"],
+            "parameters": ["XSample","XSampledColumns", "ColumnTypes", "seed"],
             "seed_offset": 2,
             "returns": ["XPreprocessed"]
         },
@@ -106,7 +108,7 @@
         },
         "get_missing_values": {
             "parameters": ["XRaw"],
-            "returns": ["NumberOfMissingValues","RatioOfMissingValues","NumberOfInstancesWithMissingValues","RatioOfInstancesWithMissingValues"]
+            "returns": ["NumberOfMissingValues","RatioOfMissingValues","NumberOfInstancesWithMissingValues","RatioOfInstancesWithMissingValues", "NumberOfFeaturesWithMissingValues", "RatioOfFeaturesWithMissingValues"]
         },
         "get_class_stats": {
             "parameters": ["Y"],
@@ -165,17 +167,17 @@
             "returns": []
         },
         "get_naive_bayes": {
-            "parameters": ["XPreprocessed","YSample", "Seed"],
+            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
             "seed_offset": 3,
             "returns": ["NaiveBayesErrRate","NaiveBayesKappa"]
         },
         "get_knn_1": {
-            "parameters": ["XPreprocessed","YSample", "Seed"],
+            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
             "seed_offset": 4,
             "returns": ["kNN1NErrRate","kNN1NKappa"]
         },
         "get_decision_stump": {
-            "parameters": ["XPreprocessed","YSample","Seed"],
+            "parameters": ["XPreprocessed", "YSample", "n_folds", "seed"],
             "seed_offset": 5,
             "returns": ["DecisionStumpErrRate","DecisionStumpKappa"]
         },
@@ -185,12 +187,12 @@
             "returns": []
         },
         "get_lda": {
-            "parameters": ["XPreprocessed","YSample", "Seed"],
+            "parameters": ["XPreprocessed","YSample", "n_folds", "seed"],
             "seed_offset": 6,
             "returns": ["LinearDiscriminantAnalysisErrRate","LinearDiscriminantAnalysisKappa"]
         },
         "get_decision_tree": {
-            "parameters": ["XPreprocessed", "YSample", "Seed"],
+            "parameters": ["XPreprocessed", "YSample", "seed"],
             "seed_offset": 13,
             "returns": ["DecisionTree"]
         },
@@ -246,6 +248,12 @@
             "function": "get_missing_values"
         },
         "RatioOfInstancesWithMissingValues": {
+            "function": "get_missing_values"
+        },
+        "NumberOfFeaturesWithMissingValues": {
+            "function": "get_missing_values"
+        },
+        "RatioOfFeaturesWithMissingValues": {
             "function": "get_missing_values"
         },
         "MeanClassProbability": {
@@ -618,37 +626,37 @@
         },
         "RandomTreeDepth1ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",1,"Seed"],
+            "parameters": ["XPreprocessed", "YSample", 1, "n_folds", "seed"],
             "seed_offset": 7,
             "returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
         },
         "RandomTreeDepth1Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",1,"Seed"],
+            "parameters": ["XPreprocessed", "YSample", 1, "n_folds", "seed"],
             "seed_offset": 8,
             "returns": ["RandomTreeDepth1ErrRate","RandomTreeDepth1Kappa"]
         },
         "RandomTreeDepth2ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",2,"Seed"],
+            "parameters": ["XPreprocessed", "YSample", 2, "n_folds", "seed"],
             "seed_offset": 9,
             "returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
         },
         "RandomTreeDepth2Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",2,"Seed"],
+            "parameters": ["XPreprocessed", "YSample", 2, "n_folds", "seed"],
             "seed_offset": 10,
             "returns": ["RandomTreeDepth2ErrRate","RandomTreeDepth2Kappa"]
         },
         "RandomTreeDepth3ErrRate": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",3,"Seed"],
+            "parameters": ["XPreprocessed", "YSample", 3, "n_folds", "seed"],
             "seed_offset": 11,
             "returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
         },
         "RandomTreeDepth3Kappa": {
             "function": "get_random_tree",
-            "parameters": ["XPreprocessed","YSample",3,"Seed"],
+            "parameters": ["XPreprocessed", "YSample", 3, "n_folds", "seed"],
             "seed_offset": 12,
             "returns": ["RandomTreeDepth3ErrRate","RandomTreeDepth3Kappa"]
         },
