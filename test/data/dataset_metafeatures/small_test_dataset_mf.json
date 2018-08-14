@@ -209,7 +209,7 @@
     },
     "NumberOfCategoricalFeatures": {
         "compute_time": 4.673004150390625e-05,
-        "value": 3
+        "value": 2
     },
     "NumberOfClasses": {
         "compute_time": 0.0007159709930419922,
@@ -237,7 +237,7 @@
     },
     "NumberOfNumericFeatures": {
         "compute_time": 4.673004150390625e-05,
-        "value": 2
+        "value": 3
     },
     "NumericNoiseToSignalRatio": {
         "compute_time": 0.011827707290649414,
@@ -417,7 +417,7 @@
     },
     "RatioOfCategoricalFeatures": {
         "compute_time": 4.673004150390625e-05,
-        "value": 0.6
+        "value": 0.4
     },
     "RatioOfFeaturesWithMissingValues": {
         "compute_time": 0.0013663768768310547,
@@ -433,7 +433,7 @@
     },
     "RatioOfNumericFeatures": {
         "compute_time": 4.673004150390625e-05,
-        "value": 0.4
+        "value": 0.6
     },
     "StdevCardinalityOfCategoricalFeatures": {
         "compute_time": 0.00033855438232421875,

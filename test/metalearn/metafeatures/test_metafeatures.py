@@ -38,9 +38,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 with open(known_dataset_metafeatures_path) as fh:
                     metafeatures = json.load(fh)
                 self.datasets[filename] = {
-                    "X": X, "Y": Y, "known_metafeatures": metafeatures,
-                    "known_metafeatures_path": known_dataset_metafeatures_path,
-                    "test": {}
+                    "X": X, "Y": Y, "column_types": column_types,
+                    "known_metafeatures": metafeatures,
+                    "known_metafeatures_path": known_dataset_metafeatures_path
                 }
             else:
                 raise FileNotFoundError(f"{known_dataset_metafeatures_path} does not exist")
@@ -148,7 +148,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
     def test_run_without_exception(self):
         try:
             for dataset_filename, dataset in self.datasets.items():
-                Metafeatures().compute(X=dataset["X"], Y=dataset["Y"])
+                Metafeatures().compute(
+                    X=dataset["X"], Y=dataset["Y"],
+                    column_types=dataset["column_types"]
+                )
         except Exception as e:
             exc_type = type(e).__name__
             self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
@@ -160,7 +163,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
             computed_mfs = Metafeatures().compute(
-                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"]
             )
             known_mfs = dataset["known_metafeatures"]
             required_checks = {
@@ -183,7 +187,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             for mf_id in Metafeatures.IDS:
                 computed_mfs = Metafeatures().compute(
                     X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
-                    metafeature_ids=[mf_id]
+                    metafeature_ids=[mf_id],
+                    column_types=dataset["column_types"]
                 )
                 required_checks = {
                     self._check_correctness: [
@@ -202,7 +207,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         for dataset_filename, dataset in self.datasets.items():
             metafeatures = Metafeatures()
             computed_mfs = metafeatures.compute(
-                X=dataset["X"], Y=None, seed=CORRECTNESS_SEED
+                X=dataset["X"], Y=None, seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"]
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
@@ -241,7 +247,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             metafeature_ids = random.sample(Metafeatures.IDS, SUBSET_LENGTH)
             computed_mfs = Metafeatures().compute(
                 X=dataset["X"],Y=dataset["Y"], seed=CORRECTNESS_SEED,
-                metafeature_ids=metafeature_ids
+                metafeature_ids=metafeature_ids,
+                column_types=dataset["column_types"]
             )
             known_metafeatures = dataset["known_metafeatures"]
             required_checks = {
@@ -263,7 +270,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         """
         for dataset in self.datasets.values():
             X_copy, Y_copy = dataset["X"].copy(), dataset["Y"].copy()
-            Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+            Metafeatures().compute(
+                X=dataset["X"],Y=dataset["Y"],
+                column_types=dataset["column_types"]
+            )
             if not (
                 X_copy.equals(dataset["X"]) and Y_copy.equals(dataset["Y"])
             ):
@@ -283,11 +293,13 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             metafeatures_instance = Metafeatures()
             # first run
             metafeatures_instance.compute(
-                X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED
+                X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"]
             )
             # second run
             computed_mfs = metafeatures_instance.compute(
-                X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED
+                X=dataset["X"],Y=dataset["Y"],seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"]
             )
 
             known_mfs = dataset["known_metafeatures"]
@@ -301,7 +313,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         with open("./metalearn/metafeatures/metafeatures_schema.json") as f:
             mf_schema = json.load(f)
         for dataset_filename, dataset in self.datasets.items():
-            computed_mfs = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"],Y=dataset["Y"],
+                column_types=dataset["column_types"]
+            )
             try:
                 jsonschema.validate(computed_mfs, mf_schema)
             except jsonschema.exceptions.ValidationError as e:
@@ -314,7 +329,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         with open("./metalearn/metafeatures/metafeatures_schema.json") as f:
             mf_schema = json.load(f)
         for dataset_filename, dataset in self.datasets.items():
-            computed_mfs = Metafeatures().compute(X=dataset["X"],Y=dataset["Y"])
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"],Y=dataset["Y"],
+                column_types=dataset["column_types"]
+            )
             try:
                 json_computed_mfs = json.dumps(computed_mfs)
             except Exception as e:
@@ -397,13 +415,17 @@ class MetafeaturesTestCase(unittest.TestCase):
         self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
 
     def test_column_type_input(self):
-        column_types = {feature: "NUMERIC" for feature in self.dummy_features.columns}
+        column_types = {col: "NUMERIC" for col in self.dummy_features.columns}
         column_types[self.dummy_features.columns[2]] = "CATEGORICAL"
         column_types[self.dummy_target.name] = "CATEGORICAL"
         # all valid
-        Metafeatures().compute(
-            self.dummy_features, self.dummy_target, column_types
-        )
+        try:
+            Metafeatures().compute(
+                self.dummy_features, self.dummy_target, column_types
+            )
+        except Exception as e:
+            exc_type = type(e).__name__
+            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
         # some valid
         column_types[self.dummy_features.columns[0]] = "NUMBER"
         column_types[self.dummy_features.columns[1]] = "CATEGORY"
@@ -413,7 +435,7 @@ class MetafeaturesTestCase(unittest.TestCase):
             )
         self.assertTrue(
             str(cm.exception).startswith(
-                "One or more input column types are not valid:"
+                "Invalid column types:"
             ),
             "Some invalid column types test failed"
         )
@@ -426,7 +448,7 @@ class MetafeaturesTestCase(unittest.TestCase):
             )
         self.assertTrue(
             str(cm.exception).startswith(
-                "One or more input column types are not valid:"
+                "Invalid column types:"
             ),
             "All invalid column types test failed"
         )
@@ -436,10 +458,10 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(
                 self.dummy_features, self.dummy_target, column_types
             )
-        self.assertEqual(
-            str(cm.exception),
-            "The number of column_types does not match the number of " +
-            "features plus the target",
+        self.assertTrue(
+            str(cm.exception).startswith(
+                "Column type not specified for column"
+            ),
             "Invalid number of column types test failed"
         )
 

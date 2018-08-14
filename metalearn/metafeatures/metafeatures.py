@@ -224,30 +224,23 @@ class Metafeatures(object):
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
         verbose
     ):
-        if column_types is not None:
-            if Y is None:
-                if len(column_types.keys()) != len(X.columns):
+        if not column_types is None:
+            invalid_column_types = {}
+            columns = list(X.columns)
+            if not Y is None:
+                columns.append(Y.name)
+            for col in columns:
+                if col not in column_types:
                     raise ValueError(
-                        "The number of column_types does not match the number" +
-                        " of features"
+                        f"Column type not specified for column {col}"
                     )
-            else:
-                if len(column_types.keys()) != len(X.columns) + 1:
-                    raise ValueError(
-                        "The number of column_types does not match the number" +
-                        " of features plus the target"
-                    )
-            invalid_column_types = []
-            for col_name, col_type in column_types.items():
-                if col_type != self.NUMERIC and col_type != self.CATEGORICAL:
-                    invalid_column_types.append((col_name, col_type))
+                col_type = column_types[col]
+                if not col_type in [self.NUMERIC, self.CATEGORICAL]:
+                    invalid_column_types[col] = col_type
             if len(invalid_column_types) > 0:
                 raise ValueError(
-                    'One or more input column types are not valid: {}. Valid '+
-                    'types include {} and {}.'.
-                    format(
-                        invalid_column_types, self.NUMERIC, self.CATEGORICAL
-                    )
+                    f"Invalid column types: {invalid_column_types}. Valid types " +
+                    f"include {self.NUMERIC} and {self.CATEGORICAL}."
                 )
 
     def _validate_metafeature_ids(
