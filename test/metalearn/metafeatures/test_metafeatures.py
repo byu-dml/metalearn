@@ -173,7 +173,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         for dataset_filename, dataset in self.datasets.items():
             known_mfs = dataset["known_metafeatures"]
             for mf_id in Metafeatures.IDS:
-                print(mf_id)
                 computed_mfs = Metafeatures().compute(
                     X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
                     metafeature_ids=[mf_id]
