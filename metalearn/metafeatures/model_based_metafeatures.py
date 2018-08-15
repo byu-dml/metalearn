@@ -4,16 +4,25 @@ from sklearn.tree import DecisionTreeClassifier
 
 from metalearn.metafeatures.common_operations import profile_distribution
 
-'''
-TODO Features to implement
-    -tree width
-'''
-
-
-def get_decision_tree(X, Y, random):
-    estimator = DecisionTreeClassifier(random_state=random)
+def get_decision_tree(X, Y, seed):
+    estimator = DecisionTreeClassifier(random_state=seed)
     estimator.fit(X, Y)
     return (estimator.tree_,)
+
+
+def get_decision_tree_width(tree):
+    adjacencies = [(left, right) for left, right in zip(tree.children_left, tree.children_right)]
+    positions = _traverse_tree(0, 0, adjacencies, [])
+    return (abs(min(positions)) + abs(max(positions)),)
+
+
+def _traverse_tree(curr_node, curr_position, adjacencies, positions):
+    if adjacencies[curr_node][0] == adjacencies[curr_node][1]:
+        positions.append(curr_position)
+    else:
+        _traverse_tree(adjacencies[curr_node][0], curr_position-1, adjacencies, positions)
+        _traverse_tree(adjacencies[curr_node][1], curr_position+1, adjacencies, positions)
+    return positions
 
 
 def get_decision_tree_level_sizes(tree):
