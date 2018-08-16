@@ -2,10 +2,50 @@
     {
         "filename": "38_sick_train_data.csv",
         "target_class_name": "Class",
-        "index_col_name": "d3mIndex"
+        "index_col_name": "d3mIndex",
+        "column_types": {
+            "age": "NUMERIC",
+            "sex": "CATEGORICAL",
+            "query_on_thyroxine": "CATEGORICAL",
+            "on_antithyroid_medication": "CATEGORICAL",
+            "sick": "CATEGORICAL",
+            "pregnant": "CATEGORICAL",
+            "thyroid_surgery": "CATEGORICAL",
+            "I131_treatment": "CATEGORICAL",
+            "query_hypothyroid": "CATEGORICAL",
+            "query_hyperthyroid": "CATEGORICAL",
+            "lithium": "CATEGORICAL",
+            "goitre": "CATEGORICAL",
+            "tumor": "CATEGORICAL",
+            "hypopituitary": "CATEGORICAL",
+            "psych": "CATEGORICAL",
+            "TSH_measured": "CATEGORICAL",
+            "TSH": "NUMERIC",
+            "T3_measured": "CATEGORICAL",
+            "T3": "NUMERIC",
+            "TT4_measured": "CATEGORICAL",
+            "TT4": "NUMERIC",
+            "T4U_measured": "CATEGORICAL",
+            "T4U": "NUMERIC",
+            "FTI_measured": "CATEGORICAL",
+            "FTI": "NUMERIC",
+            "TBG_measured": "CATEGORICAL",
+            "TBG": "NUMERIC",
+            "referral_source": "CATEGORICAL",
+            "on_thyroxine": "CATEGORICAL",
+            "Class": "CATEGORICAL"
+        }
     },
     {
         "filename": "small_test_dataset.arff",
-        "target_class_name": "class"
+        "target_class_name": "class",
+        "column_types": {
+            "missing": "NUMERIC",
+            "cat_int": "CATEGORICAL",
+            "cat_str": "CATEGORICAL",
+            "num_int": "NUMERIC",
+            "num_float": "NUMERIC",
+            "class": "CATEGORICAL"
+        }
     }
 ]

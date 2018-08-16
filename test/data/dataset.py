@@ -29,6 +29,7 @@ def read_dataset(dataset_metadata):
     dataset_filename = dataset_metadata["filename"]
     target_class_name = dataset_metadata["target_class_name"]
     index_col_name = dataset_metadata.get("index_col_name", None)
+    column_types = dataset_metadata.get("column_types", None)
     dataset_path = get_dataset_path(dataset_filename)
     ext = dataset_path.split(".")[-1]
     if ext == "arff":
@@ -40,5 +41,4 @@ def read_dataset(dataset_metadata):
 
     X = dataframe.drop(columns=[target_class_name], axis=1)
     Y = dataframe[target_class_name]
-    column_types = None # todo
     return X, Y, column_types
