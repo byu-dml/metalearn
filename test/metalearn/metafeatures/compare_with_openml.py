@@ -11,6 +11,35 @@ from metalearn import Metafeatures
 
 FILE_PATH = './test/metalearn/metafeatures/openmlComparisons/'
 
+def compare_with_openml(runs=1, max_features=200, max_instances=50000, verbose=False):
+    # get a list of datasets from openml
+    datasets = _list_dataset_ids(max_features, max_instances)
+
+    inconsistencies = False
+    successful_runs = 0
+    sample_size = runs
+    while successful_runs < sample_size:
+        dataset_id = np.random.choice(datasets, replace = False)
+        print(f"Dataset_id {dataset_id}: ", end="")
+        sys.stdout.flush()
+        try:
+            dataset = _download_dataset(dataset_id)
+            if dataset is None:
+                print(f"Invalid dataset type")
+            else:
+                if _compare_metafeatures(dataset, dataset_id, verbose):
+                    inconsistencies = True
+                successful_runs += 1
+                print(f"Succeeded. Runs = {successful_runs}")
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
+            print(f"Error: {e}")
+            _write_results(traceback.format_exc(), dataset_id)
+                
+    if inconsistencies:
+        print(f"\nNot all metafeatures matched results from OpenML.\nResults written to {FILE_PATH}")       
+        
 def _list_dataset_ids(max_features, max_instances):
     datasets_dict = openml.datasets.list_datasets()
     datasets = [
@@ -42,7 +71,7 @@ def _write_results(results, dataset_id):
     with open(FILE_PATH+report_name,'w') as fh:
         json.dump(results, fh, indent=4)
 
-def compare_metafeatures(oml_dataset, dataset_id, verbose):
+def _compare_metafeatures(oml_dataset, dataset_id, verbose):
     # get metafeatures from dataset using our metafeatures
     ourMetafeatures = Metafeatures().compute(X=oml_dataset["X"], Y=oml_dataset["Y"], verbose=verbose)
 
@@ -95,31 +124,3 @@ def compare_metafeatures(oml_dataset, dataset_id, verbose):
     else:
         return False
 
-def compare_with_openml(runs=1, max_features=200, max_instances=50000, verbose=False):
-    # get a list of datasets from openml
-    datasets = _list_dataset_ids(max_features, max_instances)
-
-    inconsistencies = False
-    successful_runs = 0
-    sample_size = runs
-    while successful_runs < sample_size:
-        dataset_id = np.random.choice(datasets, replace = False)
-        print(f"Dataset_id {dataset_id}: ", end="")
-        sys.stdout.flush()
-        try:
-            dataset = _download_dataset(dataset_id)
-            if dataset is None:
-                print(f"Invalid dataset type")
-            else:
-                if compare_metafeatures(dataset, dataset_id, verbose):
-                    inconsistencies = True
-                successful_runs += 1
-                print(f"Succeeded. Runs = {successful_runs}")
-        except KeyboardInterrupt:
-            raise
-        except Exception as e:
-            print(f"Error: {e}")
-            _write_results(traceback.format_exc(), dataset_id)
-                
-    if inconsistencies:
-        print(f"\nNot all metafeatures matched results from OpenML.\nResults written to {FILE_PATH}")       
