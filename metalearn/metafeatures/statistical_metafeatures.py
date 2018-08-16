@@ -13,7 +13,6 @@ from .common_operations import *
 
 warnings.filterwarnings("ignore", category=RuntimeWarning) # suppress sklearn warnings
 warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
-warnings.filterwarnings("ignore", category=FutureWarning) # suppress sklearn warnings
 
 def get_numeric_means(numeric_features_array):
     means = [feature.mean() for feature in numeric_features_array]
