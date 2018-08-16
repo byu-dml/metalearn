@@ -82,9 +82,6 @@ def compare_metafeatures(oml_dataset, dataset_id):
                     omlExclusiveMf.pop(openmlName)
                     omlMetafeatureValue = oml_dataset["metafeatures"][openmlName]
                     multiplier = mfNameMap[metafeatureName]["multiplier"]
-                    # print(metafeatureName)
-                    # print(f"Oml value: {omlMetafeatureValue} Our value: {metafeatureValue}")
-                    # print()
                     diff = abs(omlMetafeatureValue/multiplier - metafeatureValue)
                     singleMfDict = {metafeatureName: {"OpenML Value": omlMetafeatureValue/multiplier,
                                                       "Our Value": metafeatureValue, "Difference": diff}
@@ -100,12 +97,7 @@ def compare_metafeatures(oml_dataset, dataset_id):
                    "OUR EXCLUSIVE METAFEATURES": ourExclusiveMf,
                    "OPENML EXCLUSIVE METAFEATURES": omlExclusiveMf}
 
-    file_path = './test/metalearn/metafeatures/openmlComparisons/'
-    if not os.path.exists(file_path):
-        os.makedirs(file_path)
-    report_name = 'openml_comparison_' + str(dataset_id) + '.json'
-    with open(file_path+report_name,'w') as fh:
-        json.dump(openmlData, fh, indent=4)
+    write_results(openmlData, dataset_id)
 
     if len(inconsistentSharedMf) > 0:
         return True

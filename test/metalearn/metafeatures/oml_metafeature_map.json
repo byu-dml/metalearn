@@ -37,7 +37,7 @@
     },
     "MinClassProbability": {
         "openmlName": "MinorityClassPercentage",
-        "multiplier": 1
+        "multiplier": 100
     },
     "MaxClassProbability": {
         "openmlName": "MajorityClassPercentage",
