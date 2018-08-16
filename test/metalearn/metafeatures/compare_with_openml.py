@@ -4,6 +4,7 @@ import os
 import arff
 import numpy as np
 import traceback
+import sys
 
 from test.data.dataset import _read_arff_dataset
 from metalearn import Metafeatures
@@ -26,6 +27,7 @@ def compare_with_openml(runs=1, max_features=200, max_instances=50000):
     while successful_runs < sample_size:
         dataset_id = np.random.choice(datasets, replace = False)
         print(f"Dataset_id {dataset_id}: ", end="")
+        sys.stdout.flush()
         try:
             dataset = openml.datasets.get_dataset(dataset_id)
             target = str(dataset.default_target_attribute).split(",")
@@ -46,7 +48,7 @@ def compare_with_openml(runs=1, max_features=200, max_instances=50000):
         except KeyboardInterrupt:
             raise
         except Exception as e:
-            print(e)
+            print(f"Error: {e}")
             write_results(traceback.format_exc(), dataset_id)
     if inconsistencies:
         print("Not all metafeatures matched results from OpenML.")
