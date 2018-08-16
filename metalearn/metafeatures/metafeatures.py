@@ -17,7 +17,7 @@ from .simple_metafeatures import *
 from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
-from .model_based_metafeatures import *
+from .decision_tree_metafeatures import *
 
 
 class Metafeatures(object):
