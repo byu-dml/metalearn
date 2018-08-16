@@ -8,16 +8,12 @@ import random
 import time
 import unittest
 
-import openml
 import pandas as pd
 import numpy as np
-from arff2pandas import a2p
-import arff
 
 from metalearn import Metafeatures
 from test.config import CORRECTNESS_SEED, METADATA_PATH
 from test.data.dataset import read_dataset
-from test.data.dataset import _read_arff_dataset
 from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
 
 FAIL_MESSAGE = "message"
@@ -180,7 +176,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             }
             test_failures.update(self._perform_checks(required_checks))
 
-        self._report_test_failures(test_failures, test_name)    
+        self._report_test_failures(test_failures, test_name)
 
     def test_individual_metafeature_correctness(self):
         test_failures = {}
@@ -223,9 +219,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     Metafeatures.COMPUTE_TIME_KEY: 0.
                 }
 
-            n_computed_mfs = len(computed_mfs)
-            n_computable_mfs = len(Metafeatures.IDS)
-
             required_checks = {
                 self._check_correctness: [
                     computed_mfs, known_mfs, dataset_filename
@@ -235,6 +228,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 ]
             }
             test_failures.update(self._perform_checks(required_checks))
+
+        self._report_test_failures(test_failures, test_name)
 
     def test_request_metafeatures(self):
         SUBSET_LENGTH = 20
