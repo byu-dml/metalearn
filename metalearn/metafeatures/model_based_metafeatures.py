@@ -20,8 +20,12 @@ def _traverse_tree(curr_node, curr_position, adjacencies, positions):
     if adjacencies[curr_node][0] == adjacencies[curr_node][1]:
         positions.append(curr_position)
     else:
-        _traverse_tree(adjacencies[curr_node][0], curr_position-1, adjacencies, positions)
-        _traverse_tree(adjacencies[curr_node][1], curr_position+1, adjacencies, positions)
+        _traverse_tree(
+            adjacencies[curr_node][0], curr_position-1, adjacencies, positions
+        )
+        _traverse_tree(
+            adjacencies[curr_node][1], curr_position+1, adjacencies, positions
+        )
     return positions
 
 
