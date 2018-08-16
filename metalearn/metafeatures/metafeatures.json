@@ -68,7 +68,6 @@
                 "X": "XSampledColumns",
                 "Y": "Y",
                 "sample_shape": "sample_shape",
-                "n_folds": "n_folds",
                 "seed": 3
             },
             "returns": [
