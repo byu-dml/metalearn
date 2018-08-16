@@ -34,7 +34,7 @@ def get_numeric_kurtosis(numeric_features_array):
 def get_pca(X_preprocessed):
     num_components = min(3, X_preprocessed.shape[1])
     pca_data = PCA(n_components=num_components)
-    pca_data.fit_transform(X_preprocessed.as_matrix())
+    pca_data.fit_transform(X_preprocessed.values)
     pred_pca = pca_data.explained_variance_ratio_
     pred_eigen = pca_data.explained_variance_
     pred_det = np.linalg.det(pca_data.get_covariance())
@@ -74,7 +74,7 @@ def get_canonical_correlations(dataframe, column_types):
     def preprocess(series):
         if column_types[series.name] == 'CATEGORICAL':
             series = pd.get_dummies(series)
-        array = series.as_matrix().reshape(series.shape[0], -1)
+        array = series.values.reshape(series.shape[0], -1)
         return array
 
     if dataframe.shape[1] < 2:

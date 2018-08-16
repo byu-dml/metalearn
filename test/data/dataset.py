@@ -21,8 +21,11 @@ def _read_arff_dataset(infile_path):
 def _read_csv_dataset(path, index_col_name):
     return pd.read_csv(path, index_col=index_col_name)
 
-def read_dataset(dataset_filename, index_col_name, target_class_name):
+def read_dataset(dataset_metadata):
     """ Loads a csv or arff file (provided they are named *.{csv|arff}) """
+    dataset_filename = dataset_metadata["filename"]
+    target_class_name = dataset_metadata["target_class_name"]
+    index_col_name = dataset_metadata.get("index_col_name", None)
     dataset_path = get_dataset_path(dataset_filename)
     ext = dataset_path.split(".")[-1]
     if ext == "arff":

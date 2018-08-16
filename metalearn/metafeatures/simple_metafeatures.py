@@ -18,11 +18,18 @@ def get_dimensionality(number_of_features, number_of_instances):
 
 def get_missing_values(X):
     missing_values_by_instance = X.shape[1] - X.count(axis=1)
-    number_missing = np.sum(missing_values_by_instance)
+    missing_values_by_feature = X.shape[0] - X.count(axis=0)
+    number_missing = int(np.sum(missing_values_by_instance)) # int for json compatibility
     ratio_missing = number_missing / (X.shape[0] * X.shape[1])
-    number_instances_with_missing = np.sum(missing_values_by_instance != 0)
+    number_instances_with_missing = int(np.sum(missing_values_by_instance != 0)) # int for json compatibility
     ratio_instances_with_missing = number_instances_with_missing / X.shape[0]
-    return (number_missing, ratio_missing, number_instances_with_missing, ratio_instances_with_missing)
+    number_features_with_missing = int(np.sum(missing_values_by_feature != 0))
+    ratio_features_with_missing = number_features_with_missing / X.shape[1]
+    return (
+        number_missing, ratio_missing, number_instances_with_missing,
+        ratio_instances_with_missing, number_features_with_missing,
+        ratio_features_with_missing
+    )
 
 def get_class_stats(Y):
     classes = Y.unique()
