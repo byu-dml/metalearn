@@ -8,7 +8,6 @@ import random
 import time
 import unittest
 
-# import openml
 import pandas as pd
 import numpy as np
 
@@ -220,9 +219,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     Metafeatures.COMPUTE_TIME_KEY: 0.
                 }
 
-            n_computed_mfs = len(computed_mfs)
-            n_computable_mfs = len(Metafeatures.IDS)
-
             required_checks = {
                 self._check_correctness: [
                     computed_mfs, known_mfs, dataset_filename
@@ -233,10 +229,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             }
             test_failures.update(self._perform_checks(required_checks))
 
-            self.assertEqual(
-                n_computable_mfs, n_computed_mfs,
-                f"{test_name} computed an incorrect number of metafeatures"
-            )
         self._report_test_failures(test_failures, test_name)
 
     def test_request_metafeatures(self):
@@ -321,7 +313,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 jsonschema.validate(computed_mfs, mf_schema)
             except jsonschema.exceptions.ValidationError as e:
                 self.fail(
-                    f"Metfatures computed from {dataset_filename} do not "+
+                    f"Metafeatures computed from {dataset_filename} do not "+
                     "conform to schema"
                 )
 
@@ -600,115 +592,3 @@ class MetafeaturesTestCase(unittest.TestCase):
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
-
-
-""" === Anything under is line is currently not in use. === """
-
-
-def import_openml_dataset(id=4):
-    # get a dataset from openml using a dataset id
-    dataset = openml.datasets.get_dataset(id)
-    # get the metafeatures from the dataset
-    omlMetafeatures = {x: float(v) for x, v in dataset.qualities.items()}
-
-    # get X, Y, and attributes from the dataset
-    X, Y, attributes = dataset.get_data(target=dataset.default_target_attribute, return_attribute_names=True)
-
-    # create dataframe object from X,Y, and attributes
-    dataframe = pd.DataFrame(X, columns=attributes)
-    dataframe = dataframe.assign(target=pd.Series(Y))
-
-    # format attributes
-    # TODO: find out if pandas infers type correctly (remove this code after)
-    for i in range(len(X[0])):
-        attributes[i] = (attributes[i], str(type(X[0][i])))
-        # set types of attributes (column headers) as well as the names
-
-    return dataframe, omlMetafeatures
-
-
-def compare_with_openml(dataframe, omlMetafeatures):
-    # get metafeatures from dataset using our metafeatures
-    ourMetafeatures = extract_metafeatures(dataframe)
-    # todo use nested dictionary instead of tuple to make values more descriptive
-    mfDict = json.load(open("oml_metafeature_map.json", "r"))
-
-    omlExclusiveMf = {}
-    ourExclusiveMf = ourMetafeatures
-    sharedMf = []
-    sharedMf.append(
-        ("OML Metafeature Name", "OML Metafeature Value", "Our Metafeature Name", "Our Metafeature Value", "Similar?"))
-    for omlMetafeature in omlMetafeatures:
-        # compare shared metafeatures
-        if (ourMetafeatures.get(omlMetafeature) != None
-                or ourMetafeatures.get("" if omlMetafeature not in mfDict else mfDict.get(omlMetafeature)[0]) != None):
-            omlMetafeatureName = ""
-            omlMetafeatureValue = ""
-            ourMetafeatureName = ""
-            ourMetafeatureValue = ""
-            similarityString = ""
-            diff = 0
-            similarityQualifier = 0.05
-
-            # compare metafeatures with the same name
-            if (ourMetafeatures.get(omlMetafeature) != None):
-                omlMetafeatureName = omlMetafeature
-                omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
-                ourMetafeatureName = omlMetafeature
-                ourMetafeatureValue = float(ourMetafeatures.get(ourMetafeatureName))
-                # similarityQualifier = omlMetafeatureValue * .05
-                diff = omlMetafeatureValue - ourMetafeatureValue
-            # compare equivalent metafeatures with different names
-            elif (ourMetafeatures.get(mfDict.get(omlMetafeature)[0]) != None):
-                ourMetafeatureName, multiplier = mfDict.get(omlMetafeature)
-                ourMetafeatureValue = float(ourMetafeatures.get(ourMetafeatureName))
-                omlMetafeatureName = omlMetafeature
-                omlMetafeatureValue = float(omlMetafeatures.get(omlMetafeature))
-                # similarityQualifier = omlMetafeatureValue * .05
-                diff = omlMetafeatureValue - (ourMetafeatureValue * multiplier)
-
-            # determine if the metafeatures are similar
-            if (abs(diff) <= similarityQualifier):
-                similarityString = "yes"
-            else:
-                # compare oml value with our value, get diff between the two
-                diff = abs(omlMetafeatures[openmlName] - metafeatureValue)
-                if diff > .05:
-                    similarityString = "No"
-                else:
-                    similarityString = "Yes"
-
-                # sharedMfList is a pandas dataframe. We add a row consisting of the following values:
-                # "OML Metafeature Name", "OML Metafeature Value", "Our Metafeature Name", "Our Metafeature Value", "Similar?"
-                sharedMfList.append(
-                    [openmlName, omlMetafeatures[openmlName], metafeatureName, metafeatureValue, similarityString])
-
-                omlExclusiveMf.pop(openmlName)
-
-    for index, row in enumerate(sharedMfList):
-        sharedMf.loc[index] = row
-
-    # print shared metafeature comparison
-    print("Shared metafeature comparison")
-    pd.set_option("display.max_columns", 500)
-    pd.set_option("display.width", 1000)
-
-    sharedMf.sort_values("Similar?", ascending=False, axis=0, inplace=True)
-
-    print(sharedMf)
-
-    # print metafeatures calculate by our primitive exclusively
-    print("\nMetafeatures calculated by our primitive exclusively:")
-    print(json.dumps(ourExclusiveMf, sort_keys=True, indent=4))
-
-
-def sort_by_compute_time(metafeatures):
-    metafeature_times = {}
-    for key in metafeatures:
-        if Metafeatures.COMPUTE_TIME_NAME in key:
-            metafeature_times[key] = metafeatures[key]
-    return dict(sorted(metafeature_times.items(), key=lambda x: x[1], reverse=True))
-
-# if __name__ == "__main__":
-# dataframe, omlMetafeatures = import_openml_dataset()
-# compare_with_openml(dataframe,omlMetafeatures)

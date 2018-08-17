@@ -15,7 +15,7 @@ setup(
     install_requires = [
         'numpy<=1.14.5'
         'scikit-learn<=0.19.1',
-        'pandas<=0.23.3,>=0.21.0',
+        'pandas<=0.23.4,>=0.21.0',
         'scipy<=1.1.0'
     ],
     classifiers = [
