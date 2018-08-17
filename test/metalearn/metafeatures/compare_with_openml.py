@@ -1,25 +1,37 @@
-import openml
 import json
 import os
-import arff
-import numpy as np
-import traceback
 import sys
+import traceback
+
+import numpy as np
+import openml
 
 from test.data.dataset import _read_arff_dataset
 from metalearn import Metafeatures
+from test.config import OPENML_COMPARE_RESULTS_DIR
 
-FILE_PATH = './test/metalearn/metafeatures/openmlComparisons/'
 
-def compare_with_openml(runs=1, max_features=200, max_instances=50000, verbose=False):
-    # get a list of datasets from openml
-    datasets = _list_dataset_ids(max_features, max_instances)
+def compare_with_openml(
+    n_datasets=10, max_dataset_shape=(50000, 200), tol=.01, verbose=False
+):
+    """
+    Compares the metafeatures computed by metalearn with those of OpenML.
+    Samples `n_datasets` which are no larger than `max_dataset_shape` for this
+    comparison.
+    Parameters:
+    -----------
+    n_datasets: int, the number of openml datasets to compare
+    max_dataset_shape: tuple, the maximum number of rows and columns in the
+        openml datasets for which metafeatures will be compared
+    verbose: bool, passed to Metafeatures.compute. Prints the name of each
+        metafeature before it is computed.
+    """
+    dataset_ids = _list_dataset_ids(max_dataset_shape)
+    np.random.shuffle(dataset_ids)
 
     inconsistencies = False
     successful_runs = 0
-    sample_size = runs
-    while successful_runs < sample_size:
-        dataset_id = np.random.choice(datasets, replace = False)
+    for dataset_id in dataset_ids:
         print(f"Dataset_id {dataset_id}: ", end="")
         sys.stdout.flush()
         try:
@@ -27,100 +39,111 @@ def compare_with_openml(runs=1, max_features=200, max_instances=50000, verbose=F
             if dataset is None:
                 print(f"Invalid dataset type")
             else:
-                if _compare_metafeatures(dataset, dataset_id, verbose):
+                compare_results = _compare_metafeatures(dataset, tol, verbose)
+                _write_results(compare_results, dataset_id)
+                if len(
+                    compare_results["INCONSISTENT SHARED METAFEATURES"]
+                ) > 0:
                     inconsistencies = True
                 successful_runs += 1
-                print(f"Succeeded. Runs = {successful_runs}")
+                print(f"success #{successful_runs}.")
         except KeyboardInterrupt:
             raise
-        except Exception as e:
-            print(f"Error: {e}")
-            _write_results(traceback.format_exc(), dataset_id)
-                
+        except (
+            openml.exceptions.OpenMLServerException, ValueError
+        ):
+            message = traceback.format_exc()
+            print(f"Error:\n{message}")
+            _write_results(message, dataset_id)
+        if successful_runs >= n_datasets:
+            break
+
     if inconsistencies:
-        print(f"\nNot all metafeatures matched results from OpenML.\nResults written to {FILE_PATH}")       
-        
-def _list_dataset_ids(max_features, max_instances):
-    datasets_dict = openml.datasets.list_datasets()
-    datasets = [
-        k for k,v in datasets_dict.items() if 
-        ("NumberOfInstances" in v.keys() and v["NumberOfInstances"] <= max_instances) and 
-        ("NumberOfFeatures" in v.keys() and v["NumberOfFeatures"] <= max_features)
-    ]
-    return datasets
+        print(
+            f"\nNot all metafeatures matched results from OpenML.\nResults "
+            f"written to {OPENML_COMPARE_RESULTS_DIR}"
+        )
+
+def _list_dataset_ids(max_dataset_shape):
+    datasets = openml.datasets.list_datasets()
+    dataset_ids = []
+    for d_id, mfs in datasets.items():
+        n_instances = mfs.get("NumberOfInstances")
+        n_features = mfs.get("NumberOfFeatures")
+        if not (
+            n_instances is None or n_instances > max_dataset_shape[0] or
+            n_features is None or n_features > max_dataset_shape[1]
+        ):
+            dataset_ids.append(d_id)
+    return dataset_ids
 
 def _download_dataset(dataset_id):
     raw_dataset = openml.datasets.get_dataset(dataset_id)
-    target = str(raw_dataset.default_target_attribute).split(",")
     df = _read_arff_dataset(raw_dataset.data_file)
-    if len(target) <= 1:
-        if target[0] == "None":
+    targets = str(raw_dataset.default_target_attribute).split(",")
+    if len(targets) <= 1:
+        if targets[0] == "None":
             X = df
             Y = None
         else:
-            X = df.drop(columns=target, axis=1)
-            Y = df[target].squeeze()
-        dataset_metafeatures = {x: (float(v) if v is not None else v) for x,v in raw_dataset.qualities.items()}
-        dataset = {"X": X, "Y": Y, "metafeatures": dataset_metafeatures}
-        return dataset
+            X = df.drop(columns=targets, axis=1)
+            Y = df[targets].squeeze()
+        return {"X": X, "Y": Y, "metafeatures": raw_dataset.qualities}
+    else:
+        return None
 
 def _write_results(results, dataset_id):
-    if not os.path.exists(FILE_PATH):
-        os.makedirs(FILE_PATH)
+    if not os.path.exists(OPENML_COMPARE_RESULTS_DIR):
+        os.makedirs(OPENML_COMPARE_RESULTS_DIR)
     report_name = 'openml_comparison_' + str(dataset_id) + '.json'
-    with open(FILE_PATH+report_name,'w') as fh:
+    with open(OPENML_COMPARE_RESULTS_DIR+report_name,'w') as fh:
         json.dump(results, fh, indent=4)
 
-def _compare_metafeatures(oml_dataset, dataset_id, verbose):
+def _compare_metafeatures(oml_dataset, tol, verbose):
     # get metafeatures from dataset using our metafeatures
-    ourMetafeatures = Metafeatures().compute(X=oml_dataset["X"], Y=oml_dataset["Y"], verbose=verbose)
+    our_mfs = Metafeatures().compute(
+        X=oml_dataset["X"], Y=oml_dataset["Y"], verbose=verbose
+    )
+    oml_mfs = oml_dataset["metafeatures"]
+    mf_id_map = json.load(
+        open("./test/metalearn/metafeatures/oml_metafeature_map.json", "r")
+    )
 
-    mfNameMap = json.load(open("test/metalearn/metafeatures/oml_metafeature_map.json", "r"))
+    oml_exclusive_mfs = {x: v for x,v in oml_dataset["metafeatures"].items()}
+    our_exclusive_mfs = {}
+    consistent_mfs = {}
+    inconsistent_mfs = {}
 
-    omlExclusiveMf = {x: v for x,v in oml_dataset["metafeatures"].items()}
-    ourExclusiveMf = {}
-    consistentSharedMf = []
-    inconsistentSharedMf = []
-
-    for metafeatureName, metafeatureValue in ourMetafeatures.items():
-        metafeatureValue = metafeatureValue["value"]
-        if 'int' in str(type(metafeatureValue)):
-            metafeatureValue = int(metafeatureValue)
-        elif 'float' in str(type(metafeatureValue)):
-            metafeatureValue = float(metafeatureValue)
-
-        if mfNameMap.get(metafeatureName) is None:
-            ourExclusiveMf[metafeatureName] = metafeatureValue
-        else:
-            openmlName = mfNameMap[metafeatureName]["openmlName"]
-            if oml_dataset["metafeatures"].get(openmlName) is None:
-                ourExclusiveMf[metafeatureName] = metafeatureValue
-            else:
-                omlExclusiveMf.pop(openmlName)
-                omlMetafeatureValue = oml_dataset["metafeatures"][openmlName]
-                multiplier = mfNameMap[metafeatureName]["multiplier"]
-                if metafeatureValue == Metafeatures().NUMERIC_TARGETS or metafeatureValue == Metafeatures().NO_TARGETS:
-                    diff = float("NaN")
+    for our_mf_id, our_mf_result in our_mfs.items():
+        our_mf_value = our_mf_result[Metafeatures.VALUE_KEY]
+        if our_mf_id in mf_id_map:
+            oml_mf_id = mf_id_map[our_mf_id]["openmlName"]
+            if oml_mf_id in oml_mfs:
+                oml_exclusive_mfs.pop(oml_mf_id)
+                oml_mf_value = oml_mfs[oml_mf_id]
+                if type(our_mf_value) is str:
+                    diff = None
                 else:
-                    diff = abs(omlMetafeatureValue/multiplier - metafeatureValue)
-                singleMfDict = {metafeatureName: {"OpenML Value": omlMetafeatureValue/multiplier,
-                                                  "Our Value": metafeatureValue, "Difference": diff}
-                                }
-                if diff <= .05:
-                    consistentSharedMf.append(singleMfDict)
-                elif diff > .05 or diff == np.isnan(diff):
-                    inconsistentSharedMf.append(singleMfDict)
+                    mf_multiplier = mf_id_map[our_mf_id]["multiplier"]
+                    diff = abs(our_mf_value - mf_multiplier*oml_mf_value)
+                comparison = {
+                    our_mf_id: {
+                        "openml": mf_multiplier*oml_mf_value,
+                        "metalearn": our_mf_value
+                    }
+                }
+                if diff is None or diff > tol:
+                    inconsistent_mfs.update(comparison)
+                else:
+                    consistent_mfs.update(comparison)
+            else:
+                our_exclusive_mfs[our_mf_id] = our_mf_value
+        else:
+            our_exclusive_mfs[our_mf_id] = our_mf_value
 
-    # write results to json file
-    openmlData = { "INCONSISTENT SHARED METAFEATURES": inconsistentSharedMf,
-                   "CONSISTENT SHARED METAFEATURES": consistentSharedMf,
-                   "OUR EXCLUSIVE METAFEATURES": ourExclusiveMf,
-                   "OPENML EXCLUSIVE METAFEATURES": omlExclusiveMf}
-
-    _write_results(openmlData, dataset_id)
-
-    if len(inconsistentSharedMf) > 0:
-        return True
-    else:
-        return False
-
+    return {
+        "INCONSISTENT SHARED METAFEATURES": inconsistent_mfs,
+        "CONSISTENT SHARED METAFEATURES": consistent_mfs,
+        "OUR EXCLUSIVE METAFEATURES": our_exclusive_mfs,
+        "OPENML EXCLUSIVE METAFEATURES": oml_exclusive_mfs
+    }

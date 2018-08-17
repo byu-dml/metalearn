@@ -37,11 +37,11 @@
     },
     "MinClassProbability": {
         "openmlName": "MinorityClassPercentage",
-        "multiplier": 100
+        "multiplier": 0.01
     },
     "MaxClassProbability": {
         "openmlName": "MajorityClassPercentage",
-        "multiplier": 100
+        "multiplier": 0.01
     },
     "MaxMeansOfNumericFeatures": {
         "openmlName": "MaxMeansOfNumericAtts",
@@ -157,19 +157,19 @@
     },
     "RatioOfInstancesWithMissingValues": {
         "openmlName": "PercentageOfInstancesWithMissingValues",
-        "multiplier": 100
+        "multiplier": 0.01
     },
     "RatioOfMissingValues": {
         "openmlName": "PercentageOfMissingValues",
-        "multiplier": 100
+        "multiplier": 0.01
     },
     "RatioOfNumericFeatures": {
         "openmlName": "PercentageOfNumericFeatures",
-        "multiplier": 100
+        "multiplier": 0.01
     },
     "RatioOfCategoricalFeatures": {
         "openmlName": "PercentageOfSymbolicFeatures",
-        "multiplier": 100
+        "multiplier": 0.01
     },
     "Dimensionality": {
         "openmlName": "Dimensionality",
