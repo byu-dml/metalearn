@@ -148,6 +148,15 @@
             "returns": [
                 "DecisionTree"
             ]
+        },
+        "TraversedDecisionTree": {
+            "function": "traverse_tree",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "TraversedDecisionTree"
+            ]
         }
     },
     "metafeatures": {
@@ -1819,7 +1828,7 @@
         "DecisionTreeLevelMean": {
             "function": "get_decision_tree_level_sizes",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeLevelMean",
@@ -1831,7 +1840,7 @@
         "DecisionTreeLevelStdev": {
             "function": "get_decision_tree_level_sizes",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeLevelMean",
@@ -1843,7 +1852,7 @@
         "DecisionTreeLevelMin": {
             "function": "get_decision_tree_level_sizes",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeLevelMean",
@@ -1855,7 +1864,7 @@
         "DecisionTreeLevelMax": {
             "function": "get_decision_tree_level_sizes",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeLevelMean",
@@ -1867,7 +1876,7 @@
         "DecisionTreeBranchMean": {
             "function": "get_decision_tree_branch_lengths",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeBranchMean",
@@ -1879,7 +1888,7 @@
         "DecisionTreeBranchStdev": {
             "function": "get_decision_tree_branch_lengths",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeBranchMean",
@@ -1891,7 +1900,7 @@
         "DecisionTreeBranchMin": {
             "function": "get_decision_tree_branch_lengths",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeBranchMean",
@@ -1903,7 +1912,7 @@
         "DecisionTreeBranchMax": {
             "function": "get_decision_tree_branch_lengths",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
                 "DecisionTreeBranchMean",
@@ -1949,14 +1958,11 @@
             ]
         },
         "DecisionTreeWidth": {
-            "function": "get_decision_tree_general_info",
+            "function": "get_decision_tree_width",
             "arguments": {
-                "tree": "DecisionTree"
+                "tree": "TraversedDecisionTree"
             },
             "returns": [
-                "DecisionTreeNodeCount",
-                "DecisionTreeLeafCount",
-                "DecisionTreeHeight",
                 "DecisionTreeWidth"
             ]
         },

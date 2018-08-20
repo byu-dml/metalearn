@@ -7,35 +7,20 @@ from metalearn.metafeatures.common_operations import profile_distribution
 class DecisionTree(object):
 
     def __init__ (self, X, Y, seed):
-        self.level_sizes = []
-        self.branch_lengths = []
-        self.positions = []
         self.tree = self._get_decision_tree(X, Y, seed)
-        self.attributes = [
-                            x for x in 
-                            Counter(self.tree.feature).values() if x != -2
-                           ]
-        self.adjacencies = [
-                            (left, right) for left, right in 
-                            zip(self.tree.children_left, 
-                                self.tree.children_right)
-                            ]
-        
-        self._get_general_info()
-        self._traverse_tree(0, 0, 0, 0)
-        self.width = abs(min(self.positions)) + abs(max(self.positions))
 
     def _get_decision_tree(self, X, Y, seed):
         estimator = DecisionTreeClassifier(random_state=seed)
         estimator.fit(X, Y)
         return estimator.tree_
 
-    def _get_general_info(self):
+    def get_general_info(self):
         self.n_nodes = self.tree.node_count
         self.tree_height = self.tree.max_depth + 1
         self.level_sizes = [0] * (self.tree_height)
         counts = Counter(self.tree.feature)
         self.leaf_count = counts[-2]
+        return self.n_nodes, self.leaf_count, self.tree_height
 
     def _traverse_tree(
         self, curr_node, curr_position, curr_level, curr_branch_length
@@ -54,9 +39,32 @@ class DecisionTree(object):
                 curr_branch_length+1
             )
 
+    def traverse(self):
+        self.level_sizes = []
+        self.branch_lengths = []
+        self.positions = []
+        self.adjacencies = [
+                            (left, right) for left, right in 
+                            zip(self.tree.children_left, 
+                                self.tree.children_right)
+                            ]
+        self.get_general_info()
+        self._traverse_tree(0, 0, 0, 0)
+
+    def get_width(self):
+        return abs(min(self.positions)) + abs(max(self.positions))
+
+    def get_attributes(self):
+        return [x for x in Counter(self.tree.feature).values() if x != -2]
+
 
 def get_decision_tree(X, Y, seed):
     return (DecisionTree(X, Y, seed),)
+
+
+def traverse_tree(tree):
+    tree.traverse()
+    return (tree,)
 
 
 def get_decision_tree_level_sizes(tree):
@@ -70,9 +78,13 @@ def get_decision_tree_branch_lengths(tree):
 
 
 def get_decision_tree_attributes(tree):
-    att_mean, att_stdev, att_min, _, _, _, att_max = profile_distribution(tree.attributes)
+    att_mean, att_stdev, att_min, _, _, _, att_max = profile_distribution(tree.get_attributes())
     return (att_mean, att_stdev, att_min, att_max)
 
 
 def get_decision_tree_general_info(tree):
-    return (tree.n_nodes, tree.leaf_count, tree.tree_height, tree.width)
+    return tree.get_general_info()
+
+
+def get_decision_tree_width(tree):
+    return (tree.get_width(),)
