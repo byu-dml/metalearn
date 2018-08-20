@@ -59,10 +59,6 @@ def get_decision_tree(X, Y, seed):
     return (DecisionTree(X, Y, seed),)
 
 
-def get_decision_tree_width(tree):
-    return (tree.width,)
-
-
 def get_decision_tree_level_sizes(tree):
     level_mean, level_stdev, level_min, _, _, _, level_max = profile_distribution(tree.level_sizes)
     return (level_mean, level_stdev, level_min, level_max)
