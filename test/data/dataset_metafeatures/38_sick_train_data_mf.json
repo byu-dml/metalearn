@@ -515,17 +515,17 @@
         "compute_time": 0.08691191673278809,
         "value": 22.0
     },
-    "DecisionTreeLevelMean" : {
-        "compute_time": 0.08691191673278809,
-        "value": 8.083333333333334
+    "DecisionTreeLevelMean": {
+        "compute_time": 0.03972744941711426,
+        "value": 8.818181818181818
     },
-    "DecisionTreeLevelMin" : {
-        "compute_time": 0.08691191673278809,
-        "value": 0.0
+    "DecisionTreeLevelMin": {
+        "compute_time": 0.03972744941711426,
+        "value": 1.0
     },
-    "DecisionTreeLevelStdev" : {
-        "compute_time": 0.08691191673278809,
-        "value": 7.4888806462203235
+    "DecisionTreeLevelStdev": {
+        "compute_time": 0.03972744941711426,
+        "value": 7.386720271110607
     },
     "DecisionTreeNodeCount" : {
         "compute_time": 0.08703327178955078,

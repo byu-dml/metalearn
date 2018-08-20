@@ -1919,19 +1919,9 @@
             },
             "returns": [
                 "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
                 "DecisionTreeHeight",
-                "DecisionTreeLeafCount"
-            ]
-        },
-        "DecisionTreeHeight": {
-            "function": "get_decision_tree_general_info",
-            "arguments": {
-                "tree": "DecisionTree"
-            },
-            "returns": [
-                "DecisionTreeNodeCount",
-                "DecisionTreeHeight",
-                "DecisionTreeLeafCount"
+                "DecisionTreeWidth"
             ]
         },
         "DecisionTreeLeafCount": {
@@ -1941,8 +1931,33 @@
             },
             "returns": [
                 "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
                 "DecisionTreeHeight",
-                "DecisionTreeLeafCount"
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeHeight": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeWidth": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
             ]
         },
         "DecisionTreeAttributeMean": {
@@ -1992,15 +2007,6 @@
                 "DecisionTreeAttributeMin",
                 "DecisionTreeAttributeMax"
             ]
-        },
-        "DecisionTreeWidth": {
-            "function": "get_decision_tree_width",
-            "arguments": {
-                "tree": "DecisionTree"
-            },
-            "returns": [
-                "DecisionTreeWidth"
-            ]
-        }
+        }  
     }
 }

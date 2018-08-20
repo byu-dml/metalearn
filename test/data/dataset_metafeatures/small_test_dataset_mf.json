@@ -516,16 +516,16 @@
         "value": 4.0
     },
     "DecisionTreeLevelMean": {
-        "compute_time": 0.01143336296081543,
-        "value": 1.8
+        "compute_time": 0.007904529571533203,
+        "value": 2.25
     },
     "DecisionTreeLevelMin": {
-        "compute_time": 0.01143336296081543,
-        "value": 0.0
+        "compute_time": 0.007904529571533203,
+        "value": 1.0
     },
     "DecisionTreeLevelStdev": {
-        "compute_time": 0.01143336296081543,
-        "value": 1.4832396974191326
+        "compute_time": 0.007904529571533203,
+        "value": 1.2583057392117916
     },
     "DecisionTreeNodeCount": {
         "compute_time": 0.01183629035949707,
