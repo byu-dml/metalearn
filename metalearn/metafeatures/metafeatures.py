@@ -53,7 +53,6 @@ class Metafeatures(object):
         # LinearDiscriminantAnalysisErrRate
         if group == "all":
             return copy.deepcopy(cls.IDS)
-            # return copy.deepcopy(cls.IDS)
         elif group == "landmarking":
             return list(filter(
                 lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id, cls.IDS
