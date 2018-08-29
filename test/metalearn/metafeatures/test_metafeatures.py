@@ -332,6 +332,37 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     f"Failed to convert metafeature output to json: {str(e)}"
                 )
 
+    def test_soft_timeout(self):
+        """Tests Metafeatures().compute() with timeout set"""   
+        test_name = inspect.stack()[0][3]   
+        test_failures = {} 
+        for timeout in [.2,.4,.6,.8,1]:  
+            for dataset_filename, dataset in self.datasets.items(): 
+                metafeatures = Metafeatures()   
+                start_time = time.time()    
+                computed_mfs = metafeatures.compute(  
+                    X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                    column_types=dataset["column_types"] ,timeout=timeout
+                )   
+                compute_time = time.time() - start_time 
+                self.assertGreater( 
+                    timeout, compute_time,  
+                    f"Compute metafeatures exceeded timeout on '{dataset_filename}'"    
+                )  
+                computed_mfs = {k:v for k,v in computed_mfs.items() if v[Metafeatures.VALUE_KEY] != Metafeatures.TIMEOUT}
+                known_mfs = dataset["known_metafeatures"]
+                required_checks = {
+                self._check_correctness: [
+                    computed_mfs, known_mfs, dataset_filename
+                ],
+                self._check_compare_metafeature_lists: [
+                    computed_mfs, known_mfs, dataset_filename
+                ]
+            }
+            test_failures.update(self._perform_checks(required_checks))
+
+        self._report_test_failures(test_failures, test_name)
+
 
 class MetafeaturesTestCase(unittest.TestCase):
     """ Contains tests for Metafeatures that can be executed without loading data. """

@@ -31,6 +31,7 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
     NO_TARGETS = "NO_TARGETS"
     NUMERIC_TARGETS = "NUMERIC_TARGETS"
+    TIMEOUT = "TIMEOUT"
 
     _metadata_path = os.path.splitext(__file__)[0] + ".json"
     with open(_metadata_path, 'r') as f:
@@ -66,7 +67,7 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series = None,
         column_types: Dict[str, str] = None, metafeature_ids: List = None,
-        sample_shape=None, seed=None, n_folds=2, verbose=False
+        sample_shape=None, seed=None, n_folds=2, verbose=False, timeout=None
     ) -> dict:
         """
         Parameters
@@ -95,10 +96,13 @@ class Metafeatures(object):
         metafeature. The value is typically a number, but can be a string
         indicating a reason why the value could not be computed.
         """
+        self.start_time = time.time()
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
             verbose
         )
+        if timeout is None:
+            timeout = 100
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
         if metafeature_ids is None:
@@ -118,6 +122,7 @@ class Metafeatures(object):
 
         computed_metafeatures = {}
         for metafeature_id in metafeature_ids:
+            self._check_timeout()
             if verbose == True:
                 print(metafeature_id)
             if self._resource_is_target_dependent(metafeature_id) and (
@@ -191,6 +196,10 @@ class Metafeatures(object):
 
     def _get_cv_seed(self, seed_base, seed_offset):
         return (seed_base + seed_offset,)
+
+    def _check_timeout(self):
+        if time.time() - self.start_time > self.timeout:
+            raise TimeoutException()
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
