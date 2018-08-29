@@ -232,7 +232,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         self._report_test_failures(test_failures, test_name)
 
     def test_numeric_targets(self):
-        """ Test Metafeatures().compute() without targets
+        """ Test Metafeatures().compute() with numeric targets
         """
         test_failures = {}
         test_name = inspect.stack()[0][3]
