@@ -60,6 +60,10 @@ class Metafeatures(object):
             return list(filter(
                 cls._resource_is_target_dependent, cls.IDS
             ))
+        elif group == "numeric_targets":
+            return list(filter(
+                cls._resource_is_target_dependent, cls.IDS
+            ))
         else:
             raise ValueError(f"Unknown group {group}")
 
@@ -287,7 +291,10 @@ class Metafeatures(object):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
         if n_folds < 2:
             raise ValueError(f"`n_folds` must be >= 2, but was {n_folds}")
-        if not Y is None and metafeature_ids is not None:
+        if (Y is not None and 
+            column_types is not None and 
+            column_types[Y.name] != self.NUMERIC and 
+            metafeature_ids is not None):
             # when computing landmarking metafeatures, there must be at least
             # n_folds instances of each class of Y
             landmarking_mfs = self.list_metafeatures(group="landmarking")
