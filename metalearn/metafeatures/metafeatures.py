@@ -208,10 +208,6 @@ class Metafeatures(object):
     def _get_cv_seed(self, seed_base, seed_offset):
         return (seed_base + seed_offset,)
 
-    # def _check_timeout(self):
-    #     if time.time() - self.start_time > self.timeout:
-    #         raise TimeoutError()
-
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
         verbose
