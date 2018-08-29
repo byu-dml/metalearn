@@ -336,32 +336,39 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         """Tests Metafeatures().compute() with timeout set"""   
         test_name = inspect.stack()[0][3]   
         test_failures = {} 
-        for timeout in [.05, .1, .15, .2, .25, .3, .35, .4, .45, .5, None]:
-            for dataset_filename, dataset in self.datasets.items(): 
-                metafeatures = Metafeatures()   
-                start_time = time.time()    
-                computed_mfs = metafeatures.compute(  
-                    X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
-                    column_types=dataset["column_types"], timeout=timeout
-                )   
-                compute_time = time.time() - start_time 
-                print(f"Dataset: {dataset_filename} time: {compute_time}")
-                # self.assertGreater( 
-                #     timeout, compute_time,  
-                #     f"Compute metafeatures exceeded timeout on '{dataset_filename}'"    
-                # )  
-                computed_mfs_timeout = {k: v for k, v in computed_mfs.items() if v[Metafeatures.VALUE_KEY] != Metafeatures.TIMEOUT}
-                known_mfs = dataset["known_metafeatures"]
-                required_checks = {
-                    self._check_correctness: [
-                        computed_mfs_timeout, known_mfs, dataset_filename
-                    ],
-                    self._check_compare_metafeature_lists: [
-                        computed_mfs, known_mfs, dataset_filename
-                    ]
-                }
-            test_failures.update(self._perform_checks(required_checks))
-            print()
+        for dataset_filename, dataset in self.datasets.items():
+            metafeatures = Metafeatures()
+
+            start_time = time.time()
+            metafeatures.compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"]
+            )
+            full_compute_time = time.time() - start_time
+
+            start_time = time.time()
+            computed_mfs = metafeatures.compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"], timeout=full_compute_time/2
+            )
+            compute_time = time.time() - start_time
+
+            self.assertGreater(
+                full_compute_time, compute_time,
+                f"Compute metafeatures exceeded timeout on '{dataset_filename}'"
+            )
+            computed_mfs_timeout = {k: v for k, v in computed_mfs.items()
+                                    if v[Metafeatures.VALUE_KEY] != Metafeatures.TIMEOUT}
+            known_mfs = dataset["known_metafeatures"]
+            required_checks = {
+                self._check_correctness: [
+                    computed_mfs_timeout, known_mfs, dataset_filename
+                ],
+                self._check_compare_metafeature_lists: [
+                    computed_mfs, known_mfs, dataset_filename
+                ]
+            }
+        test_failures.update(self._perform_checks(required_checks))
         self._report_test_failures(test_failures, test_name)
 
 

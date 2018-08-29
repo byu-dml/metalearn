@@ -96,15 +96,20 @@ class Metafeatures(object):
         metafeature. The value is typically a number, but can be a string
         indicating a reason why the value could not be computed.
         """
-        self.start_time = time.time()
+        start_time = time.time()
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
             verbose
         )
         if timeout is None:
-            self.timeout = 100
+            def check_time():
+                pass
         else:
-            self.timeout = timeout - .1
+            def check_time():
+                if time.time() - start_time > timeout:
+                    raise TimeoutError()
+        self._check_timeout = check_time
+
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
         if metafeature_ids is None:
@@ -122,7 +127,8 @@ class Metafeatures(object):
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
 
-        computed_metafeatures = {name:{self.VALUE_KEY:self.TIMEOUT, self.COMPUTE_TIME_KEY:0} for name in metafeature_ids}
+        computed_metafeatures = {name: {self.VALUE_KEY: self.TIMEOUT, self.COMPUTE_TIME_KEY: 0}
+                                 for name in metafeature_ids}
         try:
             for metafeature_id in metafeature_ids:
                 if verbose == True:
@@ -143,7 +149,7 @@ class Metafeatures(object):
                     self.COMPUTE_TIME_KEY: compute_time
                 }
                 self._check_timeout()
-        except TimeoutError as t:
+        except TimeoutError:
             pass
 
         return computed_metafeatures
@@ -202,9 +208,9 @@ class Metafeatures(object):
     def _get_cv_seed(self, seed_base, seed_offset):
         return (seed_base + seed_offset,)
 
-    def _check_timeout(self):
-        if time.time() - self.start_time > self.timeout:
-            raise TimeoutError()
+    # def _check_timeout(self):
+    #     if time.time() - self.start_time > self.timeout:
+    #         raise TimeoutError()
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
