@@ -179,7 +179,12 @@
                 "NumberOfClasses",
                 "MeanClassProbability",
                 "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
                 "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
                 "MaxClassProbability",
                 "MinorityClassSize",
                 "MajorityClassSize"
@@ -348,7 +353,12 @@
                 "NumberOfClasses",
                 "MeanClassProbability",
                 "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
                 "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
                 "MaxClassProbability",
                 "MinorityClassSize",
                 "MajorityClassSize"
@@ -363,7 +373,52 @@
                 "NumberOfClasses",
                 "MeanClassProbability",
                 "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
                 "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
+        },
+        "SkewClassProbability": {
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
+                "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
+        },
+        "KurtosisClassProbability": {
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
+                "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
                 "MaxClassProbability",
                 "MinorityClassSize",
                 "MajorityClassSize"
@@ -378,7 +433,72 @@
                 "NumberOfClasses",
                 "MeanClassProbability",
                 "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
                 "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
+        },
+        "Quartile1ClassProbability": {
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
+                "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
+        },
+        "Quartile2ClassProbability": {
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
+                "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
+                "MaxClassProbability",
+                "MinorityClassSize",
+                "MajorityClassSize"
+            ]
+        },
+        "Quartile3ClassProbability": {
+            "function": "get_class_stats",
+            "arguments": {
+                "Y": "Y"
+            },
+            "returns": [
+                "NumberOfClasses",
+                "MeanClassProbability",
+                "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
+                "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
                 "MaxClassProbability",
                 "MinorityClassSize",
                 "MajorityClassSize"
@@ -393,7 +513,12 @@
                 "NumberOfClasses",
                 "MeanClassProbability",
                 "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
                 "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
                 "MaxClassProbability",
                 "MinorityClassSize",
                 "MajorityClassSize"
@@ -408,7 +533,12 @@
                 "NumberOfClasses",
                 "MeanClassProbability",
                 "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
                 "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
                 "MaxClassProbability",
                 "MinorityClassSize",
                 "MajorityClassSize"
@@ -423,7 +553,12 @@
                 "NumberOfClasses",
                 "MeanClassProbability",
                 "StdevClassProbability",
+                "SkewClassProbability",
+                "KurtosisClassProbability",
                 "MinClassProbability",
+                "Quartile1ClassProbability",
+                "Quartile2ClassProbability",
+                "Quartile3ClassProbability",
                 "MaxClassProbability",
                 "MinorityClassSize",
                 "MajorityClassSize"
@@ -438,7 +573,12 @@
             "returns": [
                 "MeanCardinalityOfCategoricalFeatures",
                 "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
                 "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
                 "MaxCardinalityOfCategoricalFeatures"
             ]
         },
@@ -451,7 +591,48 @@
             "returns": [
                 "MeanCardinalityOfCategoricalFeatures",
                 "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
                 "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
+        },
+        "SkewCardinalityOfCategoricalFeatures": {
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
+        },
+        "KurtosisCardinalityOfCategoricalFeatures": {
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
                 "MaxCardinalityOfCategoricalFeatures"
             ]
         },
@@ -464,7 +645,66 @@
             "returns": [
                 "MeanCardinalityOfCategoricalFeatures",
                 "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
                 "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
+        },
+        "Quartile1CardinalityOfCategoricalFeatures": {
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
+        },
+        "Quartile2CardinalityOfCategoricalFeatures": {
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
+                "MaxCardinalityOfCategoricalFeatures"
+            ]
+        },
+        "Quartile3CardinalityOfCategoricalFeatures": {
+            "function": "get_categorical_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfCategoricalFeatures",
+                "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
+                "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
                 "MaxCardinalityOfCategoricalFeatures"
             ]
         },
@@ -477,7 +717,12 @@
             "returns": [
                 "MeanCardinalityOfCategoricalFeatures",
                 "StdevCardinalityOfCategoricalFeatures",
+                "SkewCardinalityOfCategoricalFeatures",
+                "KurtosisCardinalityOfCategoricalFeatures",
                 "MinCardinalityOfCategoricalFeatures",
+                "Quartile1CardinalityOfCategoricalFeatures",
+                "Quartile2CardinalityOfCategoricalFeatures",
+                "Quartile3CardinalityOfCategoricalFeatures",
                 "MaxCardinalityOfCategoricalFeatures"
             ]
         },
@@ -490,7 +735,12 @@
             "returns": [
                 "MeanCardinalityOfNumericFeatures",
                 "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
                 "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
                 "MaxCardinalityOfNumericFeatures"
             ]
         },
@@ -503,7 +753,48 @@
             "returns": [
                 "MeanCardinalityOfNumericFeatures",
                 "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
                 "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
+        },
+        "SkewCardinalityOfNumericFeatures": {
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
+        },
+        "KurtosisCardinalityOfNumericFeatures": {
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
                 "MaxCardinalityOfNumericFeatures"
             ]
         },
@@ -516,7 +807,66 @@
             "returns": [
                 "MeanCardinalityOfNumericFeatures",
                 "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
                 "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
+        },
+        "Quartile1CardinalityOfNumericFeatures": {
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
+        },
+        "Quartile2CardinalityOfNumericFeatures": {
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
+                "MaxCardinalityOfNumericFeatures"
+            ]
+        },
+        "Quartile3CardinalityOfNumericFeatures": {
+            "function": "get_numeric_cardinalities",
+            "arguments": {
+                "X": "X",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "MeanCardinalityOfNumericFeatures",
+                "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
+                "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
                 "MaxCardinalityOfNumericFeatures"
             ]
         },
@@ -529,7 +879,12 @@
             "returns": [
                 "MeanCardinalityOfNumericFeatures",
                 "StdevCardinalityOfNumericFeatures",
+                "SkewCardinalityOfNumericFeatures",
+                "KurtosisCardinalityOfNumericFeatures",
                 "MinCardinalityOfNumericFeatures",
+                "Quartile1CardinalityOfNumericFeatures",
+                "Quartile2CardinalityOfNumericFeatures",
+                "Quartile3CardinalityOfNumericFeatures",
                 "MaxCardinalityOfNumericFeatures"
             ]
         },
@@ -541,6 +896,8 @@
             "returns": [
                 "MeanMeansOfNumericFeatures",
                 "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
                 "MinMeansOfNumericFeatures",
                 "Quartile1MeansOfNumericFeatures",
                 "Quartile2MeansOfNumericFeatures",
@@ -556,6 +913,42 @@
             "returns": [
                 "MeanMeansOfNumericFeatures",
                 "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
+        },
+        "SkewMeansOfNumericFeatures": {
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
+                "MinMeansOfNumericFeatures",
+                "Quartile1MeansOfNumericFeatures",
+                "Quartile2MeansOfNumericFeatures",
+                "Quartile3MeansOfNumericFeatures",
+                "MaxMeansOfNumericFeatures"
+            ]
+        },
+        "KurtosisMeansOfNumericFeatures": {
+            "function": "get_numeric_means",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanMeansOfNumericFeatures",
+                "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
                 "MinMeansOfNumericFeatures",
                 "Quartile1MeansOfNumericFeatures",
                 "Quartile2MeansOfNumericFeatures",
@@ -571,6 +964,8 @@
             "returns": [
                 "MeanMeansOfNumericFeatures",
                 "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
                 "MinMeansOfNumericFeatures",
                 "Quartile1MeansOfNumericFeatures",
                 "Quartile2MeansOfNumericFeatures",
@@ -586,6 +981,8 @@
             "returns": [
                 "MeanMeansOfNumericFeatures",
                 "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
                 "MinMeansOfNumericFeatures",
                 "Quartile1MeansOfNumericFeatures",
                 "Quartile2MeansOfNumericFeatures",
@@ -601,6 +998,8 @@
             "returns": [
                 "MeanMeansOfNumericFeatures",
                 "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
                 "MinMeansOfNumericFeatures",
                 "Quartile1MeansOfNumericFeatures",
                 "Quartile2MeansOfNumericFeatures",
@@ -616,6 +1015,8 @@
             "returns": [
                 "MeanMeansOfNumericFeatures",
                 "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
                 "MinMeansOfNumericFeatures",
                 "Quartile1MeansOfNumericFeatures",
                 "Quartile2MeansOfNumericFeatures",
@@ -631,6 +1032,8 @@
             "returns": [
                 "MeanMeansOfNumericFeatures",
                 "StdevMeansOfNumericFeatures",
+                "SkewMeansOfNumericFeatures",
+                "KurtosisMeansOfNumericFeatures",
                 "MinMeansOfNumericFeatures",
                 "Quartile1MeansOfNumericFeatures",
                 "Quartile2MeansOfNumericFeatures",
@@ -646,6 +1049,8 @@
             "returns": [
                 "MeanStdDevOfNumericFeatures",
                 "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
                 "MinStdDevOfNumericFeatures",
                 "Quartile1StdDevOfNumericFeatures",
                 "Quartile2StdDevOfNumericFeatures",
@@ -661,6 +1066,42 @@
             "returns": [
                 "MeanStdDevOfNumericFeatures",
                 "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
+        },
+        "SkewStdDevOfNumericFeatures": {
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
+                "MinStdDevOfNumericFeatures",
+                "Quartile1StdDevOfNumericFeatures",
+                "Quartile2StdDevOfNumericFeatures",
+                "Quartile3StdDevOfNumericFeatures",
+                "MaxStdDevOfNumericFeatures"
+            ]
+        },
+        "KurtosisStdDevOfNumericFeatures": {
+            "function": "get_numeric_stdev",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfNumericFeatures",
+                "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
                 "MinStdDevOfNumericFeatures",
                 "Quartile1StdDevOfNumericFeatures",
                 "Quartile2StdDevOfNumericFeatures",
@@ -676,6 +1117,8 @@
             "returns": [
                 "MeanStdDevOfNumericFeatures",
                 "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
                 "MinStdDevOfNumericFeatures",
                 "Quartile1StdDevOfNumericFeatures",
                 "Quartile2StdDevOfNumericFeatures",
@@ -691,6 +1134,8 @@
             "returns": [
                 "MeanStdDevOfNumericFeatures",
                 "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
                 "MinStdDevOfNumericFeatures",
                 "Quartile1StdDevOfNumericFeatures",
                 "Quartile2StdDevOfNumericFeatures",
@@ -706,6 +1151,8 @@
             "returns": [
                 "MeanStdDevOfNumericFeatures",
                 "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
                 "MinStdDevOfNumericFeatures",
                 "Quartile1StdDevOfNumericFeatures",
                 "Quartile2StdDevOfNumericFeatures",
@@ -721,6 +1168,8 @@
             "returns": [
                 "MeanStdDevOfNumericFeatures",
                 "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
                 "MinStdDevOfNumericFeatures",
                 "Quartile1StdDevOfNumericFeatures",
                 "Quartile2StdDevOfNumericFeatures",
@@ -736,6 +1185,8 @@
             "returns": [
                 "MeanStdDevOfNumericFeatures",
                 "StdevStdDevOfNumericFeatures",
+                "SkewStdDevOfNumericFeatures",
+                "KurtosisStdDevOfNumericFeatures",
                 "MinStdDevOfNumericFeatures",
                 "Quartile1StdDevOfNumericFeatures",
                 "Quartile2StdDevOfNumericFeatures",
@@ -751,6 +1202,8 @@
             "returns": [
                 "MeanSkewnessOfNumericFeatures",
                 "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
                 "MinSkewnessOfNumericFeatures",
                 "Quartile1SkewnessOfNumericFeatures",
                 "Quartile2SkewnessOfNumericFeatures",
@@ -766,6 +1219,42 @@
             "returns": [
                 "MeanSkewnessOfNumericFeatures",
                 "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
+        },
+        "SkewSkewnessOfNumericFeatures": {
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
+                "MinSkewnessOfNumericFeatures",
+                "Quartile1SkewnessOfNumericFeatures",
+                "Quartile2SkewnessOfNumericFeatures",
+                "Quartile3SkewnessOfNumericFeatures",
+                "MaxSkewnessOfNumericFeatures"
+            ]
+        },
+        "KurtosisSkewnessOfNumericFeatures": {
+            "function": "get_numeric_skewness",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfNumericFeatures",
+                "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
                 "MinSkewnessOfNumericFeatures",
                 "Quartile1SkewnessOfNumericFeatures",
                 "Quartile2SkewnessOfNumericFeatures",
@@ -781,6 +1270,8 @@
             "returns": [
                 "MeanSkewnessOfNumericFeatures",
                 "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
                 "MinSkewnessOfNumericFeatures",
                 "Quartile1SkewnessOfNumericFeatures",
                 "Quartile2SkewnessOfNumericFeatures",
@@ -796,6 +1287,8 @@
             "returns": [
                 "MeanSkewnessOfNumericFeatures",
                 "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
                 "MinSkewnessOfNumericFeatures",
                 "Quartile1SkewnessOfNumericFeatures",
                 "Quartile2SkewnessOfNumericFeatures",
@@ -811,6 +1304,8 @@
             "returns": [
                 "MeanSkewnessOfNumericFeatures",
                 "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
                 "MinSkewnessOfNumericFeatures",
                 "Quartile1SkewnessOfNumericFeatures",
                 "Quartile2SkewnessOfNumericFeatures",
@@ -826,6 +1321,8 @@
             "returns": [
                 "MeanSkewnessOfNumericFeatures",
                 "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
                 "MinSkewnessOfNumericFeatures",
                 "Quartile1SkewnessOfNumericFeatures",
                 "Quartile2SkewnessOfNumericFeatures",
@@ -841,6 +1338,8 @@
             "returns": [
                 "MeanSkewnessOfNumericFeatures",
                 "StdevSkewnessOfNumericFeatures",
+                "SkewSkewnessOfNumericFeatures",
+                "KurtosisSkewnessOfNumericFeatures",
                 "MinSkewnessOfNumericFeatures",
                 "Quartile1SkewnessOfNumericFeatures",
                 "Quartile2SkewnessOfNumericFeatures",
@@ -854,13 +1353,15 @@
                 "numeric_features_array": "NoNaNNumericFeatures"
             },
             "returns": [
-            "MeanKurtosisOfNumericFeatures",
-            "StdevKurtosisOfNumericFeatures",
-            "MinKurtosisOfNumericFeatures",
-            "Quartile1KurtosisOfNumericFeatures",
-            "Quartile2KurtosisOfNumericFeatures",
-            "Quartile3KurtosisOfNumericFeatures",
-            "MaxKurtosisOfNumericFeatures"
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
         ]
         },
         "StdevKurtosisOfNumericFeatures": {
@@ -871,6 +1372,42 @@
             "returns": [
                 "MeanKurtosisOfNumericFeatures",
                 "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
+        },
+        "SkewKurtosisOfNumericFeatures": {
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
+                "MinKurtosisOfNumericFeatures",
+                "Quartile1KurtosisOfNumericFeatures",
+                "Quartile2KurtosisOfNumericFeatures",
+                "Quartile3KurtosisOfNumericFeatures",
+                "MaxKurtosisOfNumericFeatures"
+            ]
+        },
+        "KurtosisKurtosisOfNumericFeatures": {
+            "function": "get_numeric_kurtosis",
+            "arguments": {
+                "numeric_features_array": "NoNaNNumericFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfNumericFeatures",
+                "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
                 "MinKurtosisOfNumericFeatures",
                 "Quartile1KurtosisOfNumericFeatures",
                 "Quartile2KurtosisOfNumericFeatures",
@@ -886,6 +1423,8 @@
             "returns": [
                 "MeanKurtosisOfNumericFeatures",
                 "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
                 "MinKurtosisOfNumericFeatures",
                 "Quartile1KurtosisOfNumericFeatures",
                 "Quartile2KurtosisOfNumericFeatures",
@@ -901,6 +1440,8 @@
             "returns": [
                 "MeanKurtosisOfNumericFeatures",
                 "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
                 "MinKurtosisOfNumericFeatures",
                 "Quartile1KurtosisOfNumericFeatures",
                 "Quartile2KurtosisOfNumericFeatures",
@@ -916,6 +1457,8 @@
             "returns": [
                 "MeanKurtosisOfNumericFeatures",
                 "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
                 "MinKurtosisOfNumericFeatures",
                 "Quartile1KurtosisOfNumericFeatures",
                 "Quartile2KurtosisOfNumericFeatures",
@@ -931,6 +1474,8 @@
             "returns": [
                 "MeanKurtosisOfNumericFeatures",
                 "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
                 "MinKurtosisOfNumericFeatures",
                 "Quartile1KurtosisOfNumericFeatures",
                 "Quartile2KurtosisOfNumericFeatures",
@@ -946,6 +1491,8 @@
             "returns": [
                 "MeanKurtosisOfNumericFeatures",
                 "StdevKurtosisOfNumericFeatures",
+                "SkewKurtosisOfNumericFeatures",
+                "KurtosisKurtosisOfNumericFeatures",
                 "MinKurtosisOfNumericFeatures",
                 "Quartile1KurtosisOfNumericFeatures",
                 "Quartile2KurtosisOfNumericFeatures",
@@ -1074,6 +1621,60 @@
             },
             "returns": [
                 "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
+        },
+        "StdevCategoricalAttributeEntropy": {
+            "function": "get_attribute_entropy",
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
+        },
+        "SkewCategoricalAttributeEntropy": {
+            "function": "get_attribute_entropy",
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
+                "MinCategoricalAttributeEntropy",
+                "Quartile1CategoricalAttributeEntropy",
+                "Quartile2CategoricalAttributeEntropy",
+                "Quartile3CategoricalAttributeEntropy",
+                "MaxCategoricalAttributeEntropy"
+            ]
+        },
+        "KurtosisCategoricalAttributeEntropy": {
+            "function": "get_attribute_entropy",
+            "arguments": {
+                "feature_array": "NoNaNCategoricalFeatures"
+            },
+            "returns": [
+                "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
                 "MinCategoricalAttributeEntropy",
                 "Quartile1CategoricalAttributeEntropy",
                 "Quartile2CategoricalAttributeEntropy",
@@ -1088,6 +1689,9 @@
             },
             "returns": [
                 "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
                 "MinCategoricalAttributeEntropy",
                 "Quartile1CategoricalAttributeEntropy",
                 "Quartile2CategoricalAttributeEntropy",
@@ -1102,6 +1706,9 @@
             },
             "returns": [
                 "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
                 "MinCategoricalAttributeEntropy",
                 "Quartile1CategoricalAttributeEntropy",
                 "Quartile2CategoricalAttributeEntropy",
@@ -1116,6 +1723,9 @@
             },
             "returns": [
                 "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
                 "MinCategoricalAttributeEntropy",
                 "Quartile1CategoricalAttributeEntropy",
                 "Quartile2CategoricalAttributeEntropy",
@@ -1130,6 +1740,9 @@
             },
             "returns": [
                 "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
                 "MinCategoricalAttributeEntropy",
                 "Quartile1CategoricalAttributeEntropy",
                 "Quartile2CategoricalAttributeEntropy",
@@ -1144,6 +1757,9 @@
             },
             "returns": [
                 "MeanCategoricalAttributeEntropy",
+                "StdevCategoricalAttributeEntropy",
+                "SkewCategoricalAttributeEntropy",
+                "KurtosisCategoricalAttributeEntropy",
                 "MinCategoricalAttributeEntropy",
                 "Quartile1CategoricalAttributeEntropy",
                 "Quartile2CategoricalAttributeEntropy",
@@ -1158,6 +1774,60 @@
             },
             "returns": [
                 "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
+        },
+        "StdevNumericAttributeEntropy": {
+            "function": "get_attribute_entropy",
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
+        },
+        "SkewNumericAttributeEntropy": {
+            "function": "get_attribute_entropy",
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
+                "MinNumericAttributeEntropy",
+                "Quartile1NumericAttributeEntropy",
+                "Quartile2NumericAttributeEntropy",
+                "Quartile3NumericAttributeEntropy",
+                "MaxNumericAttributeEntropy"
+            ]
+        },
+        "KurtosisNumericAttributeEntropy": {
+            "function": "get_attribute_entropy",
+            "arguments": {
+                "feature_array": "NoNaNBinnedNumericFeatures"
+            },
+            "returns": [
+                "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
                 "MinNumericAttributeEntropy",
                 "Quartile1NumericAttributeEntropy",
                 "Quartile2NumericAttributeEntropy",
@@ -1172,6 +1842,9 @@
             },
             "returns": [
                 "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
                 "MinNumericAttributeEntropy",
                 "Quartile1NumericAttributeEntropy",
                 "Quartile2NumericAttributeEntropy",
@@ -1186,6 +1859,9 @@
             },
             "returns": [
                 "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
                 "MinNumericAttributeEntropy",
                 "Quartile1NumericAttributeEntropy",
                 "Quartile2NumericAttributeEntropy",
@@ -1200,6 +1876,9 @@
             },
             "returns": [
                 "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
                 "MinNumericAttributeEntropy",
                 "Quartile1NumericAttributeEntropy",
                 "Quartile2NumericAttributeEntropy",
@@ -1214,6 +1893,9 @@
             },
             "returns": [
                 "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
                 "MinNumericAttributeEntropy",
                 "Quartile1NumericAttributeEntropy",
                 "Quartile2NumericAttributeEntropy",
@@ -1228,6 +1910,9 @@
             },
             "returns": [
                 "MeanNumericAttributeEntropy",
+                "StdevNumericAttributeEntropy",
+                "SkewNumericAttributeEntropy",
+                "KurtosisNumericAttributeEntropy",
                 "MinNumericAttributeEntropy",
                 "Quartile1NumericAttributeEntropy",
                 "Quartile2NumericAttributeEntropy",
@@ -1242,6 +1927,60 @@
             },
             "returns": [
                 "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
+        },
+        "StdevCategoricalJointEntropy": {
+            "function": "get_joint_entropy",
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
+        },
+        "SkewCategoricalJointEntropy": {
+            "function": "get_joint_entropy",
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
+                "MinCategoricalJointEntropy",
+                "Quartile1CategoricalJointEntropy",
+                "Quartile2CategoricalJointEntropy",
+                "Quartile3CategoricalJointEntropy",
+                "MaxCategoricalJointEntropy"
+            ]
+        },
+        "KurtosisCategoricalJointEntropy": {
+            "function": "get_joint_entropy",
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
                 "MinCategoricalJointEntropy",
                 "Quartile1CategoricalJointEntropy",
                 "Quartile2CategoricalJointEntropy",
@@ -1256,6 +1995,9 @@
             },
             "returns": [
                 "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
                 "MinCategoricalJointEntropy",
                 "Quartile1CategoricalJointEntropy",
                 "Quartile2CategoricalJointEntropy",
@@ -1270,6 +2012,9 @@
             },
             "returns": [
                 "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
                 "MinCategoricalJointEntropy",
                 "Quartile1CategoricalJointEntropy",
                 "Quartile2CategoricalJointEntropy",
@@ -1284,6 +2029,9 @@
             },
             "returns": [
                 "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
                 "MinCategoricalJointEntropy",
                 "Quartile1CategoricalJointEntropy",
                 "Quartile2CategoricalJointEntropy",
@@ -1298,6 +2046,9 @@
             },
             "returns": [
                 "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
                 "MinCategoricalJointEntropy",
                 "Quartile1CategoricalJointEntropy",
                 "Quartile2CategoricalJointEntropy",
@@ -1311,6 +2062,10 @@
                 "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
             },
             "returns": ["MeanCategoricalJointEntropy",
+                "MeanCategoricalJointEntropy",
+                "StdevCategoricalJointEntropy",
+                "SkewCategoricalJointEntropy",
+                "KurtosisCategoricalJointEntropy",
                 "MinCategoricalJointEntropy",
                 "Quartile1CategoricalJointEntropy",
                 "Quartile2CategoricalJointEntropy",
@@ -1325,6 +2080,60 @@
             },
             "returns": [
                 "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
+        },
+        "StdevNumericJointEntropy": {
+            "function": "get_joint_entropy",
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
+        },
+        "SkewNumericJointEntropy": {
+            "function": "get_joint_entropy",
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
+                "MinNumericJointEntropy",
+                "Quartile1NumericJointEntropy",
+                "Quartile2NumericJointEntropy",
+                "Quartile3NumericJointEntropy",
+                "MaxNumericJointEntropy"
+            ]
+        },
+        "KurtosisNumericJointEntropy": {
+            "function": "get_joint_entropy",
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
                 "MinNumericJointEntropy",
                 "Quartile1NumericJointEntropy",
                 "Quartile2NumericJointEntropy",
@@ -1339,6 +2148,9 @@
             },
             "returns": [
                 "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
                 "MinNumericJointEntropy",
                 "Quartile1NumericJointEntropy",
                 "Quartile2NumericJointEntropy",
@@ -1353,6 +2165,9 @@
             },
             "returns": [
                 "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
                 "MinNumericJointEntropy",
                 "Quartile1NumericJointEntropy",
                 "Quartile2NumericJointEntropy",
@@ -1367,6 +2182,9 @@
             },
             "returns": [
                 "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
                 "MinNumericJointEntropy",
                 "Quartile1NumericJointEntropy",
                 "Quartile2NumericJointEntropy",
@@ -1381,6 +2199,9 @@
             },
             "returns": [
                 "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
                 "MinNumericJointEntropy",
                 "Quartile1NumericJointEntropy",
                 "Quartile2NumericJointEntropy",
@@ -1395,6 +2216,9 @@
             },
             "returns": [
                 "MeanNumericJointEntropy",
+                "StdevNumericJointEntropy",
+                "SkewNumericJointEntropy",
+                "KurtosisNumericJointEntropy",
                 "MinNumericJointEntropy",
                 "Quartile1NumericJointEntropy",
                 "Quartile2NumericJointEntropy",
@@ -1409,6 +2233,60 @@
             },
             "returns": [
                 "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
+        },
+        "StdevCategoricalMutualInformation": {
+            "function": "get_mutual_information",
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
+        },
+        "SkewCategoricalMutualInformation": {
+            "function": "get_mutual_information",
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
+                "MinCategoricalMutualInformation",
+                "Quartile1CategoricalMutualInformation",
+                "Quartile2CategoricalMutualInformation",
+                "Quartile3CategoricalMutualInformation",
+                "MaxCategoricalMutualInformation"
+            ]
+        },
+        "KurtosisCategoricalMutualInformation": {
+            "function": "get_mutual_information",
+            "arguments": {
+                "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
+            },
+            "returns": [
+                "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
                 "MinCategoricalMutualInformation",
                 "Quartile1CategoricalMutualInformation",
                 "Quartile2CategoricalMutualInformation",
@@ -1423,6 +2301,9 @@
             },
             "returns": [
                 "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
                 "MinCategoricalMutualInformation",
                 "Quartile1CategoricalMutualInformation",
                 "Quartile2CategoricalMutualInformation",
@@ -1437,6 +2318,9 @@
             },
             "returns": [
                 "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
                 "MinCategoricalMutualInformation",
                 "Quartile1CategoricalMutualInformation",
                 "Quartile2CategoricalMutualInformation",
@@ -1451,6 +2335,9 @@
             },
             "returns": [
                 "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
                 "MinCategoricalMutualInformation",
                 "Quartile1CategoricalMutualInformation",
                 "Quartile2CategoricalMutualInformation",
@@ -1465,6 +2352,9 @@
             },
             "returns": [
                 "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
                 "MinCategoricalMutualInformation",
                 "Quartile1CategoricalMutualInformation",
                 "Quartile2CategoricalMutualInformation",
@@ -1479,6 +2369,9 @@
             },
             "returns": [
                 "MeanCategoricalMutualInformation",
+                "StdevCategoricalMutualInformation",
+                "SkewCategoricalMutualInformation",
+                "KurtosisCategoricalMutualInformation",
                 "MinCategoricalMutualInformation",
                 "Quartile1CategoricalMutualInformation",
                 "Quartile2CategoricalMutualInformation",
@@ -1493,6 +2386,60 @@
             },
             "returns": [
                 "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
+        },
+        "StdevNumericMutualInformation": {
+            "function": "get_mutual_information",
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
+        },
+        "SkewNumericMutualInformation": {
+            "function": "get_mutual_information",
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
+                "MinNumericMutualInformation",
+                "Quartile1NumericMutualInformation",
+                "Quartile2NumericMutualInformation",
+                "Quartile3NumericMutualInformation",
+                "MaxNumericMutualInformation"
+            ]
+        },
+        "KurtosisNumericMutualInformation": {
+            "function": "get_mutual_information",
+            "arguments": {
+                "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
+            },
+            "returns": [
+                "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
                 "MinNumericMutualInformation",
                 "Quartile1NumericMutualInformation",
                 "Quartile2NumericMutualInformation",
@@ -1507,6 +2454,9 @@
             },
             "returns": [
                 "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
                 "MinNumericMutualInformation",
                 "Quartile1NumericMutualInformation",
                 "Quartile2NumericMutualInformation",
@@ -1521,6 +2471,9 @@
             },
             "returns": [
                 "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
                 "MinNumericMutualInformation",
                 "Quartile1NumericMutualInformation",
                 "Quartile2NumericMutualInformation",
@@ -1535,6 +2488,9 @@
             },
             "returns": [
                 "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
                 "MinNumericMutualInformation",
                 "Quartile1NumericMutualInformation",
                 "Quartile2NumericMutualInformation",
@@ -1549,6 +2505,9 @@
             },
             "returns": [
                 "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
                 "MinNumericMutualInformation",
                 "Quartile1NumericMutualInformation",
                 "Quartile2NumericMutualInformation",
@@ -1563,6 +2522,9 @@
             },
             "returns": [
                 "MeanNumericMutualInformation",
+                "StdevNumericMutualInformation",
+                "SkewNumericMutualInformation",
+                "KurtosisNumericMutualInformation",
                 "MinNumericMutualInformation",
                 "Quartile1NumericMutualInformation",
                 "Quartile2NumericMutualInformation",
