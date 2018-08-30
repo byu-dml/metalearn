@@ -2061,7 +2061,7 @@
             "arguments": {
                 "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
             },
-            "returns": ["MeanCategoricalJointEntropy",
+            "returns": [
                 "MeanCategoricalJointEntropy",
                 "StdevCategoricalJointEntropy",
                 "SkewCategoricalJointEntropy",

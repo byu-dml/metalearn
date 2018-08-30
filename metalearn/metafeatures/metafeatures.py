@@ -115,7 +115,6 @@ class Metafeatures(object):
         self._init_resources(
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
         )
-
         computed_metafeatures = {}
         for metafeature_id in metafeature_ids:
             if verbose == True:
