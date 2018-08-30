@@ -255,6 +255,29 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
         self._report_test_failures(test_failures, test_name)
 
+    def test_exclude_metafeatures(self):
+        SUBSET_LENGTH = 20
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            metafeature_ids = random.sample(Metafeatures.IDS, SUBSET_LENGTH)
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                exclude=metafeature_ids,
+                column_types=dataset["column_types"]
+            )
+            known_metafeatures = dataset["known_metafeatures"]
+            required_checks = {
+                self._check_correctness: [
+                    computed_mfs, known_metafeatures, dataset_filename
+                ]
+            }
+            test_failures.update(self._perform_checks(required_checks))
+            if any(mf_id in computed_mfs.keys() for mf_id in metafeature_ids):
+                self.assertTrue(False, "Metafeatures computed an excluded metafeature")
+
+        self._report_test_failures(test_failures, test_name)
+
     def test_compute_effects_on_dataset(self):
         """
         Tests whether computing metafeatures has any side effects on the input
@@ -331,6 +354,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 self.fail(
                     f"Failed to convert metafeature output to json: {str(e)}"
                 )
+
 
 
 class MetafeaturesTestCase(unittest.TestCase):

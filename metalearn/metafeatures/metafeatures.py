@@ -66,7 +66,7 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series = None,
         column_types: Dict[str, str] = None, metafeature_ids: List = None,
-        sample_shape=None, seed=None, n_folds=2, verbose=False
+        sample_shape=None, seed=None, n_folds=2, verbose=False, exclude: List=None
     ) -> dict:
         """
         Parameters
@@ -87,6 +87,8 @@ class Metafeatures(object):
             landmarking metafeatures. also affects the sample_shape validation
         verbose: bool, default False. When True, prints the ID of each
             metafeature right before it is about to be computed.
+        exclude: list, the metafeatures to be excluded from computation. Must
+            None if metafeature_ids is not None. Default None.
 
         Returns
         -------
@@ -97,23 +99,24 @@ class Metafeatures(object):
         """
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-            verbose
+            verbose, exclude
         )
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
         if metafeature_ids is None:
-            metafeature_ids = self.list_metafeatures()
+            metafeature_ids = self._set_metafeature_ids(exclude)
+            exclude = None
         if sample_shape is None:
             sample_shape = (None, None)
         if seed is None:
             seed = np.random.randint(2**32)
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-            verbose
+            verbose, exclude
         )
 
         self._init_resources(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds, exclude
         )
 
         computed_metafeatures = {}
@@ -139,7 +142,7 @@ class Metafeatures(object):
         return computed_metafeatures
 
     def _init_resources(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds, exclude
     ):
         self._resources = {
             "X_raw": {
@@ -194,35 +197,35 @@ class Metafeatures(object):
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
         for f in [
             self._validate_X, self._validate_Y, self._validate_column_types,
             self._validate_metafeature_ids, self._validate_sample_shape,
-            self._validate_n_folds, self._validate_verbose
+            self._validate_n_folds, self._validate_verbose, self._validate_excluded_ids
         ]:
             f(
                 X, Y, column_types, metafeature_ids, sample_shape, seed,
-                n_folds, verbose
+                n_folds, verbose, exclude
             )
 
     def _validate_X(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
 
     def _validate_Y(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
 
     def _validate_column_types(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
         if not column_types is None:
             invalid_column_types = {}
@@ -245,8 +248,10 @@ class Metafeatures(object):
 
     def _validate_metafeature_ids(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
+        if metafeature_ids is not None and exclude is not None:
+            raise ValueError("metafeature_ids and exclude cannot both be non-null")
         if metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if mf not in self._resources_info
@@ -259,7 +264,7 @@ class Metafeatures(object):
 
     def _validate_sample_shape(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
         if not sample_shape is None:
             if not type(sample_shape) in [tuple, list]:
@@ -281,7 +286,7 @@ class Metafeatures(object):
 
     def _validate_n_folds(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
         if not dtype_is_numeric(type(n_folds)) or (n_folds != int(n_folds)):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
@@ -305,10 +310,26 @@ class Metafeatures(object):
 
     def _validate_verbose(
         self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        verbose, exclude
     ):
         if not type(verbose) is bool:
             raise ValueError("`verbose` must be of type bool.")
+
+    def _validate_excluded_ids(
+        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
+        verbose, exclude
+    ):
+        if metafeature_ids is not None and exclude is not None:
+            raise ValueError("metafeature_ids and exclude cannot both be non-null")
+        if exclude is not None:
+            invalid_metafeature_ids = [
+                mf for mf in exclude if mf not in self._resources_info
+            ]
+            if len(invalid_metafeature_ids) > 0:
+                raise ValueError(
+                    'One or more excluded metafeatures are not valid: {}'.
+                    format(invalid_metafeature_ids)
+                )
 
     def _infer_column_types(self, X, Y):
         column_types = {}
@@ -323,6 +344,13 @@ class Metafeatures(object):
             else:
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
+
+    def _set_metafeature_ids(self, exclude):
+        if exclude is not None:
+            return [mf for mf in self.list_metafeatures() if mf not in exclude]
+
+        else:
+            return self.list_metafeatures()
 
     def _get_resource(self, resource_id):
         if not resource_id in self._resources:
