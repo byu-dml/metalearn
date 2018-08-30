@@ -348,7 +348,6 @@ class Metafeatures(object):
     def _set_metafeature_ids(self, exclude):
         if exclude is not None:
             return [mf for mf in self.list_metafeatures() if mf not in exclude]
-
         else:
             return self.list_metafeatures()
 
