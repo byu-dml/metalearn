@@ -6,14 +6,49 @@ from metalearn.metafeatures.base import build_resources_info, MetafeatureCompute
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
+def get_categorical_cardinalities_at_values(X,column_types):
+    categoricalCardinalityAtTwo = 0;
+    categoricalCardinalityAtThree = 0;
+    categoricalCardinalityAtFour = 0;
+    for feature in X.columns:
+        if column_types[feature] == "CATEGORICAL":
+            if len(X[feature].unique()) == 2:
+                categoricalCardinalityAtTwo+=1
+            if len(X[feature].unique()) == 3:
+                categoricalCardinalityAtThree+=1
+            if len(X[feature].unique()) == 4:
+                categoricalCardinalityAtFour+=1
+    return(categoricalCardinalityAtTwo,categoricalCardinalityAtThree,categoricalCardinalityAtFour)
+
+def get_numeric_cardinalities_at_values(X,column_types):
+    numericCardinalityAtTwo = 0;
+    numericCardinalityAtThree = 0;
+    numericCardinalityAtFour = 0;
+    for feature in X.columns:
+        if column_types[feature] == "NUMERIC":
+            if len(X[feature].unique()) == 2:
+                numericCardinalityAtTwo+=1
+            if len(X[feature].unique()) == 3:
+                numericCardinalityAtThree+=1
+            if len(X[feature].unique()) == 4:
+                numericCardinalityAtFour+=1
+    return(numericCardinalityAtTwo,numericCardinalityAtThree,numericCardinalityAtFour)
+
 def get_dataset_stats(X, column_types):
     number_of_instances = X.shape[0]
     number_of_features = X.shape[1]
     numeric_features = len(get_numeric_features(X, column_types))
     categorical_features = number_of_features - numeric_features
+    binary_features = get_categorical_cardinalities_at_values(X,column_types)[0]
+    # for feature in X.columns:
+    #      if column_types[feature] == "CATEGORICAL":
+    #          if len(X[feature].unique()) == 2:
+    #              binary_features += 1
+    # print(binary_features)
+    ratio_of_binary_features = binary_features / number_of_features
     ratio_of_numeric_features = numeric_features / number_of_features
     ratio_of_categorical_features = categorical_features / number_of_features
-    return (number_of_instances, number_of_features, numeric_features, categorical_features, ratio_of_numeric_features, ratio_of_categorical_features)
+    return (number_of_instances, number_of_features, numeric_features, categorical_features, binary_features, ratio_of_numeric_features, ratio_of_categorical_features, ratio_of_binary_features)
 
 get_dataset_stats = MetafeatureComputer(
     get_dataset_stats,

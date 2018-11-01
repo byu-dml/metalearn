@@ -149,6 +149,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 break
         return check
 
+    #def test_ellies_stuff(self):
+    #    pass
+
     def test_run_without_exception(self):
         try:
             for dataset_filename, dataset in self.datasets.items():

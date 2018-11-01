@@ -214,6 +214,21 @@ def get_canonical_correlations(dataframe, column_types):
     return correlations
 
 
+def autocorrelation():
+    autoCorrelation = null
+    #get_dataset_stats returns the number of instances 
+    #if the amount of datasets is greater than or equal to 0 (checking if there are actual data values)
+    #if not, autocorrelation is null
+    #double TimeBasedChanges = 0.0
+    #iterate through the dataset number of instances
+    #get both the current instance (at i) and the previous instance at (i-1)
+    #check if the attribute is numberic or nominal
+    #if it is numeric, take the previous instance value - current instance value
+    #if it is nominal, if the two values are equal, return 0, else 1
+    #set a double autocorrelation
+    #if number of instances is greater than 1, return number of instances -1-time based changes divided by number of instances -1
+    #otherwise, return 1.0
+
 """
 A list of all MetafeatureComputer
 instances in this module.
