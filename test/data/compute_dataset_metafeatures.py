@@ -28,7 +28,7 @@ def compute_dataset_metafeatures():
         X, Y, column_types = read_dataset(dataset_metadata)
 
         start_time = time.time()
-        metafeatures = Metafeatures().compute(X=X, Y=Y, seed=CORRECTNESS_SEED)
+        metafeatures = Metafeatures().compute(X=X, Y=Y, column_types=column_types, seed=CORRECTNESS_SEED)
         run_time = time.time() - start_time
 
         if choice == "v":
