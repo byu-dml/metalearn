@@ -12,11 +12,12 @@ def get_categorical_cardinalities_at_values(X,column_types):
     categoricalCardinalityAtFour = 0;
     for feature in X.columns:
         if column_types[feature] == "CATEGORICAL":
-            if len(X[feature].unique()) == 2:
+            cardinality = len(X[feature].unique())
+            if cardinality == 2:
                 categoricalCardinalityAtTwo+=1
-            if len(X[feature].unique()) == 3:
+            if cardinality == 3:
                 categoricalCardinalityAtThree+=1
-            if len(X[feature].unique()) == 4:
+            if cardinality == 4:
                 categoricalCardinalityAtFour+=1
     return(categoricalCardinalityAtTwo,categoricalCardinalityAtThree,categoricalCardinalityAtFour)
 
@@ -26,11 +27,12 @@ def get_numeric_cardinalities_at_values(X,column_types):
     numericCardinalityAtFour = 0;
     for feature in X.columns:
         if column_types[feature] == "NUMERIC":
-            if len(X[feature].unique()) == 2:
+            cardinality = len(X[feature].unique())
+            if cardinality == 2:
                 numericCardinalityAtTwo+=1
-            if len(X[feature].unique()) == 3:
+            if cardinality == 3:
                 numericCardinalityAtThree+=1
-            if len(X[feature].unique()) == 4:
+            if cardinality == 4:
                 numericCardinalityAtFour+=1
     return(numericCardinalityAtTwo,numericCardinalityAtThree,numericCardinalityAtFour)
 

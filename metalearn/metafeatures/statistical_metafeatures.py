@@ -213,12 +213,13 @@ def get_canonical_correlations(dataframe, column_types):
 
     return correlations
 
-
 def autocorrelation():
-    autoCorrelation = null
-    #get_dataset_stats returns the number of instances 
+    #get_dataset_stats returns the number of instances
     #if the amount of datasets is greater than or equal to 0 (checking if there are actual data values)
     #if not, autocorrelation is null
+    
+
+
     #double TimeBasedChanges = 0.0
     #iterate through the dataset number of instances
     #get both the current instance (at i) and the previous instance at (i-1)
