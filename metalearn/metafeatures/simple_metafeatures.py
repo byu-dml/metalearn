@@ -6,36 +6,6 @@ from metalearn.metafeatures.base import build_resources_info, MetafeatureCompute
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
-def get_categorical_cardinalities_at_values(X,column_types):
-    categoricalCardinalityAtTwo = 0;
-    categoricalCardinalityAtThree = 0;
-    categoricalCardinalityAtFour = 0;
-    for feature in X.columns:
-        if column_types[feature] == "CATEGORICAL":
-            cardinality = len(X[feature].unique())
-            if cardinality == 2:
-                categoricalCardinalityAtTwo+=1
-            if cardinality == 3:
-                categoricalCardinalityAtThree+=1
-            if cardinality == 4:
-                categoricalCardinalityAtFour+=1
-    return(categoricalCardinalityAtTwo,categoricalCardinalityAtThree,categoricalCardinalityAtFour)
-
-def get_numeric_cardinalities_at_values(X,column_types):
-    numericCardinalityAtTwo = 0;
-    numericCardinalityAtThree = 0;
-    numericCardinalityAtFour = 0;
-    for feature in X.columns:
-        if column_types[feature] == "NUMERIC":
-            cardinality = len(X[feature].unique())
-            if cardinality == 2:
-                numericCardinalityAtTwo+=1
-            if cardinality == 3:
-                numericCardinalityAtThree+=1
-            if cardinality == 4:
-                numericCardinalityAtFour+=1
-    return(numericCardinalityAtTwo,numericCardinalityAtThree,numericCardinalityAtFour)
-
 def get_dataset_stats(X, column_types):
     number_of_instances = X.shape[0]
     number_of_features = X.shape[1]
@@ -139,6 +109,32 @@ get_class_stats = MetafeatureComputer(
     groups=[MetafeatureGroup.SIMPLE]
 )
 
+
+def get_categorical_cardinalities_at_values(X,column_types):
+    categoricalCardinalityAtTwo = 0;
+    categoricalCardinalityAtThree = 0;
+    categoricalCardinalityAtFour = 0;
+    for x in (get_categorical_cardinalities(X, column_types)[0]):
+        if x == 2:
+            categoricalCardinalityAtTwo+=1
+        if x == 3:
+            categoricalCardinalityAtThree+=1
+        if x == 4:
+            categoricalCardinalityAtFour+=1
+    return(categoricalCardinalityAtTwo,categoricalCardinalityAtThree,categoricalCardinalityAtFour)
+
+def get_numeric_cardinalities_at_values(X,column_types):
+    numericCardinalityAtTwo = 0;
+    numericCardinalityAtThree = 0;
+    numericCardinalityAtFour = 0;
+    for x in (get_numeric_cardinalities(X, column_types)[0]):
+        if x == 2:
+            numericCardinalityAtTwo+=1
+        if x == 3:
+            numericCardinalityAtThree+=1
+        if x == 4:
+            numericCardinalityAtFour+=1
+    return(numericCardinalityAtTwo,numericCardinalityAtThree,numericCardinalityAtFour)
 
 def get_categorical_cardinalities(X, column_types):
     cardinalities = [X[feature].unique().shape[0] for feature in get_categorical_features(X, column_types)]

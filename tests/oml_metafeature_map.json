@@ -282,5 +282,19 @@
     "kNN1NKappa": {
         "openmlName": "kNN1NKappa",
         "multiplier": 1
+    },
+    "NumberOfBinaryFeatures": {
+        "openmlName": "NumberOfBinaryFeatures",
+        "multiplier": 1
+    },
+    "RatioOfBinaryFeatures": {
+        "openmlName": "PercentageOfBinaryFeatures",
+        "multiplier": 0.01
+    },
+    "Autocorrelation": {
+        "openmlName": "AutoCorrelation",
+        "multiplier": 1
     }
+
+
 }
