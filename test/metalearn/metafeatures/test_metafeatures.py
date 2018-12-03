@@ -68,6 +68,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_failures = {}
         fail_message = "Not all metafeatures matched previous results."
 
+        # computed_mfs["LinearDiscriminantAnalysisErrRate"]["value"] = 0
+
         for mf_id, result in computed_mfs.items():
             computed_value = result[Metafeatures.VALUE_KEY]
             known_value = known_mfs[mf_id][Metafeatures.VALUE_KEY]
@@ -588,6 +590,11 @@ class MetafeaturesTestCase(unittest.TestCase):
         except Exception as e:
            exc_type = type(e).__name__
            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+
+    def test_string_length_metafeatures(self):
+
+        pass
+
 
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]

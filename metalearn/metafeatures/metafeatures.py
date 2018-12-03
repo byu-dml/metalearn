@@ -310,6 +310,7 @@ class Metafeatures(object):
         if not type(verbose) is bool:
             raise ValueError("`verbose` must be of type bool.")
 
+    # todo: intelligently infer TEXT data type
     def _infer_column_types(self, X, Y):
         column_types = {}
         for col_name in X.columns:
@@ -469,6 +470,20 @@ class Metafeatures(object):
                     no_nan_series
                 )
         return (numeric_features_with_no_missing_values,)
+
+    def _get_text_features_with_no_missing_values(
+				self, X_sample, column_types
+		):
+        text_features_with_no_missing_values = []
+        for feature in X_sample.columns:
+            if column_types[feature] == self.TEXT:
+                no_nan_series = X_sample[feature].dropna(
+					axis=0, how='any'
+				)
+                text_features_with_no_missing_values.append(
+					no_nan_series
+				)
+        return (text_features_with_no_missing_values,)
 
     def _get_binned_numeric_features_with_no_missing_values(
         self, numeric_features_array
