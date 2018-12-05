@@ -45,6 +45,18 @@
             "cat_str": "CATEGORICAL",
             "num_int": "NUMERIC",
             "num_float": "NUMERIC",
+            "class": "CATEGORICAL"
+        }
+    },
+    {
+        "filename": "small_test_dataset_with_text.arff",
+        "target_class_name": "class",
+        "column_types": {
+            "missing": "NUMERIC",
+            "cat_int": "CATEGORICAL",
+            "cat_str": "CATEGORICAL",
+            "num_int": "NUMERIC",
+            "num_float": "NUMERIC",
             "text_col": "TEXT",
             "class": "CATEGORICAL"
         }
