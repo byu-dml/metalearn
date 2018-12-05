@@ -28,7 +28,7 @@ def get_string_length_means(text_features_array):
 
 def get_string_length_stdev(text_features_array):
 	string_lengths_array = get_string_lengths_array_from_text_features(text_features_array)
-	stdevs = [feature.stdev() for feature in string_lengths_array]
+	stdevs = [feature.std() for feature in string_lengths_array]
 	return profile_distribution(stdevs)
 
 
