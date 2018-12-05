@@ -15,6 +15,7 @@ from .simple_metafeatures import *
 from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
+from .text_metafeatures import *
 
 
 class Metafeatures(object):
@@ -28,6 +29,7 @@ class Metafeatures(object):
     VALUE_KEY = 'value'
     COMPUTE_TIME_KEY = 'compute_time'
     NUMERIC = "NUMERIC"
+    TEXT = "TEXT"
     CATEGORICAL = "CATEGORICAL"
     NO_TARGETS = "NO_TARGETS"
     NUMERIC_TARGETS = "NUMERIC_TARGETS"
@@ -74,7 +76,7 @@ class Metafeatures(object):
         X: pandas.DataFrame, the dataset features
         Y: pandas.Seris, the dataset targets
         column_types: Dict[str, str], dict from column name to column type as
-            "NUMERIC" or "CATEGORICAL", must include Y column
+            "NUMERIC" or "CATEGORICAL" or "TEXT", must include Y column
         metafeature_ids: list, the metafeatures to compute. default of None
             indicates to compute all metafeatures
         sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
@@ -235,12 +237,13 @@ class Metafeatures(object):
                         f"Column type not specified for column {col}"
                     )
                 col_type = column_types[col]
-                if not col_type in [self.NUMERIC, self.CATEGORICAL]:
+                # todo: add self.TEXT to check. Additionally add self.TEXT to all tests that check for column types
+                if not col_type in [self.NUMERIC, self.CATEGORICAL, self.TEXT]:
                     invalid_column_types[col] = col_type
             if len(invalid_column_types) > 0:
                 raise ValueError(
                     f"Invalid column types: {invalid_column_types}. Valid types " +
-                    f"include {self.NUMERIC} and {self.CATEGORICAL}."
+                    f"include {self.NUMERIC} and {self.CATEGORICAL} and {self.TEXT}."
                 )
 
     def _validate_metafeature_ids(
@@ -322,6 +325,8 @@ class Metafeatures(object):
             if dtype_is_numeric(Y.dtype):
                 column_types[Y.name] = self.NUMERIC
             else:
+                # todo: get number of unique values in col_name, compute unique/total ratio. Use ratio to infer type
+
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
@@ -378,6 +383,7 @@ class Metafeatures(object):
     def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed):
         series_array = []
         for feature in X_sample.columns:
+            is_text = False
             feature_series = X_sample[feature].copy()
             col = feature_series.values
             dropped_nan_series = X_sampled_columns[feature].dropna(
@@ -390,7 +396,11 @@ class Metafeatures(object):
             )
             if column_types[feature_series.name] == self.CATEGORICAL:
                 feature_series = pd.get_dummies(feature_series)
-            series_array.append(feature_series)
+            elif column_types[feature_series.name] == self.TEXT:
+                X_sample.drop(columns=[feature])
+                is_text = True
+            if not is_text:
+                series_array.append(feature_series)
         return (pd.concat(series_array, axis=1, copy=False),)
 
     def _sample_columns(self, X, sample_shape, seed):

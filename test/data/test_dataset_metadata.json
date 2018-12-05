@@ -45,6 +45,7 @@
             "cat_str": "CATEGORICAL",
             "num_int": "NUMERIC",
             "num_float": "NUMERIC",
+            "text_col": "TEXT",
             "class": "CATEGORICAL"
         }
     }
