@@ -12,10 +12,14 @@ from sklearn.cross_decomposition import CCA
 from .common_operations import *
 
 
-def get_string_lengths_array_from_text_features(text_features_array):
-	lengths = [len(feature) for feature in text_features_array]
-	return lengths
+def get_string_length(string):
+	return len(string)
 
+def get_string_lengths_array_from_text_features(text_features_array):
+	lengths = []
+	for feature in text_features_array:
+		lengths.append(feature.apply(get_string_length))
+	return lengths
 
 def get_string_length_means(text_features_array):
 	string_lengths_array = get_string_lengths_array_from_text_features(text_features_array)
