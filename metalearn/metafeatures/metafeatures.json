@@ -2234,6 +2234,39 @@
                 "Quartile3KurtosisOfStringLengthOfTextFeatures",
                 "MaxKurtosisOfStringLengthOfTextFeatures"
             ]
+        },
+        "MostCommonAlphanumericTokens": {
+            "function": "get_most_common_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens"
+            ]
+        },
+        "MostCommonTokens": {
+            "function": "get_most_common_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens"
+            ]
+        },
+        "MostCommonNumericTokens": {
+            "function": "get_most_common_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens"
+            ]
         }
     }
 }
