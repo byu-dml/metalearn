@@ -2267,6 +2267,15 @@
                 "MostCommonAlphanumericTokens",
                 "MostCommonNumericTokens"
             ]
+        },
+        "MostCommonTokensSplitByPunctuation": {
+            "function": "get_most_common_tokens_split_by_punctuation",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokensSplitByPunctuation"
+            ]
         }
     }
 }

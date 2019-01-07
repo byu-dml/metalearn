@@ -8,6 +8,7 @@ import pandas as pd
 from scipy.stats import skew, kurtosis
 from sklearn.decomposition import PCA
 from sklearn.cross_decomposition import CCA
+import string
 
 from .common_operations import *
 
@@ -49,7 +50,7 @@ def get_most_common_tokens_split_by_space(text_features_array, most_common_limit
 	tokens = {}
 	alnum_tokens = {}
 	num_tokens = {}
-	# Get dictionary of token:count
+	# make dictionaries of token:count
 	for feature in text_features_array:
 		for text in feature:
 			for token in text.split(" "):
@@ -106,3 +107,15 @@ def get_most_common_tokens_split_by_space(text_features_array, most_common_limit
 			break
 
 	return most_common_tokens, most_common_alnum_tokens, most_common_num_tokens
+
+
+def get_most_common_tokens_split_by_punctuation(text_features_array, most_common_limit=10):
+	tokens = {}
+	# make dictionaries of token:count
+	for feature in text_features_array:
+		for text in feature:
+			# for token in re.split("[^\w^\s]", text):
+			for token in text.split(string.punctuation):
+				if token not in tokens:
+					tokens[token] = 0
+				tokens[token] += 1
