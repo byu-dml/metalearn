@@ -356,7 +356,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 )
 
 
-
 class MetafeaturesTestCase(unittest.TestCase):
     """ Contains tests for Metafeatures that can be executed without loading data. """
 
@@ -364,7 +363,8 @@ class MetafeaturesTestCase(unittest.TestCase):
         self.dummy_features = pd.DataFrame(np.random.rand(50, 50))
         self.dummy_target = pd.Series(np.random.randint(2, size=50), name="target").astype("str")
 
-        self.invalid_metafeature_message_start = "One or more requested metafeatures are not valid:"
+        self.invalid_requested_metafeature_message_start = "One or more requested metafeatures are not valid:"
+        self.invalid_excluded_metafeature_message_start = "One or more excluded metafeatures are not valid:"
         self.invalid_metafeature_message_start_fail_message = "Error message indicating invalid metafeatures did not start with expected string."
         self.invalid_metafeature_message_contains_fail_message = "Error message indicating invalid metafeatures should include names of invalid features."
 
@@ -389,10 +389,10 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.zeros(500))
         self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
 
-    def _check_invalid_metafeature_exception_string(self, exception_str, invalid_metafeatures):
+    def _check_invalid_metafeature_exception_string(self, exception_str, expected_str, invalid_metafeatures):
         """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
         self.assertTrue(
-            exception_str.startswith(self.invalid_metafeature_message_start),
+            exception_str.startswith(expected_str),
             self.invalid_metafeature_message_start_fail_message
         )
 
@@ -403,17 +403,24 @@ class MetafeaturesTestCase(unittest.TestCase):
             )
 
     def test_metafeatures_input_all_invalid(self):
-        """ Test case where all requested metafeatures are invalid. """
+        """ Test cases where all requested and excluded metafeatures are invalid. """
 
         invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
 
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeature_ids=invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_requested_metafeature_message_start,
+                                                         invalid_metafeatures)
 
-        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, exclude=invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_excluded_metafeature_message_start,
+                                                         invalid_metafeatures)
 
     def test_metafeatures_input_partial_invalid(self):
-        """ Test case where only some requested metafeatures are invalid. """
+        """ Test case where only some requested and excluded metafeatures are invalid. """
 
         invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
         valid_metafeatures = ["NumberOfInstances", "NumberOfFeatures"]
@@ -421,14 +428,40 @@ class MetafeaturesTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
                                    metafeature_ids=invalid_metafeatures + valid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_requested_metafeature_message_start,
+                                                         invalid_metafeatures)
 
-        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   exclude=invalid_metafeatures + valid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_excluded_metafeature_message_start,
+                                                         invalid_metafeatures)
 
         # Order should not matter
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
                                    metafeature_ids=valid_metafeatures + invalid_metafeatures)
-        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_requested_metafeature_message_start,
+                                                         invalid_metafeatures)
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   exclude=valid_metafeatures + invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_excluded_metafeature_message_start,
+                                                         invalid_metafeatures)
+
+    def test_request_and_exclude_metafeatures(self):
+        expected_exception_string = "metafeature_ids and exclude cannot both be non-null"
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   metafeature_ids=[], exclude=[])
+
+        self.assertEqual(str(cm.exception), expected_exception_string)
 
     def test_column_type_input(self):
         column_types = {col: "NUMERIC" for col in self.dummy_features.columns}
