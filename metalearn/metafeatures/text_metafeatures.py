@@ -46,51 +46,62 @@ def get_string_length_kurtosis(text_features_array):
 	kurtoses = [feature.kurtosis() for feature in string_lengths_array]
 	return profile_distribution(kurtoses)
 
-def get_most_common_tokens_split_by_space(text_features_array, most_common_limit=10):
+def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10):
 	tokens = {}
-	alnum_tokens = {}
-	num_tokens = {}
+	alphanumeric_tokens = {}
+	numeric_tokens = {}
+	number_of_tokens = 0
+	number_of_tokens_containing_numeric_char = 0
+
 	# make dictionaries of token:count
 	for feature in text_features_array:
 		for text in feature:
 			for token in text.split(" "):
+				# update numeric_tokens
 				if token.isdigit():
-					if token not in num_tokens:
-						num_tokens[token] = 0
-					num_tokens[token] += 1
+					if token not in numeric_tokens:
+						numeric_tokens[token] = 0
+					numeric_tokens[token] += 1
+				# update alphanumeric_tokens
 				elif token.isalnum():
-					if token not in alnum_tokens:
-						alnum_tokens[token] = 0
-					alnum_tokens[token] += 1
+					if token not in alphanumeric_tokens:
+						alphanumeric_tokens[token] = 0
+					alphanumeric_tokens[token] += 1
 
+				# update number_of_tokens_containing_numeric_char
+				if any(char.isdigit() for char in token):
+					number_of_tokens_containing_numeric_char += 1
+
+				# update tokens
 				if token not in tokens:
 					tokens[token] = 0
 				tokens[token] += 1
+				number_of_tokens += 1
 
-	# get most_common_alnum_tokens
-	most_common_alnum_tokens = []
-	for token in sorted(alnum_tokens, key=alnum_tokens.get, reverse=True):
-		most_common_alnum_tokens.append(
+	# get most_common_alphanumeric_tokens
+	most_common_alphanumeric_tokens = []
+	for token in sorted(alphanumeric_tokens, key=alphanumeric_tokens.get, reverse=True):
+		most_common_alphanumeric_tokens.append(
 			{
 				"token": token,
-				"count": alnum_tokens[token],
-				"ratio": alnum_tokens[token]/len(tokens)
+				"count": alphanumeric_tokens[token],
+				"ratio": alphanumeric_tokens[token]/len(tokens)
 			}
 		)
-		if len(most_common_alnum_tokens) == most_common_limit:
+		if len(most_common_alphanumeric_tokens) == most_common_limit:
 			break
 
-	# get most_common_num_tokens
-	most_common_num_tokens = []
-	for token in sorted(num_tokens, key=num_tokens.get, reverse=True):
-		most_common_num_tokens.append(
+	# get most_common_numeric_tokens
+	most_common_numeric_tokens = []
+	for token in sorted(numeric_tokens, key=numeric_tokens.get, reverse=True):
+		most_common_numeric_tokens.append(
 			{
 				"token": token,
-				"count": num_tokens[token],
-				"ratio": num_tokens[token]/len(tokens)
+				"count": numeric_tokens[token],
+				"ratio": numeric_tokens[token]/len(tokens)
 			}
 		)
-		if len(most_common_num_tokens) == most_common_limit:
+		if len(most_common_numeric_tokens) == most_common_limit:
 			break
 
 	# get most_common_tokens
@@ -106,16 +117,13 @@ def get_most_common_tokens_split_by_space(text_features_array, most_common_limit
 		if len(most_common_tokens) == most_common_limit:
 			break
 
-	return most_common_tokens, most_common_alnum_tokens, most_common_num_tokens
+	# compute number_of_distinct_tokens
+	number_of_distinct_tokens = len(tokens)
+	# compute ratio_of_distinct_tokens
+	ratio_of_distinct_tokens = number_of_distinct_tokens / number_of_tokens
+	# compute ratio_of_tokens_containing_numeric_char
+	ratio_of_tokens_containing_numeric_char = number_of_tokens_containing_numeric_char / number_of_tokens
+
+	return most_common_tokens, most_common_alphanumeric_tokens, most_common_numeric_tokens, number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
 
 
-def get_most_common_tokens_split_by_punctuation(text_features_array, most_common_limit=10):
-	tokens = {}
-	# make dictionaries of token:count
-	for feature in text_features_array:
-		for text in feature:
-			# for token in re.split("[^\w^\s]", text):
-			for token in text.split(string.punctuation):
-				if token not in tokens:
-					tokens[token] = 0
-				tokens[token] += 1

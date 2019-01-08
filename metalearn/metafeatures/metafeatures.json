@@ -2236,45 +2236,131 @@
             ]
         },
         "MostCommonAlphanumericTokens": {
-            "function": "get_most_common_tokens_split_by_space",
+            "function": "get_mfs_for_tokens_split_by_space",
             "arguments": {
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
                 "MostCommonTokens",
                 "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens"
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
             ]
         },
         "MostCommonTokens": {
-            "function": "get_most_common_tokens_split_by_space",
+            "function": "get_mfs_for_tokens_split_by_space",
             "arguments": {
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
                 "MostCommonTokens",
                 "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens"
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
             ]
         },
         "MostCommonNumericTokens": {
-            "function": "get_most_common_tokens_split_by_space",
+            "function": "get_mfs_for_tokens_split_by_space",
             "arguments": {
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
                 "MostCommonTokens",
                 "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens"
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
             ]
         },
-        "MostCommonTokensSplitByPunctuation": {
-            "function": "get_most_common_tokens_split_by_punctuation",
+        "NumberOfTokens": {
+            "function": "get_mfs_for_tokens_split_by_space",
             "arguments": {
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
-                "MostCommonTokensSplitByPunctuation"
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "NumberOfDistinctTokens": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "NumberOfTokensContainingNumericChar": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "RatioOfDistinctTokens": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "RatioOfTokensContainingNumericChar": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "MostCommonTokens",
+                "MostCommonAlphanumericTokens",
+                "MostCommonNumericTokens",
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
             ]
         }
     }
