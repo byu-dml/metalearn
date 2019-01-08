@@ -72,23 +72,23 @@ class Metafeatures(object):
         Parameters
         ----------
         X: pandas.DataFrame, the dataset features
-        Y: pandas.Seris, the dataset targets
+        Y: pandas.Series, the dataset targets
         column_types: Dict[str, str], dict from column name to column type as
             "NUMERIC" or "CATEGORICAL", must include Y column
         metafeature_ids: list, the metafeatures to compute. default of None
             indicates to compute all metafeatures
         sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
             Default is (None, None), indicate not to sample rows or columns.
-        seed: int, the seed used to generate psuedo-random numbers. when None
-            is given, a seed will be generated psuedo-randomly. this can be
+        seed: int, the seed used to generate pseudo-random numbers. when None
+            is given, a seed will be generated pseudo-randomly. this can be
             used for reproducibility of metafeatures. a generated seed can be
             accessed through the 'seed' property, after calling this method.
         n_folds: int, the number of cross validation folds used by the
             landmarking metafeatures. also affects the sample_shape validation
         verbose: bool, default False. When True, prints the ID of each
             metafeature right before it is about to be computed.
-        exclude: list, the metafeatures to be excluded from computation. Must
-            None if metafeature_ids is not None. Default None.
+        exclude: list, default None. The metafeatures to be excluded from computation.
+            Must be None if metafeature_ids is not None.
 
         Returns
         -------
@@ -202,7 +202,7 @@ class Metafeatures(object):
         for f in [
             self._validate_X, self._validate_Y, self._validate_column_types,
             self._validate_metafeature_ids, self._validate_sample_shape,
-            self._validate_n_folds, self._validate_verbose, self._validate_excluded_ids
+            self._validate_n_folds, self._validate_verbose
         ]:
             f(
                 X, Y, column_types, metafeature_ids, sample_shape, seed,
@@ -252,13 +252,22 @@ class Metafeatures(object):
     ):
         if metafeature_ids is not None and exclude is not None:
             raise ValueError("metafeature_ids and exclude cannot both be non-null")
-        if metafeature_ids is not None:
+        elif metafeature_ids is not None:
             invalid_metafeature_ids = [
                 mf for mf in metafeature_ids if mf not in self._resources_info
             ]
             if len(invalid_metafeature_ids) > 0:
                 raise ValueError(
                     'One or more requested metafeatures are not valid: {}'.
+                    format(invalid_metafeature_ids)
+                )
+        elif exclude is not None:
+            invalid_metafeature_ids = [
+                mf for mf in exclude if mf not in self._resources_info
+            ]
+            if len(invalid_metafeature_ids) > 0:
+                raise ValueError(
+                    'One or more excluded metafeatures are not valid: {}'.
                     format(invalid_metafeature_ids)
                 )
 
@@ -314,22 +323,6 @@ class Metafeatures(object):
     ):
         if not type(verbose) is bool:
             raise ValueError("`verbose` must be of type bool.")
-
-    def _validate_excluded_ids(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose, exclude
-    ):
-        if metafeature_ids is not None and exclude is not None:
-            raise ValueError("metafeature_ids and exclude cannot both be non-null")
-        if exclude is not None:
-            invalid_metafeature_ids = [
-                mf for mf in exclude if mf not in self._resources_info
-            ]
-            if len(invalid_metafeature_ids) > 0:
-                raise ValueError(
-                    'One or more excluded metafeatures are not valid: {}'.
-                    format(invalid_metafeature_ids)
-                )
 
     def _infer_column_types(self, X, Y):
         column_types = {}
