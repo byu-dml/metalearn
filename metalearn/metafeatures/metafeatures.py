@@ -88,6 +88,10 @@ class Metafeatures(object):
             landmarking metafeatures. also affects the sample_shape validation
         verbose: bool, default False. When True, prints the ID of each
             metafeature right before it is about to be computed.
+        timeout: float, default None. If timeout is None, compute_metafeatures
+            will be run to completion. Otherwise, execution will halt after
+            approximately timeout seconds. Any metafeatures that have not been
+            computed will be labeled 'TIMEOUT'.
 
         Returns
         -------
@@ -131,7 +135,7 @@ class Metafeatures(object):
                                  for name in metafeature_ids}
         try:
             for metafeature_id in metafeature_ids:
-                if verbose == True:
+                if verbose:
                     print(metafeature_id)
                 if self._resource_is_target_dependent(metafeature_id) and (
                     Y is None or column_types[Y.name] == self.NUMERIC

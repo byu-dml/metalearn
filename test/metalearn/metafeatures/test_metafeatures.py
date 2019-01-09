@@ -351,10 +351,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
                 column_types=dataset["column_types"], timeout=full_compute_time/2
             )
-            compute_time = time.time() - start_time
+            limited_compute_time = time.time() - start_time
 
             self.assertGreater(
-                full_compute_time, compute_time,
+                full_compute_time, limited_compute_time,
                 f"Compute metafeatures exceeded timeout on '{dataset_filename}'"
             )
             computed_mfs_timeout = {k: v for k, v in computed_mfs.items()
