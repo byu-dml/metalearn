@@ -147,6 +147,15 @@
             "returns": [
                 "NoNaNTextFeatures"
             ]
+        },
+        "StringLengthsArrayFromTextFeatures": {
+            "function": "get_string_lengths_array_from_text_features",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "StringLengthsArrayFromTextFeatures"
+            ]
         }
     },
     "metafeatures": {
@@ -1818,7 +1827,7 @@
         "MeanMeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanMeansOfStringLengthOfTextFeatures",
@@ -1833,7 +1842,7 @@
         "StdevMeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanMeansOfStringLengthOfTextFeatures",
@@ -1848,7 +1857,7 @@
         "MinMeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanMeansOfStringLengthOfTextFeatures",
@@ -1863,7 +1872,7 @@
         "MaxMeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanMeansOfStringLengthOfTextFeatures",
@@ -1878,7 +1887,7 @@
         "Quartile1MeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanMeansOfStringLengthOfTextFeatures",
@@ -1893,7 +1902,7 @@
         "Quartile2MeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanMeansOfStringLengthOfTextFeatures",
@@ -1908,7 +1917,7 @@
         "Quartile3MeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanMeansOfStringLengthOfTextFeatures",
@@ -1923,7 +1932,7 @@
         "MeanStdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanStdDevOfStringLengthOfTextFeatures",
@@ -1938,7 +1947,7 @@
         "StdevStdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanStdDevOfStringLengthOfTextFeatures",
@@ -1953,7 +1962,7 @@
         "MinStdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanStdDevOfStringLengthOfTextFeatures",
@@ -1968,7 +1977,7 @@
         "MaxStdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanStdDevOfStringLengthOfTextFeatures",
@@ -1983,7 +1992,7 @@
         "Quartile1StdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanStdDevOfStringLengthOfTextFeatures",
@@ -1998,7 +2007,7 @@
         "Quartile2StdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanStdDevOfStringLengthOfTextFeatures",
@@ -2013,7 +2022,7 @@
         "Quartile3StdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanStdDevOfStringLengthOfTextFeatures",
@@ -2028,7 +2037,7 @@
         "MeanSkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanSkewnessOfStringLengthOfTextFeatures",
@@ -2043,7 +2052,7 @@
         "StdevSkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanSkewnessOfStringLengthOfTextFeatures",
@@ -2058,7 +2067,7 @@
         "MinSkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanSkewnessOfStringLengthOfTextFeatures",
@@ -2073,7 +2082,7 @@
         "MaxSkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanSkewnessOfStringLengthOfTextFeatures",
@@ -2088,7 +2097,7 @@
         "Quartile1SkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanSkewnessOfStringLengthOfTextFeatures",
@@ -2103,7 +2112,7 @@
         "Quartile2SkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanSkewnessOfStringLengthOfTextFeatures",
@@ -2118,7 +2127,7 @@
         "Quartile3SkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanSkewnessOfStringLengthOfTextFeatures",
@@ -2133,7 +2142,7 @@
         "MeanKurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
             "MeanKurtosisOfStringLengthOfTextFeatures",
@@ -2148,7 +2157,7 @@
         "StdevKurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanKurtosisOfStringLengthOfTextFeatures",
@@ -2163,7 +2172,7 @@
         "MinKurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanKurtosisOfStringLengthOfTextFeatures",
@@ -2178,7 +2187,7 @@
         "MaxKurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanKurtosisOfStringLengthOfTextFeatures",
@@ -2193,7 +2202,7 @@
         "Quartile1KurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanKurtosisOfStringLengthOfTextFeatures",
@@ -2208,7 +2217,7 @@
         "Quartile2KurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanKurtosisOfStringLengthOfTextFeatures",
@@ -2223,7 +2232,7 @@
         "Quartile3KurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
                 "MeanKurtosisOfStringLengthOfTextFeatures",
