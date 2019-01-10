@@ -33,5 +33,7 @@ def get_noise_signal_ratio(attribute_entropy, mutual_information):
     if mutual_information == 0:
         nsr = np.nan
     else:
+        # print("attr", attribute_entropy)
+        # print("info", mutual_information)
         nsr = (attribute_entropy - mutual_information) / mutual_information
     return (nsr,)

@@ -24,7 +24,7 @@ def profile_distribution(data):
         dist_min, dist_quartile1, dist_quartile2, dist_quartile3, dist_max = np.percentile(data, [0,25,50,75,100])
         dist_skew = skew(data)
         dist_kurtosis = kurtosis(data)
-    return (dist_mean, dist_stdev, dist_skew, dist_kurtosis, dist_min, dist_quartile1, dist_quartile2, dist_quartile3, dist_max)
+    return (data, dist_mean, dist_stdev, dist_skew, dist_kurtosis, dist_min, dist_quartile1, dist_quartile2, dist_quartile3, dist_max)
 
 def get_numeric_features(dataframe, column_types):
     return [feature for feature in dataframe.columns if column_types[feature] == "NUMERIC"]
