@@ -12,18 +12,15 @@ def get_class_entropy(Y_sample):
 
 def get_attribute_entropy(feature_array):
     entropies = [get_entropy(feature) for feature in feature_array]
-    mean_attribute_entropy, stdev_attribute_entropy, skew_attribute_entropy, kurtosis_attribute_entropy, min_attribute_entropy, quartile1_attribute_entropy, quartile2_attribute_entropy, quartile3_attribute_entropy, max_attribute_entropy = profile_distribution(entropies)
-    return (mean_attribute_entropy, stdev_attribute_entropy, skew_attribute_entropy, kurtosis_attribute_entropy, min_attribute_entropy, quartile1_attribute_entropy, quartile2_attribute_entropy, quartile3_attribute_entropy, max_attribute_entropy)
+    return profile_distribution(entropies)
 
 def get_joint_entropy(feature_class_array):
     entropies = [get_entropy(feature_class_pair[0].astype(str) + feature_class_pair[1].astype(str)) for feature_class_pair in feature_class_array]
-    mean_joint_entropy, stdev_joint_entropy, skew_joint_entropy, kurtosis_joint_entropy, min_joint_entropy, quartile1_joint_entropy, quartile2_joint_entropy, quartile3_joint_entropy, max_joint_entropy = profile_distribution(entropies)
-    return (mean_joint_entropy,stdev_joint_entropy, skew_joint_entropy, kurtosis_joint_entropy, min_joint_entropy, quartile1_joint_entropy, quartile2_joint_entropy, quartile3_joint_entropy, max_joint_entropy)
+    return profile_distribution(entropies)
 
 def get_mutual_information(feature_class_array):
     mi_scores = [mutual_info_score(*feature_class_pair) for feature_class_pair in feature_class_array]
-    mean_mutual_information, stdev_mutual_information, skew_mutual_information, kurtosis_mutual_information, min_mutual_information, quartile1_mutual_information, quartile2_mutual_information, quartile3_mutual_information, max_mutual_information = profile_distribution(mi_scores)
-    return (mean_mutual_information, stdev_mutual_information, skew_mutual_information, kurtosis_mutual_information, min_mutual_information, quartile1_mutual_information, quartile2_mutual_information, quartile3_mutual_information, max_mutual_information)
+    return profile_distribution(mi_scores)
 
 def get_equivalent_number_features(class_entropy, mutual_information):
     if mutual_information == 0:

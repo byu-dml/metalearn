@@ -36,17 +36,14 @@ def get_class_stats(Y):
     number_of_classes = classes.shape[0]
     counts = [sum(Y == label) for label in classes]
     probs = [count/Y.shape[0] for count in counts]
-    mean_class_probability, stdev_class_probability, skew_class_probability, kurtosis_class_probability, min_class_probability, quartile1_class_probability, quartile2_class_probability, quartile3_class_probability, max_class_probability = profile_distribution(probs)
     majority_class_size = max(counts)
     minority_class_size = min(counts)
-    return (number_of_classes, mean_class_probability, stdev_class_probability, skew_class_probability, kurtosis_class_probability, min_class_probability, quartile1_class_probability, quartile2_class_probability, quartile3_class_probability, max_class_probability, minority_class_size, majority_class_size)
+    return (number_of_classes, *profile_distribution(probs), minority_class_size, majority_class_size)
 
 def get_categorical_cardinalities(X, column_types):
     cardinalities = [X[feature].unique().shape[0] for feature in get_categorical_features(X, column_types)]
-    mean_cardinality_of_categorical_features, stdev_cardinality_of_categorical_features, skew_cardinality_of_categorical_features, kurtosis_cardinality_of_categorical_features, min_cardinality_of_categorical_features, quartile1_cardinality_of_categorical_features, quartile2_cardinality_of_categorical_features, quartile3_cardinality_of_categorical_features, max_cardinality_of_categorical_features = profile_distribution(cardinalities)
-    return (mean_cardinality_of_categorical_features, stdev_cardinality_of_categorical_features, skew_cardinality_of_categorical_features, kurtosis_cardinality_of_categorical_features, min_cardinality_of_categorical_features,quartile1_cardinality_of_categorical_features, quartile2_cardinality_of_categorical_features, quartile3_cardinality_of_categorical_features, max_cardinality_of_categorical_features)
+    return profile_distribution(cardinalities)
 
 def get_numeric_cardinalities(X, column_types):
     cardinalities = [X[feature].unique().shape[0] for feature in get_numeric_features(X, column_types)]
-    mean_cardinality_of_numeric_features, stdev_cardinality_of_numeric_features, skew_cardinality_of_numeric_features, kurtosis_cardinality_of_numeric_features, min_cardinality_of_numeric_features, quartile1_cardinality_of_numeric_features, quartile2_cardinality_of_numeric_features, quartile3_cardinality_of_numeric_features, max_cardinality_of_numeric_features = profile_distribution(cardinalities)
-    return (mean_cardinality_of_numeric_features, stdev_cardinality_of_numeric_features, skew_cardinality_of_numeric_features, kurtosis_cardinality_of_numeric_features, min_cardinality_of_numeric_features, quartile1_cardinality_of_numeric_features, quartile2_cardinality_of_numeric_features, quartile3_cardinality_of_numeric_features, max_cardinality_of_numeric_features)
+    return profile_distribution(cardinalities)

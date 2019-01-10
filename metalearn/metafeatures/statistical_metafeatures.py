@@ -47,8 +47,7 @@ def get_pca(X_preprocessed):
 
 def get_correlations(X_sample, column_types):
     correlations = get_canonical_correlations(X_sample, column_types)
-    mean_correlation, stdev_correlation, skew_correlation, kurtosis_correlation, min_correlation, quartile1_correlation, quartile2_correlation, quartile3_correlation, max_correlation = profile_distribution(correlations)
-    return (mean_correlation, stdev_correlation, skew_correlation, kurtosis_correlation, min_correlation, quartile1_correlation, quartile2_correlation, quartile3_correlation, max_correlation)
+    profile_distribution(correlations)
 
 def get_correlations_by_class(X_sample, Y_sample):
     correlations = []
