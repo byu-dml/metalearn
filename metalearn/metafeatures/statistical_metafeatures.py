@@ -56,8 +56,7 @@ def get_correlations_by_class(X_sample, Y_sample):
     for label in Y_sample.unique():
         group = XY_grouped_by_class.get_group(label).drop(Y_sample.name, axis=1)
         correlations.extend(get_canonical_correlations(group))
-    mean_correlation, stdev_correlation, skew_correlation, kurtosis_correlation, min_correlation, quartile1_correlation, quartile2_correlation, quartile3_correlation, max_correlation = profile_distribution(correlations)
-    return (mean_correlation, stdev_correlation, skew_correlation, kurtosis_correlation, min_correlation, quartile1_correlation, quartile2_correlation, quartile3_correlation, max_correlation)
+    return profile_distribution(correlations)
 
 def get_canonical_correlations(dataframe, column_types):
     '''
