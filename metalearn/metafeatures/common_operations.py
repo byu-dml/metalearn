@@ -16,7 +16,7 @@ def profile_distribution(data):
     features = dictionary containing the min, max, mean, and standard deviation
     """
     if len(data) == 0:
-        return (np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan)
+        return (data, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan)
     else:
         ddof = 1 if len(data) > 1 else 0
         dist_mean = np.mean(data)
