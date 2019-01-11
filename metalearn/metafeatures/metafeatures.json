@@ -148,13 +148,13 @@
                 "NoNaNTextFeatures"
             ]
         },
-        "StringLengthsArrayFromTextFeatures": {
+        "ArrayOfStringLengthsOfTextFeatures": {
             "function": "get_string_lengths_array_from_text_features",
             "arguments": {
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
-                "StringLengthsArrayFromTextFeatures"
+                "ArrayOfStringLengthsOfTextFeatures"
             ]
         }
     },

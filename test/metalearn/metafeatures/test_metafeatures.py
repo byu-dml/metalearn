@@ -591,10 +591,6 @@ class MetafeaturesTestCase(unittest.TestCase):
            exc_type = type(e).__name__
            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
 
-    def test_string_length_metafeatures(self):
-
-        pass
-
 
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
