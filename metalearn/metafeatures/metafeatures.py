@@ -397,7 +397,6 @@ class Metafeatures(object):
             if column_types[feature_series.name] == self.CATEGORICAL:
                 feature_series = pd.get_dummies(feature_series)
             elif column_types[feature_series.name] == self.TEXT:
-                X_sample.drop(columns=[feature])
                 is_text = True
             if not is_text:
                 series_array.append(feature_series)
