@@ -11,7 +11,7 @@
             "properties": {
                 "value": {
                     "type": [
-                        "number", "string"
+                        "number", "string", "array"
                     ]
                 },
                 "compute_time": {

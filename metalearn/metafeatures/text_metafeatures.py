@@ -96,9 +96,9 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10)
 	# compute number_of_distinct_tokens
 	number_of_distinct_tokens = len(tokens)
 	# compute ratio_of_distinct_tokens
-	ratio_of_distinct_tokens = number_of_distinct_tokens / number_of_tokens
+	ratio_of_distinct_tokens = 0 if number_of_tokens == 0 else (number_of_distinct_tokens / number_of_tokens)
 	# compute ratio_of_tokens_containing_numeric_char
-	ratio_of_tokens_containing_numeric_char = number_of_tokens_containing_numeric_char / number_of_tokens
+	ratio_of_tokens_containing_numeric_char = 0 if number_of_tokens == 0 else (number_of_tokens_containing_numeric_char / number_of_tokens)
 
 	return most_common_tokens, most_common_alphanumeric_tokens, most_common_numeric_tokens, number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
 
