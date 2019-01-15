@@ -104,7 +104,7 @@ class Metafeatures(object):
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
         if metafeature_ids is None:
-            metafeature_ids = self._set_metafeature_ids(exclude)
+            metafeature_ids = self._get_metafeature_ids(exclude)
             exclude = None
         if sample_shape is None:
             sample_shape = (None, None)
@@ -336,7 +336,7 @@ class Metafeatures(object):
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
-    def _set_metafeature_ids(self, exclude):
+    def _get_metafeature_ids(self, exclude):
         if exclude is not None:
             return [mf for mf in self.list_metafeatures() if mf not in exclude]
         else:
