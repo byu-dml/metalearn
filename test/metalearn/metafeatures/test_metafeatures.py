@@ -6,6 +6,7 @@ import math
 import os
 import random
 import time
+import copy
 import unittest
 
 import pandas as pd
@@ -645,6 +646,15 @@ class MetafeaturesTestCase(unittest.TestCase):
         except Exception as e:
            exc_type = type(e).__name__
            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+
+    def test_list_metafeatures(self):
+        mf_list = Metafeatures.list_metafeatures()
+        mf_list_copy = copy.deepcopy(mf_list)
+        mf_list.clear()
+        if Metafeatures.list_metafeatures() != mf_list_copy:
+            mf_list.extend(mf_list_copy)
+            self.assertTrue(False, "Metafeature list has been mutated")
+
 
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
