@@ -6,6 +6,7 @@ import math
 import os
 import random
 import time
+import copy
 import unittest
 
 import pandas as pd
@@ -67,8 +68,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         """
         test_failures = {}
         fail_message = "Not all metafeatures matched previous results."
-
-        # computed_mfs["LinearDiscriminantAnalysisErrRate"]["value"] = 0
 
         for mf_id, result in computed_mfs.items():
             computed_value = result[Metafeatures.VALUE_KEY]
@@ -590,6 +589,14 @@ class MetafeaturesTestCase(unittest.TestCase):
         except Exception as e:
            exc_type = type(e).__name__
            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+
+    def test_list_metafeatures(self):
+        mf_list = Metafeatures.list_metafeatures()
+        mf_list_copy = copy.deepcopy(mf_list)
+        mf_list.clear()
+        if Metafeatures.list_metafeatures() != mf_list_copy:
+            mf_list.extend(mf_list_copy)
+            self.assertTrue(False, "Metafeature list has been mutated")
 
 
 def metafeatures_suite():

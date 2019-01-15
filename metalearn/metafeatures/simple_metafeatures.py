@@ -50,5 +50,3 @@ def get_numeric_cardinalities(X, column_types):
     cardinalities = [X[feature].unique().shape[0] for feature in get_numeric_features(X, column_types)]
     mean_cardinality_of_numeric_features, stdev_cardinality_of_numeric_features, min_cardinality_of_numeric_features, _, _, _, max_cardinality_of_numeric_features = profile_distribution(cardinalities)
     return (mean_cardinality_of_numeric_features, stdev_cardinality_of_numeric_features, min_cardinality_of_numeric_features, max_cardinality_of_numeric_features)
-
-
