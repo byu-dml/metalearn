@@ -3,6 +3,7 @@ import math
 import json
 import time
 import io
+import copy
 from typing import Dict, List
 
 import numpy as np
@@ -51,7 +52,7 @@ class Metafeatures(object):
         # PredDet, kNN1NErrRate, kNN1NKappa, LinearDiscriminantAnalysisKappa,
         # LinearDiscriminantAnalysisErrRate
         if group == "all":
-            return cls.IDS
+            return copy.deepcopy(cls.IDS)
         elif group == "landmarking":
             return list(filter(
                 lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id, cls.IDS
