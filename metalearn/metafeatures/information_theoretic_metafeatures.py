@@ -16,7 +16,7 @@ def get_attribute_entropy(feature_array):
     return (mean_attribute_entropy, min_attribute_entropy, quartile1_attribute_entropy, quartile2_attribute_entropy, quartile3_attribute_entropy, max_attribute_entropy)
 
 def get_joint_entropy(feature_class_array):
-    entropies = [get_entropy(feature_class_pair[0].astype(str) + feature_class_pair[1].astype(str)) for feature_class_pair in feature_class_array]
+    entropies = [get_entropy(translate_into_tuples(feature_class_pair[0],feature_class_pair[1])) for feature_class_pair in feature_class_array]
     mean_joint_entropy, _, min_joint_entropy, quartile1_joint_entropy, quartile2_joint_entropy, quartile3_joint_entropy, max_joint_entropy = profile_distribution(entropies)
     return (mean_joint_entropy, min_joint_entropy, quartile1_joint_entropy, quartile2_joint_entropy, quartile3_joint_entropy, max_joint_entropy)
 
@@ -38,3 +38,6 @@ def get_noise_signal_ratio(attribute_entropy, mutual_information):
     else:
         nsr = (attribute_entropy - mutual_information) / mutual_information
     return (nsr,)
+
+def translate_into_tuples(col1, col2):
+    return pd.Series([x for x in zip(col1, col2)])
