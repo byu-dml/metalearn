@@ -68,8 +68,6 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_failures = {}
         fail_message = "Not all metafeatures matched previous results."
 
-        # computed_mfs["LinearDiscriminantAnalysisErrRate"]["value"] = 0
-
         for mf_id, result in computed_mfs.items():
             computed_value = result[Metafeatures.VALUE_KEY]
             known_value = known_mfs[mf_id][Metafeatures.VALUE_KEY]
