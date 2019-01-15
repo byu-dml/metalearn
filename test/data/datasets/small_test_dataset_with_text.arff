@@ -18,5 +18,5 @@
 ?,0,T,?, 0.491, 'one two three',        'one two: three',           B
 ?,?,F,2, 0.553, 'three two one',        'three two; one',           B
 ?,4,F,4, 0.569, 'eight nine ten',       'eight (nine) ten',         B
-?,?,F,-1,0.850, 'eight eight eight',    'eight eight eight',        C
+?,?,F,-1,0.850, ?,                      'eight eight eight',        C
 ?,2,F,?, 0.883, 'text forty seven',     'text forty seven',         C
