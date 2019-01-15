@@ -10,7 +10,7 @@ class DecisionTree:
         self.tree = self._get_decision_tree(X, Y, seed)
         self.n_nodes = self.tree.node_count
         self.tree_height = self.tree.max_depth + 1
-        self.leaf_count = Counter(self.tree.feature)[-2]  # -2 indicates that a node has no children
+        self.leaf_count = Counter(self.tree.feature)[-2]  # -2 indicates that a node has no children, ie is a leaf node
 
     def _get_decision_tree(self, X, Y, seed):
         estimator = DecisionTreeClassifier(random_state=seed)
