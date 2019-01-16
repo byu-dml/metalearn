@@ -35,6 +35,7 @@ class Metafeatures(object):
     CATEGORICAL = "CATEGORICAL"
     NO_TARGETS = "NO_TARGETS"
     NUMERIC_TARGETS = "NUMERIC_TARGETS"
+    TIMEOUT = "TIMEOUT"
 
     _metadata_path = os.path.splitext(__file__)[0] + ".json"
     with open(_metadata_path, 'r') as f:
@@ -70,7 +71,8 @@ class Metafeatures(object):
     def compute(
         self, X: DataFrame, Y: Series=None,
         column_types: Dict[str, str]=None, metafeature_ids: List=None,
-        exclude: List=None, sample_shape=None, seed=None, n_folds=2, verbose=False
+        exclude: List=None, sample_shape=None, seed=None, n_folds=2,
+        verbose=False, timeout=None
     ) -> dict:
         """
         Parameters
@@ -93,6 +95,10 @@ class Metafeatures(object):
             landmarking metafeatures. also affects the sample_shape validation
         verbose: bool, default False. When True, prints the ID of each
             metafeature right before it is about to be computed.
+        timeout: float, default None. If timeout is None, compute_metafeatures
+            will be run to completion. Otherwise, execution will halt after
+            approximately timeout seconds. Any metafeatures that have not been
+            computed will be labeled 'TIMEOUT'.
 
         Returns
         -------
@@ -101,10 +107,20 @@ class Metafeatures(object):
         metafeature. The value is typically a number, but can be a string
         indicating a reason why the value could not be computed.
         """
+        start_time = time.time()
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
             n_folds, verbose
         )
+        if timeout is None:
+            def check_time():
+                pass
+        else:
+            def check_time():
+                if time.time() - start_time > timeout:
+                    raise TimeoutError()
+        self._check_timeout = check_time
+
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
         if metafeature_ids is None:
@@ -123,25 +139,30 @@ class Metafeatures(object):
             X, Y, column_types, sample_shape, seed, n_folds
         )
 
-        computed_metafeatures = {}
-        for metafeature_id in metafeature_ids:
-            if verbose == True:
-                print(metafeature_id)
-            if self._resource_is_target_dependent(metafeature_id) and (
-                Y is None or column_types[Y.name] == self.NUMERIC
-            ):
-                if Y is None:
-                    value = self.NO_TARGETS
+        computed_metafeatures = {name: {self.VALUE_KEY: self.TIMEOUT, self.COMPUTE_TIME_KEY: 0}
+                                 for name in metafeature_ids}
+        try:
+            for metafeature_id in metafeature_ids:
+                self._check_timeout()
+                if verbose:
+                    print(metafeature_id)
+                if self._resource_is_target_dependent(metafeature_id) and (
+                    Y is None or column_types[Y.name] == self.NUMERIC
+                ):
+                    if Y is None:
+                        value = self.NO_TARGETS
+                    else:
+                        value = self.NUMERIC_TARGETS
+                    compute_time = None
                 else:
-                    value = self.NUMERIC_TARGETS
-                compute_time = None
-            else:
-                value, compute_time = self._get_resource(metafeature_id)
+                    value, compute_time = self._get_resource(metafeature_id)
 
-            computed_metafeatures[metafeature_id] = {
-                self.VALUE_KEY: value,
-                self.COMPUTE_TIME_KEY: compute_time
-            }
+                computed_metafeatures[metafeature_id] = {
+                    self.VALUE_KEY: value,
+                    self.COMPUTE_TIME_KEY: compute_time
+                }
+        except TimeoutError:
+            pass
 
         return computed_metafeatures
 
@@ -351,6 +372,7 @@ class Metafeatures(object):
             return self.list_metafeatures()
 
     def _get_resource(self, resource_id):
+        self._check_timeout()
         if not resource_id in self._resources:
             resource_info = self._resources_info[resource_id]
             f_name = resource_info["function"]

@@ -125,13 +125,13 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         master_diffs = master_mf_ids_set - intersect_mf_ids_set
         if len(master_diffs) > 0:
-            test_failures["master_differences"] = list(master_names_unique)
+            test_failures["master_differences"] = list(master_diffs)
         known_diffs = known_mf_ids_set - intersect_mf_ids_set
         if len(known_diffs) > 0:
-            test_failures["known_differences"] = list(known_names_unique)
+            test_failures["known_differences"] = list(known_diffs)
         computed_diffs = computed_mf_ids_set - intersect_mf_ids_set
         if len(computed_diffs) > 0:
-            test_failures["computed_differences"] = list(computed_names_unique)
+            test_failures["computed_differences"] = list(computed_diffs)
 
         return self._format_check_report(
             "metafeature_lists", fail_message, test_failures, filename
@@ -355,6 +355,45 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 self.fail(
                     f"Failed to convert metafeature output to json: {str(e)}"
                 )
+
+    def test_soft_timeout(self):
+        """Tests Metafeatures().compute() with timeout set"""   
+        test_name = inspect.stack()[0][3]   
+        test_failures = {} 
+        for dataset_filename, dataset in self.datasets.items():
+            metafeatures = Metafeatures()
+
+            start_time = time.time()
+            metafeatures.compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"]
+            )
+            full_compute_time = time.time() - start_time
+
+            start_time = time.time()
+            computed_mfs = metafeatures.compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"], timeout=full_compute_time/2
+            )
+            limited_compute_time = time.time() - start_time
+
+            self.assertGreater(
+                full_compute_time, limited_compute_time,
+                f"Compute metafeatures exceeded timeout on '{dataset_filename}'"
+            )
+            computed_mfs_timeout = {k: v for k, v in computed_mfs.items()
+                                    if v[Metafeatures.VALUE_KEY] != Metafeatures.TIMEOUT}
+            known_mfs = dataset["known_metafeatures"]
+            required_checks = {
+                self._check_correctness: [
+                    computed_mfs_timeout, known_mfs, dataset_filename
+                ],
+                self._check_compare_metafeature_lists: [
+                    computed_mfs, known_mfs, dataset_filename
+                ]
+            }
+        test_failures.update(self._perform_checks(required_checks))
+        self._report_test_failures(test_failures, test_name)
 
 
 class MetafeaturesTestCase(unittest.TestCase):
