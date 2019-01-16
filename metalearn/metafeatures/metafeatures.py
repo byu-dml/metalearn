@@ -135,6 +135,7 @@ class Metafeatures(object):
                                  for name in metafeature_ids}
         try:
             for metafeature_id in metafeature_ids:
+                self._check_timeout()
                 if verbose:
                     print(metafeature_id)
                 if self._resource_is_target_dependent(metafeature_id) and (
@@ -152,7 +153,6 @@ class Metafeatures(object):
                     self.VALUE_KEY: value,
                     self.COMPUTE_TIME_KEY: compute_time
                 }
-                self._check_timeout()
         except TimeoutError:
             pass
 
