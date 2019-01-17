@@ -77,8 +77,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 correct = False
             elif type(known_value) is str:
                 correct = known_value == computed_value
-            elif not np.isnan(known_value) and not np.isnan(computed_value):
-                correct = math.isclose(known_value, computed_value)
+            else:
+                correct = np.array(np.isclose(known_value, computed_value, equal_nan=True)).all()
             if not correct:
                 test_failures[mf_id] = {
                     "known_value": known_value,
