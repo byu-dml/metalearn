@@ -580,7 +580,71 @@
         "value": 0.8
     },
     "kNN1NKappa": {
-        "compute_time": 0.00862264633178711,
-        "value": -0.02631578947368407
+        "compute_time": 0.008564472198486328,
+        "value": -0.02631578947368407       
+    },
+    "DecisionTreeAttributeMax": {
+        "compute_time": 0.011350393295288086,
+        "value": 5.0
+    },
+    "DecisionTreeAttributeMean": {
+        "compute_time": 0.011350393295288086,
+        "value": 2.25
+    },
+    "DecisionTreeAttributeMin": {
+        "compute_time": 0.011350393295288086,
+        "value": 1.0
+    },
+    "DecisionTreeAttributeStdev": {
+        "compute_time": 0.011350393295288086,
+        "value": 1.8929694486000912
+    },
+    "DecisionTreeBranchMax": {
+        "compute_time": 0.011487722396850586,
+        "value": 3.0
+    },
+    "DecisionTreeBranchMean": {
+        "compute_time": 0.011487722396850586,
+        "value": 2.6
+    },
+    "DecisionTreeBranchMin": {
+        "compute_time": 0.011487722396850586,
+        "value": 1.0
+    },
+    "DecisionTreeBranchStdev": {
+        "compute_time": 0.011487722396850586,
+        "value": 0.8944271909999161
+    },
+    "DecisionTreeHeight": {
+        "compute_time": 0.01183629035949707,
+        "value": 4
+    },
+    "DecisionTreeLeafCount": {
+        "compute_time": 0.01183629035949707,
+        "value": 5
+    },
+    "DecisionTreeLevelMax": {
+        "compute_time": 0.01143336296081543,
+        "value": 4.0
+    },
+    "DecisionTreeLevelMean": {
+        "compute_time": 0.007904529571533203,
+        "value": 2.25
+    },
+    "DecisionTreeLevelMin": {
+        "compute_time": 0.007904529571533203,
+        "value": 1.0
+    },
+    "DecisionTreeLevelStdev": {
+        "compute_time": 0.007904529571533203,
+        "value": 1.2583057392117916
+    },
+    "DecisionTreeNodeCount": {
+        "compute_time": 0.01183629035949707,
+        "value": 9
+    },
+    "DecisionTreeWidth": {
+        "compute_time": 0.0037889480590820312,
+        "value": 4
     }
 }

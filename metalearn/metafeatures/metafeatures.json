@@ -156,6 +156,26 @@
             "returns": [
                 "ArrayOfStringLengthsOfTextFeatures"
             ]
+        },
+        "DecisionTree": {
+            "function": "get_decision_tree",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 9
+            },
+            "returns": [
+                "DecisionTree"
+            ]
+        },
+        "TraversedDecisionTree": {
+            "function": "traverse_tree",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "TraversedDecisionTree"
+            ]
         }
     },
     "metafeatures": {
@@ -2242,6 +2262,195 @@
                 "Quartile2KurtosisOfStringLengthOfTextFeatures",
                 "Quartile3KurtosisOfStringLengthOfTextFeatures",
                 "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "DecisionTreeLevelMean": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeLevelMean",
+                "DecisionTreeLevelStdev",
+                "DecisionTreeLevelMin",
+                "DecisionTreeLevelMax"
+            ]
+        },
+        "DecisionTreeLevelStdev": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeLevelMean",
+                "DecisionTreeLevelStdev",
+                "DecisionTreeLevelMin",
+                "DecisionTreeLevelMax"
+            ]
+        },
+        "DecisionTreeLevelMin": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeLevelMean",
+                "DecisionTreeLevelStdev",
+                "DecisionTreeLevelMin",
+                "DecisionTreeLevelMax"
+            ]
+        },
+        "DecisionTreeLevelMax": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeLevelMean",
+                "DecisionTreeLevelStdev",
+                "DecisionTreeLevelMin",
+                "DecisionTreeLevelMax"
+            ]
+        },
+        "DecisionTreeBranchMean": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeBranchMean",
+                "DecisionTreeBranchStdev",
+                "DecisionTreeBranchMin",
+                "DecisionTreeBranchMax"
+            ]
+        },
+        "DecisionTreeBranchStdev": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeBranchMean",
+                "DecisionTreeBranchStdev",
+                "DecisionTreeBranchMin",
+                "DecisionTreeBranchMax"
+            ]
+        },
+        "DecisionTreeBranchMin": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeBranchMean",
+                "DecisionTreeBranchStdev",
+                "DecisionTreeBranchMin",
+                "DecisionTreeBranchMax"
+            ]
+        },
+        "DecisionTreeBranchMax": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeBranchMean",
+                "DecisionTreeBranchStdev",
+                "DecisionTreeBranchMin",
+                "DecisionTreeBranchMax"
+            ]
+        },
+        "DecisionTreeNodeCount": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeLeafCount": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeHeight": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeWidth": {
+            "function": "get_decision_tree_width",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeAttributeMean": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeAttributeMean",
+                "DecisionTreeAttributeStdev",
+                "DecisionTreeAttributeMin",
+                "DecisionTreeAttributeMax"
+            ]
+        },
+        "DecisionTreeAttributeStdev": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeAttributeMean",
+                "DecisionTreeAttributeStdev",
+                "DecisionTreeAttributeMin",
+                "DecisionTreeAttributeMax"
+            ]
+        },
+        "DecisionTreeAttributeMin": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeAttributeMean",
+                "DecisionTreeAttributeStdev",
+                "DecisionTreeAttributeMin",
+                "DecisionTreeAttributeMax"
+            ]
+        },
+        "DecisionTreeAttributeMax": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeAttributeMean",
+                "DecisionTreeAttributeStdev",
+                "DecisionTreeAttributeMin",
+                "DecisionTreeAttributeMax"
             ]
         },
         "MostCommonAlphanumericTokens": {

@@ -582,5 +582,69 @@
     "kNN1NKappa": {
         "compute_time": 0.3409409523010254,
         "value": 0.16702041294319114
+    },
+    "DecisionTreeAttributeMax": {
+        "compute_time": 0.0874476432800293,
+        "value": 49.0
+    },
+    "DecisionTreeAttributeMean": {
+        "compute_time": 0.0874476432800293,
+        "value": 5.705882352941177
+    },
+    "DecisionTreeAttributeMin" : {
+        "compute_time": 0.0874476432800293,
+        "value": 1.0
+    },
+    "DecisionTreeAttributeStdev" : {
+        "compute_time": 0.0874476432800293,
+        "value": 11.444238211226388
+    },
+    "DecisionTreeBranchMax" : {
+        "compute_time": 0.10315966606140137,
+        "value": 10.0
+    },
+    "DecisionTreeBranchMean" : {
+        "compute_time": 0.10315966606140137,
+        "value": 6.26530612244898
+    },
+    "DecisionTreeBranchMin" : {
+        "compute_time": 0.10315966606140137,
+        "value": 4.0
+    },
+    "DecisionTreeBranchStdev" : {
+        "compute_time": 0.10315966606140137, 
+        "value": 1.551551779725726
+    },
+    "DecisionTreeHeight" : {
+        "compute_time": 0.08703327178955078,
+        "value": 11
+    },
+    "DecisionTreeLeafCount" : {
+        "compute_time": 0.08703327178955078,
+        "value": 49
+    },
+    "DecisionTreeLevelMax" : {
+        "compute_time": 0.08691191673278809,
+        "value": 22.0
+    },
+    "DecisionTreeLevelMean": {
+        "compute_time": 0.03972744941711426,
+        "value": 8.818181818181818
+    },
+    "DecisionTreeLevelMin": {
+        "compute_time": 0.03972744941711426,
+        "value": 1.0
+    },
+    "DecisionTreeLevelStdev": {
+        "compute_time": 0.03972744941711426,
+        "value": 7.386720271110607
+    },
+    "DecisionTreeNodeCount" : {
+        "compute_time": 0.08703327178955078,
+        "value": 97
+    },
+    "DecisionTreeWidth": {
+        "compute_time": 0.03907275199890137,
+        "value": 9
     }
 }
