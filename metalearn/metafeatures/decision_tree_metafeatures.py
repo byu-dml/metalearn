@@ -65,16 +65,13 @@ def traverse_tree(tree):
     return (TraversedDecisionTree(tree),)
 
 def get_decision_tree_level_sizes(tree):
-    level_mean, level_stdev, level_min, _, _, _, level_max = profile_distribution(tree.level_sizes)
-    return (level_mean, level_stdev, level_min, level_max)
+    return profile_distribution(tree.level_sizes)
 
 def get_decision_tree_branch_lengths(tree):
-    branch_mean, branch_stdev, branch_min, _, _, _, branch_max = profile_distribution(tree.branch_lengths)
-    return (branch_mean, branch_stdev, branch_min, branch_max)
+    return profile_distribution(tree.branch_lengths)
 
 def get_decision_tree_attributes(tree):
-    att_mean, att_stdev, att_min, _, _, _, att_max = profile_distribution(tree.get_attributes())
-    return (att_mean, att_stdev, att_min, att_max)
+    return profile_distribution(tree.get_attributes())
 
 def get_decision_tree_general_info(tree):
     return tree.get_general_info()
