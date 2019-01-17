@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 from pandas import DataFrame
 from sklearn.pipeline import Pipeline
@@ -21,17 +23,20 @@ Decision Node, Random Node.
 '''
 
 def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
-    accuracy_scorer = make_scorer(accuracy_score)
-    kappa_scorer = make_scorer(cohen_kappa_score)
-    cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=cv_seed)
-    scores = cross_validate(
-        pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
-            'accuracy': accuracy_scorer, 'kappa': kappa_scorer
-        }
-    )
-    err_rate = 1. - np.mean(scores['test_accuracy'])
-    kappa = np.mean(scores['test_kappa'])
-    return (err_rate, kappa)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning)  # suppress sklearn warnings
+        warnings.filterwarnings("ignore", category=UserWarning)  # suppress sklearn warnings
+        accuracy_scorer = make_scorer(accuracy_score)
+        kappa_scorer = make_scorer(cohen_kappa_score)
+        cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=cv_seed)
+        scores = cross_validate(
+            pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
+                'accuracy': accuracy_scorer, 'kappa': kappa_scorer
+            }
+        )
+        err_rate = 1. - np.mean(scores['test_accuracy'])
+        kappa = np.mean(scores['test_kappa'])
+        return (err_rate, kappa)
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])

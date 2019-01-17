@@ -1,7 +1,6 @@
 import time
 import math
 import itertools
-import warnings
 
 import numpy as np
 import pandas as pd
@@ -10,9 +9,6 @@ from sklearn.decomposition import PCA
 from sklearn.cross_decomposition import CCA
 
 from .common_operations import *
-
-warnings.filterwarnings("ignore", category=RuntimeWarning) # suppress sklearn warnings
-warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
 
 def get_numeric_means(numeric_features_array):
     means = [feature.mean() for feature in numeric_features_array]

@@ -137,6 +137,45 @@
             "returns": [
                 "NoNaNBinnedNumericFeaturesAndClass"
             ]
+        },
+        "NoNaNTextFeatures": {
+            "function": "self._get_text_features_with_no_missing_values",
+            "arguments": {
+                "X_sample": "XSample",
+                "column_types": "column_types"
+            },
+            "returns": [
+                "NoNaNTextFeatures"
+            ]
+        },
+        "ArrayOfStringLengthsOfTextFeatures": {
+            "function": "get_string_lengths_array_from_text_features",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "ArrayOfStringLengthsOfTextFeatures"
+            ]
+        },
+        "DecisionTree": {
+            "function": "get_decision_tree",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 9
+            },
+            "returns": [
+                "DecisionTree"
+            ]
+        },
+        "TraversedDecisionTree": {
+            "function": "traverse_tree",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "TraversedDecisionTree"
+            ]
         }
     },
     "metafeatures": {
@@ -3124,6 +3163,1122 @@
             "returns": [
                 "LinearDiscriminantAnalysisErrRate",
                 "LinearDiscriminantAnalysisKappa"
+            ]
+        },
+        "MeanMeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "StdevMeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "SkewMeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "KurtosisMeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MinMeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MaxMeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile1MeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile2MeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile3MeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MeanStdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "StdevStdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "SkewStdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "KurtosisStdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MinStdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MaxStdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile1StdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile2StdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile3StdDevOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MeanSkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "StdevSkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "SkewSkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "KurtosisSkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MinSkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MaxSkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile1SkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile2SkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile3SkewnessOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MeanKurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "StdevKurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "SkewKurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "KurtosisKurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MinKurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MaxKurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile1KurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile2KurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "Quartile3KurtosisOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
+        "MeanDecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "StdevDecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "SkewDecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "KurtosisDecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "MinDecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "Quartile1DecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "Quartile2DecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "Quartile3DecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "MaxDecisionTreeLevelSize": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
+        "MeanDecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "StdevDecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "SkewDecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "KurtosisDecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "MinDecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "Quartile1DecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "Quartile2DecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "Quartile3DecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "MaxDecisionTreeBranchLength": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
+        "DecisionTreeNodeCount": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeLeafCount": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeHeight": {
+            "function": "get_decision_tree_general_info",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeNodeCount",
+                "DecisionTreeLeafCount",
+                "DecisionTreeHeight",
+                "DecisionTreeWidth"
+            ]
+        },
+        "DecisionTreeWidth": {
+            "function": "get_decision_tree_width",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeWidth"
+            ]
+        },
+        "MeanDecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "StdevDecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "SkewDecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "KurtosisDecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "MinDecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "Quartile1DecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "Quartile2DecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "Quartile3DecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
+        "MaxDecisionTreeAttribute": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
             ]
         }
     }
