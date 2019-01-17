@@ -3165,12 +3165,31 @@
                 "LinearDiscriminantAnalysisKappa"
             ]
         },
+        "MeansOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_means",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "MeansOfStringLengthOfTextFeatures",
+                "MeanMeansOfStringLengthOfTextFeatures",
+                "StdevMeansOfStringLengthOfTextFeatures",
+                "SkewMeansOfStringLengthOfTextFeatures",
+                "KurtosisMeansOfStringLengthOfTextFeatures",
+                "MinMeansOfStringLengthOfTextFeatures",
+                "Quartile1MeansOfStringLengthOfTextFeatures",
+                "Quartile2MeansOfStringLengthOfTextFeatures",
+                "Quartile3MeansOfStringLengthOfTextFeatures",
+                "MaxMeansOfStringLengthOfTextFeatures"
+            ]
+        },
         "MeanMeansOfStringLengthOfTextFeatures": {
             "function": "get_string_length_means",
             "arguments": {
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3188,6 +3207,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3205,6 +3225,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3222,6 +3243,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3239,6 +3261,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3256,6 +3279,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3273,6 +3297,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3290,6 +3315,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3307,6 +3333,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "MeansOfStringLengthOfTextFeatures",
                 "MeanMeansOfStringLengthOfTextFeatures",
                 "StdevMeansOfStringLengthOfTextFeatures",
                 "SkewMeansOfStringLengthOfTextFeatures",
@@ -3318,12 +3345,31 @@
                 "MaxMeansOfStringLengthOfTextFeatures"
             ]
         },
+        "StdDevsOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_stdev",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
+                "MeanStdDevOfStringLengthOfTextFeatures",
+                "StdevStdDevOfStringLengthOfTextFeatures",
+                "SkewStdDevOfStringLengthOfTextFeatures",
+                "KurtosisStdDevOfStringLengthOfTextFeatures",
+                "MinStdDevOfStringLengthOfTextFeatures",
+                "Quartile1StdDevOfStringLengthOfTextFeatures",
+                "Quartile2StdDevOfStringLengthOfTextFeatures",
+                "Quartile3StdDevOfStringLengthOfTextFeatures",
+                "MaxStdDevOfStringLengthOfTextFeatures"
+            ]
+        },
         "MeanStdDevOfStringLengthOfTextFeatures": {
             "function": "get_string_length_stdev",
             "arguments": {
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3341,6 +3387,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3358,6 +3405,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3375,6 +3423,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3392,6 +3441,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3409,6 +3459,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3426,6 +3477,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3443,6 +3495,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3460,6 +3513,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "StdDevsOfStringLengthOfTextFeatures",
                 "MeanStdDevOfStringLengthOfTextFeatures",
                 "StdevStdDevOfStringLengthOfTextFeatures",
                 "SkewStdDevOfStringLengthOfTextFeatures",
@@ -3471,12 +3525,31 @@
                 "MaxStdDevOfStringLengthOfTextFeatures"
             ]
         },
+        "SkewnessesOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_skewness",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
+                "MeanSkewnessOfStringLengthOfTextFeatures",
+                "StdevSkewnessOfStringLengthOfTextFeatures",
+                "SkewSkewnessOfStringLengthOfTextFeatures",
+                "KurtosisSkewnessOfStringLengthOfTextFeatures",
+                "MinSkewnessOfStringLengthOfTextFeatures",
+                "Quartile1SkewnessOfStringLengthOfTextFeatures",
+                "Quartile2SkewnessOfStringLengthOfTextFeatures",
+                "Quartile3SkewnessOfStringLengthOfTextFeatures",
+                "MaxSkewnessOfStringLengthOfTextFeatures"
+            ]
+        },
         "MeanSkewnessOfStringLengthOfTextFeatures": {
             "function": "get_string_length_skewness",
             "arguments": {
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3494,6 +3567,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3511,6 +3585,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3528,6 +3603,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3545,6 +3621,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3562,6 +3639,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3579,6 +3657,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3596,6 +3675,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3613,6 +3693,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "SkewnessesOfStringLengthOfTextFeatures",
                 "MeanSkewnessOfStringLengthOfTextFeatures",
                 "StdevSkewnessOfStringLengthOfTextFeatures",
                 "SkewSkewnessOfStringLengthOfTextFeatures",
@@ -3624,12 +3705,31 @@
                 "MaxSkewnessOfStringLengthOfTextFeatures"
             ]
         },
+        "KurtosesOfStringLengthOfTextFeatures": {
+            "function": "get_string_length_kurtosis",
+            "arguments": {
+                "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+            },
+            "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
+                "MeanKurtosisOfStringLengthOfTextFeatures",
+                "StdevKurtosisOfStringLengthOfTextFeatures",
+                "SkewKurtosisOfStringLengthOfTextFeatures",
+                "KurtosisKurtosisOfStringLengthOfTextFeatures",
+                "MinKurtosisOfStringLengthOfTextFeatures",
+                "Quartile1KurtosisOfStringLengthOfTextFeatures",
+                "Quartile2KurtosisOfStringLengthOfTextFeatures",
+                "Quartile3KurtosisOfStringLengthOfTextFeatures",
+                "MaxKurtosisOfStringLengthOfTextFeatures"
+            ]
+        },
         "MeanKurtosisOfStringLengthOfTextFeatures": {
             "function": "get_string_length_kurtosis",
             "arguments": {
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3647,6 +3747,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3664,6 +3765,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3681,6 +3783,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3698,6 +3801,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3715,6 +3819,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3732,6 +3837,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3749,6 +3855,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3766,6 +3873,7 @@
                 "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
             },
             "returns": [
+                "KurtosesOfStringLengthOfTextFeatures",
                 "MeanKurtosisOfStringLengthOfTextFeatures",
                 "StdevKurtosisOfStringLengthOfTextFeatures",
                 "SkewKurtosisOfStringLengthOfTextFeatures",
@@ -3777,12 +3885,31 @@
                 "MaxKurtosisOfStringLengthOfTextFeatures"
             ]
         },
+        "DecisionTreeLevelSizes": {
+            "function": "get_decision_tree_level_sizes",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeLevelSizes",
+                "MeanDecisionTreeLevelSize",
+                "StdevDecisionTreeLevelSize",
+                "SkewDecisionTreeLevelSize",
+                "KurtosisDecisionTreeLevelSize",
+                "MinDecisionTreeLevelSize",
+                "Quartile1DecisionTreeLevelSize",
+                "Quartile2DecisionTreeLevelSize",
+                "Quartile3DecisionTreeLevelSize",
+                "MaxDecisionTreeLevelSize"
+            ]
+        },
         "MeanDecisionTreeLevelSize": {
             "function": "get_decision_tree_level_sizes",
             "arguments": {
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3800,6 +3927,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3817,6 +3945,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3834,6 +3963,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3851,6 +3981,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3868,6 +3999,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3885,6 +4017,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3902,6 +4035,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3919,6 +4053,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeLevelSizes",
                 "MeanDecisionTreeLevelSize",
                 "StdevDecisionTreeLevelSize",
                 "SkewDecisionTreeLevelSize",
@@ -3930,12 +4065,31 @@
                 "MaxDecisionTreeLevelSize"
             ]
         },
+        "DecisionTreeBranchLengths": {
+            "function": "get_decision_tree_branch_lengths",
+            "arguments": {
+                "tree": "TraversedDecisionTree"
+            },
+            "returns": [
+                "DecisionTreeBranchLengths",
+                "MeanDecisionTreeBranchLength",
+                "StdevDecisionTreeBranchLength",
+                "SkewDecisionTreeBranchLength",
+                "KurtosisDecisionTreeBranchLength",
+                "MinDecisionTreeBranchLength",
+                "Quartile1DecisionTreeBranchLength",
+                "Quartile2DecisionTreeBranchLength",
+                "Quartile3DecisionTreeBranchLength",
+                "MaxDecisionTreeBranchLength"
+            ]
+        },
         "MeanDecisionTreeBranchLength": {
             "function": "get_decision_tree_branch_lengths",
             "arguments": {
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -3953,6 +4107,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -3970,6 +4125,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -3987,6 +4143,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -4004,6 +4161,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -4021,6 +4179,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -4038,6 +4197,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -4055,6 +4215,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -4072,6 +4233,7 @@
                 "tree": "TraversedDecisionTree"
             },
             "returns": [
+                "DecisionTreeBranchLengths",
                 "MeanDecisionTreeBranchLength",
                 "StdevDecisionTreeBranchLength",
                 "SkewDecisionTreeBranchLength",
@@ -4128,12 +4290,31 @@
                 "DecisionTreeWidth"
             ]
         },
+        "DecisionTreeAttributes": {
+            "function": "get_decision_tree_attributes",
+            "arguments": {
+                "tree": "DecisionTree"
+            },
+            "returns": [
+                "DecisionTreeAttributes",
+                "MeanDecisionTreeAttribute",
+                "StdevDecisionTreeAttribute",
+                "SkewDecisionTreeAttribute",
+                "KurtosisDecisionTreeAttribute",
+                "MinDecisionTreeAttribute",
+                "Quartile1DecisionTreeAttribute",
+                "Quartile2DecisionTreeAttribute",
+                "Quartile3DecisionTreeAttribute",
+                "MaxDecisionTreeAttribute"
+            ]
+        },
         "MeanDecisionTreeAttribute": {
             "function": "get_decision_tree_attributes",
             "arguments": {
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4151,6 +4332,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4168,6 +4350,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4185,6 +4368,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4202,6 +4386,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4219,6 +4404,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4236,6 +4422,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4253,6 +4440,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
@@ -4270,6 +4458,7 @@
                 "tree": "DecisionTree"
             },
             "returns": [
+                "DecisionTreeAttributes",
                 "MeanDecisionTreeAttribute",
                 "StdevDecisionTreeAttribute",
                 "SkewDecisionTreeAttribute",
