@@ -1,7 +1,6 @@
 import time
 import math
 import itertools
-import warnings
 
 import numpy as np
 import pandas as pd
@@ -10,9 +9,6 @@ from sklearn.decomposition import PCA
 from sklearn.cross_decomposition import CCA
 
 from .common_operations import *
-
-warnings.filterwarnings("ignore", category=RuntimeWarning) # suppress sklearn warnings
-warnings.filterwarnings("ignore", category=UserWarning) # suppress sklearn warnings
 
 def get_numeric_means(numeric_features_array):
     means = [feature.mean() for feature in numeric_features_array]
@@ -47,8 +43,7 @@ def get_pca(X_preprocessed):
 
 def get_correlations(X_sample, column_types):
     correlations = get_canonical_correlations(X_sample, column_types)
-    mean_correlation, stdev_correlation, _, _, _, _, _ = profile_distribution(correlations)
-    return (mean_correlation, stdev_correlation)
+    profile_distribution(correlations)
 
 def get_correlations_by_class(X_sample, Y_sample):
     correlations = []
@@ -57,8 +52,7 @@ def get_correlations_by_class(X_sample, Y_sample):
     for label in Y_sample.unique():
         group = XY_grouped_by_class.get_group(label).drop(Y_sample.name, axis=1)
         correlations.extend(get_canonical_correlations(group))
-    mean_correlation, stdev_correlation, _, _, _, _, _ = profile_distribution(correlations)
-    return (mean_correlation, stdev_correlation)
+    return profile_distribution(correlations)
 
 def get_canonical_correlations(dataframe, column_types):
     '''

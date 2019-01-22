@@ -6,6 +6,7 @@ import math
 import os
 import random
 import time
+import copy
 import unittest
 
 import pandas as pd
@@ -76,8 +77,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 correct = False
             elif type(known_value) is str:
                 correct = known_value == computed_value
-            elif not np.isnan(known_value) and not np.isnan(computed_value):
-                correct = math.isclose(known_value, computed_value)
+            else:
+                correct = np.array(np.isclose(known_value, computed_value, equal_nan=True)).all()
             if not correct:
                 test_failures[mf_id] = {
                     "known_value": known_value,
@@ -124,13 +125,13 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         master_diffs = master_mf_ids_set - intersect_mf_ids_set
         if len(master_diffs) > 0:
-            test_failures["master_differences"] = list(master_names_unique)
+            test_failures["master_differences"] = list(master_diffs)
         known_diffs = known_mf_ids_set - intersect_mf_ids_set
         if len(known_diffs) > 0:
-            test_failures["known_differences"] = list(known_names_unique)
+            test_failures["known_differences"] = list(known_diffs)
         computed_diffs = computed_mf_ids_set - intersect_mf_ids_set
         if len(computed_diffs) > 0:
-            test_failures["computed_differences"] = list(computed_names_unique)
+            test_failures["computed_differences"] = list(computed_diffs)
 
         return self._format_check_report(
             "metafeature_lists", fail_message, test_failures, filename
@@ -291,6 +292,29 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
         self._report_test_failures(test_failures, test_name)
 
+    def test_exclude_metafeatures(self):
+        SUBSET_LENGTH = 20
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            metafeature_ids = random.sample(Metafeatures.IDS, SUBSET_LENGTH)
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                exclude=metafeature_ids,
+                column_types=dataset["column_types"]
+            )
+            known_metafeatures = dataset["known_metafeatures"]
+            required_checks = {
+                self._check_correctness: [
+                    computed_mfs, known_metafeatures, dataset_filename
+                ]
+            }
+            test_failures.update(self._perform_checks(required_checks))
+            if any(mf_id in computed_mfs.keys() for mf_id in metafeature_ids):
+                self.assertTrue(False, "Metafeatures computed an excluded metafeature")
+
+        self._report_test_failures(test_failures, test_name)
+
     def test_compute_effects_on_dataset(self):
         """
         Tests whether computing metafeatures has any side effects on the input
@@ -368,6 +392,45 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     f"Failed to convert metafeature output to json: {str(e)}"
                 )
 
+    def test_soft_timeout(self):
+        """Tests Metafeatures().compute() with timeout set"""   
+        test_name = inspect.stack()[0][3]   
+        test_failures = {} 
+        for dataset_filename, dataset in self.datasets.items():
+            metafeatures = Metafeatures()
+
+            start_time = time.time()
+            metafeatures.compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"]
+            )
+            full_compute_time = time.time() - start_time
+
+            start_time = time.time()
+            computed_mfs = metafeatures.compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                column_types=dataset["column_types"], timeout=full_compute_time/2
+            )
+            limited_compute_time = time.time() - start_time
+
+            self.assertGreater(
+                full_compute_time, limited_compute_time,
+                f"Compute metafeatures exceeded timeout on '{dataset_filename}'"
+            )
+            computed_mfs_timeout = {k: v for k, v in computed_mfs.items()
+                                    if v[Metafeatures.VALUE_KEY] != Metafeatures.TIMEOUT}
+            known_mfs = dataset["known_metafeatures"]
+            required_checks = {
+                self._check_correctness: [
+                    computed_mfs_timeout, known_mfs, dataset_filename
+                ],
+                self._check_compare_metafeature_lists: [
+                    computed_mfs, known_mfs, dataset_filename
+                ]
+            }
+        test_failures.update(self._perform_checks(required_checks))
+        self._report_test_failures(test_failures, test_name)
+
 
 class MetafeaturesTestCase(unittest.TestCase):
     """ Contains tests for Metafeatures that can be executed without loading data. """
@@ -376,7 +439,8 @@ class MetafeaturesTestCase(unittest.TestCase):
         self.dummy_features = pd.DataFrame(np.random.rand(50, 50))
         self.dummy_target = pd.Series(np.random.randint(2, size=50), name="target").astype("str")
 
-        self.invalid_metafeature_message_start = "One or more requested metafeatures are not valid:"
+        self.invalid_requested_metafeature_message_start = "One or more requested metafeatures are not valid:"
+        self.invalid_excluded_metafeature_message_start = "One or more excluded metafeatures are not valid:"
         self.invalid_metafeature_message_start_fail_message = "Error message indicating invalid metafeatures did not start with expected string."
         self.invalid_metafeature_message_contains_fail_message = "Error message indicating invalid metafeatures should include names of invalid features."
 
@@ -401,10 +465,10 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.zeros(500))
         self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
 
-    def _check_invalid_metafeature_exception_string(self, exception_str, invalid_metafeatures):
+    def _check_invalid_metafeature_exception_string(self, exception_str, expected_str, invalid_metafeatures):
         """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
         self.assertTrue(
-            exception_str.startswith(self.invalid_metafeature_message_start),
+            exception_str.startswith(expected_str),
             self.invalid_metafeature_message_start_fail_message
         )
 
@@ -415,17 +479,24 @@ class MetafeaturesTestCase(unittest.TestCase):
             )
 
     def test_metafeatures_input_all_invalid(self):
-        """ Test case where all requested metafeatures are invalid. """
+        """ Test cases where all requested and excluded metafeatures are invalid. """
 
         invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
 
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, metafeature_ids=invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_requested_metafeature_message_start,
+                                                         invalid_metafeatures)
 
-        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, exclude=invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_excluded_metafeature_message_start,
+                                                         invalid_metafeatures)
 
     def test_metafeatures_input_partial_invalid(self):
-        """ Test case where only some requested metafeatures are invalid. """
+        """ Test case where only some requested and excluded metafeatures are invalid. """
 
         invalid_metafeatures = ["ThisIsNotValid", "ThisIsAlsoNotValid"]
         valid_metafeatures = ["NumberOfInstances", "NumberOfFeatures"]
@@ -433,14 +504,40 @@ class MetafeaturesTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
                                    metafeature_ids=invalid_metafeatures + valid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_requested_metafeature_message_start,
+                                                         invalid_metafeatures)
 
-        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   exclude=invalid_metafeatures + valid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_excluded_metafeature_message_start,
+                                                         invalid_metafeatures)
 
         # Order should not matter
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
                                    metafeature_ids=valid_metafeatures + invalid_metafeatures)
-        self._check_invalid_metafeature_exception_string(str(cm.exception), invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_requested_metafeature_message_start,
+                                                         invalid_metafeatures)
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   exclude=valid_metafeatures + invalid_metafeatures)
+        self._check_invalid_metafeature_exception_string(str(cm.exception),
+                                                         self.invalid_excluded_metafeature_message_start,
+                                                         invalid_metafeatures)
+
+    def test_request_and_exclude_metafeatures(self):
+        expected_exception_string = "metafeature_ids and exclude cannot both be non-null"
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   metafeature_ids=[], exclude=[])
+
+        self.assertEqual(str(cm.exception), expected_exception_string)
 
     def test_column_type_input(self):
         column_types = {col: "NUMERIC" for col in self.dummy_features.columns}
@@ -625,6 +722,16 @@ class MetafeaturesTestCase(unittest.TestCase):
            exc_type = type(e).__name__
            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
 
+    def test_list_metafeatures(self):
+        mf_list = Metafeatures.list_metafeatures()
+        mf_list_copy = copy.deepcopy(mf_list)
+        mf_list.clear()
+        if Metafeatures.list_metafeatures() != mf_list_copy:
+            mf_list.extend(mf_list_copy)
+            self.assertTrue(False, "Metafeature list has been mutated")
+
+
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+

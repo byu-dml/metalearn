@@ -3,6 +3,7 @@ import math
 import json
 import time
 import io
+import copy
 from typing import Dict, List
 
 import numpy as np
@@ -15,6 +16,8 @@ from .simple_metafeatures import *
 from .statistical_metafeatures import *
 from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
+from .decision_tree_metafeatures import *
+from .text_metafeatures import *
 
 
 class Metafeatures(object):
@@ -28,9 +31,11 @@ class Metafeatures(object):
     VALUE_KEY = 'value'
     COMPUTE_TIME_KEY = 'compute_time'
     NUMERIC = "NUMERIC"
+    TEXT = "TEXT"
     CATEGORICAL = "CATEGORICAL"
     NO_TARGETS = "NO_TARGETS"
     NUMERIC_TARGETS = "NUMERIC_TARGETS"
+    TIMEOUT = "TIMEOUT"
 
     _metadata_path = os.path.splitext(__file__)[0] + ".json"
     with open(_metadata_path, 'r') as f:
@@ -51,7 +56,7 @@ class Metafeatures(object):
         # PredDet, kNN1NErrRate, kNN1NKappa, LinearDiscriminantAnalysisKappa,
         # LinearDiscriminantAnalysisErrRate
         if group == "all":
-            return cls.IDS
+            return copy.deepcopy(cls.IDS)
         elif group == "landmarking":
             return list(filter(
                 lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id, cls.IDS
@@ -69,29 +74,36 @@ class Metafeatures(object):
             raise ValueError(f"Unknown group {group}")
 
     def compute(
-        self, X: DataFrame, Y: Series = None,
-        column_types: Dict[str, str] = None, metafeature_ids: List = None,
-        sample_shape=None, seed=None, n_folds=2, verbose=False
+        self, X: DataFrame, Y: Series=None,
+        column_types: Dict[str, str]=None, metafeature_ids: List=None,
+        exclude: List=None, sample_shape=None, seed=None, n_folds=2,
+        verbose=False, timeout=None
     ) -> dict:
         """
         Parameters
         ----------
         X: pandas.DataFrame, the dataset features
-        Y: pandas.Seris, the dataset targets
+        Y: pandas.Series, the dataset targets
         column_types: Dict[str, str], dict from column name to column type as
-            "NUMERIC" or "CATEGORICAL", must include Y column
+            "NUMERIC" or "CATEGORICAL" or "TEXT", must include Y column
         metafeature_ids: list, the metafeatures to compute. default of None
             indicates to compute all metafeatures
+        exclude: list, default None. The metafeatures to be excluded from computation.
+            Must be None if metafeature_ids is not None.
         sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
             Default is (None, None), indicate not to sample rows or columns.
-        seed: int, the seed used to generate psuedo-random numbers. when None
-            is given, a seed will be generated psuedo-randomly. this can be
+        seed: int, the seed used to generate pseudo-random numbers. when None
+            is given, a seed will be generated pseudo-randomly. this can be
             used for reproducibility of metafeatures. a generated seed can be
             accessed through the 'seed' property, after calling this method.
         n_folds: int, the number of cross validation folds used by the
             landmarking metafeatures. also affects the sample_shape validation
         verbose: bool, default False. When True, prints the ID of each
             metafeature right before it is about to be computed.
+        timeout: float, default None. If timeout is None, compute_metafeatures
+            will be run to completion. Otherwise, execution will halt after
+            approximately timeout seconds. Any metafeatures that have not been
+            computed will be labeled 'TIMEOUT'.
 
         Returns
         -------
@@ -100,51 +112,67 @@ class Metafeatures(object):
         metafeature. The value is typically a number, but can be a string
         indicating a reason why the value could not be computed.
         """
+        start_time = time.time()
         self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-            verbose
+            X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+            n_folds, verbose
         )
+        if timeout is None:
+            def check_time():
+                pass
+        else:
+            def check_time():
+                if time.time() - start_time > timeout:
+                    raise TimeoutError()
+        self._check_timeout = check_time
+
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
         if metafeature_ids is None:
-            metafeature_ids = self.list_metafeatures()
+            metafeature_ids = self._get_metafeature_ids(exclude)
+            exclude = None
         if sample_shape is None:
             sample_shape = (None, None)
         if seed is None:
             seed = np.random.randint(2**32)
         self._validate_compute_arguments(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-            verbose
+            X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+            n_folds, verbose
         )
 
         self._init_resources(
-            X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+            X, Y, column_types, sample_shape, seed, n_folds
         )
 
-        computed_metafeatures = {}
-        for metafeature_id in metafeature_ids:
-            if verbose == True:
-                print(metafeature_id)
-            if self._resource_is_target_dependent(metafeature_id) and (
-                Y is None or column_types[Y.name] == self.NUMERIC
-            ):
-                if Y is None:
-                    value = self.NO_TARGETS
+        computed_metafeatures = {name: {self.VALUE_KEY: self.TIMEOUT, self.COMPUTE_TIME_KEY: 0}
+                                 for name in metafeature_ids}
+        try:
+            for metafeature_id in metafeature_ids:
+                self._check_timeout()
+                if verbose:
+                    print(metafeature_id)
+                if self._resource_is_target_dependent(metafeature_id) and (
+                    Y is None or column_types[Y.name] == self.NUMERIC
+                ):
+                    if Y is None:
+                        value = self.NO_TARGETS
+                    else:
+                        value = self.NUMERIC_TARGETS
+                    compute_time = None
                 else:
-                    value = self.NUMERIC_TARGETS
-                compute_time = None
-            else:
-                value, compute_time = self._get_resource(metafeature_id)
+                    value, compute_time = self._get_resource(metafeature_id)
 
-            computed_metafeatures[metafeature_id] = {
-                self.VALUE_KEY: value,
-                self.COMPUTE_TIME_KEY: compute_time
-            }
+                computed_metafeatures[metafeature_id] = {
+                    self.VALUE_KEY: value,
+                    self.COMPUTE_TIME_KEY: compute_time
+                }
+        except TimeoutError:
+            pass
 
         return computed_metafeatures
 
     def _init_resources(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds
+        self, X, Y, column_types, sample_shape, seed, n_folds
     ):
         self._resources = {
             "X_raw": {
@@ -198,8 +226,8 @@ class Metafeatures(object):
         return (seed_base + seed_offset,)
 
     def _validate_compute_arguments(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
         for f in [
             self._validate_X, self._validate_Y, self._validate_column_types,
@@ -207,27 +235,27 @@ class Metafeatures(object):
             self._validate_n_folds, self._validate_verbose
         ]:
             f(
-                X, Y, column_types, metafeature_ids, sample_shape, seed,
+                X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
                 n_folds, verbose
             )
 
     def _validate_X(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
 
     def _validate_Y(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
 
     def _validate_column_types(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
         if not column_types is None:
             invalid_column_types = {}
@@ -240,31 +268,41 @@ class Metafeatures(object):
                         f"Column type not specified for column {col}"
                     )
                 col_type = column_types[col]
-                if not col_type in [self.NUMERIC, self.CATEGORICAL]:
+                # todo: add self.TEXT to check. Additionally add self.TEXT to all tests that check for column types
+                if not col_type in [self.NUMERIC, self.CATEGORICAL, self.TEXT]:
                     invalid_column_types[col] = col_type
             if len(invalid_column_types) > 0:
                 raise ValueError(
                     f"Invalid column types: {invalid_column_types}. Valid types " +
-                    f"include {self.NUMERIC} and {self.CATEGORICAL}."
+                    f"include {self.NUMERIC} and {self.CATEGORICAL} and {self.TEXT}."
                 )
 
     def _validate_metafeature_ids(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
-        if metafeature_ids is not None:
+        ids = None
+        if metafeature_ids is not None and exclude is not None:
+            raise ValueError("metafeature_ids and exclude cannot both be non-null")
+        elif metafeature_ids is not None:
+            ids = metafeature_ids
+            list_label = 'requested'
+        elif exclude is not None:
+            ids = exclude
+            list_label = 'excluded'
+        if ids is not None:
             invalid_metafeature_ids = [
-                mf for mf in metafeature_ids if mf not in self._resources_info
+                mf for mf in ids if mf not in self._resources_info
             ]
             if len(invalid_metafeature_ids) > 0:
                 raise ValueError(
-                    'One or more requested metafeatures are not valid: {}'.
-                    format(invalid_metafeature_ids)
+                    'One or more {} metafeatures are not valid: {}'.
+                    format(list_label, invalid_metafeature_ids)
                 )
 
     def _validate_sample_shape(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
         if not sample_shape is None:
             if not type(sample_shape) in [tuple, list]:
@@ -285,8 +323,8 @@ class Metafeatures(object):
                     )
 
     def _validate_n_folds(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
         if not dtype_is_numeric(type(n_folds)) or (n_folds != int(n_folds)):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
@@ -312,12 +350,13 @@ class Metafeatures(object):
                         )
 
     def _validate_verbose(
-        self, X, Y, column_types, metafeature_ids, sample_shape, seed, n_folds,
-        verbose
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose
     ):
         if not type(verbose) is bool:
             raise ValueError("`verbose` must be of type bool.")
 
+    # todo: intelligently infer TEXT data type
     def _infer_column_types(self, X, Y):
         column_types = {}
         for col_name in X.columns:
@@ -329,10 +368,19 @@ class Metafeatures(object):
             if dtype_is_numeric(Y.dtype):
                 column_types[Y.name] = self.NUMERIC
             else:
+                # todo: get number of unique values in col_name, compute unique/total ratio. Use ratio to infer type
+
                 column_types[Y.name] = self.CATEGORICAL
         return column_types
 
+    def _get_metafeature_ids(self, exclude):
+        if exclude is not None:
+            return [mf for mf in self.list_metafeatures() if mf not in exclude]
+        else:
+            return self.list_metafeatures()
+
     def _get_resource(self, resource_id):
+        self._check_timeout()
         if not resource_id in self._resources:
             resource_info = self._resources_info[resource_id]
             f_name = resource_info["function"]
@@ -385,6 +433,7 @@ class Metafeatures(object):
     def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed):
         series_array = []
         for feature in X_sample.columns:
+            is_text = False
             feature_series = X_sample[feature].copy()
             col = feature_series.values
             dropped_nan_series = X_sampled_columns[feature].dropna(
@@ -397,7 +446,10 @@ class Metafeatures(object):
             )
             if column_types[feature_series.name] == self.CATEGORICAL:
                 feature_series = pd.get_dummies(feature_series)
-            series_array.append(feature_series)
+            elif column_types[feature_series.name] == self.TEXT:
+                is_text = True
+            if not is_text:
+                series_array.append(feature_series)
         return (pd.concat(series_array, axis=1, copy=False),)
 
     def _sample_columns(self, X, sample_shape, seed):
@@ -477,6 +529,20 @@ class Metafeatures(object):
                     no_nan_series
                 )
         return (numeric_features_with_no_missing_values,)
+
+    def _get_text_features_with_no_missing_values(
+				self, X_sample, column_types
+		):
+        text_features_with_no_missing_values = []
+        for feature in X_sample.columns:
+            if column_types[feature] == self.TEXT:
+                no_nan_series = X_sample[feature].dropna(
+					axis=0, how='any'
+				)
+                text_features_with_no_missing_values.append(
+					no_nan_series
+				)
+        return (text_features_with_no_missing_values,)
 
     def _get_binned_numeric_features_with_no_missing_values(
         self, numeric_features_array
