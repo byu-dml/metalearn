@@ -52,44 +52,46 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10)
 				tokens[token] += 1
 				number_of_tokens += 1
 
+	# todo: re-include these loops after deciding what to do with most_common_tokens,
+	# todo: most_common_alphanumeric_tokens, and most_common_numeric_tokens
 	# get most_common_alphanumeric_tokens
-	most_common_alphanumeric_tokens = []
-	for token in sorted(alphanumeric_tokens, key=alphanumeric_tokens.get, reverse=True):
-		most_common_alphanumeric_tokens.append(
-			{
-				"token": token,
-				"count": alphanumeric_tokens[token],
-				"ratio": alphanumeric_tokens[token]/len(tokens)
-			}
-		)
-		if len(most_common_alphanumeric_tokens) == most_common_limit:
-			break
-
-	# get most_common_numeric_tokens
-	most_common_numeric_tokens = []
-	for token in sorted(numeric_tokens, key=numeric_tokens.get, reverse=True):
-		most_common_numeric_tokens.append(
-			{
-				"token": token,
-				"count": numeric_tokens[token],
-				"ratio": numeric_tokens[token]/len(tokens)
-			}
-		)
-		if len(most_common_numeric_tokens) == most_common_limit:
-			break
-
-	# get most_common_tokens
-	most_common_tokens = []
-	for token in sorted(tokens, key=tokens.get, reverse=True):
-		most_common_tokens.append(
-			{
-				"token": token,
-				"count": tokens[token],
-				"ratio": tokens[token]/len(tokens)
-			}
-		)
-		if len(most_common_tokens) == most_common_limit:
-			break
+	# most_common_alphanumeric_tokens = []
+	# for token in sorted(alphanumeric_tokens, key=alphanumeric_tokens.get, reverse=True):
+	# 	most_common_alphanumeric_tokens.append(
+	# 		{
+	# 			"token": token,
+	# 			"count": alphanumeric_tokens[token],
+	# 			"ratio": alphanumeric_tokens[token]/len(tokens)
+	# 		}
+	# 	)
+	# 	if len(most_common_alphanumeric_tokens) == most_common_limit:
+	# 		break
+	#
+	# # get most_common_numeric_tokens
+	# most_common_numeric_tokens = []
+	# for token in sorted(numeric_tokens, key=numeric_tokens.get, reverse=True):
+	# 	most_common_numeric_tokens.append(
+	# 		{
+	# 			"token": token,
+	# 			"count": numeric_tokens[token],
+	# 			"ratio": numeric_tokens[token]/len(tokens)
+	# 		}
+	# 	)
+	# 	if len(most_common_numeric_tokens) == most_common_limit:
+	# 		break
+	#
+	# # get most_common_tokens
+	# most_common_tokens = []
+	# for token in sorted(tokens, key=tokens.get, reverse=True):
+	# 	most_common_tokens.append(
+	# 		{
+	# 			"token": token,
+	# 			"count": tokens[token],
+	# 			"ratio": tokens[token]/len(tokens)
+	# 		}
+	# 	)
+	# 	if len(most_common_tokens) == most_common_limit:
+	# 		break
 
 	# compute number_of_distinct_tokens
 	number_of_distinct_tokens = len(tokens)
@@ -98,6 +100,7 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10)
 	# compute ratio_of_tokens_containing_numeric_char
 	ratio_of_tokens_containing_numeric_char = 0 if number_of_tokens == 0 else (number_of_tokens_containing_numeric_char / number_of_tokens)
 
-	return most_common_tokens, most_common_alphanumeric_tokens, most_common_numeric_tokens, number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
+	# return most_common_tokens, most_common_alphanumeric_tokens, most_common_numeric_tokens, number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
+	return number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
 
 

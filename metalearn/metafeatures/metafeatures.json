@@ -2453,63 +2453,12 @@
                 "DecisionTreeAttributeMax"
             ]
         },
-        "MostCommonAlphanumericTokens": {
-            "function": "get_mfs_for_tokens_split_by_space",
-            "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
-            },
-            "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
-                "NumberOfTokens",
-                "NumberOfDistinctTokens",
-                "NumberOfTokensContainingNumericChar",
-                "RatioOfDistinctTokens",
-                "RatioOfTokensContainingNumericChar"
-            ]
-        },
-        "MostCommonTokens": {
-            "function": "get_mfs_for_tokens_split_by_space",
-            "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
-            },
-            "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
-                "NumberOfTokens",
-                "NumberOfDistinctTokens",
-                "NumberOfTokensContainingNumericChar",
-                "RatioOfDistinctTokens",
-                "RatioOfTokensContainingNumericChar"
-            ]
-        },
-        "MostCommonNumericTokens": {
-            "function": "get_mfs_for_tokens_split_by_space",
-            "arguments": {
-                "text_features_array": "NoNaNTextFeatures"
-            },
-            "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
-                "NumberOfTokens",
-                "NumberOfDistinctTokens",
-                "NumberOfTokensContainingNumericChar",
-                "RatioOfDistinctTokens",
-                "RatioOfTokensContainingNumericChar"
-            ]
-        },
         "NumberOfTokens": {
             "function": "get_mfs_for_tokens_split_by_space",
             "arguments": {
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
                 "NumberOfTokens",
                 "NumberOfDistinctTokens",
                 "NumberOfTokensContainingNumericChar",
@@ -2523,9 +2472,6 @@
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
                 "NumberOfTokens",
                 "NumberOfDistinctTokens",
                 "NumberOfTokensContainingNumericChar",
@@ -2539,9 +2485,6 @@
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
                 "NumberOfTokens",
                 "NumberOfDistinctTokens",
                 "NumberOfTokensContainingNumericChar",
@@ -2555,9 +2498,6 @@
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
                 "NumberOfTokens",
                 "NumberOfDistinctTokens",
                 "NumberOfTokensContainingNumericChar",
@@ -2571,9 +2511,6 @@
                 "text_features_array": "NoNaNTextFeatures"
             },
             "returns": [
-                "MostCommonTokens",
-                "MostCommonAlphanumericTokens",
-                "MostCommonNumericTokens",
                 "NumberOfTokens",
                 "NumberOfDistinctTokens",
                 "NumberOfTokensContainingNumericChar",
