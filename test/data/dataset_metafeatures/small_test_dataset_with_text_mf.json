@@ -59,25 +59,6 @@
         "compute_time": 0.008306264877319336,
         "value": 0.05882352941176472
     },
-    "DecisionTreeAttributes": {
-        "compute_time": 0.0054242610931396484,
-        "value": [
-            2,
-            5,
-            1,
-            1
-        ]
-    },
-    "DecisionTreeBranchLengths": {
-        "compute_time": 0.0054149627685546875,
-        "value": [
-            1,
-            3,
-            3,
-            3,
-            3
-        ]
-    },
     "DecisionTreeHeight": {
         "compute_time": 0.004971981048583984,
         "value": 4
@@ -85,15 +66,6 @@
     "DecisionTreeLeafCount": {
         "compute_time": 0.004971981048583984,
         "value": 5
-    },
-    "DecisionTreeLevelSizes": {
-        "compute_time": 0.00550532341003418,
-        "value": [
-            1,
-            2,
-            2,
-            4
-        ]
     },
     "DecisionTreeNodeCount": {
         "compute_time": 0.004971981048583984,
