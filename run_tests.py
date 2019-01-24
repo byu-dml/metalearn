@@ -1,7 +1,7 @@
 import unittest
 
 # from test.metalearn.metafeatures.compare_with_openml import compare_with_openml
-from test.data.compute_dataset_metafeatures import compute_dataset_metafeatures
+# from test.data.compute_dataset_metafeatures import compute_dataset_metafeatures
 from test.metalearn.metafeatures.test_metafeatures import metafeatures_suite
 # from test.metalearn.metafeatures.benchmark_metafeatures import (
 #     run_metafeature_benchmark, compare_metafeature_benchmarks

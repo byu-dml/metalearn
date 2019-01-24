@@ -698,3 +698,4 @@ class MetafeaturesTestCase(unittest.TestCase):
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
+
