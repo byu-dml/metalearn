@@ -232,6 +232,42 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         self._report_test_failures(test_failures, test_name)
 
+    def test_numeric_targets(self):
+        """ Test Metafeatures().compute() with numeric targets
+        """
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            metafeatures = Metafeatures()
+            column_types = dataset["column_types"].copy()
+            column_types[dataset["Y"].name] = metafeatures.NUMERIC
+            computed_mfs = metafeatures.compute(
+                X=dataset["X"], Y=pd.Series(np.random.rand(dataset["Y"].shape[0]),
+                name=dataset["Y"].name), seed=CORRECTNESS_SEED, 
+                column_types=column_types
+            )
+            known_mfs = dataset["known_metafeatures"]
+            target_dependent_metafeatures = Metafeatures.list_metafeatures(
+                "target_dependent"
+            )
+            for mf_name in target_dependent_metafeatures:
+                known_mfs[mf_name] = {
+                    Metafeatures.VALUE_KEY: Metafeatures.NUMERIC_TARGETS,
+                    Metafeatures.COMPUTE_TIME_KEY: 0.
+                }
+
+            required_checks = {
+                self._check_correctness: [
+                    computed_mfs, known_mfs, dataset_filename
+                ],
+                self._check_compare_metafeature_lists: [
+                    computed_mfs, known_mfs, dataset_filename
+                ]
+            }
+            test_failures.update(self._perform_checks(required_checks))
+
+        self._report_test_failures(test_failures, test_name)
+
     def test_request_metafeatures(self):
         SUBSET_LENGTH = 20
         test_failures = {}
