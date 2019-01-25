@@ -65,11 +65,6 @@ class Metafeatures(object):
             return list(filter(
                 cls._resource_is_target_dependent, cls.IDS
             ))
-        # Once we have metafeatures for numeric targets, update this group
-        elif group == "numeric_targets":
-            return list(filter(
-                cls._resource_is_target_dependent, cls.IDS
-            ))
         else:
             raise ValueError(f"Unknown group {group}")
 

@@ -247,10 +247,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 column_types=column_types
             )
             known_mfs = dataset["known_metafeatures"]
-            numeric_target_metafeatures = Metafeatures.list_metafeatures(
-                "numeric_targets"
+            target_dependent_metafeatures = Metafeatures.list_metafeatures(
+                "target_dependent"
             )
-            for mf_name in numeric_target_metafeatures:
+            for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
                     Metafeatures.VALUE_KEY: Metafeatures.NUMERIC_TARGETS,
                     Metafeatures.COMPUTE_TIME_KEY: 0.
