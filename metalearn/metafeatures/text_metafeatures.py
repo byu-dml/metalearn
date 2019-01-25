@@ -1,3 +1,9 @@
+from collections import Counter
+from itertools import chain
+
+import numpy as np
+import pandas as pd
+
 from .common_operations import *
 
 def get_string_lengths_array_from_text_features(text_features_array):
@@ -21,47 +27,65 @@ def get_string_length_kurtosis(string_lengths_array):
 	return profile_distribution(kurtoses)
 
 def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10):
-	tokens = {}
-	alphanumeric_tokens = {}
-	numeric_tokens = {}
-	number_of_tokens = 0
-	number_of_tokens_containing_numeric_char = 0
 
-	# make dictionaries of token:count
+	def isnumeric(token):
+		try:
+			float(token)
+		except ValueError:
+			return False
+		return True
+
+	def contains_numeric(token):
+		return any([char.isdigit() for char in token])
+
+	def flatten_nested_list(nested_list):
+		return list(chain.from_iterable(nested_list))
+
+	def filter_and_aggregate(tokens_series, f):
+		filtered_tokens = tokens_series.combine(tokens_series.apply(f), lambda tokens, mask: np.array(tokens)[mask.astype(bool)].tolist())
+		return flatten_nested_list(filtered_tokens)
+
+	isnumeric = np.vectorize(isnumeric, otypes=[object])
+	isalnum = np.vectorize(str.isalnum, otypes=[object])
+	contains_numeric = np.vectorize(contains_numeric, otypes=[object])
+
+	tokens = []
+	numeric_tokens = []
+	alphanumeric_tokens = []
+	contains_numeric_tokens = []
+
 	for feature in text_features_array:
-		for text in feature:
-			for token in text.split(" "):
-				# update numeric_tokens
-				if token.isdigit():
-					if token not in numeric_tokens:
-						numeric_tokens[token] = 0
-					numeric_tokens[token] += 1
-				# update alphanumeric_tokens
-				elif token.isalnum():
-					if token not in alphanumeric_tokens:
-						alphanumeric_tokens[token] = 0
-					alphanumeric_tokens[token] += 1
+		feature_tokens = feature.apply(str.split)
+		tokens.extend(flatten_nested_list(feature_tokens))
+		numeric_tokens.extend(filter_and_aggregate(feature_tokens, isnumeric))
+		alphanumeric_tokens.extend(filter_and_aggregate(feature_tokens, isalnum))
+		contains_numeric_tokens.extend(filter_and_aggregate(feature_tokens, contains_numeric))
 
-				# update number_of_tokens_containing_numeric_char
-				if any(char.isdigit() for char in token):
-					number_of_tokens_containing_numeric_char += 1
+	token_counts = Counter(tokens)
+	numeric_token_counts = Counter(numeric_tokens)
+	alphanumeric_token_counts = Counter(alphanumeric_tokens)
+	contains_numeric_token_counts = Counter(contains_numeric_tokens)
 
-				# update tokens
-				if token not in tokens:
-					tokens[token] = 0
-				tokens[token] += 1
-				number_of_tokens += 1
+	number_of_tokens = len(tokens)
+	number_of_distinct_tokens = len(token_counts)
+	number_of_tokens_containing_numeric_char = len(contains_numeric_tokens)
+
+	ratio_of_distinct_tokens = 0 if number_of_tokens == 0 else (number_of_distinct_tokens / number_of_tokens)
+	ratio_of_tokens_containing_numeric_char = 0 if number_of_tokens == 0 else (number_of_tokens_containing_numeric_char / number_of_tokens)
+
+	return number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
+
 
 	# todo: re-include these loops after deciding what to do with most_common_tokens,
 	# todo: most_common_alphanumeric_tokens, and most_common_numeric_tokens
 	# get most_common_alphanumeric_tokens
 	# most_common_alphanumeric_tokens = []
-	# for token in sorted(alphanumeric_tokens, key=alphanumeric_tokens.get, reverse=True):
+	# for token in sorted(alphanumeric_token_counts, key=alphanumeric_token_counts.get, reverse=True):
 	# 	most_common_alphanumeric_tokens.append(
 	# 		{
 	# 			"token": token,
-	# 			"count": alphanumeric_tokens[token],
-	# 			"ratio": alphanumeric_tokens[token]/len(tokens)
+	# 			"count": alphanumeric_token_counts[token],
+	# 			"ratio": alphanumeric_token_counts[token]/len(token_counts)
 	# 		}
 	# 	)
 	# 	if len(most_common_alphanumeric_tokens) == most_common_limit:
@@ -69,12 +93,12 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10)
 	#
 	# # get most_common_numeric_tokens
 	# most_common_numeric_tokens = []
-	# for token in sorted(numeric_tokens, key=numeric_tokens.get, reverse=True):
+	# for token in sorted(numeric_token_counts, key=numeric_token_counts.get, reverse=True):
 	# 	most_common_numeric_tokens.append(
 	# 		{
 	# 			"token": token,
-	# 			"count": numeric_tokens[token],
-	# 			"ratio": numeric_tokens[token]/len(tokens)
+	# 			"count": numeric_token_counts[token],
+	# 			"ratio": numeric_token_counts[token]/len(token_counts)
 	# 		}
 	# 	)
 	# 	if len(most_common_numeric_tokens) == most_common_limit:
@@ -82,25 +106,13 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10)
 	#
 	# # get most_common_tokens
 	# most_common_tokens = []
-	# for token in sorted(tokens, key=tokens.get, reverse=True):
-	# 	most_common_tokens.append(
+	# for token in sorted(token_counts, key=token_counts.get, reverse=True):
+	# 	most_common_token_counts.append(
 	# 		{
 	# 			"token": token,
-	# 			"count": tokens[token],
-	# 			"ratio": tokens[token]/len(tokens)
+	# 			"count": token_counts[token],
+	# 			"ratio": token_counts[token]/len(token_counts)
 	# 		}
 	# 	)
 	# 	if len(most_common_tokens) == most_common_limit:
 	# 		break
-
-	# compute number_of_distinct_tokens
-	number_of_distinct_tokens = len(tokens)
-	# compute ratio_of_distinct_tokens
-	ratio_of_distinct_tokens = 0 if number_of_tokens == 0 else (number_of_distinct_tokens / number_of_tokens)
-	# compute ratio_of_tokens_containing_numeric_char
-	ratio_of_tokens_containing_numeric_char = 0 if number_of_tokens == 0 else (number_of_tokens_containing_numeric_char / number_of_tokens)
-
-	# return most_common_tokens, most_common_alphanumeric_tokens, most_common_numeric_tokens, number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
-	return number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
-
-
