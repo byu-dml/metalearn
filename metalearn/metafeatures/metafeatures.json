@@ -3885,24 +3885,6 @@
                 "MaxKurtosisOfStringLengthOfTextFeatures"
             ]
         },
-        "DecisionTreeLevelSizes": {
-            "function": "get_decision_tree_level_sizes",
-            "arguments": {
-                "tree": "TraversedDecisionTree"
-            },
-            "returns": [
-                "DecisionTreeLevelSizes",
-                "MeanDecisionTreeLevelSize",
-                "StdevDecisionTreeLevelSize",
-                "SkewDecisionTreeLevelSize",
-                "KurtosisDecisionTreeLevelSize",
-                "MinDecisionTreeLevelSize",
-                "Quartile1DecisionTreeLevelSize",
-                "Quartile2DecisionTreeLevelSize",
-                "Quartile3DecisionTreeLevelSize",
-                "MaxDecisionTreeLevelSize"
-            ]
-        },
         "MeanDecisionTreeLevelSize": {
             "function": "get_decision_tree_level_sizes",
             "arguments": {
@@ -4063,24 +4045,6 @@
                 "Quartile2DecisionTreeLevelSize",
                 "Quartile3DecisionTreeLevelSize",
                 "MaxDecisionTreeLevelSize"
-            ]
-        },
-        "DecisionTreeBranchLengths": {
-            "function": "get_decision_tree_branch_lengths",
-            "arguments": {
-                "tree": "TraversedDecisionTree"
-            },
-            "returns": [
-                "DecisionTreeBranchLengths",
-                "MeanDecisionTreeBranchLength",
-                "StdevDecisionTreeBranchLength",
-                "SkewDecisionTreeBranchLength",
-                "KurtosisDecisionTreeBranchLength",
-                "MinDecisionTreeBranchLength",
-                "Quartile1DecisionTreeBranchLength",
-                "Quartile2DecisionTreeBranchLength",
-                "Quartile3DecisionTreeBranchLength",
-                "MaxDecisionTreeBranchLength"
             ]
         },
         "MeanDecisionTreeBranchLength": {
@@ -4290,24 +4254,6 @@
                 "DecisionTreeWidth"
             ]
         },
-        "DecisionTreeAttributes": {
-            "function": "get_decision_tree_attributes",
-            "arguments": {
-                "tree": "DecisionTree"
-            },
-            "returns": [
-                "DecisionTreeAttributes",
-                "MeanDecisionTreeAttribute",
-                "StdevDecisionTreeAttribute",
-                "SkewDecisionTreeAttribute",
-                "KurtosisDecisionTreeAttribute",
-                "MinDecisionTreeAttribute",
-                "Quartile1DecisionTreeAttribute",
-                "Quartile2DecisionTreeAttribute",
-                "Quartile3DecisionTreeAttribute",
-                "MaxDecisionTreeAttribute"
-            ]
-        },
         "MeanDecisionTreeAttribute": {
             "function": "get_decision_tree_attributes",
             "arguments": {
@@ -4468,6 +4414,71 @@
                 "Quartile2DecisionTreeAttribute",
                 "Quartile3DecisionTreeAttribute",
                 "MaxDecisionTreeAttribute"
+            ]
+        },
+        "NumberOfTokens": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "NumberOfDistinctTokens": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "NumberOfTokensContainingNumericChar": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "RatioOfDistinctTokens": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "RatioOfTokensContainingNumericChar": {
+            "function": "get_mfs_for_tokens_split_by_space",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokens",
+                "NumberOfDistinctTokens",
+                "NumberOfTokensContainingNumericChar",
+                "RatioOfDistinctTokens",
+                "RatioOfTokensContainingNumericChar"
             ]
         }
     }
