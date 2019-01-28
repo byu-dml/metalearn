@@ -1,7 +1,7 @@
 arff2pandas==1.0.1
 jsonschema==2.6.0
 liac-arff==2.3
-numpy==1.15.2
+numpy==1.15.4
 pandas==0.23.4
 python-dateutil==2.7.3
 pytz==2018.5
