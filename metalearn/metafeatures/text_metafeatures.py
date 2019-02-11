@@ -26,8 +26,7 @@ def get_string_length_kurtosis(string_lengths_array):
 	kurtoses = [feature.kurtosis() for feature in string_lengths_array]
 	return profile_distribution(kurtoses)
 
-def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10):
-
+def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10, delimeter=" "):
 	def isnumeric(token):
 		try:
 			float(token)
@@ -55,7 +54,7 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10)
 	contains_numeric_tokens = []
 
 	for feature in text_features_array:
-		feature_tokens = feature.apply(str.split)
+		feature_tokens = feature.str.split(delimeter)
 		tokens.extend(flatten_nested_list(feature_tokens))
 		numeric_tokens.extend(filter_and_aggregate(feature_tokens, isnumeric))
 		alphanumeric_tokens.extend(filter_and_aggregate(feature_tokens, isalnum))
@@ -116,3 +115,6 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10)
 	# 	)
 	# 	if len(most_common_tokens) == most_common_limit:
 	# 		break
+
+def get_mfs_for_tokens_split_by_punctuation(text_features_array, most_common_limit=10):
+	return get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit, "[:punct:]")

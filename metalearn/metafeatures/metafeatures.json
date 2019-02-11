@@ -4480,6 +4480,71 @@
                 "RatioOfDistinctTokens",
                 "RatioOfTokensContainingNumericChar"
             ]
+        },
+        "NumberOfTokensSplitByPunctuation": {
+            "function": "get_mfs_for_tokens_split_by_punctuation",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokensSplitByPunctuation",
+                "NumberOfDistinctTokensSplitByPunctuation",
+                "NumberOfTokensSplitByPunctuationContainingNumericChar",
+                "RatioOfDistinctTokensSplitByPunctuation",
+                "RatioOfTokensSplitByPunctuationContainingNumericChar"
+            ]
+        },
+        "NumberOfDistinctTokensSplitByPunctuation": {
+            "function": "get_mfs_for_tokens_split_by_punctuation",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokensSplitByPunctuation",
+                "NumberOfDistinctTokensSplitByPunctuation",
+                "NumberOfTokensSplitByPunctuationContainingNumericChar",
+                "RatioOfDistinctTokensSplitByPunctuation",
+                "RatioOfTokensSplitByPunctuationContainingNumericChar"
+            ]
+        },
+        "NumberOfTokensSplitByPunctuationContainingNumericChar": {
+            "function": "get_mfs_for_tokens_split_by_punctuation",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokensSplitByPunctuation",
+                "NumberOfDistinctTokensSplitByPunctuation",
+                "NumberOfTokensSplitByPunctuationContainingNumericChar",
+                "RatioOfDistinctTokensSplitByPunctuation",
+                "RatioOfTokensSplitByPunctuationContainingNumericChar"
+            ]
+        },
+        "RatioOfDistinctTokensSplitByPunctuation": {
+            "function": "get_mfs_for_tokens_split_by_punctuation",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokensSplitByPunctuation",
+                "NumberOfDistinctTokensSplitByPunctuation",
+                "NumberOfTokensSplitByPunctuationContainingNumericChar",
+                "RatioOfDistinctTokensSplitByPunctuation",
+                "RatioOfTokensSplitByPunctuationContainingNumericChar"
+            ]
+        },
+        "RatioOfTokensSplitByPunctuationContainingNumericChar": {
+            "function": "get_mfs_for_tokens_split_by_punctuation",
+            "arguments": {
+                "text_features_array": "NoNaNTextFeatures"
+            },
+            "returns": [
+                "NumberOfTokensSplitByPunctuation",
+                "NumberOfDistinctTokensSplitByPunctuation",
+                "NumberOfTokensSplitByPunctuationContainingNumericChar",
+                "RatioOfDistinctTokensSplitByPunctuation",
+                "RatioOfTokensSplitByPunctuationContainingNumericChar"
+            ]
         }
     }
 }
