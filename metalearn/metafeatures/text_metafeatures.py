@@ -26,13 +26,25 @@ def get_string_length_kurtosis(string_lengths_array):
 	kurtoses = [feature.kurtosis() for feature in string_lengths_array]
 	return profile_distribution(kurtoses)
 
-def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10, delimeter=" "):
+def get_mfs_for_tokens_split_by_punctuation(text_features_array, most_common_limit=10):
+	return get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, "[.?!\\-_(),:;/{}]")
+
+def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10):
+	return get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, " ")
+
+def get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, delimeter):
 	def isnumeric(token):
 		try:
 			float(token)
 		except ValueError:
 			return False
 		return True
+
+	def is_not_empty(token):
+		if token:
+			return True
+		else:
+			return False
 
 	def contains_numeric(token):
 		return any([char.isdigit() for char in token])
@@ -55,7 +67,7 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10,
 
 	for feature in text_features_array:
 		feature_tokens = feature.str.split(delimeter)
-		tokens.extend(flatten_nested_list(feature_tokens))
+		tokens.extend(filter(is_not_empty, flatten_nested_list(feature_tokens)))
 		numeric_tokens.extend(filter_and_aggregate(feature_tokens, isnumeric))
 		alphanumeric_tokens.extend(filter_and_aggregate(feature_tokens, isalnum))
 		contains_numeric_tokens.extend(filter_and_aggregate(feature_tokens, contains_numeric))
@@ -73,7 +85,6 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10,
 	ratio_of_tokens_containing_numeric_char = 0 if number_of_tokens == 0 else (number_of_tokens_containing_numeric_char / number_of_tokens)
 
 	return number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
-
 
 	# todo: re-include these loops after deciding what to do with most_common_tokens,
 	# todo: most_common_alphanumeric_tokens, and most_common_numeric_tokens
@@ -116,5 +127,3 @@ def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10,
 	# 	if len(most_common_tokens) == most_common_limit:
 	# 		break
 
-def get_mfs_for_tokens_split_by_punctuation(text_features_array, most_common_limit=10):
-	return get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit, "[:punct:]")
