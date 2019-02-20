@@ -2,9 +2,11 @@ import warnings
 
 import numpy as np
 from pandas import DataFrame
+from sklearn import svm, datasets
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import cross_validate, StratifiedKFold
-from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score
+from sklearn.base import is_classifier
+from sklearn.model_selection import cross_validate, StratifiedKFold, cross_val_predict
+from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score, roc_auc_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
@@ -29,6 +31,7 @@ def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
         accuracy_scorer = make_scorer(accuracy_score)
         kappa_scorer = make_scorer(cohen_kappa_score)
         cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=cv_seed)
+        new_cross_val(pipeline, X.values, Y.values, cv, 1, scoring={'accuracy':accuracy_scorer, 'kappa':kappa_scorer})
         scores = cross_validate(
             pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
                 'accuracy': accuracy_scorer, 'kappa': kappa_scorer
@@ -37,6 +40,13 @@ def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
         err_rate = 1. - np.mean(scores['test_accuracy'])
         kappa = np.mean(scores['test_kappa'])
         return (err_rate, kappa)
+
+def new_cross_val(pipeline, X, y, cv, n_jobs, scoring):
+    scores = cross_val_predict(pipeline, X, y, cv=cv, n_jobs=n_jobs, method='predict_proba')
+    #still need to binarize the X data
+
+    #function taken from SKLearn Source code (sklearn.model_selection.cross_validate) and modified to include probabilites
+
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])
