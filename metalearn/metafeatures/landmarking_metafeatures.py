@@ -43,10 +43,19 @@ def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
 
 def new_cross_val(pipeline, X, y, cv, n_jobs, scoring):
     scores = cross_val_predict(pipeline, X, y, cv=cv, n_jobs=n_jobs, method='predict_proba')
-    #still need to binarize the X data
+    # binary_x = binarize(X)
+    roc_auc = 0
+    # roc_auc_score(binary_x, scores[0], average='weighted')
 
-    #function taken from SKLearn Source code (sklearn.model_selection.cross_validate) and modified to include probabilites
-
+def binarize(X):
+    binary = []
+    for value in np.unique(X):
+        for score in X:
+            if str(score) == value:
+                binary.append(1)
+            else:
+                binary.append(0)
+    return binary
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])
