@@ -31,7 +31,8 @@ def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
         accuracy_scorer = make_scorer(accuracy_score)
         kappa_scorer = make_scorer(cohen_kappa_score)
         cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=cv_seed)
-        new_cross_val(pipeline, X.values, Y.values, cv, 1, scoring={'accuracy':accuracy_scorer, 'kappa':kappa_scorer})
+        binary = binarize(X)
+        new_cross_val(pipeline, binary, Y.values, cv, 1, scoring={'accuracy':accuracy_scorer, 'kappa':kappa_scorer})
         scores = cross_validate(
             pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
                 'accuracy': accuracy_scorer, 'kappa': kappa_scorer
@@ -43,9 +44,8 @@ def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
 
 def new_cross_val(pipeline, X, y, cv, n_jobs, scoring):
     scores = cross_val_predict(pipeline, X, y, cv=cv, n_jobs=n_jobs, method='predict_proba')
-    # binary_x = binarize(X)
     roc_auc = 0
-    # roc_auc_score(binary_x, scores[0], average='weighted')
+    roc_auc_score(binary_x, scores, average='weighted')
 
 def binarize(X):
     binary = []
@@ -55,7 +55,7 @@ def binarize(X):
                 binary.append(1)
             else:
                 binary.append(0)
-    return binary
+    return np.array(binary)
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])
