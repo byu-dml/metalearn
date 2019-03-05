@@ -300,6 +300,15 @@
                 "Dimensionality"
             ]
         },
+        "NumberOfDistinctValues": {
+            "function": "get_distinct_values",
+            "arguments": {
+                "X": "X_raw"
+            },
+            "returns": [
+                "NumberOfDistinctValues"
+            ]
+        },
         "NumberOfMissingValues": {
             "function": "get_missing_values",
             "arguments": {

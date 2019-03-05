@@ -1,3 +1,5 @@
+from collections import Counter
+
 import numpy as np
 from pandas import DataFrame
 
@@ -30,6 +32,20 @@ def get_missing_values(X):
         ratio_instances_with_missing, number_features_with_missing,
         ratio_features_with_missing
     )
+
+# todo: there are many "values" related metafeatures that could also be computed within this method to save time
+def get_distinct_values(X):
+    values = []
+    for item, row in X.iterrows():
+        row.dropna()
+        row = row[~row.isnull()]
+        values.extend(row)
+        pass
+
+    value_count = Counter(values)
+    number_of_distinct_values = len(value_count)
+
+    return [number_of_distinct_values]
 
 def get_class_stats(Y):
     classes = Y.unique()
