@@ -61,5 +61,14 @@
             "text_col_2": "TEXT",
             "class": "CATEGORICAL"
         }
+    },
+    {
+      "filename": "landmarking_test.arff",
+      "target_class_name": "class",
+      "column_types": {
+        "first": "NUMERIC",
+        "second": "NUMERIC",
+        "class": "CATEGORICAL"
+      }
     }
 ]

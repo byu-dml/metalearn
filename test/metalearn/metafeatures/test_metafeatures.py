@@ -6,6 +6,7 @@ import math
 import os
 import random
 import time
+import traceback
 import copy
 import unittest
 
@@ -153,8 +154,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     column_types=dataset["column_types"]
                 )
         except Exception as e:
-            exc_type = type(e).__name__
-            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+            # exc_type = type(e).__name__
+            # self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+            self.fail(traceback.format_exc())
 
     def test_correctness(self):
         """Tests that metafeatures are computed correctly, for known datasets.
@@ -243,7 +245,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             column_types[dataset["Y"].name] = metafeatures.NUMERIC
             computed_mfs = metafeatures.compute(
                 X=dataset["X"], Y=pd.Series(np.random.rand(dataset["Y"].shape[0]),
-                name=dataset["Y"].name), seed=CORRECTNESS_SEED, 
+                name=dataset["Y"].name), seed=CORRECTNESS_SEED,
                 column_types=column_types
             )
             known_mfs = dataset["known_metafeatures"]
@@ -393,9 +395,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 )
 
     def test_soft_timeout(self):
-        """Tests Metafeatures().compute() with timeout set"""   
-        test_name = inspect.stack()[0][3]   
-        test_failures = {} 
+        """Tests Metafeatures().compute() with timeout set"""
+        test_name = inspect.stack()[0][3]
+        test_failures = {}
         for dataset_filename, dataset in self.datasets.items():
             metafeatures = Metafeatures()
 
@@ -734,4 +736,3 @@ class MetafeaturesTestCase(unittest.TestCase):
 def metafeatures_suite():
     test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
     return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
-
