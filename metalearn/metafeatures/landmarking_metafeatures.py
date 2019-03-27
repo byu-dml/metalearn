@@ -30,8 +30,6 @@ def run_pipeline(X, Y, pipeline, n_folds, cv_seed):
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=RuntimeWarning)  # suppress sklearn warnings
         warnings.filterwarnings("ignore", category=UserWarning)  # suppress sklearn warnings
-        accuracy_scorer = make_scorer(accuracy_score)
-        kappa_scorer = make_scorer(cohen_kappa_score)
         cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=cv_seed)
         results = new_cross_val(pipeline, X.values, Y.values, cv, 1)
         return (results[0], results[1])
@@ -48,9 +46,30 @@ def new_cross_val(pipeline, X, y, cv, n_jobs):
         y_pred = pipeline.predict(X_test)
         accuracy.append(accuracy_score(y_test, y_pred))
         kappa.append(cohen_kappa_score(y_test, y_pred))
+        #roc_auc.append(binarize(y_test, y_pred))
     err_rate = 1. - np.mean(accuracy)
     kappa = np.mean(kappa)
+    # roc = np.mean(roc_auc)
     return (err_rate, kappa)
+
+def binarize(y_test, y_proba):
+    roc_auc = []
+    for value in np.unique(y_test):
+        binary = []
+        for val in y_test:
+            if value == val:
+                binary.append(1)
+            else:
+                binary.append(0)
+        print(len(binary))
+        print(binary)
+        print(len(y_proba))
+        print(y_proba)
+        print(roc_auc_score(binary, y_proba, average='weighted'))
+        roc_auc.append(roc_auc_score(binary, y_proba, average='weighted'))
+    return np.mean(roc_auc)
+
+
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])

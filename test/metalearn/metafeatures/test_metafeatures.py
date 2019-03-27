@@ -17,6 +17,8 @@ from metalearn import Metafeatures
 from test.config import CORRECTNESS_SEED, METADATA_PATH
 from test.data.dataset import read_dataset
 from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
+from sklearn.model_selection import cross_validate, StratifiedKFold
+from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score
 
 FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
@@ -157,6 +159,24 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             # exc_type = type(e).__name__
             # self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
             self.fail(traceback.format_exc())
+
+    # def test_cross_validate(self):
+    #     accuracy_scorer = make_scorer(accuracy_score)
+    #     kappa_scorer = make_scorer(cohen_kappa_score)
+    #     cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=cv_seed)
+    #     scores = cross_validate(
+    #         pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
+    #             'accuracy': accuracy_scorer, 'kappa': kappa_scorer
+    #         }
+    #     )
+    #     err_rate = 1. - np.mean(scores['test_accuracy'])
+    #     kappa = np.mean(scores['test_kappa'])
+    #     try:
+    #         assert(err_rate == run_pipeline()[0])
+    #         assert(kappa == run_pipeline()[1])
+    #     except Exception as e:
+    #         self.fail(traceback.format_exc())
+
 
     def test_correctness(self):
         """Tests that metafeatures are computed correctly, for known datasets.
