@@ -139,7 +139,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
     def _perform_checks(self, functions):
         check = {}
-        for function, args in functions.items():
+        for function, args in functions:
             check = function(*args)
             if check != {}:
                 break
@@ -175,7 +175,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     computed_mfs, known_mfs, dataset_filename
                 ]
             }
-            test_failures.update(self._perform_checks(required_checks))
+            test_failures.update(self._perform_checks(required_checks.items()))
 
         self._report_test_failures(test_failures, test_name)
 
@@ -195,7 +195,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                         computed_mfs, known_mfs, dataset_filename
                     ]
                 }
-                test_failures.update(self._perform_checks(required_checks))
+                test_failures.update(self._perform_checks(required_checks.items()))
 
         self._report_test_failures(test_failures, test_name)
 
@@ -228,7 +228,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     computed_mfs, known_mfs, dataset_filename
                 ]
             }
-            test_failures.update(self._perform_checks(required_checks))
+            test_failures.update(self._perform_checks(required_checks.items()))
 
         self._report_test_failures(test_failures, test_name)
 
@@ -264,7 +264,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     computed_mfs, known_mfs, dataset_filename
                 ]
             }
-            test_failures.update(self._perform_checks(required_checks))
+            test_failures.update(self._perform_checks(required_checks.items()))
 
         self._report_test_failures(test_failures, test_name)
 
@@ -285,7 +285,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     computed_mfs, known_metafeatures, dataset_filename
                 ]
             }
-            test_failures.update(self._perform_checks(required_checks))
+            test_failures.update(self._perform_checks(required_checks.items()))
             self.assertEqual(
                 metafeature_ids, list(computed_mfs.keys()),
                 "Compute did not return requested metafeatures"
@@ -309,7 +309,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     computed_mfs, known_metafeatures, dataset_filename
                 ]
             }
-            test_failures.update(self._perform_checks(required_checks))
+            test_failures.update(self._perform_checks(required_checks.items()))
             if any(mf_id in computed_mfs.keys() for mf_id in metafeature_ids):
                 self.assertTrue(False, "Metafeatures computed an excluded metafeature")
 
@@ -358,7 +358,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             required_checks[self._check_correctness] = [
                 computed_mfs, known_mfs, dataset_filename
             ]
-            test_failures.update(self._perform_checks(required_checks))
+            test_failures.update(self._perform_checks(required_checks.items()))
         self._report_test_failures(test_failures, test_name)
 
     def test_output_format(self):
@@ -428,7 +428,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     computed_mfs, known_mfs, dataset_filename
                 ]
             }
-        test_failures.update(self._perform_checks(required_checks))
+        test_failures.update(self._perform_checks(required_checks.items()))
         self._report_test_failures(test_failures, test_name)
 
 
