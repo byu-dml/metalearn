@@ -129,7 +129,7 @@ class Metafeatures(object):
         if sample_shape is None:
             sample_shape = (None, None)
         if seed is None:
-            seed = np.random.randint(2**32)
+            seed = np.random.randint(np.iinfo(np.int32).max)
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
             n_folds, verbose
