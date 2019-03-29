@@ -382,9 +382,9 @@ class Metafeatures(object):
             f = self._get_function(f_name)
             args, total_time = self._get_arguments(resource_id)
             return_resources = resource_info["returns"]
-            start_timestamp = time.time()
+            start_timestamp = time.perf_counter()
             computed_resources = f(**args)
-            compute_time = time.time() - start_timestamp
+            compute_time = time.perf_counter() - start_timestamp
             total_time += compute_time
             for res_id, computed_resource in zip(
                 return_resources, computed_resources
