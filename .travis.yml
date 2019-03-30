@@ -2,13 +2,9 @@ language: python
 python:
   - "3.6"
 
-# - pip install coverage
 install:
+  - pip install -r requirements.txt
   - python setup.py install
 
-#  --with-coverage --cover-package=gama
 script:
   - nosetests -s -v
-
-#after_success:
-# - bash <(curl -s https://codecov.io/bash)
