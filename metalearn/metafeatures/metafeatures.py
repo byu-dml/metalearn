@@ -240,6 +240,8 @@ class Metafeatures(object):
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
+        if X.empty:
+            raise ValueError('X must not be empty')
 
     def _validate_Y(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
@@ -247,6 +249,8 @@ class Metafeatures(object):
     ):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
+        if Y is not None and Y.shape[0] != X.shape[0]:
+            raise ValueError('Y must have the same number of rows as X')
 
     def _validate_column_types(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
@@ -325,9 +329,9 @@ class Metafeatures(object):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
         if n_folds < 2:
             raise ValueError(f"`n_folds` must be >= 2, but was {n_folds}")
-        if (Y is not None and 
-            column_types is not None and 
-            column_types[Y.name] != self.NUMERIC and 
+        if (Y is not None and
+            column_types is not None and
+            column_types[Y.name] != self.NUMERIC and
             metafeature_ids is not None):
             # when computing landmarking metafeatures, there must be at least
             # n_folds instances of each class of Y

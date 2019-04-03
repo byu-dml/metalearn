@@ -470,21 +470,21 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(X=np.zeros((500, 50)), Y=pd.Series(np.zeros(500)))
         self.assertEqual(str(cm.exception), expected_error_message1, fail_message1)
 
-        # with self.assertRaises(ValueError) as cm:
-        #     Metafeatures().compute(X=pd.DataFrame(np.zeros((0, 50))), Y=pd.Series(np.zeros(500)))
-        # self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((0, 50))), Y=pd.Series(np.zeros(500)))
+        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
 
-        # with self.assertRaises(ValueError) as cm:
-        #     Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 0))), Y=pd.Series(np.zeros(500)))
-        # self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 0))), Y=pd.Series(np.zeros(500)))
+        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
 
         with self.assertRaises(TypeError) as cm:
             Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.random.randint(2, size=500).astype("str"))
         self.assertEqual(str(cm.exception), expected_error_message3, fail_message3)
 
-        # with self.assertRaises(ValueError) as cm:
-        #     Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=pd.Series(np.random.randint(2, size=0), name="target").astype("str"))
-        # self.assertEqual(str(cm.exception), expected_error_message4, fail_message4)
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=pd.Series(np.random.randint(2, size=0), name="target").astype("str"))
+        self.assertEqual(str(cm.exception), expected_error_message4, fail_message4)
 
     def _check_invalid_metafeature_exception_string(self, exception_str, expected_str, invalid_metafeatures):
         """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
