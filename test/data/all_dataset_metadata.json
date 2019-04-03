@@ -24,21 +24,5 @@
     {
         "filename": "small_test_dataset.arff",
         "target_class_name": "class"
-    },
-    {
-        "filename": "baseball.csv",
-        "target_class_name": "Hall_of_Fame",
-        "index_col_name": "d3mIndex"
-    },
-    {
-      "filename": "train.csv",
-      "target_class_name": "Hall_of_Fame",
-      "index_col_name": "d3mIndex"
-    },
-    {
-      "filename": "test.csv",
-      "target_class_name": "Hall_of_Fame",
-      "index_col_name": "d3mIndex"
     }
-
 ]

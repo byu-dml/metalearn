@@ -6,7 +6,6 @@ import math
 import os
 import random
 import time
-import traceback
 import copy
 import unittest
 
@@ -17,8 +16,11 @@ from metalearn import Metafeatures
 from test.config import CORRECTNESS_SEED, METADATA_PATH
 from test.data.dataset import read_dataset
 from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
-from sklearn.model_selection import cross_validate, StratifiedKFold
+from metalearn.metafeatures.landmarking_metafeatures import new_cross_val
+from sklearn.pipeline import Pipeline
 from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import cross_validate, StratifiedKFold
 
 FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
@@ -156,27 +158,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     column_types=dataset["column_types"]
                 )
         except Exception as e:
-            # exc_type = type(e).__name__
-            # self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
-            self.fail(traceback.format_exc())
-
-    # def test_cross_validate(self):
-    #     accuracy_scorer = make_scorer(accuracy_score)
-    #     kappa_scorer = make_scorer(cohen_kappa_score)
-    #     cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=cv_seed)
-    #     scores = cross_validate(
-    #         pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
-    #             'accuracy': accuracy_scorer, 'kappa': kappa_scorer
-    #         }
-    #     )
-    #     err_rate = 1. - np.mean(scores['test_accuracy'])
-    #     kappa = np.mean(scores['test_kappa'])
-    #     try:
-    #         assert(err_rate == run_pipeline()[0])
-    #         assert(kappa == run_pipeline()[1])
-    #     except Exception as e:
-    #         self.fail(traceback.format_exc())
-
+            exc_type = type(e).__name__
+            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
 
     def test_correctness(self):
         """Tests that metafeatures are computed correctly, for known datasets.
@@ -471,8 +454,12 @@ class MetafeaturesTestCase(unittest.TestCase):
 
         expected_error_message1 = "X must be of type pandas.DataFrame"
         fail_message1 = "We expect a user friendly message when the features passed to compute is not a Pandas.DataFrame."
-        expected_error_message2 = "Y must be of type pandas.Series"
-        fail_message2 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
+        expected_error_message2 = "X must not be empty"
+        fail_message2 = "We expect a user friendly message when the features passed to compute are empty."
+        expected_error_message3 = "Y must be of type pandas.Series"
+        fail_message3 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
+        expected_error_message4 = "Y must have the same number of rows as X"
+        fail_message4 = "We expect a user friendly message when the target column passed to compute has a number of rows different than X's."
         # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
 
         with self.assertRaises(TypeError) as cm:
@@ -483,9 +470,21 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(X=np.zeros((500, 50)), Y=pd.Series(np.zeros(500)))
         self.assertEqual(str(cm.exception), expected_error_message1, fail_message1)
 
+        # with self.assertRaises(ValueError) as cm:
+        #     Metafeatures().compute(X=pd.DataFrame(np.zeros((0, 50))), Y=pd.Series(np.zeros(500)))
+        # self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+
+        # with self.assertRaises(ValueError) as cm:
+        #     Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 0))), Y=pd.Series(np.zeros(500)))
+        # self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+
         with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.zeros(500))
-        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.random.randint(2, size=500).astype("str"))
+        self.assertEqual(str(cm.exception), expected_error_message3, fail_message3)
+
+        # with self.assertRaises(ValueError) as cm:
+        #     Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=pd.Series(np.random.randint(2, size=0), name="target").astype("str"))
+        # self.assertEqual(str(cm.exception), expected_error_message4, fail_message4)
 
     def _check_invalid_metafeature_exception_string(self, exception_str, expected_str, invalid_metafeatures):
         """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
@@ -751,6 +750,24 @@ class MetafeaturesTestCase(unittest.TestCase):
         if Metafeatures.list_metafeatures() != mf_list_copy:
             mf_list.extend(mf_list_copy)
             self.assertTrue(False, "Metafeature list has been mutated")
+
+    def test_cross_validation(self):
+        X = self.dummy_features
+        Y = self.dummy_target
+        pipeline = Pipeline([('naive_bayes', GaussianNB())])
+        accuracy_scorer = make_scorer(accuracy_score)
+        kappa_scorer = make_scorer(cohen_kappa_score)
+        cv = StratifiedKFold(n_splits=2, shuffle=True, random_state=1)
+        scores = cross_validate(
+            pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
+                'accuracy': accuracy_scorer, 'kappa': kappa_scorer
+            }
+        )
+        err_rate = 1. - np.mean(scores['test_accuracy'])
+        kappa = np.mean(scores['test_kappa'])
+        calculated_scores = new_cross_val(pipeline, X.values, Y.values, cv, 1)
+        self.assertEqual(err_rate, calculated_scores[0])
+        self.assertEqual(kappa, calculated_scores[1])
 
 
 def metafeatures_suite():
