@@ -445,7 +445,7 @@ class MetafeaturesTestCase(unittest.TestCase):
         self.invalid_metafeature_message_contains_fail_message = "Error message indicating invalid metafeatures should include names of invalid features."
 
     def test_dataframe_input_error(self):
-        """ Tests if `compute` gives a user-friendly error when a TypeError occurs. """
+        """ Tests if `compute` gives a user-friendly error when a TypeError or ValueError occurs. """
 
         expected_error_message1 = "X must be of type pandas.DataFrame"
         fail_message1 = "We expect a user friendly message when the features passed to compute is not a Pandas.DataFrame."
