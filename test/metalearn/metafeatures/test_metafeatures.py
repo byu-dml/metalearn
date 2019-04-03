@@ -19,7 +19,10 @@ from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
 from metalearn.metafeatures.landmarking_metafeatures import new_cross_val
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_validate, StratifiedKFold
 
 FAIL_MESSAGE = "message"
@@ -754,20 +757,25 @@ class MetafeaturesTestCase(unittest.TestCase):
     def test_cross_validation(self):
         X = self.dummy_features
         Y = self.dummy_target
-        pipeline = Pipeline([('naive_bayes', GaussianNB())])
+        pipelines = (Pipeline([('naive_bayes', GaussianNB())]), Pipeline([('knn_1', KNeighborsClassifier(n_neighbors = 1, n_jobs=1))]),
+            Pipeline([('decision_stump', DecisionTreeClassifier(criterion='entropy', splitter='best', max_depth=1, random_state=0))]),
+            Pipeline([('random_tree', DecisionTreeClassifier(criterion='entropy', splitter='random', max_depth=2,random_state=0))]),
+            Pipeline([('lda', LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'))]))
         accuracy_scorer = make_scorer(accuracy_score)
         kappa_scorer = make_scorer(cohen_kappa_score)
         cv = StratifiedKFold(n_splits=2, shuffle=True, random_state=1)
-        scores = cross_validate(
-            pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
-                'accuracy': accuracy_scorer, 'kappa': kappa_scorer
-            }
-        )
-        err_rate = 1. - np.mean(scores['test_accuracy'])
-        kappa = np.mean(scores['test_kappa'])
-        calculated_scores = new_cross_val(pipeline, X.values, Y.values, cv, 1)
-        self.assertEqual(err_rate, calculated_scores[0])
-        self.assertEqual(kappa, calculated_scores[1])
+        for pipeline in pipelines:
+            scores = cross_validate(
+                pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
+                    'accuracy': accuracy_scorer, 'kappa': kappa_scorer
+                }
+            )
+            err_rate = 1. - np.mean(scores['test_accuracy'])
+            kappa = np.mean(scores['test_kappa'])
+            calculated_scores = new_cross_val(pipeline, X.values, Y.values, cv, 1)
+            self.assertEqual(err_rate, calculated_scores[0])
+            self.assertEqual(kappa, calculated_scores[1])
+
 
 
 def metafeatures_suite():

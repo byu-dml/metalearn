@@ -39,6 +39,7 @@ def new_cross_val(pipeline, X, y, cv, n_jobs):
     cv = check_cv(cv, y, classifier=is_classifier(pipeline))
     accuracy = []
     kappa = []
+    #roc_auc = []
     for train, test in cv.split(X, y):
         X_train, X_test = X[train], X[test]
         y_train, y_test = y[train], y[test]
@@ -46,9 +47,23 @@ def new_cross_val(pipeline, X, y, cv, n_jobs):
         y_pred = pipeline.predict(X_test)
         accuracy.append(accuracy_score(y_test, y_pred))
         kappa.append(cohen_kappa_score(y_test, y_pred))
+        #roc_auc.append(binarize(y_test, y_pred))
     err_rate = 1. - np.mean(accuracy)
     kappa = np.mean(kappa)
+    # roc = np.mean(roc_auc)
     return (err_rate, kappa)
+
+def binarize(y_test, y_proba):
+    roc_auc = []
+    for value in np.unique(y_test):
+        binary = []
+        for val in y_test:
+            if value == val:
+                binary.append(1)
+            else:
+                binary.append(0)
+        roc_auc.append(roc_auc_score(binary, y_proba, average='weighted'))
+    return np.mean(roc_auc)
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])
