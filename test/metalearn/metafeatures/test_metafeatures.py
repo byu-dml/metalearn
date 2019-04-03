@@ -738,6 +738,16 @@ class MetafeaturesTestCase(unittest.TestCase):
            exc_type = type(e).__name__
            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
 
+    def test_target_column_with_one_unique_value(self):
+        # should not raise an error
+        X = pd.DataFrame(np.random.rand(100, 7))
+        Y = pd.Series(np.random.randint(0, 1, 100), name="target").astype("str")
+        try:
+            Metafeatures().compute(X, Y)
+        except Exception as e:
+           exc_type = type(e).__name__
+           self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+
     def test_list_metafeatures(self):
         mf_list = Metafeatures.list_metafeatures()
         mf_list_copy = copy.deepcopy(mf_list)
