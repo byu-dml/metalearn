@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/byu-dml/metalearn.png)](https://travis-ci.org/byu-dml/metalearn)
+
 # metalearn
 The Data Mining Lab of the Computer Science Department of Brigham Young
 University (BYU-DML) python library of meta-learning tools.
@@ -15,3 +17,4 @@ This package, openml, should be accessed by git cloning the following
 repository:
 https://github.com/openml/openml-python.git
 The repository contains instructions for pip installing this package.
+ 
