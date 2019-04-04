@@ -21,6 +21,7 @@ FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
 TEST_NAME = "test_name"
 
+
 class MetafeaturesWithDataTestCase(unittest.TestCase):
     """ Contains tests for Metafeatures that require loading data first. """
 
@@ -139,7 +140,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
     def _perform_checks(self, functions):
         check = {}
-        for function, args in functions.items():
+        for function, args in functions:
             check = function(*args)
             if check != {}:
                 break
@@ -167,14 +168,12 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 column_types=dataset["column_types"]
             )
             known_mfs = dataset["known_metafeatures"]
-            required_checks = {
-                self._check_correctness: [
-                    computed_mfs, known_mfs, dataset_filename
-                ],
-                self._check_compare_metafeature_lists: [
-                    computed_mfs, known_mfs, dataset_filename
-                ]
-            }
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs, known_mfs, dataset_filename]),
+                (self._check_compare_metafeature_lists,
+                 [computed_mfs, known_mfs, dataset_filename])
+            ]
             test_failures.update(self._perform_checks(required_checks))
 
         self._report_test_failures(test_failures, test_name)
@@ -190,11 +189,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     metafeature_ids=[mf_id],
                     column_types=dataset["column_types"]
                 )
-                required_checks = {
-                    self._check_correctness: [
-                        computed_mfs, known_mfs, dataset_filename
-                    ]
-                }
+                required_checks = [
+                    (self._check_correctness,
+                     [computed_mfs, known_mfs, dataset_filename])
+                ]
                 test_failures.update(self._perform_checks(required_checks))
 
         self._report_test_failures(test_failures, test_name)
@@ -220,14 +218,12 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     Metafeatures.COMPUTE_TIME_KEY: 0.
                 }
 
-            required_checks = {
-                self._check_correctness: [
-                    computed_mfs, known_mfs, dataset_filename
-                ],
-                self._check_compare_metafeature_lists: [
-                    computed_mfs, known_mfs, dataset_filename
-                ]
-            }
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs, known_mfs, dataset_filename]),
+                (self._check_compare_metafeature_lists,
+                 [computed_mfs, known_mfs, dataset_filename])
+            ]
             test_failures.update(self._perform_checks(required_checks))
 
         self._report_test_failures(test_failures, test_name)
@@ -256,14 +252,12 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                     Metafeatures.COMPUTE_TIME_KEY: 0.
                 }
 
-            required_checks = {
-                self._check_correctness: [
-                    computed_mfs, known_mfs, dataset_filename
-                ],
-                self._check_compare_metafeature_lists: [
-                    computed_mfs, known_mfs, dataset_filename
-                ]
-            }
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs, known_mfs, dataset_filename]),
+                (self._check_compare_metafeature_lists,
+                 [computed_mfs, known_mfs, dataset_filename])
+            ]
             test_failures.update(self._perform_checks(required_checks))
 
         self._report_test_failures(test_failures, test_name)
@@ -280,11 +274,11 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 column_types=dataset["column_types"]
             )
             known_metafeatures = dataset["known_metafeatures"]
-            required_checks = {
-                self._check_correctness: [
-                    computed_mfs, known_metafeatures, dataset_filename
-                ]
-            }
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs, known_metafeatures, dataset_filename])
+            ]
+
             test_failures.update(self._perform_checks(required_checks))
             self.assertEqual(
                 metafeature_ids, list(computed_mfs.keys()),
@@ -304,11 +298,11 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 column_types=dataset["column_types"]
             )
             known_metafeatures = dataset["known_metafeatures"]
-            required_checks = {
-                self._check_correctness: [
-                    computed_mfs, known_metafeatures, dataset_filename
-                ]
-            }
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs, known_metafeatures, dataset_filename])
+            ]
+
             test_failures.update(self._perform_checks(required_checks))
             if any(mf_id in computed_mfs.keys() for mf_id in metafeature_ids):
                 self.assertTrue(False, "Metafeatures computed an excluded metafeature")
@@ -338,7 +332,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         Tests whether computing metafeatures has any side effects on the
         instance metafeatures object. Fails if there are any side effects.
         """
-        required_checks = {}
+        required_checks = []
         test_failures = {}
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
@@ -355,9 +349,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
 
             known_mfs = dataset["known_metafeatures"]
-            required_checks[self._check_correctness] = [
-                computed_mfs, known_mfs, dataset_filename
-            ]
+            required_checks.append(
+                (self._check_correctness,
+                 [computed_mfs, known_mfs, dataset_filename])
+            )
             test_failures.update(self._perform_checks(required_checks))
         self._report_test_failures(test_failures, test_name)
 
@@ -420,14 +415,13 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             computed_mfs_timeout = {k: v for k, v in computed_mfs.items()
                                     if v[Metafeatures.VALUE_KEY] != Metafeatures.TIMEOUT}
             known_mfs = dataset["known_metafeatures"]
-            required_checks = {
-                self._check_correctness: [
-                    computed_mfs_timeout, known_mfs, dataset_filename
-                ],
-                self._check_compare_metafeature_lists: [
-                    computed_mfs, known_mfs, dataset_filename
-                ]
-            }
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs_timeout, known_mfs, dataset_filename]),
+                (self._check_compare_metafeature_lists,
+                 [computed_mfs, known_mfs, dataset_filename])
+            ]
+
         test_failures.update(self._perform_checks(required_checks))
         self._report_test_failures(test_failures, test_name)
 
