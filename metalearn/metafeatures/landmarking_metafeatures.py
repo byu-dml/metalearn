@@ -67,8 +67,6 @@ def get_random_tree(X, Y, depth, seed, n_folds, cv_seed):
 
 def get_lda(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([(
-        'lda', LinearDiscriminantAnalysis(
-            solver='lsqr', shrinkage='auto'
-        )
+        'lda', LinearDiscriminantAnalysis()
     )])
     return run_pipeline(X, Y, pipeline, n_folds, cv_seed)

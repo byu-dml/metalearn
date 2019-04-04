@@ -439,12 +439,16 @@ class MetafeaturesTestCase(unittest.TestCase):
         self.invalid_metafeature_message_contains_fail_message = "Error message indicating invalid metafeatures should include names of invalid features."
 
     def test_dataframe_input_error(self):
-        """ Tests if `compute` gives a user-friendly error when a TypeError occurs. """
+        """ Tests if `compute` gives a user-friendly error when a TypeError or ValueError occurs. """
 
         expected_error_message1 = "X must be of type pandas.DataFrame"
         fail_message1 = "We expect a user friendly message when the features passed to compute is not a Pandas.DataFrame."
-        expected_error_message2 = "Y must be of type pandas.Series"
-        fail_message2 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
+        expected_error_message2 = "X must not be empty"
+        fail_message2 = "We expect a user friendly message when the features passed to compute are empty."
+        expected_error_message3 = "Y must be of type pandas.Series"
+        fail_message3 = "We expect a user friendly message when the target column passed to compute is not a Pandas.Series."
+        expected_error_message4 = "Y must have the same number of rows as X"
+        fail_message4 = "We expect a user friendly message when the target column passed to compute has a number of rows different than X's."
         # We don't check for the Type of TypeError explicitly as any other error would fail the unit test.
 
         with self.assertRaises(TypeError) as cm:
@@ -455,9 +459,21 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(X=np.zeros((500, 50)), Y=pd.Series(np.zeros(500)))
         self.assertEqual(str(cm.exception), expected_error_message1, fail_message1)
 
-        with self.assertRaises(TypeError) as cm:
-            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.zeros(500))
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((0, 50))), Y=pd.Series(np.zeros(500)))
         self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 0))), Y=pd.Series(np.zeros(500)))
+        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
+
+        with self.assertRaises(TypeError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.random.randint(2, size=500).astype("str"))
+        self.assertEqual(str(cm.exception), expected_error_message3, fail_message3)
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=pd.Series(np.random.randint(2, size=0), name="target").astype("str"))
+        self.assertEqual(str(cm.exception), expected_error_message4, fail_message4)
 
     def _check_invalid_metafeature_exception_string(self, exception_str, expected_str, invalid_metafeatures):
         """ Checks if the exception message starts with the right string, and contains all of the invalid metafeatures expected. """
@@ -712,6 +728,16 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(
                 X_small, Y_small, metafeature_ids=metafeature_ids, n_folds=2
             )
+        except Exception as e:
+           exc_type = type(e).__name__
+           self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
+
+    def test_target_column_with_one_unique_value(self):
+        # should not raise an error
+        X = pd.DataFrame(np.random.rand(100, 7))
+        Y = pd.Series(np.random.randint(0, 1, 100), name="target").astype("str")
+        try:
+            Metafeatures().compute(X, Y)
         except Exception as e:
            exc_type = type(e).__name__
            self.fail(f"computing metafeatures raised {exc_type} unexpectedly")
