@@ -76,10 +76,10 @@ class DatasetGenerator:
 
         metadatas = []
         for dataset in self.datasets:
-            dataset['metadata'].pop('id', None)
-            id_ = self._hash_id(dataset)
-            dataset['metadata']['id'] = id_
-            dataset_path = os.path.join(dataset_dir, '{}.csv'.format(id_))
+            dataset['metadata'].pop('digest', None)
+            digest = self._digest(dataset)
+            dataset['metadata']['digest'] = digest
+            dataset_path = os.path.join(dataset_dir, '{}.csv'.format(digest))
             dataset['data'].to_csv(dataset_path, index=False)
             metadatas.append(dataset['metadata'])
 
@@ -186,6 +186,7 @@ class DatasetGenerator:
             }
         }
         metadata['column_types']['y'] = y_column_type
+        metadata['target_column'] = 'y'
 
         y = pd.Series(np.zeros(n_rows), name='y')
         for col_name in sorted(data.columns):
@@ -209,7 +210,7 @@ class DatasetGenerator:
                 self._unknown_column_type(column_type)
 
         if y_column_type == self.CATEGORICAL:
-            y = y.round().astype(int)
+            y = y.round().abs().astype(int)
         elif y_column_type == self.TEXT:
             y = (10*y).round().astype(int) % len(string.ascii_letters)
             for i, value in enumerate(y):
@@ -261,7 +262,7 @@ class DatasetGenerator:
         self._add_dataset(data, metadata)
 
     @staticmethod
-    def _hash_id(dataset):
+    def _digest(dataset):
         return hashlib.sha256(DatasetGenerator._dataset_to_json(dataset).encode('utf8')).hexdigest()
 
     @staticmethod
@@ -304,5 +305,5 @@ def initialize():
             y = None
             X = dataset['data']
         column_types = dataset['metadata']['column_types']
-        dataset_id = dataset['metadata']['id']
+        dataset_id = dataset['metadata']['digest']
         compute_metafeatures(X, y, column_types, dataset_id)
