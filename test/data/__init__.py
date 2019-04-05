@@ -20,6 +20,19 @@ class InvalidStateError(Exception):
     pass
 
 
+class PandasChainedAssignmentContextManager:
+
+    def __init__(self, chained_assignment_mode=None):
+        self._local_setting = chained_assignment_mode
+
+    def __enter__(self):
+        self._global_setting = pd.options.mode.chained_assignment
+        pd.options.mode.chained_assignment = self._local_setting
+
+    def __exit__(self, *args):
+        pd.options.mode.chained_assignment = self._global_setting
+
+
 class DatasetGenerator:
 
     NUMERIC = 'NUMERIC'
@@ -45,13 +58,14 @@ class DatasetGenerator:
         self.rng.seed(seed)
         self.datasets = []
 
-        self._generate(1, 1)
-        self._generate(n_rows, max_n_cols_per_type)
-        self._generate_sparse(n_rows, max_n_cols_per_type)
-        self._generate_empty_rows(n_rows, max_n_cols_per_type, 1)
-        self._generate_empty_rows(n_rows, max_n_cols_per_type)
-        self._generate_empty_cols(n_rows, max_n_cols_per_type, 1)
-        self._generate_empty_cols(n_rows, max_n_cols_per_type)
+        with PandasChainedAssignmentContextManager():
+            self._generate(1, 1)
+            self._generate(n_rows, max_n_cols_per_type)
+            self._generate_sparse(n_rows, max_n_cols_per_type)
+            self._generate_empty_rows(n_rows, max_n_cols_per_type, 1)
+            self._generate_empty_rows(n_rows, max_n_cols_per_type)
+            self._generate_empty_cols(n_rows, max_n_cols_per_type, 1)
+            self._generate_empty_cols(n_rows, max_n_cols_per_type)
 
     def save(self, dataset_dir, metadata_path):
         if self.datasets is None:
@@ -105,7 +119,7 @@ class DatasetGenerator:
 
     def _sample_X_metadata(self, unique_column_types, max_n_cols_per_type):
         metadata = {
-            'unique_column_types': list(unique_column_types),
+            'unique_column_types': sorted(unique_column_types),
         }
         column_types = []
         for col_type in unique_column_types:
@@ -248,7 +262,17 @@ class DatasetGenerator:
 
     @staticmethod
     def _hash_id(dataset):
-        return hashlib.sha256(repr(sorted(dataset.items())).encode('utf8')).hexdigest()
+        return hashlib.sha256(DatasetGenerator._dataset_to_json(dataset).encode('utf8')).hexdigest()
+
+    @staticmethod
+    def _dataset_to_json(dataset):
+        json_structure = {
+            'data': dataset['data'].to_json(),
+            'metadata': dataset['metadata']
+        }
+        return json.dumps(json_structure, sort_keys=True)
+
+
 
 def get_dataset_metafeatures_path(dataset_id):
     return os.path.join(METAFEATURES_DIR, dataset_id+"_mf.json")
