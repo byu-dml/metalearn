@@ -16,7 +16,7 @@ from metalearn import Metafeatures
 from test.config import CORRECTNESS_SEED, METADATA_PATH
 from test.data.dataset import read_dataset
 from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
-from metalearn.metafeatures.landmarking_metafeatures import new_cross_val
+from metalearn.metafeatures.landmarking_metafeatures import cross_validate
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score
 from sklearn.neighbors import KNeighborsClassifier
@@ -772,9 +772,16 @@ class MetafeaturesTestCase(unittest.TestCase):
             )
             err_rate = 1. - np.mean(scores['test_accuracy'])
             kappa = np.mean(scores['test_kappa'])
-            calculated_scores = new_cross_val(pipeline, X.values, Y.values, cv, 1)
-            self.assertEqual(err_rate, calculated_scores[0])
-            self.assertEqual(kappa, calculated_scores[1])
+            #specify our cross validate function?
+            calculated_scores = cross_validate(
+                pipeline, X.values, Y.values, cv=cv, n_jobs=1, scoring={
+                    'accuracy':accuracy_scorer, 'kappa': kappa_scorer
+                }
+            )
+            calculated_err_rate = 1. - np.mean(scores['test_accuracy'])
+            calculated_kappa = np.mean(scores['test_kappa'])
+            self.assertEqual(err_rate, calculated_err_rate)
+            self.assertEqual(kappa, calculated_kappa)
 
 
 
