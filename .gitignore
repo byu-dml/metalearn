@@ -101,4 +101,4 @@ ENV/
 .mypy_cache/
 
 #miscellaneous
-test_all_datasets.py
+test/data/datasets/

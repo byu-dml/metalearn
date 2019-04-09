@@ -15,7 +15,7 @@ setup(
     install_requires = [
         'numpy<=1.15.4',
         'scikit-learn<=0.20.2',
-        'pandas<=0.23.4'
+        'pandas<=0.23.4',
     ],
     classifiers = [
         'Programming Language :: Python :: 3.6'
@@ -23,7 +23,6 @@ setup(
     python_requires='~=3.6',
     include_package_data=True,
     tests_require=[
-        'arff2pandas<=1.0.1',
-        'jsonschema<=2.6.0'
+        'jsonschema<=2.6.0',
     ]
 )

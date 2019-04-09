@@ -16,6 +16,21 @@ from test.config import (
 )
 
 
+def get_dataset_path(dataset_id):
+    return os.path.join(DATASET_DIR, dataset_id+'.csv')
+
+def read_dataset(metadata):
+    dataset_id = metadata['id']
+    path = get_dataset_path(dataset_id)
+    data = pd.read_csv(path)
+    y = None
+    X = data
+    if 'target_column' in metadata:
+        target_column = metadata['target_column']
+        y = X[target_column]
+        X.drop(target_column, axis=1, inplace=True)
+    return X, y, metadata['column_types']
+
 class InvalidStateError(Exception):
     pass
 
@@ -76,10 +91,10 @@ class DatasetGenerator:
 
         metadatas = []
         for dataset in self.datasets:
-            dataset['metadata'].pop('digest', None)
-            digest = self._digest(dataset)
-            dataset['metadata']['digest'] = digest
-            dataset_path = os.path.join(dataset_dir, '{}.csv'.format(digest))
+            dataset['metadata'].pop('id', None)
+            dataset_id = self._hash_id(dataset)
+            dataset['metadata']['id'] = dataset_id
+            dataset_path = get_dataset_path(dataset_id)
             dataset['data'].to_csv(dataset_path, index=False)
             metadatas.append(dataset['metadata'])
 
@@ -88,7 +103,7 @@ class DatasetGenerator:
             os.makedirs(metadata_dir)
 
         with open(os.path.join(metadata_path), 'w') as f:
-            json.dump(metadatas, f, indent=4, sort_keys=True)
+            json.dump(metadatas, f, sort_keys=True)
 
     def _generate(self, n_rows, max_n_cols_per_type):
         Xs, X_metadatas = self._generate_Xs(n_rows, max_n_cols_per_type)
@@ -262,7 +277,7 @@ class DatasetGenerator:
         self._add_dataset(data, metadata)
 
     @staticmethod
-    def _digest(dataset):
+    def _hash_id(dataset):
         return hashlib.sha256(DatasetGenerator._dataset_to_json(dataset).encode('utf8')).hexdigest()
 
     @staticmethod
@@ -272,7 +287,6 @@ class DatasetGenerator:
             'metadata': dataset['metadata']
         }
         return json.dumps(json_structure, sort_keys=True)
-
 
 
 def get_dataset_metafeatures_path(dataset_id):
@@ -288,8 +302,8 @@ def compute_metafeatures(X, y, column_types, dataset_id):
         mf_file_path = get_dataset_metafeatures_path(dataset_id)
         if not os.path.isdir(METAFEATURES_DIR):
             os.makedirs(METAFEATURES_DIR)
-        json.dump(metafeatures, open(mf_file_path, "w"), sort_keys=True, indent=4)
-    except ValueError:
+        json.dump(metafeatures, open(mf_file_path, "w"), sort_keys=True)
+    except ValueError: # todo fix value error
         pass
 
 
@@ -298,12 +312,6 @@ def initialize():
     dg.generate()
     dg.save(DATASET_DIR, METADATA_PATH)
     for dataset in dg.datasets:
-        if 'y' in dataset['data']:
-            y = dataset['data']['y']
-            X = dataset['data'].drop('y', axis=1, inplace=False)
-        else:
-            y = None
-            X = dataset['data']
-        column_types = dataset['metadata']['column_types']
-        dataset_id = dataset['metadata']['digest']
+        X, y, column_types = read_dataset(dataset['metadata'])
+        dataset_id = dataset['metadata']['id']
         compute_metafeatures(X, y, column_types, dataset_id)
