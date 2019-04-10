@@ -469,21 +469,12 @@ class MetafeaturesTestCase(unittest.TestCase):
 
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=pd.DataFrame(np.zeros((0, 50))), Y=pd.Series(np.zeros(500)))
-<<<<<<< HEAD
         self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
 
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 0))), Y=pd.Series(np.zeros(500)))
         self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
 
-=======
-        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
-
-        with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 0))), Y=pd.Series(np.zeros(500)))
-        self.assertEqual(str(cm.exception), expected_error_message2, fail_message2)
-
->>>>>>> 0a3b7cb339250144f6d2f70977f74fe457cecee3
         with self.assertRaises(TypeError) as cm:
             Metafeatures().compute(X=pd.DataFrame(np.zeros((500, 50))), Y=np.random.randint(2, size=500).astype("str"))
         self.assertEqual(str(cm.exception), expected_error_message3, fail_message3)
