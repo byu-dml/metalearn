@@ -56,19 +56,6 @@ def cross_validate(pipeline, X, y, cv, n_jobs, scoring):
         kappa.append(cohen_kappa_score(y_test, y_pred))
     scores = {'test_accuracy': accuracy, 'test_kappa': kappa}
     return(scores)
-#
-#
-# def binarize(y_test, y_proba):
-#     roc_auc = []
-#     for value in np.unique(y_test):
-#         binary = []
-#         for val in y_test:
-#             if value == val:
-#                 binary.append(1)
-#             else:
-#                 binary.append(0)
-#         roc_auc.append(roc_auc_score(binary, y_proba, average='weighted'))
-#     return np.mean(roc_auc)
 
 def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])
