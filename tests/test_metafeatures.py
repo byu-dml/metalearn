@@ -13,9 +13,9 @@ import pandas as pd
 import numpy as np
 
 from metalearn import Metafeatures
-from test.config import CORRECTNESS_SEED, METADATA_PATH
-from test.data.dataset import read_dataset
-from test.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
+from tests.config import CORRECTNESS_SEED, METADATA_PATH
+from tests.data.dataset import read_dataset
+from tests.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
 
 FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
@@ -749,9 +749,3 @@ class MetafeaturesTestCase(unittest.TestCase):
         if Metafeatures.list_metafeatures() != mf_list_copy:
             mf_list.extend(mf_list_copy)
             self.assertTrue(False, "Metafeature list has been mutated")
-
-
-def metafeatures_suite():
-    test_cases = [MetafeaturesTestCase, MetafeaturesWithDataTestCase]
-    return unittest.TestSuite(map(unittest.TestLoader().loadTestsFromTestCase, test_cases))
-

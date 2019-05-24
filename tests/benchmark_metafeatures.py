@@ -4,8 +4,8 @@ import time
 import numpy as np
 
 from metalearn import Metafeatures
-from test.data.dataset import read_dataset
-from test.config import CORRECTNESS_SEED, METADATA_PATH
+from tests.data.dataset import read_dataset
+from tests.config import CORRECTNESS_SEED, METADATA_PATH
 
 
 def get_benchmark_path(benchmark_name):
