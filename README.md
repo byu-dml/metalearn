@@ -1,25 +1,40 @@
 [![Build Status](https://api.travis-ci.org/byu-dml/metalearn.png)](https://travis-ci.org/byu-dml/metalearn)
 
-# metalearn
+# Metalearn
+
 The Data Mining Lab of the Computer Science Department of Brigham Young
-University (BYU-DML) python library of meta-learning tools.
+University (BYU-DML) python library of meta-learning tools. Extracts **general**, **statistical**, **information-theoretic**, **landmarking** and **model-based** meta-features from tabular datasets for use in meta-learning applications.
 
-Currently extracts meta-features from tabular datasets with categorical
-targets.
+## Installing
 
-This package is installable from pypi using:  
+Metalearn's dependencies will be installed with this package, including:
+- pandas
+- numpy
+- scikit-learn
+
+### Using pip:  
+
 `pip install metalearn`
 
-Example:  
+### From source:
+
+```bash
+git clone https://github.com/byu-dml/metalearn.git
+cd metalearn
+python setup.py install
+```
+## Using Metalearn
+  
 ```python
 from metalearn import Metafeatures
 import pandas as pd
+import numpy as np
 
-X = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-Y = pd.Series(['a', 'b', 'c'])
+X = pd.DataFrame(np.arange(16).reshape(4,4))
+Y = pd.Series(['a', 'a', 'b', 'b'])
 
 metafeatures = Metafeatures()  # instantiate an instance of the base class Metafeatures
-mfs = Metafeatures.compute(X, Y)
+mfs = metafeatures.compute(X, Y)
 ```
 
   
