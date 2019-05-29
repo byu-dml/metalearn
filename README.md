@@ -7,14 +7,27 @@ University (BYU-DML) python library of meta-learning tools.
 Currently extracts meta-features from tabular datasets with categorical
 targets.
 
-In order for the test suite to run properly, our package requires Python3.6
+This package is installable from pypi using:  
+`pip install metalearn`
 
-You can install the requirements for this package using:
-pip install -r requirements.txt
+Example:  
+```python
+from metalearn import Metafeatures
+import pandas as pd
 
-The test suite has one required package that is not available on pypi.
-This package, openml, should be accessed by git cloning the following
-repository:
-https://github.com/openml/openml-python.git
-The repository contains instructions for pip installing this package.
- 
+X = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+Y = pd.Series(['a', 'b', 'c'])
+
+metafeatures = Metafeatures()  # instantiate an instance of the base class Metafeatures
+mfs = Metafeatures.compute(X, Y)
+```
+
+  
+In order for the test suite to run properly, our package requires Python3.6.  
+You can install the requirements for the test suite using:  
+`pip install -r requirements.txt`
+  
+  
+The repository also contains code to compare our metafeatures against ones computed by [OpenML](https://github.com/openml/OpenML).  
+In order to use it, first install the requirements by running:  
+`pip install -r openml_requirements.txt`  
