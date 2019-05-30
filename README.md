@@ -2,12 +2,12 @@
 
 # Metalearn
 
-The Data Mining Lab of the Computer Science Department of Brigham Young University (BYU-DML) python3 library of meta-learning tools.
-Extracts **general**, **statistical**, **information-theoretic**, **landmarking** and **model-based** meta-features from tabular datasets for use in meta-learning applications.
+The Data Mining Lab of the Computer Science Department of Brigham Young
+University (BYU-DML) python library of meta-learning tools. Extracts **general**, **statistical**, **information-theoretic**, **landmarking** and **model-based** meta-features from tabular datasets for use in meta-learning applications.
 
-## Installation
+## Installing
 
-Dependencies installed with this package include:
+Metalearn's dependencies will be installed with this package, including:
 - pandas
 - numpy
 - scikit-learn
@@ -21,7 +21,7 @@ Dependencies installed with this package include:
 ```bash
 git clone https://github.com/byu-dml/metalearn.git
 cd metalearn
-python3 setup.py install
+python setup.py install
 ```
 ## Example Usage
   
@@ -49,7 +49,7 @@ In order to use it, first install the requirements for OpenML by running:
 `pip install -r openml_requirements.txt`  
 
 All test code is run from the file `run_tests.py` with the command:  
-`python3 run_tests.py`
+`python run_tests.py`
 
 ### Unit Tests
 
@@ -70,20 +70,27 @@ from tests.compare_with_openml import compare_with_openml
 compare_with_openml(n_datasets=10)
 ```
 
-### Benchmarking (Incomplete)
+### Benchmarking
 
-to benchmark the metafeatures before and after making changes, uncomment these lines before running:  
+Tracks the difference in speed of computation before and after changes. Make sure the imports are uncommented before running:
 ```python
 from tests.data.compute_dataset_metafeatures import compute_dataset_metafeatures
 from tests.benchmark_metafeatures import (
     run_metafeature_benchmark, compare_metafeature_benchmarks
 )
-
-compute_dataset_metafeatures()
+```
+Before making any changes, uncomment the line:
+```python
 run_metafeature_benchmark("start")
+```
+to save computation times.
+
+To compare, recomment out the previous line and uncomment out the following.
+```python
 run_metafeature_benchmark("end")
 compare_metafeature_benchmarks("start", "end")
 ```
+This will compare the two files and create a new file with the differences and their standard deviations
 
 ## License
 
