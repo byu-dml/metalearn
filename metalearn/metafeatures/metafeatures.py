@@ -11,6 +11,7 @@ import pandas as pd
 from pandas import DataFrame, Series
 from sklearn.model_selection import StratifiedShuffleSplit
 
+from .resources import METAFEATURE_CONFIG
 from .common_operations import *
 from .simple_metafeatures import *
 from .statistical_metafeatures import *
@@ -37,8 +38,7 @@ class Metafeatures(object):
     NUMERIC_TARGETS = "NUMERIC_TARGETS"
     TIMEOUT = "TIMEOUT"
 
-    _metadata_path = os.path.splitext(__file__)[0] + ".json"
-    with open(_metadata_path, 'r') as f:
+    with open(METAFEATURE_CONFIG, 'r') as f:
         _metadata = json.load(f)
     IDS = list(_metadata["metafeatures"].keys())
     _resources_info = {}
