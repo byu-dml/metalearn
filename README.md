@@ -2,12 +2,12 @@
 
 # Metalearn
 
-The Data Mining Lab of the Computer Science Department of Brigham Young
-University (BYU-DML) python library of meta-learning tools. Extracts **general**, **statistical**, **information-theoretic**, **landmarking** and **model-based** meta-features from tabular datasets for use in meta-learning applications.
+The Data Mining Lab of the Computer Science Department of Brigham Young University (BYU-DML) python3 library of meta-learning tools.
+Extracts **general**, **statistical**, **information-theoretic**, **landmarking** and **model-based** meta-features from tabular datasets for use in meta-learning applications.
 
-## Installing
+## Installation
 
-Metalearn's dependencies will be installed with this package, including:
+Dependencies installed with this package include:
 - pandas
 - numpy
 - scikit-learn
@@ -21,7 +21,7 @@ Metalearn's dependencies will be installed with this package, including:
 ```bash
 git clone https://github.com/byu-dml/metalearn.git
 cd metalearn
-python setup.py install
+python3 setup.py install
 ```
 ## Example Usage
   
@@ -49,7 +49,7 @@ In order to use it, first install the requirements for OpenML by running:
 `pip install -r openml_requirements.txt`  
 
 All test code is run from the file `run_tests.py` with the command:  
-`python run_tests.py`
+`python3 run_tests.py`
 
 ### Unit Tests
 
