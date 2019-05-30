@@ -23,7 +23,7 @@ git clone https://github.com/byu-dml/metalearn.git
 cd metalearn
 python setup.py install
 ```
-## Using Metalearn
+## Example Usage
   
 ```python
 from metalearn import Metafeatures
@@ -83,3 +83,11 @@ run_metafeature_benchmark("start")
 run_metafeature_benchmark("end")
 compare_metafeature_benchmarks("start", "end")
 ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/byu-dml/metalearn/blob/develop/LICENSE) file for details
+
+## Acknowledgements
+
+Many of the metafeatures in this package were inspired by the work done in the R project [mfe](https://github.com/rivolli/mfe)
