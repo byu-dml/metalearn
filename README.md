@@ -74,7 +74,6 @@ compare_with_openml(n_datasets=10)
 
 Tracks the difference in speed of computation before and after changes. Make sure the imports are uncommented before running:
 ```python
-from tests.data.compute_dataset_metafeatures import compute_dataset_metafeatures
 from tests.benchmark_metafeatures import (
     run_metafeature_benchmark, compare_metafeature_benchmarks
 )
@@ -91,6 +90,15 @@ run_metafeature_benchmark("end")
 compare_metafeature_benchmarks("start", "end")
 ```
 This will compare the two files and create a new file with the differences and their standard deviations
+
+### Updating Metafeatures
+
+To update metafeatures to reflect any changes made in the code, uncomment these lines before running:
+```python
+from tests.data.compute_dataset_metafeatures import compute_dataset_metafeatures
+
+compute_dataset_metafeatures()
+```
 
 ## License
 
