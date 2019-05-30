@@ -12,7 +12,7 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from metalearn import Metafeatures
+from metalearn import Metafeatures, METAFEATURE_CONFIG, METAFEATURES_JSON_SCHEMA
 from tests.config import CORRECTNESS_SEED, METADATA_PATH
 from tests.data.dataset import read_dataset
 from tests.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
@@ -112,7 +112,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_failures = {}
         fail_message = "Metafeature lists do not match."
 
-        with open("./metalearn/metafeatures/metafeatures.json") as f:
+        with open(METAFEATURE_CONFIG) as f:
             master_mf_ids = json.load(f)["metafeatures"].keys()
         master_mf_ids_set = set(master_mf_ids)
 
@@ -357,7 +357,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         self._report_test_failures(test_failures, test_name)
 
     def test_output_format(self):
-        with open("./metalearn/metafeatures/metafeatures_schema.json") as f:
+        with open(METAFEATURES_JSON_SCHEMA) as f:
             mf_schema = json.load(f)
         for dataset_filename, dataset in self.datasets.items():
             computed_mfs = Metafeatures().compute(
@@ -373,7 +373,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 )
 
     def test_output_json_compatibility(self):
-        with open("./metalearn/metafeatures/metafeatures_schema.json") as f:
+        with open(METAFEATURES_JSON_SCHEMA) as f:
             mf_schema = json.load(f)
         for dataset_filename, dataset in self.datasets.items():
             computed_mfs = Metafeatures().compute(
@@ -749,3 +749,11 @@ class MetafeaturesTestCase(unittest.TestCase):
         if Metafeatures.list_metafeatures() != mf_list_copy:
             mf_list.extend(mf_list_copy)
             self.assertTrue(False, "Metafeature list has been mutated")
+
+    def test_y_no_name(self):
+        X = pd.DataFrame(np.random.rand(8,2))
+        y = pd.Series(['a','a','a','a','b','b','b','b'])
+        try:
+            Metafeatures().compute(X,y)
+        except Exception as e:
+            self.fail(e)
