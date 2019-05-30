@@ -71,25 +71,10 @@ print(mfs)
 
 ## Using the Test Suite
 
-In order for the test suite to run properly, our package requires Python3.6.  
-You can install the requirements for the test suite using:  
-`pip install -r requirements.txt`
-  
-The repository also contains code to compare our metafeatures against ones computed by [OpenML](https://github.com/openml/OpenML).  
-In order to use it, first install the requirements for OpenML by running:  
-`pip install -r openml_requirements.txt`  
-
-All test code is run from the file `run_tests.py` with the command:  
-`python3 run_tests.py`
-
-### Unit Tests
-
-To use the automated unit tests, make sure these lines are uncommented before running:  
-```python
-runner = unittest.TextTestRunner(verbosity=1)
-tests = unittest.TestLoader().discover('tests')
-if not runner.run(tests).wasSuccessful():
-    sys.exit(1)
+Using this cloned or downloaded repository, the tests can be run with:
+```
+pip install -r requirements.txt
+python3 run_tests.py
 ```
 
 ## License
