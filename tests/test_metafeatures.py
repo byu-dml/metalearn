@@ -72,6 +72,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         for mf_id, result in computed_mfs.items():
             computed_value = result[Metafeatures.VALUE_KEY]
+            if not any(isinstance(computed_value, type_) for type_ in [str, float, int]):
+                self.fail(
+                    'computed {} has invalid value {} with type {}'.format(mf_id, computed_value, type(computed_value))
+                )
             known_value = known_mfs[mf_id][Metafeatures.VALUE_KEY]
             correct = True
             if known_value is None:
