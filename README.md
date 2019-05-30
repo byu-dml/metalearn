@@ -30,7 +30,7 @@ import numpy as np
 X = pd.DataFrame(np.random.rand(8,2))
 Y = pd.Series(['a', 'a', 'a', 'a', 'b', 'b', 'b', 'b'], name='targets')
 
-metafeatures = Metafeatures()  # instantiate an instance of the base class Metafeatures
+metafeatures = Metafeatures()
 mfs = metafeatures.compute(X, Y)
 ```
 
@@ -68,15 +68,6 @@ print(mfs)
 # RatioOfNumericFeatures
 # {'RatioOfNumericFeatures': {'value': 0.5, 'compute_time': 3.9138991269283e-05}}
 ```
-- Y: If Y is categorical or text, the dataset is considered to be a classification task. If Y is numeric, the dataset is considered to be a regression task. If Y is not provided the dataset is run without targets.  
-- column_types: Maps from column name to one of ['CATEGORICAL', 'NUMERIC', 'TEXT']. Must include the target column. 
-- metafeature_ids: Specifies a subset of metafeatures to compute. Default of None indicates to compute all metafeatures
-- exclude: Specifies a subset of metafeatures to ignore. Can't be used with metafeature_ids.
-- sample_shape: The shape of X after sampling row and columns. None indicates not to sample.
-- seed: Using the same seed ensures deterministic behavior. If seed is None, a seed is generated psuedo-randomly
-- n_folds: The number of folds used during cross-validation. There must be at least n_folds instances of each class
-- verbose: If True, prints the ID of each metafeature after it is computed
-- timeout: Halts execution after approximately timeout seconds. If None, compute will run to completion.
 
 ## Using the Test Suite
 
