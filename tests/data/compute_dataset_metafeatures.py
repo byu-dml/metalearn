@@ -5,7 +5,7 @@ import time
 import pandas as pd
 
 from metalearn import Metafeatures
-from test.config import CORRECTNESS_SEED, METAFEATURES_DIR, METADATA_PATH
+from tests.config import CORRECTNESS_SEED, METAFEATURES_DIR, METADATA_PATH
 from .dataset import read_dataset
 
 

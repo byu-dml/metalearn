@@ -100,5 +100,11 @@ ENV/
 # mypy
 .mypy_cache/
 
-#miscellaneous
+# IDE configurations
+.idea/
+
+# miscellaneous
 test_all_datasets.py
+openmlComparisonResults/
+start.json
+end.json
