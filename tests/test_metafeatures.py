@@ -749,3 +749,11 @@ class MetafeaturesTestCase(unittest.TestCase):
         if Metafeatures.list_metafeatures() != mf_list_copy:
             mf_list.extend(mf_list_copy)
             self.assertTrue(False, "Metafeature list has been mutated")
+
+    def test_y_no_name(self):
+        X = pd.DataFrame(np.random.rand(8,2))
+        y = pd.Series(['a','a','a','a','b','b','b','b'])
+        try:
+            Metafeatures().compute(X,y)
+        except Exception as e:
+            self.fail(e)
