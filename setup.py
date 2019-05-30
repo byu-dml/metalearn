@@ -4,7 +4,7 @@ __version__ = '0.5.3'
 
 setup(
     name = 'metalearn',
-    packages = find_packages(),
+    packages = find_packages(include=['metalearn', 'metalearn.*']),
     version = __version__,
     description = 'A package to aid in metalearning',
     author = 'Roland Laboulaye, Brandon Schoenfeld, Casey Davis',
@@ -22,8 +22,4 @@ setup(
     ],
     python_requires='~=3.6',
     include_package_data=True,
-    tests_require=[
-        'arff2pandas<=1.0.1',
-        'jsonschema<=2.6.0'
-    ]
 )
