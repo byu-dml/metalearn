@@ -53,7 +53,7 @@ All test code is run from the file `run_tests.py` with the command:
 
 ### Unit Tests
 
-To use the automated unit tests, uncomment these lines before running:  
+To use the automated unit tests, make sure these lines are uncommented before running:  
 ```python
 runner = unittest.TextTestRunner(verbosity=1)
 tests = unittest.TestLoader().discover('tests')
@@ -61,48 +61,9 @@ if not runner.run(tests).wasSuccessful():
     sys.exit(1)
 ```
 
-### OpenML Comparison
-
-To compare our computed metafeatures against the ones computed by OpenML, uncomment these lines before running:  
-```python
-from tests.compare_with_openml import compare_with_openml
-
-compare_with_openml(n_datasets=10)
-```
-
-### Benchmarking
-
-Tracks the difference in speed of computation before and after changes. Make sure the imports are uncommented before running:
-```python
-from tests.benchmark_metafeatures import (
-    run_metafeature_benchmark, compare_metafeature_benchmarks
-)
-```
-Before making any changes, uncomment the line:
-```python
-run_metafeature_benchmark("start")
-```
-to save computation times.
-
-To compare, recomment out the previous line and uncomment out the following.
-```python
-run_metafeature_benchmark("end")
-compare_metafeature_benchmarks("start", "end")
-```
-This will compare the two files and create a new file with the differences and their standard deviations
-
-### Updating Metafeatures
-
-To update metafeatures to reflect any changes made in the code, uncomment these lines before running:
-```python
-from tests.data.compute_dataset_metafeatures import compute_dataset_metafeatures
-
-compute_dataset_metafeatures()
-```
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/byu-dml/metalearn/blob/develop/LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Acknowledgements
 
