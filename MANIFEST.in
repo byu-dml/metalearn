@@ -1,1 +1,2 @@
 include metalearn/metafeatures/metafeatures.json
+include metalearn/metafeatures/metafeatures_schema.json
