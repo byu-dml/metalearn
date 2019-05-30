@@ -9,12 +9,11 @@ import unittest
 
 if __name__ == '__main__':
     # Compare our mfs to openml's mfs
-    # compare_with_openml(10)
+    # compare_with_openml(n_datasets=10)
 
-    # Run benchmarks
-    # compute_dataset_metafeatures()
-    # run_metafeature_benchmark("start")
-    # run_metafeature_benchmark("end")
+    # Benchmark against another version of the code
+    # run_metafeature_benchmark("start") # Run this on the branch or commit you want to benchmark against...
+    # run_metafeature_benchmark("end") # ...then run this on the branch or commit you've been developing
     # compare_metafeature_benchmarks("start", "end")
 
     # Run unit tests
@@ -22,3 +21,6 @@ if __name__ == '__main__':
     tests = unittest.TestLoader().discover('tests')
     if not runner.run(tests).wasSuccessful():
         sys.exit(1)
+
+    # Compute Metafeatures
+    # compute_dataset_metafeatures()

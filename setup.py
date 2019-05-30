@@ -14,7 +14,7 @@ setup(
     keywords = ['metalearning', 'machine learning', 'metalearn'],
     install_requires = [
         'numpy<=1.15.4',
-        'scikit-learn<=0.20.2',
+        'scikit-learn<=0.20.3',
         'pandas<=0.23.4'
     ],
     classifiers = [
