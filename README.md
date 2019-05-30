@@ -30,8 +30,9 @@ from metalearn import Metafeatures
 import pandas as pd
 import numpy as np
 
-X = pd.DataFrame(np.arange(16).reshape(4,4))
-Y = pd.Series(['a', 'a', 'b', 'b'])
+# X and Y must be a pandas DataFrame and a pandas Series respectively
+X = pd.DataFrame(np.random.rand(8,2))
+Y = pd.Series(['a', 'a', 'a', 'a', 'b', 'b', 'b', 'b'])
 
 metafeatures = Metafeatures()  # instantiate an instance of the base class Metafeatures
 mfs = metafeatures.compute(X, Y)
@@ -69,7 +70,7 @@ from tests.compare_with_openml import compare_with_openml
 compare_with_openml(n_datasets=10)
 ```
 
-### Benchmarking
+### Benchmarking (Incomplete)
 
 to benchmark the metafeatures before and after making changes, uncomment these lines before running:  
 ```python
