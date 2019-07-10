@@ -176,6 +176,58 @@
             "returns": [
                 "TraversedDecisionTree"
             ]
+        },
+        "FullPerceptron": {
+            "function": "get_fitted_perceptron",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 10,
+                "n_classes": "NumberOfClasses",
+                "frac": "all"
+            },
+            "returns": [
+                "FullPerceptron"
+            ]
+        },
+        "OneTenthPerceptron": {
+            "function": "get_fitted_perceptron",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 11,
+                "n_classes": "NumberOfClasses",
+                "frac": "tenth"
+            },
+            "returns": [
+                "OneTenthPerceptron"
+            ]
+        },
+        "OneHalfPerceptron": {
+            "function": "get_fitted_perceptron",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 12,
+                "n_classes": "NumberOfClasses",
+                "frac": "half"
+            },
+            "returns": [
+                "OneHalfPerceptron"
+            ]
+        },
+        "SqrtPerceptron": {
+            "function": "get_fitted_perceptron",
+            "arguments": {
+                "X": "XPreprocessed",
+                "Y": "YSample",
+                "seed": 13,
+                "n_classes": "NumberOfClasses",
+                "frac": "sqrt"
+            },
+            "returns": [
+                "SqrtPerceptron"
+            ]
         }
     },
     "metafeatures": {
@@ -4168,6 +4220,726 @@
                 "NumberOfTokensContainingNumericChar",
                 "RatioOfDistinctTokens",
                 "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "FullPerceptronWeightsSum": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeightsSum"
+            ]
+        },
+        "OneTenthPerceptronWeightsSum": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeightsSum"
+            ]
+        },
+        "OneHalfPerceptronWeightsSum": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeightsSum"
+            ]
+        },
+        "SqrtPerceptronWeightsSum": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeightsSum"
+            ]
+        },
+        "MeanFullPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "StdevFullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "SkewFullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "KurtosisFullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "MinFullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "Quartile1FullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "Quartile2FullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "Quartile3FullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "MaxFullPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronWeights",
+                "MeanFullPerceptronWeights",
+                "StdevFullPerceptronWeights",
+                "SkewFullPerceptronWeights",
+                "KurtosisFullPerceptronWeights",
+                "MinFullPerceptronWeights",
+                "Quartile1FullPerceptronWeights",
+                "Quartile2FullPerceptronWeights",
+                "Quartile3FullPerceptronWeights",
+                "MaxFullPerceptronWeights"
+            ]
+        },
+        "MeanOneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "StdevOneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "SkewOneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "KurtosisOneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "MinOneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "Quartile1OneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "Quartile2OneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "Quartile3OneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "MaxOneTenthPerceptronWeights": {
+            "function": "get_perceptron_weights_sum",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronWeights",
+                "MeanOneTenthPerceptronWeights",
+                "StdevOneTenthPerceptronWeights",
+                "SkewOneTenthPerceptronWeights",
+                "KurtosisOneTenthPerceptronWeights",
+                "MinOneTenthPerceptronWeights",
+                "Quartile1OneTenthPerceptronWeights",
+                "Quartile2OneTenthPerceptronWeights",
+                "Quartile3OneTenthPerceptronWeights",
+                "MaxOneTenthPerceptronWeights"
+            ]
+        },
+        "MeanOneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "StdevOneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "SkewOneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "KurtosisOneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "MinOneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "Quartile1OneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "Quartile2OneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "Quartile3OneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "MaxOneHalfPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronWeights",
+                "MeanOneHalfPerceptronWeights",
+                "StdevOneHalfPerceptronWeights",
+                "SkewOneHalfPerceptronWeights",
+                "KurtosisOneHalfPerceptronWeights",
+                "MinOneHalfPerceptronWeights",
+                "Quartile1OneHalfPerceptronWeights",
+                "Quartile2OneHalfPerceptronWeights",
+                "Quartile3OneHalfPerceptronWeights",
+                "MaxOneHalfPerceptronWeights"
+            ]
+        },
+        "MeanSqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "StdevSqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "SkewSqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "KurtosisSqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "MinSqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "Quartile1SqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "Quartile2SqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "Quartile3SqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "MaxSqrtPerceptronWeights": {
+            "function": "get_perceptron_weights_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronWeights",
+                "MeanSqrtPerceptronWeights",
+                "StdevSqrtPerceptronWeights",
+                "SkewSqrtPerceptronWeights",
+                "KurtosisSqrtPerceptronWeights",
+                "MinSqrtPerceptronWeights",
+                "Quartile1SqrtPerceptronWeights",
+                "Quartile2SqrtPerceptronWeights",
+                "Quartile3SqrtPerceptronWeights",
+                "MaxSqrtPerceptronWeights"
+            ]
+        },
+        "FullPerceptronNIters": {
+            "function": "get_perceptron_n_iters",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronNIters"
+            ]
+        },
+        "OneTenthPerceptronNIters": {
+            "function": "get_perceptron_n_iters",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronNIters"
+            ]
+        },
+        "OneHalfPerceptronNIters": {
+            "function": "get_perceptron_n_iters",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronNIters"
+            ]
+        },
+        "SqrtPerceptronNIters": {
+            "function": "get_perceptron_n_iters",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronNIters"
             ]
         }
     }
