@@ -7,8 +7,8 @@ from metalearn.metafeatures.common_operations import profile_distribution
 def get_fitted_perceptron(X, Y, seed, n_classes, frac='all'):
     class_fraction = n_classes/len(X)
 
-    if len(X) < n_classes * 2:
-        raise ValueError(f'The number of instances in X must be at least 2 * n_classes')
+    # if len(X) < n_classes * 2:
+    #     raise ValueError(f'The number of instances in X must be at least 2 * n_classes')
 
     if frac == 'all':
         frac = class_fraction

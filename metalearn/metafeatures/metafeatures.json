@@ -4277,7 +4277,7 @@
             ]
         },
         "StdevFullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4295,7 +4295,7 @@
             ]
         },
         "SkewFullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4313,7 +4313,7 @@
             ]
         },
         "KurtosisFullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4331,7 +4331,7 @@
             ]
         },
         "MinFullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4349,7 +4349,7 @@
             ]
         },
         "Quartile1FullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4367,7 +4367,7 @@
             ]
         },
         "Quartile2FullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4385,7 +4385,7 @@
             ]
         },
         "Quartile3FullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4403,7 +4403,7 @@
             ]
         },
         "MaxFullPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "FullPerceptron"
             },
@@ -4439,7 +4439,7 @@
             ]
         },
         "StdevOneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
@@ -4457,7 +4457,7 @@
             ]
         },
         "SkewOneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
@@ -4475,7 +4475,7 @@
             ]
         },
         "KurtosisOneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
@@ -4493,7 +4493,7 @@
             ]
         },
         "MinOneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
@@ -4511,7 +4511,7 @@
             ]
         },
         "Quartile1OneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
@@ -4529,7 +4529,7 @@
             ]
         },
         "Quartile2OneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
@@ -4547,7 +4547,7 @@
             ]
         },
         "Quartile3OneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
@@ -4565,7 +4565,7 @@
             ]
         },
         "MaxOneTenthPerceptronWeights": {
-            "function": "get_perceptron_weights_sum",
+            "function": "get_perceptron_weights_dist",
             "arguments": {
                 "perceptron": "OneTenthPerceptron"
             },
