@@ -176,6 +176,18 @@
             "returns": [
                 "TraversedDecisionTree"
             ]
+        },
+        "UnweightedRadiusNeighborsGraph": {
+            "function": "get_radius_neighbors_graph",
+            "arguments": {
+                "X": "XSample",
+                "Y": "YSample",
+                "column_types": "column_types",
+                "mode": "connectivity"
+            },
+            "returns": [
+                "UnweightedRadiusNeighborsGraph"
+            ]
         }
     },
     "metafeatures": {
@@ -4168,6 +4180,15 @@
                 "NumberOfTokensContainingNumericChar",
                 "RatioOfDistinctTokens",
                 "RatioOfTokensContainingNumericChar"
+            ]
+        },
+        "UnweightedNumberOfEdges": {
+            "function": "get_number_of_edges",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedNumberOfEdges"
             ]
         }
     }

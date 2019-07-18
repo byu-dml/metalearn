@@ -19,6 +19,7 @@ from .information_theoretic_metafeatures import *
 from .landmarking_metafeatures import *
 from .decision_tree_metafeatures import *
 from .text_metafeatures import *
+from .graph_metafeatures import *
 
 
 class Metafeatures(object):
