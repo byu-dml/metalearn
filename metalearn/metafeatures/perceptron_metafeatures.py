@@ -39,5 +39,11 @@ def get_perceptron_weights_dist(perceptron):
     return profile_distribution(weights)
 
 
+def get_perceptron_bias_dist(perceptron):
+    intercepts = perceptron.intercept_
+    return profile_distribution(intercepts)
+
+
 def get_perceptron_n_iters(perceptron):
-    return perceptron.n_iter_,
+    n_iter = perceptron.n_iter_
+    return n_iter,
