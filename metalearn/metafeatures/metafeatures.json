@@ -180,9 +180,7 @@
         "UnweightedRadiusNeighborsGraph": {
             "function": "get_radius_neighbors_graph",
             "arguments": {
-                "X": "XSample",
-                "Y": "YSample",
-                "column_types": "column_types",
+                "X": "XPreprocessed",
                 "mode": "connectivity"
             },
             "returns": [
