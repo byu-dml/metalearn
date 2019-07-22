@@ -4906,6 +4906,674 @@
                 "MaxSqrtPerceptronWeights"
             ]
         },
+        "MeanFullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+
+        "StdevFullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+
+        "SkewFullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+
+        "KurtosisFullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+
+        "MinFullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+
+        "Quartile1FullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+        "Quartile2FullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+        "Quartile3FullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+        "MaxFullPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "FullPerceptron"
+            },
+            "returns": [
+                "FullPerceptronBias",
+                "MeanFullPerceptronBias",
+                "StdevFullPerceptronBias",
+                "SkewFullPerceptronBias",
+                "KurtosisFullPerceptronBias",
+                "MinFullPerceptronBias",
+                "Quartile1FullPerceptronBias",
+                "Quartile2FullPerceptronBias",
+                "Quartile3FullPerceptronBias",
+                "MaxFullPerceptronBias"
+            ]
+        },
+        "MeanOneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+
+        "StdevOneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+
+        "SkewOneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+
+        "KurtosisOneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+
+        "MinOneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+
+        "Quartile1OneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+        "Quartile2OneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+        "Quartile3OneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+        "MaxOneTenthPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneTenthPerceptron"
+            },
+            "returns": [
+                "OneTenthPerceptronBias",
+                "MeanOneTenthPerceptronBias",
+                "StdevOneTenthPerceptronBias",
+                "SkewOneTenthPerceptronBias",
+                "KurtosisOneTenthPerceptronBias",
+                "MinOneTenthPerceptronBias",
+                "Quartile1OneTenthPerceptronBias",
+                "Quartile2OneTenthPerceptronBias",
+                "Quartile3OneTenthPerceptronBias",
+                "MaxOneTenthPerceptronBias"
+            ]
+        },
+        "MeanOneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+
+        "StdevOneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+
+        "SkewOneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+
+        "KurtosisOneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+
+        "MinOneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+
+        "Quartile1OneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+        "Quartile2OneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+        "Quartile3OneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+        "MaxOneHalfPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "OneHalfPerceptron"
+            },
+            "returns": [
+                "OneHalfPerceptronBias",
+                "MeanOneHalfPerceptronBias",
+                "StdevOneHalfPerceptronBias",
+                "SkewOneHalfPerceptronBias",
+                "KurtosisOneHalfPerceptronBias",
+                "MinOneHalfPerceptronBias",
+                "Quartile1OneHalfPerceptronBias",
+                "Quartile2OneHalfPerceptronBias",
+                "Quartile3OneHalfPerceptronBias",
+                "MaxOneHalfPerceptronBias"
+            ]
+        },
+        "MeanSqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+
+        "StdevSqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+
+        "SkewSqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+
+        "KurtosisSqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+
+        "MinSqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+
+        "Quartile1SqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+        "Quartile2SqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+        "Quartile3SqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
+        "MaxSqrtPerceptronBias": {
+            "function": "get_perceptron_bias_dist",
+            "arguments": {
+                "perceptron": "SqrtPerceptron"
+            },
+            "returns": [
+                "SqrtPerceptronBias",
+                "MeanSqrtPerceptronBias",
+                "StdevSqrtPerceptronBias",
+                "SkewSqrtPerceptronBias",
+                "KurtosisSqrtPerceptronBias",
+                "MinSqrtPerceptronBias",
+                "Quartile1SqrtPerceptronBias",
+                "Quartile2SqrtPerceptronBias",
+                "Quartile3SqrtPerceptronBias",
+                "MaxSqrtPerceptronBias"
+            ]
+        },
         "FullPerceptronNIters": {
             "function": "get_perceptron_n_iters",
             "arguments": {
