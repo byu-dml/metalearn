@@ -181,10 +181,20 @@
             "function": "get_radius_neighbors_graph",
             "arguments": {
                 "X": "XPreprocessed",
-                "mode": "connectivity"
+                "mode": "unweighted"
             },
             "returns": [
                 "UnweightedRadiusNeighborsGraph"
+            ]
+        },
+        "WeightedRadiusNeighborsGraph": {
+            "function": "get_radius_neighbors_graph",
+            "arguments": {
+                "X": "XPreprocessed",
+                "mode": "weighted"
+            },
+            "returns": [
+                "WeightedRadiusNeighborsGraph"
             ]
         }
     },
@@ -4180,13 +4190,157 @@
                 "RatioOfTokensContainingNumericChar"
             ]
         },
-        "UnweightedNumberOfEdges": {
+        "UnweightedGraphNumberOfEdges": {
             "function": "get_number_of_edges",
             "arguments": {
                 "graph": "UnweightedRadiusNeighborsGraph"
             },
             "returns": [
-                "UnweightedNumberOfEdges"
+                "UnweightedGraphNumberOfEdges"
+            ]
+        },
+        "MeanUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
+            ]
+        },
+        "MeanUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
+            ]
+        },
+        "MeanUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
+            ]
+        },
+        "MeanUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
+            ]
+        },
+        "MeanUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
+            ]
+        },
+        "MeanUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
+            ]
+        },
+        "MeanUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
+            ]
+        },
+        "MaxUnweightedGraphShortestPath": {
+            "function": "get_path_lengths",
+            "arguments": {
+                "graph": "UnweightedRadiusNeighborsGraph"
+            },
+            "returns": [
+                "UnweightedGraphShortestPaths",
+                "MeanUnweightedGraphShortestPath",
+                "StdevUnweightedGraphShortestPath",
+                "SkewUnweightedGraphShortestPath",
+                "KurtosisUnweightedGraphShortestPath",
+                "MinUnweightedGraphShortestPath",
+                "Quartile1UnweightedGraphShortestPath",
+                "Quartile2UnweightedGraphShortestPath",
+                "Quartile3UnweightedGraphShortestPath",
+                "MaxUnweightedGraphShortestPath"
             ]
         }
     }

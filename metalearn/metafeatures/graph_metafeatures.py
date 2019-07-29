@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.sparse import csr_matrix
 import networkx as nx
 from networkx.algorithms.bipartite import clustering
 from sklearn.neighbors import radius_neighbors_graph
@@ -7,20 +8,29 @@ from .common_operations import profile_distribution
 
 
 def get_radius_neighbors_graph(X, mode):
-    graph = radius_neighbors_graph(X, radius=0.5, mode=mode)
-    return nx.from_scipy_sparse_matrix(graph),
+    adj = radius_neighbors_graph(X, radius=np.inf, mode='distance').toarray()
+    radius = np.percentile(adj[np.triu_indices(len(adj), 1)], 15)
+    if mode == 'weighted':
+        adj = np.where(adj < radius, adj, 0)
+    elif mode == 'unweighted':
+        adj = np.where(adj < radius, 1, 0)
+    else:
+        raise NotImplementedError
+    graph = nx.Graph(adj)
+    return graph,
 
 
 def get_number_of_edges(graph):
-    return graph.number_of_edges(),
+    edges = graph.number_of_edges()
+    return edges,
 
 
 def get_path_lengths(graph):
-    length_dict = nx.all_pairs_dijkstra_path_length(graph)
     lengths = []
-    for source, paths in length_dict.items():
+    for source, paths in nx.all_pairs_dijkstra_path_length(graph):
         for target, length in paths.items():
-            lengths.append(length)
+            if length > 0:
+                lengths.append(length)
     return profile_distribution(lengths)
 
 
