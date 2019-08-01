@@ -1,10 +1,36 @@
 import numpy as np
-from scipy.sparse import csr_matrix
+from heapq import heapify, heappop, heappush
 import networkx as nx
 from networkx.algorithms.bipartite import clustering
 from sklearn.neighbors import radius_neighbors_graph
 
 from .common_operations import profile_distribution
+
+
+class Graph:
+
+    def __init__(self, adj):
+        self.adj = adj
+        self.nodes = [i for i in range(len(self.adj))]
+
+    def get_all_shortest_path_lengths(self):
+        lengths = self._floyd_warshall()
+        return lengths
+
+    def _floyd_warshall(self):
+        dists = np.full((len(self.adj), len(self.adj)), fill_value=np.inf)
+        np.fill_diagonal(dists, val=0)
+        dists[np.nonzero(self.adj)] = self.adj[np.nonzero(self.adj)]
+        V = self.nodes
+
+        for k in V:
+            for i in V:
+                for j in V:
+                    new_dist = dists[i, k] + dists[k, j]
+                    if dists[i, j] > new_dist:
+                        dists[i, j] = new_dist
+
+        return dists
 
 
 def get_radius_neighbors_graph(X, mode):
