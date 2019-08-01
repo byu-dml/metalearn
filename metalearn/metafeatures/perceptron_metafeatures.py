@@ -20,6 +20,10 @@ def get_fitted_perceptron(X, Y, seed, n_classes, frac='all'):
     cls = Perceptron(random_state=seed, validation_fraction=frac, early_stopping=True, max_iter=1000, tol=1e-3)
 
     if n_classes == 1:
+    # The `.fit` method cannot handle a dataset with 1 class, so we
+    # give the model the theoretical weights it would learn on a single
+    # class classification problem: zero weights (so as to predict class 0
+    # every time). 
         cls.coef_ = np.array([0.0 for i in range(X.shape[1])])
         cls.intercept_ = np.array([0])
         cls.n_iter_ = 0
