@@ -14,6 +14,7 @@ from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 import metalearn.metafeatures.constants as consts
 
 
+
 def get_numeric_means(numeric_features_array):
     means = [feature.mean() for feature in numeric_features_array]
     return profile_distribution(means)
@@ -214,22 +215,17 @@ def get_canonical_correlations(dataframe, column_types):
     return correlations
 
 def autocorrelation(Y, column_types):
-    autoCorrelation = 1.0
-    if len(Y) >= 0:
-        TimeBasedChanges = 0.0
-        for i in range(len(Y) - 1):
-            previousData = Y.at[i]
-            currentData = Y.at[i + 1]
-            if column_types[Y.name] == "NUMERIC":
-                TimeBasedChanges += abs(previousData - currentData)
-            elif column_types[Y.name] == "CATEGORICAL":
-                if previousData != currentData:
-                    TimeBasedChanges += 1
-        if Y.size > 1:
-            autoCorrelation = (Y.size - 1 - TimeBasedChanges)/(Y.size - 1.0)
+    if Y.size == 0:
+        ac = None
+    elif Y.size == 1:
+        ac = 1.0
+    elif column_types[Y.name] == "NUMERIC":
+        ac = Y.autocorr()
+    elif column_types[Y.name] == "CATEGORICAL":
+        ac = np.equal(Y[:-1].values, Y[1:].values).mean()
     else:
-        autoCorrelation = None
-    return (autoCorrelation,)
+        ac = None
+    return (ac,)
 
 """
 A list of all MetafeatureComputer

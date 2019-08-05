@@ -13,7 +13,7 @@ def get_dataset_stats(X, column_types):
     number_of_features = X.shape[1]
     numeric_features = len(get_numeric_features(X, column_types))
     categorical_features = number_of_features - numeric_features
-    binary_features = get_categorical_cardinalities_at_values(X,column_types)[0]
+    binary_features = get_categorical_cardinalities_at_values(X,column_types)[0]  # TODO: can this be optimized?
     ratio_of_binary_features = binary_features / number_of_features
     ratio_of_numeric_features = numeric_features / number_of_features
     ratio_of_categorical_features = categorical_features / number_of_features
