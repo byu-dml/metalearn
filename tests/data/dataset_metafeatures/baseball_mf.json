@@ -1,0 +1,926 @@
+{
+    "CategoricalNoiseToSignalRatio": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "ClassEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "DecisionStumpErrRate": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "DecisionStumpKappa": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "DecisionTreeHeight": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "DecisionTreeLeafCount": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "DecisionTreeNodeCount": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "DecisionTreeWidth": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Dimensionality": {
+        "compute_time": 3.960495814681053e-05,
+        "value": 0.012667660208643815
+    },
+    "EquivalentNumberOfCategoricalFeatures": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "EquivalentNumberOfNumericFeatures": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisCardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": -2.0
+    },
+    "KurtosisCardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": -1.2500068454598208
+    },
+    "KurtosisCategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": -2.0
+    },
+    "KurtosisCategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisCategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisDecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisDecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisDecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisKurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 1.6447578939796204
+    },
+    "KurtosisKurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "KurtosisMeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 6.673801809873831
+    },
+    "KurtosisMeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "KurtosisNumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 1.354263535843871
+    },
+    "KurtosisNumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisNumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "KurtosisSkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": 2.441860823872682
+    },
+    "KurtosisSkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "KurtosisStdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 6.362301162752955
+    },
+    "KurtosisStdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "LinearDiscriminantAnalysisErrRate": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "LinearDiscriminantAnalysisKappa": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MajorityClassSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxCardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 1339.0
+    },
+    "MaxCardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 1239.0
+    },
+    "MaxCategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 7.198817298840598
+    },
+    "MaxCategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxCategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxDecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxDecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxDecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxKurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 8.044662100343796
+    },
+    "MaxKurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "MaxMeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 4534.613263785395
+    },
+    "MaxMeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "MaxNumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 1.950252980493278
+    },
+    "MaxNumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxNumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MaxSkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": 2.467543911993765
+    },
+    "MaxSkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "MaxStdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 2092.6432742922634
+    },
+    "MaxStdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "MeanCardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 673.0
+    },
+    "MeanCardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 525.6666666666666
+    },
+    "MeanCategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 4.440021641020347
+    },
+    "MeanCategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanCategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanDecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanDecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanDecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanKurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 2.1462880227657206
+    },
+    "MeanKurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "MeanMeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 637.3841785265669
+    },
+    "MeanMeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "MeanNumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 1.7335199912519854
+    },
+    "MeanNumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanNumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MeanSkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": 0.8343245518137928
+    },
+    "MeanSkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "MeanStdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 324.7019649607152
+    },
+    "MeanStdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "MinCardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 7.0
+    },
+    "MinCardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 17.0
+    },
+    "MinCategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 1.681225983200096
+    },
+    "MinCategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinCategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinDecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinDecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinDecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinKurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 0.257155437828672
+    },
+    "MinKurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "MinMeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 0.2687786885245902
+    },
+    "MinMeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "MinNumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 1.2277099865000252
+    },
+    "MinNumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinNumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "MinSkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": -1.865517709117721
+    },
+    "MinSkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "MinStdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 0.02517808355568833
+    },
+    "MinStdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "MinorityClassSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "NaiveBayesErrRate": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "NaiveBayesKappa": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "NumberOfCategoricalFeatures": {
+        "compute_time": 1.94209860637784e-05,
+        "value": 2
+    },
+    "NumberOfClasses": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "NumberOfDistinctTokens": {
+        "compute_time": 8.283107308670878e-05,
+        "value": 0
+    },
+    "NumberOfFeatures": {
+        "compute_time": 1.94209860637784e-05,
+        "value": 17
+    },
+    "NumberOfFeaturesWithMissingValues": {
+        "compute_time": 0.0018860370037145913,
+        "value": 1
+    },
+    "NumberOfInstances": {
+        "compute_time": 1.94209860637784e-05,
+        "value": 1342
+    },
+    "NumberOfInstancesWithMissingValues": {
+        "compute_time": 0.0018860370037145913,
+        "value": 20
+    },
+    "NumberOfMissingValues": {
+        "compute_time": 0.0018860370037145913,
+        "value": 20
+    },
+    "NumberOfNumericFeatures": {
+        "compute_time": 1.94209860637784e-05,
+        "value": 15
+    },
+    "NumberOfTokens": {
+        "compute_time": 8.283107308670878e-05,
+        "value": 0
+    },
+    "NumberOfTokensContainingNumericChar": {
+        "compute_time": 8.283107308670878e-05,
+        "value": 0
+    },
+    "NumericNoiseToSignalRatio": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "PredDet": {
+        "compute_time": 0.18015817104605958,
+        "value": Infinity
+    },
+    "PredEigen1": {
+        "compute_time": 0.18015817104605958,
+        "value": 5361035.215635827
+    },
+    "PredEigen2": {
+        "compute_time": 0.18015817104605958,
+        "value": 93995.10303435646
+    },
+    "PredEigen3": {
+        "compute_time": 0.18015817104605958,
+        "value": 45013.183089525555
+    },
+    "PredPCA1": {
+        "compute_time": 0.18015817104605958,
+        "value": 0.9653091369079596
+    },
+    "PredPCA2": {
+        "compute_time": 0.18015817104605958,
+        "value": 0.01692477816952899
+    },
+    "PredPCA3": {
+        "compute_time": 0.18015817104605958,
+        "value": 0.008105083285202118
+    },
+    "Quartile1CardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 340.0
+    },
+    "Quartile1CardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 178.0
+    },
+    "Quartile1CategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 3.0606238121102214
+    },
+    "Quartile1CategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1CategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1ClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1DecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1DecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1DecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1KurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 0.7133023244083134
+    },
+    "Quartile1KurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "Quartile1MeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 7.224609165424739
+    },
+    "Quartile1MeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "Quartile1NumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 1.6541111150211445
+    },
+    "Quartile1NumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1NumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile1SkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": 0.5371452821697278
+    },
+    "Quartile1SkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "Quartile1StdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 1.597730588603258
+    },
+    "Quartile1StdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "Quartile2CardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 673.0
+    },
+    "Quartile2CardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 418.0
+    },
+    "Quartile2CategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 4.440021641020347
+    },
+    "Quartile2CategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2CategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2ClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2DecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2DecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2DecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2KurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 1.098434363727045
+    },
+    "Quartile2KurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "Quartile2MeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 203.21460506706407
+    },
+    "Quartile2MeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "Quartile2NumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 1.7570122436419053
+    },
+    "Quartile2NumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2NumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile2SkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": 0.9585931788821953
+    },
+    "Quartile2SkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "Quartile2StdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 116.49444045117912
+    },
+    "Quartile2StdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "Quartile3CardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 1006.0
+    },
+    "Quartile3CardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 803.5
+    },
+    "Quartile3CategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 5.819419469930472
+    },
+    "Quartile3CategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3CategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3ClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3DecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3DecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3DecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3KurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 3.437262455513981
+    },
+    "Quartile3KurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "Quartile3MeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 600.5141579731744
+    },
+    "Quartile3MeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "Quartile3NumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 1.8674451866197583
+    },
+    "Quartile3NumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3NumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "Quartile3SkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": 1.3913400681494212
+    },
+    "Quartile3SkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "Quartile3StdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 366.5174961346092
+    },
+    "Quartile3StdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "RandomTreeDepth1ErrRate": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "RandomTreeDepth1Kappa": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "RandomTreeDepth2ErrRate": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "RandomTreeDepth2Kappa": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "RandomTreeDepth3ErrRate": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "RandomTreeDepth3Kappa": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "RatioOfCategoricalFeatures": {
+        "compute_time": 1.94209860637784e-05,
+        "value": 0.11764705882352941
+    },
+    "RatioOfDistinctTokens": {
+        "compute_time": 8.283107308670878e-05,
+        "value": 0
+    },
+    "RatioOfFeaturesWithMissingValues": {
+        "compute_time": 0.0018860370037145913,
+        "value": 0.058823529411764705
+    },
+    "RatioOfInstancesWithMissingValues": {
+        "compute_time": 0.0018860370037145913,
+        "value": 0.014903129657228018
+    },
+    "RatioOfMissingValues": {
+        "compute_time": 0.0018860370037145913,
+        "value": 0.0008766546857192952
+    },
+    "RatioOfNumericFeatures": {
+        "compute_time": 1.94209860637784e-05,
+        "value": 0.8823529411764706
+    },
+    "RatioOfTokensContainingNumericChar": {
+        "compute_time": 8.283107308670878e-05,
+        "value": 0
+    },
+    "SkewCardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 0.0
+    },
+    "SkewCardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 0.3224920573219124
+    },
+    "SkewCategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 0.0
+    },
+    "SkewCategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewCategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewDecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewDecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewDecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewKurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 1.4744731396650288
+    },
+    "SkewKurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "SkewMeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 2.7190120671937312
+    },
+    "SkewMeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "SkewNumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": -1.2622456623743195
+    },
+    "SkewNumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewNumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "SkewSkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": -1.1995779388290593
+    },
+    "SkewSkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "SkewStdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 2.6189312836434
+    },
+    "SkewStdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "StdevCardinalityOfCategoricalFeatures": {
+        "compute_time": 0.0007631490007042885,
+        "value": 941.8662325404813
+    },
+    "StdevCardinalityOfNumericFeatures": {
+        "compute_time": 0.0016664910363033414,
+        "value": 387.83863851324753
+    },
+    "StdevCategoricalAttributeEntropy": {
+        "compute_time": 0.0030559799633920193,
+        "value": 3.901526235105403
+    },
+    "StdevCategoricalJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevCategoricalMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevClassProbability": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevDecisionTreeAttribute": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevDecisionTreeBranchLength": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevDecisionTreeLevelSize": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevKurtosisOfNumericFeatures": {
+        "compute_time": 0.002516634005587548,
+        "value": 2.149815807419462
+    },
+    "StdevKurtosisOfStringLengthOfTextFeatures": {
+        "compute_time": 3.257201751694083e-05,
+        "value": NaN
+    },
+    "StdevMeansOfNumericFeatures": {
+        "compute_time": 0.00220480898860842,
+        "value": 1164.0902842355063
+    },
+    "StdevMeansOfStringLengthOfTextFeatures": {
+        "compute_time": 3.341602860018611e-05,
+        "value": NaN
+    },
+    "StdevNumericAttributeEntropy": {
+        "compute_time": 0.04877952305832878,
+        "value": 0.189190636328898
+    },
+    "StdevNumericJointEntropy": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevNumericMutualInformation": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "StdevSkewnessOfNumericFeatures": {
+        "compute_time": 0.0026568230241537094,
+        "value": 0.9651486701768154
+    },
+    "StdevSkewnessOfStringLengthOfTextFeatures": {
+        "compute_time": 3.2634008675813675e-05,
+        "value": NaN
+    },
+    "StdevStdDevOfNumericFeatures": {
+        "compute_time": 0.0025491759879514575,
+        "value": 532.6581729849303
+    },
+    "StdevStdDevOfStringLengthOfTextFeatures": {
+        "compute_time": 3.3126038033515215e-05,
+        "value": NaN
+    },
+    "kNN1NErrRate": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    },
+    "kNN1NKappa": {
+        "compute_time": null,
+        "value": "NUMERIC_TARGETS"
+    }
+}

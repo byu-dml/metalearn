@@ -22,5 +22,5 @@ if __name__ == '__main__':
     if not runner.run(tests).wasSuccessful():
         sys.exit(1)
 
-    # Compute Metafeatures
+    # # Compute Metafeatures
     # compute_dataset_metafeatures()
