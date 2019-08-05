@@ -1,3 +1,5 @@
+from collections import Counter
+
 import numpy as np
 from pandas import DataFrame
 
@@ -111,30 +113,12 @@ get_class_stats = MetafeatureComputer(
 
 
 def get_categorical_cardinalities_at_values(X,column_types):
-    categoricalCardinalityAtTwo = 0;
-    categoricalCardinalityAtThree = 0;
-    categoricalCardinalityAtFour = 0;
-    for x in (get_categorical_cardinalities(X, column_types)[0]):
-        if x == 2:
-            categoricalCardinalityAtTwo+=1
-        if x == 3:
-            categoricalCardinalityAtThree+=1
-        if x == 4:
-            categoricalCardinalityAtFour+=1
-    return(categoricalCardinalityAtTwo,categoricalCardinalityAtThree,categoricalCardinalityAtFour)
+    counts = Counter(get_categorical_cardinalities(X, column_types)[0])
+    return counts.get(2, 0), counts.get(3, 0), counts.get(4, 0)
 
 def get_numeric_cardinalities_at_values(X,column_types):
-    numericCardinalityAtTwo = 0;
-    numericCardinalityAtThree = 0;
-    numericCardinalityAtFour = 0;
-    for x in (get_numeric_cardinalities(X, column_types)[0]):
-        if x == 2:
-            numericCardinalityAtTwo+=1
-        if x == 3:
-            numericCardinalityAtThree+=1
-        if x == 4:
-            numericCardinalityAtFour+=1
-    return(numericCardinalityAtTwo,numericCardinalityAtThree,numericCardinalityAtFour)
+    counts = Counter(get_numeric_cardinalities(X, column_types)[0])
+    return counts.get(2, 0), counts.get(3, 0), counts.get(4, 0)
 
 def get_categorical_cardinalities(X, column_types):
     cardinalities = [X[feature].unique().shape[0] for feature in get_categorical_features(X, column_types)]
