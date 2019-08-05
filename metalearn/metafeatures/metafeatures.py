@@ -11,6 +11,7 @@ import pandas as pd
 from pandas import DataFrame, Series
 from sklearn.model_selection import StratifiedShuffleSplit
 
+from .resources import METAFEATURE_CONFIG
 from .common_operations import *
 from .simple_metafeatures import *
 from .statistical_metafeatures import *
@@ -37,8 +38,7 @@ class Metafeatures(object):
     NUMERIC_TARGETS = "NUMERIC_TARGETS"
     TIMEOUT = "TIMEOUT"
 
-    _metadata_path = os.path.splitext(__file__)[0] + ".json"
-    with open(_metadata_path, 'r') as f:
+    with open(METAFEATURE_CONFIG, 'r') as f:
         _metadata = json.load(f)
     IDS = list(_metadata["metafeatures"].keys())
     _resources_info = {}
@@ -560,11 +560,11 @@ class Metafeatures(object):
         numeric_features_and_class_with_no_missing_values = []
         for feature in X_sample.columns:
             if column_types[feature] == self.NUMERIC:
-                df = pd.concat([X_sample[feature],Y_sample], axis=1).dropna(
-                    axis=0, how='any'
-                )
+                # renaming avoids name collisions and problems when y does not have a name
+                df = pd.concat([X_sample[feature].rename('x'), Y_sample.rename('y')], axis=1)
+                df.dropna(axis=0, how='any', inplace=True)
                 numeric_features_and_class_with_no_missing_values.append(
-                    (df[feature],df[Y_sample.name])
+                    (df['x'],df['y'])
                 )
         binned_feature_class_array = [
             (

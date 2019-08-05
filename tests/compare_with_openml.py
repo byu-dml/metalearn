@@ -6,9 +6,9 @@ import traceback
 import numpy as np
 import openml
 
-from test.data.dataset import _read_arff_dataset
+from tests.data.dataset import _read_arff_dataset
 from metalearn import Metafeatures
-from test.config import OPENML_COMPARE_RESULTS_DIR
+from tests.config import OPENML_COMPARE_RESULTS_DIR
 
 
 def compare_with_openml(
@@ -106,7 +106,7 @@ def _compare_metafeatures(oml_dataset, tol, verbose):
     )
     oml_mfs = oml_dataset["metafeatures"]
     mf_id_map = json.load(
-        open("./test/metalearn/metafeatures/oml_metafeature_map.json", "r")
+        open("./tests/oml_metafeature_map.json", "r")
     )
 
     oml_exclusive_mfs = {x: v for x,v in oml_dataset["metafeatures"].items()}
