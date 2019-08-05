@@ -17,7 +17,10 @@ def get_dataset_stats(X, column_types):
     ratio_of_binary_features = binary_features / number_of_features
     ratio_of_numeric_features = numeric_features / number_of_features
     ratio_of_categorical_features = categorical_features / number_of_features
-    return (number_of_instances, number_of_features, numeric_features, categorical_features, binary_features, ratio_of_numeric_features, ratio_of_categorical_features, ratio_of_binary_features)
+    return (
+        number_of_instances, number_of_features, numeric_features, categorical_features, binary_features,
+        ratio_of_numeric_features, ratio_of_categorical_features, ratio_of_binary_features
+    )
 
 get_dataset_stats = MetafeatureComputer(
     get_dataset_stats,
