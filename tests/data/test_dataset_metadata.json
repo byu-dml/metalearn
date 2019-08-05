@@ -36,7 +36,6 @@
             "Class": "CATEGORICAL"
         }
     },
-
     {
         "filename": "small_test_dataset.arff",
         "target_class_name": "class",
