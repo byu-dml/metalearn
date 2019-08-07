@@ -102,6 +102,7 @@ ENV/
 
 # IDE configurations
 .idea/
+.vscode/
 
 # miscellaneous
 test_all_datasets.py
