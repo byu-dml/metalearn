@@ -4,6 +4,7 @@ import time
 import numpy as np
 
 from metalearn import Metafeatures
+import metalearn.metafeatures.constants as consts
 from tests.data.dataset import read_dataset
 from tests.config import CORRECTNESS_SEED, METADATA_PATH
 
@@ -49,7 +50,7 @@ def run_metafeature_benchmark(benchmark_name, iters=100):
             total_compute_times.append(compute_timestamp - init_timestamp)
             for mf_id, result in computed_mfs.items():
                 metafeature_compute_times[mf_id].append(
-                    result[Metafeatures.COMPUTE_TIME_KEY]
+                    result[consts.COMPUTE_TIME_KEY]
                 )
         benchmark_data[dataset_metadata["filename"]] = {
             "init_time": {

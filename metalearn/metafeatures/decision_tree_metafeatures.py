@@ -3,6 +3,9 @@ from collections import Counter
 from sklearn.tree import DecisionTreeClassifier
 
 from metalearn.metafeatures.common_operations import profile_distribution
+from metalearn.metafeatures.base import ResourceComputer, MetafeatureComputer
+from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
+
 
 class DecisionTree:
 
@@ -61,20 +64,148 @@ class TraversedDecisionTree:
 def get_decision_tree(X, Y, seed):
     return (DecisionTree(X, Y, seed),)
 
+get_decision_tree = ResourceComputer(
+    get_decision_tree,
+    ["DecisionTree"],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample",
+        "seed": 9
+    }
+)
+
+
 def traverse_tree(tree):
     return (TraversedDecisionTree(tree),)
+
+traverse_tree = ResourceComputer(
+    traverse_tree,
+    ["TraversedDecisionTree"],
+    { "tree": "DecisionTree" }
+)
+
 
 def get_decision_tree_level_sizes(tree):
     return profile_distribution(tree.level_sizes)
 
+get_decision_tree_level_sizes = MetafeatureComputer(
+    get_decision_tree_level_sizes,
+    [
+        "MeanDecisionTreeLevelSize",
+        "StdevDecisionTreeLevelSize",
+        "SkewDecisionTreeLevelSize",
+        "KurtosisDecisionTreeLevelSize",
+        "MinDecisionTreeLevelSize",
+        "Quartile1DecisionTreeLevelSize",
+        "Quartile2DecisionTreeLevelSize",
+        "Quartile3DecisionTreeLevelSize",
+        "MaxDecisionTreeLevelSize"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.MODEL_BASED],
+    {
+        "tree": "TraversedDecisionTree"
+    }
+)
+
+
 def get_decision_tree_branch_lengths(tree):
     return profile_distribution(tree.branch_lengths)
+
+get_decision_tree_branch_lengths = MetafeatureComputer(
+    get_decision_tree_branch_lengths,
+    [
+        "MeanDecisionTreeBranchLength",
+        "StdevDecisionTreeBranchLength",
+        "SkewDecisionTreeBranchLength",
+        "KurtosisDecisionTreeBranchLength",
+        "MinDecisionTreeBranchLength",
+        "Quartile1DecisionTreeBranchLength",
+        "Quartile2DecisionTreeBranchLength",
+        "Quartile3DecisionTreeBranchLength",
+        "MaxDecisionTreeBranchLength"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.MODEL_BASED],
+    {
+        "tree": "TraversedDecisionTree"
+    }
+)
+
 
 def get_decision_tree_attributes(tree):
     return profile_distribution(tree.get_attributes())
 
+get_decision_tree_attributes = MetafeatureComputer(
+    get_decision_tree_attributes,
+    [
+        "MeanDecisionTreeAttribute",
+        "StdevDecisionTreeAttribute",
+        "SkewDecisionTreeAttribute",
+        "KurtosisDecisionTreeAttribute",
+        "MinDecisionTreeAttribute",
+        "Quartile1DecisionTreeAttribute",
+        "Quartile2DecisionTreeAttribute",
+        "Quartile3DecisionTreeAttribute",
+        "MaxDecisionTreeAttribute"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.MODEL_BASED],
+    {
+        "tree": "DecisionTree"
+    }
+)
+
+
 def get_decision_tree_general_info(tree):
     return tree.get_general_info()
 
+get_decision_tree_general_info = MetafeatureComputer(
+    get_decision_tree_general_info,
+    [
+        "DecisionTreeNodeCount",
+        "DecisionTreeLeafCount",
+        "DecisionTreeHeight",
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.MODEL_BASED],
+    {
+        "tree": "DecisionTree"
+    }
+)
+
+
 def get_decision_tree_width(tree):
     return (tree.get_width(),)
+
+get_decision_tree_width = MetafeatureComputer(
+    get_decision_tree_width,
+    ["DecisionTreeWidth"],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.MODEL_BASED],
+    {
+        "tree": "TraversedDecisionTree"
+    }
+)
+
+
+"""
+A list of all ResourceComputer
+instances in this module.
+"""
+resource_computers = [
+    get_decision_tree,
+    traverse_tree
+]
+
+"""
+A list of all MetafeatureComputer
+instances in this module.
+"""
+metafeature_computers = [
+    get_decision_tree_level_sizes,
+    get_decision_tree_branch_lengths,
+    get_decision_tree_attributes,
+    get_decision_tree_general_info,
+    get_decision_tree_width
+]

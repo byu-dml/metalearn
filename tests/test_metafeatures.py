@@ -12,7 +12,9 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from metalearn import Metafeatures, METAFEATURE_CONFIG, METAFEATURES_JSON_SCHEMA
+from metalearn import Metafeatures, METAFEATURES_JSON_SCHEMA
+import metalearn.metafeatures.constants as consts
+from metalearn.metafeatures.resources import metafeature_ids
 from tests.config import CORRECTNESS_SEED, METADATA_PATH
 from tests.data.dataset import read_dataset
 from tests.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
@@ -71,12 +73,12 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         fail_message = "Not all metafeatures matched previous results."
 
         for mf_id, result in computed_mfs.items():
-            computed_value = result[Metafeatures.VALUE_KEY]
+            computed_value = result[consts.VALUE_KEY]
             if not any(isinstance(computed_value, type_) for type_ in [str, float, int]):
                 self.fail(
                     'computed {} has invalid value {} with type {}'.format(mf_id, computed_value, type(computed_value))
                 )
-            known_value = known_mfs[mf_id][Metafeatures.VALUE_KEY]
+            known_value = known_mfs[mf_id][consts.VALUE_KEY]
             correct = True
             if known_value is None:
                 correct = False
@@ -116,9 +118,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_failures = {}
         fail_message = "Metafeature lists do not match."
 
-        with open(METAFEATURE_CONFIG) as f:
-            master_mf_ids = json.load(f)["metafeatures"].keys()
-        master_mf_ids_set = set(master_mf_ids)
+        master_mf_ids_set = set(metafeature_ids)
 
         known_mf_ids_set = set({
             x for x in known_mfs.keys() if "_Time" not in x
@@ -218,8 +218,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
-                    Metafeatures.VALUE_KEY: Metafeatures.NO_TARGETS,
-                    Metafeatures.COMPUTE_TIME_KEY: 0.
+                    consts.VALUE_KEY: consts.NO_TARGETS,
+                    consts.COMPUTE_TIME_KEY: 0.
                 }
 
             required_checks = [
@@ -240,7 +240,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         for dataset_filename, dataset in self.datasets.items():
             metafeatures = Metafeatures()
             column_types = dataset["column_types"].copy()
-            column_types[dataset["Y"].name] = metafeatures.NUMERIC
+            column_types[dataset["Y"].name] = consts.NUMERIC
             computed_mfs = metafeatures.compute(
                 X=dataset["X"], Y=pd.Series(np.random.rand(dataset["Y"].shape[0]),
                 name=dataset["Y"].name), seed=CORRECTNESS_SEED, 
@@ -252,8 +252,8 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
-                    Metafeatures.VALUE_KEY: Metafeatures.NUMERIC_TARGETS,
-                    Metafeatures.COMPUTE_TIME_KEY: 0.
+                    consts.VALUE_KEY: consts.NUMERIC_TARGETS,
+                    consts.COMPUTE_TIME_KEY: 0.
                 }
 
             required_checks = [
@@ -417,7 +417,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 f"Compute metafeatures exceeded timeout on '{dataset_filename}'"
             )
             computed_mfs_timeout = {k: v for k, v in computed_mfs.items()
-                                    if v[Metafeatures.VALUE_KEY] != Metafeatures.TIMEOUT}
+                                    if v[consts.VALUE_KEY] != consts.TIMEOUT}
             known_mfs = dataset["known_metafeatures"]
             required_checks = [
                 (self._check_correctness,
@@ -554,9 +554,9 @@ class MetafeaturesTestCase(unittest.TestCase):
         self.assertEqual(str(cm.exception), expected_exception_string)
 
     def test_column_type_input(self):
-        column_types = {col: "NUMERIC" for col in self.dummy_features.columns}
-        column_types[self.dummy_features.columns[2]] = "CATEGORICAL"
-        column_types[self.dummy_target.name] = "CATEGORICAL"
+        column_types = {col: consts.NUMERIC for col in self.dummy_features.columns}
+        column_types[self.dummy_features.columns[2]] = consts.CATEGORICAL
+        column_types[self.dummy_target.name] = consts.CATEGORICAL
         # all valid
         try:
             Metafeatures().compute(
