@@ -17,16 +17,16 @@ def get_fitted_perceptron(X, Y, seed, n_classes, frac='all'):
     elif frac == 'sqrt':
         frac = min(max(1 - (np.sqrt(len(X)) / len(X)), class_fraction), 1 - class_fraction)
 
-    cls = Perceptron(random_state=seed, validation_fraction=frac, early_stopping=True, max_iter=1000, tol=1e-3)
+    clf = Perceptron(random_state=seed, validation_fraction=frac, early_stopping=True, max_iter=1000, tol=1e-3)
 
     if n_classes == 1:
-        cls.coef_ = np.array([0.0 for i in range(X.shape[1])])
-        cls.intercept_ = np.array([0])
-        cls.n_iter_ = 0
+        clf.coef_ = np.array([0.0 for i in range(X.shape[1])])
+        clf.intercept_ = np.array([0])
+        clf.n_iter_ = 0
     else:
-        cls.fit(X, Y)
+        clf.fit(X, Y)
 
-    return cls,
+    return clf,
 
 
 def get_perceptron_weights_sum(perceptron):
