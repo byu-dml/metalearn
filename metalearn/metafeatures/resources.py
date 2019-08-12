@@ -1,5 +1,4 @@
 from typing import List
-import pkg_resources
 
 from metalearn.metafeatures.base import ResourceComputerMap, MetafeatureComputer, ResourceComputer
 
@@ -13,12 +12,6 @@ from metalearn.metafeatures.information_theoretic_metafeatures import metafeatur
 from metalearn.metafeatures.landmarking_metafeatures import metafeature_computers as landmarking_metafeatures
 from metalearn.metafeatures.text_metafeatures import metafeature_computers as text_metafeatures
 from metalearn.metafeatures.decision_tree_metafeatures import metafeature_computers as dt_metafeatures
-
-
-# Expose the `metafeatures_schema.json` file as a file path string.
-# Needed to allow the file to be successfully accessed across platforms 
-# and install types.
-METAFEATURES_JSON_SCHEMA = pkg_resources.resource_filename('metalearn', 'metafeatures/metafeatures_schema.json')
 
 
 def _get_metafeature_ids(metafeature_computers: List[MetafeatureComputer]) -> List[str]:
