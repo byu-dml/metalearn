@@ -176,7 +176,7 @@ class Metafeatures(object):
         elif resource_id=='XSample':
             return False
         else:
-            resource_computer = cls._resources_info.get(resource_id)
+            resource_computer = cls._resources_info[resource_id]
             for argument in resource_computer.argmap.values():
                 if (argument in cls._resources_info and
                     cls._resource_is_target_dependent(argument)
@@ -345,7 +345,7 @@ class Metafeatures(object):
     def _get_resource(self, resource_id):
         self._check_timeout()
         if not resource_id in self._resources:
-            resource_computer = self._resources_info.get(resource_id)
+            resource_computer = self._resources_info[resource_id]
             args, total_time = self._get_arguments(resource_id)
             return_resources = resource_computer.returns
             start_timestamp = time.perf_counter()
@@ -360,7 +360,7 @@ class Metafeatures(object):
         return resource[consts.VALUE_KEY], resource[consts.COMPUTE_TIME_KEY]
 
     def _get_arguments(self, resource_id):
-        resource_computer = self._resources_info.get(resource_id)
+        resource_computer = self._resources_info[resource_id]
         args = resource_computer.argmap
         resolved_parameters = {}
         total_time = 0.0

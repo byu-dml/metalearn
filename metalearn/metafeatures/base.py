@@ -1,6 +1,7 @@
 import inspect
 from typing import List, Callable, Dict, Union, Optional, Any
 import itertools
+from collections.abc import MutableMapping
 
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
@@ -125,7 +126,7 @@ class MetafeatureComputer(ResourceComputer):
         self.problem_type = problem_type
 
 
-class ResourceComputerMap:
+class ResourceComputerMap(MutableMapping):
     def __init__(self, computers: Union[ResourceComputer,List[ResourceComputer],None] = None) -> None:
         """
         Wraps a dictionary map of resource names to their computers.
@@ -137,10 +138,6 @@ class ResourceComputerMap:
         self._map: Dict[str,ResourceComputer] = {}
         if computers is not None:
             self.add(computers)
-    
-    def __contains__(self, key):
-        """Called to implement membership test operators. e.g. `key in my_resouce_map`."""
-        return key in self._map
     
     def add(self, computers: Union[ResourceComputer,List[ResourceComputer]]) -> None:
         """
@@ -155,21 +152,31 @@ class ResourceComputerMap:
         else:
             raise ValueError("computers must be ResourceComputer or List[ResourceComputer]")
     
-    def get(self, key: str = None) -> Union[Dict[str,ResourceComputer],ResourceComputer]:
-        """Used for getting the resource map."""
-        if key is not None:
-            return self._map[key]
-        return self._map
+    def __getitem__(self, key: str = None) -> ResourceComputer:
+        """Used for getting a resource from the map."""
+        return self._map[key]
 
     def _add_one(self, computer: ResourceComputer) -> None:
         if not isinstance(computer, ResourceComputer):
             raise ValueError(f"computer is not a ResourceComputer; it is a {type(computer)}")
             
         for resource_name in computer.returns:
-            if resource_name in self._map:
-                raise ValueError(
-                    f"duplicate computer '{computer.name}' provided for resource '{resource_name}', "
-                    f"which is already present in the resouce map, registered "
-                    f"by computer '{self.get(resource_name).name}'"
-                )
-            self._map[resource_name] = computer
+            self.__setitem__(resource_name, computer)
+    
+    def __setitem__(self, resource_name: str, computer: ResourceComputer):
+        if resource_name in self._map:
+            raise ValueError(
+                f"duplicate computer '{computer.name}' provided for resource '{resource_name}', "
+                f"which is already present in the resouce map, registered "
+                f"by computer '{self._map[resource_name].name}'"
+            )
+        self._map[resource_name] = computer
+    
+    def __iter__(self):
+        return iter(self._map)
+    
+    def __len__(self):
+        return len(self._map)
+    
+    def __delitem__(self, key: str):
+        raise TypeError("ResourceComputerMap does not support deletion of its ResourceComputers")
