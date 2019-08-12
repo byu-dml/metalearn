@@ -28,6 +28,20 @@ class ResourceComputer:
             A custom map of ``computer``'s argument names to the global resource names
             that will be passed as ``computer``'s arguments when ``computer`` is called.
         """
+
+        computer_args = inspect.getfullargspec(computer)
+        # TODO: If needed, add support for `computer` functions that
+        # use these types of arguments.
+        if (
+            computer_args.varargs is not None or
+            computer_args.varkw is not None or 
+            len(computer_args.kwonlyargs) > 0
+        ):
+            raise ValueError((
+                "ResourceComputer supports `computer` functions that "
+                "use positional arguments only in their function definition."
+            ))
+
         self._computer = computer
         self.returns = returns
 
@@ -62,6 +76,7 @@ class ResourceComputer:
             # may be a global resource name (e.g. `"XSample"`) or
             # a direct value for the argument (e.g. `5`)
             self.argmap.update(argmap)
+        
     
     def __call__(self, *args, **kwargs):
         """
