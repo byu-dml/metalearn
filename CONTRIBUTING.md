@@ -4,7 +4,7 @@
 
 `metalearn` uses a caching mechanism to cache expensive computations that may need to be used again within the package by another function. Both resources (e.g. the dataset itself or a preprocessed version of it) and metafeatures (e.g. entropy, number of features) are cached by the system.
 
-When adding a new metafeature to the package, the function that computes that metafeature needs to be registered in the `resources_info` variable in [./metalearn/metafeatures/resources.py](./metalearn/metafeatures/resources.py). Before the function can be registered though, it needs to be decorated with metadata by being passed through the `MetafeatureComputer` constructor (see example below). This allows the metafeatures returned by the function to be used intelligently by the package.
+When adding a new metafeature to the package, the function that computes that metafeature needs to be registered in the `resources_info` variable in [./metalearn/metafeatures/resources.py](./metalearn/metafeatures/resources.py), and passed to the call made to `_get_metafeature_ids` in that module as well. Before the function can be registered and passed though, it needs to be decorated with metadata by being passed through the `MetafeatureComputer` constructor (see example below). This allows the metafeatures returned by the function to be used intelligently by the package.
 
 Follow the example below to know how to write and register new metafeature(s). Note that a metafeature-computing function (e.g. `get_dataset_stats` as seen below) can compute and return more than one meta-feature.
 
