@@ -55,12 +55,12 @@ class ResourceComputer:
                 # ``computer``.
                 self.argmap[local_name] = local_name
 
-        for local_name, resource_name in argmap.items():
+        if argmap is not None:
             # Now include any argument name or value overrides
-            # the developer has provided. Note: `resource_name`
+            # the developer has provided. Note: each value in `argmap`
             # may be a global resource name (e.g. `"XSample"`) or
             # a direct value for the argument (e.g. `5`)
-            self.argmap[local_name] = resource_name
+            self.argmap.update(argmap)
     
     def __call__(self, *args, **kwargs):
         """
