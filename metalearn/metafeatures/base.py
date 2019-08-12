@@ -11,7 +11,7 @@ class ResourceComputer:
         self,
         computer: Callable,
         returns: List[str],
-        argmap: Optional[Dict[str,Any]] = {}
+        argmap: Optional[Dict[str,Any]] = None
     ) -> None:
         """
         Decorates ``computer``, a resource computing function
