@@ -5,10 +5,11 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from metalearn.metafeatures.base import ResourceComputer
 import metalearn.metafeatures.constants as consts
 
-def get_cv_seed(seed_base, seed_offset = 1):
+
+def get_cv_seed(seed_base, seed_offset):
     return (seed_base + seed_offset,)
 
-get_cv_seed = ResourceComputer(get_cv_seed, ["cv_seed"])
+get_cv_seed = ResourceComputer(get_cv_seed, ["cv_seed"], {'seed_offset': 1})
 
 
 def sample_columns(X, sample_shape, seed):

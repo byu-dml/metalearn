@@ -1,109 +1,58 @@
-import inspect
-from typing import List, Callable, Dict, Union, Optional, Any
-import itertools
 from collections.abc import MutableMapping
+import inspect
+import itertools
+from typing import List, Callable, Dict, Union, Optional, Any
 
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
+
 class ResourceComputer:
+    """
+    Decorates ``computer``, a resource computing function with metadata about that function.
+
+    Parameters
+    ----------
+    computer
+        The function that computes the resources.
+    returns
+        The names of the resources that ``computer`` returns, specified in the same order as ``computer`` returns
+        them.
+    argmap
+        A custom map of ``computer``'s argument names to the global resource names that will be passed as
+        ``computer``'s arguments when ``computer`` is called.
+    """
 
     def __init__(
-        self,
-        computer: Callable,
-        returns: List[str],
-        argmap: Optional[Dict[str,Any]] = None
+        self, computer: Callable, returns: List[str], argmap: Optional[Dict[str,Any]] = None
     ) -> None:
-        """
-        Decorates ``computer``, a resource computing function
-        with metadata about that function.
-        
-        Parameters
-        ----------
-        computer
-            The function that computes the resources.
-        returns
-            The names of the resources that ``computer`` returns, specified in
-            the same order as ``computer`` returns them.
-        argmap
-            A custom map of ``computer``'s argument names to the global resource names
-            that will be passed as ``computer``'s arguments when ``computer`` is called.
-        """
-
-        computer_args = inspect.getfullargspec(computer)
-        # TODO: If needed, add support for `computer` functions that
-        # use these types of arguments.
+        argspec = inspect.getfullargspec(computer)
+        # TODO: If needed, add support for `computer` functions that use these types of arguments.
         if (
-            computer_args.varargs is not None or
-            computer_args.varkw is not None or 
-            len(computer_args.kwonlyargs) > 0
+            argspec.varargs is not None or argspec.varkw is not None or argspec.defaults is not None or
+            len(argspec.kwonlyargs) > 0
         ):
-            raise ValueError((
-                "ResourceComputer supports `computer` functions that "
-                "use positional arguments only in their function definition."
-            ))
+            raise ValueError('`computer` must use only positional arguments with no default values')
 
-        self._computer = computer
+        self.computer = computer
         self.returns = returns
-
-        self.argmap = {}
-
-        # reversing is needed because `self.defaults` gives the default
-        # argument values corresponding to the *last* `n` arguments in the
-        # function signature.
-        reversed_args = self.args[::-1]
-        reversed_defaults = self.defaults[::-1]
-        arg_default_pairs = itertools.zip_longest(reversed_args, reversed_defaults)
-
-        for local_name, default in arg_default_pairs:
-            # By default, just use the `computer` function's
-            # normal local argument names in the argmap,
-            # making sure to preserve default argument values
-            # when they are supplied.
-            if default is not None:
-                # The function has a default value for this arg;
-                # use that.
-                self.argmap[local_name] = default
-            else:
-                # This function has no default. Tell the system
-                # to pass in the global resource identified by
-                # this arg's ``local_name`` when calling this
-                # ``computer``.
-                self.argmap[local_name] = local_name
+        self.argmap = {arg_name: arg_name for arg_name in argspec.args}
 
         if argmap is not None:
-            # Now include any argument name or value overrides
-            # the developer has provided. Note: each value in `argmap`
-            # may be a global resource name (e.g. `"XSample"`) or
-            # a direct value for the argument (e.g. `5`)
+            # override computer arg value with developer provided values
+            # Note each value in `argmap` is a global resource name (e.g. `"XSample"`) or a literal value (e.g. `5`)
             self.argmap.update(argmap)
         
     
     def __call__(self, *args, **kwargs):
         """
-        Allows a ``ResourceComputer`` instance to be callable.
-        Just forwards all arguments on to self._computer.
+        Allows a ``ResourceComputer`` instance to be callable. Just forwards all arguments on to self.computer.
         """
-        return self._computer(*args, **kwargs)
-    
-    @property
-    def args(self) -> list:
-        """Returns a list of the positional parameter names of self._computer"""
-        return inspect.getfullargspec(self._computer).args
-    
-    @property
-    def defaults(self) -> list:
-        """
-        From https://docs.python.org/3/library/inspect.html#inspect.getfullargspec
-        [Returns] an n-tuple of default argument values corresponding to the last `n`
-        positional parameters [of self._computer].
-        """
-        defaults = inspect.getfullargspec(self._computer).defaults
-        return [] if defaults is None else defaults
+        return self.computer(*args, **kwargs)
 
     @property
     def name(self) -> str:
-        """Returns the function name of self._computer"""
-        return self._computer.__name__
+        """Returns the function name of self.computer"""
+        return self.computer.__name__
 
 
 class MetafeatureComputer(ResourceComputer):

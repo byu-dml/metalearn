@@ -118,7 +118,7 @@ get_string_length_kurtosis = MetafeatureComputer(
 )
 
 
-def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10):
+def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit):
 
 	def isnumeric(token):
 		try:
@@ -221,7 +221,8 @@ get_mfs_for_tokens_split_by_space = MetafeatureComputer(
 	ProblemType.ANY,
 	[MetafeatureGroup.TEXT],
 	{
-		"text_features_array": "NoNaNTextFeatures"
+		"text_features_array": "NoNaNTextFeatures",
+		'most_common_limit': 10,
 	}
 )
 
