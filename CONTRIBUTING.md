@@ -4,7 +4,7 @@
 
 `metalearn` uses a caching mechanism to cache expensive computations that may need to be used again within the package by another function. Both resources (e.g. the dataset itself or a preprocessed version of it) and metafeatures (e.g. entropy, number of features) are cached by the system.
 
-When adding a new metafeature to the package, the function that computes that metafeature needs to be registered in the `resources_info` variable in [./metalearn/metafeatures/resources.py](./metalearn/metafeatures/resources.py), and passed to the call made to `_get_metafeature_ids` in that module as well. Before the function can be registered and passed though, it needs to be decorated with metadata by being passed through the `MetafeatureComputer` constructor (see example below). This allows the metafeatures returned by the function to be used intelligently by the package.
+When adding a new metafeature to the package, the function that computes that metafeature needs to be included in the `Metafeatures` class definition in the `Metafeatures._mfs_info` attribute in [./metalearn/metafeatures/metafeatures.py](./metalearn/metafeatures/metafeatures.py). Before the function can be included though, it needs to be decorated with metadata by being passed through the `MetafeatureComputer` constructor (see example below). This allows the metafeatures returned by the function to be used intelligently by the package.
 
 Follow the example below to know how to write and register new metafeature(s). Note that a metafeature-computing function (e.g. `get_dataset_stats` as seen below) can compute and return more than one meta-feature.
 
@@ -46,4 +46,4 @@ get_dataset_stats = MetafeatureComputer(
 )
 ```
 
-By convention, all the decorated metafeature-computing functions in a module are aggregated at the bottom of the module into a list called `metafeature_computers`, which is then imported by [./metalearn/metafeatures/resources.py](./metalearn/metafeatures/resources.py) and added to that module's `resources_info` variable.
+By convention, all the decorated metafeature-computing functions in a module are aggregated at the bottom of the module into a call to `build_resources_info`, which is then imported by [./metalearn/metafeatures/metafeatures.py](./metalearn/metafeatures/metafeatures.py) and added to the `_mfs_info` attribute of that module's `Metafeatures` class.
