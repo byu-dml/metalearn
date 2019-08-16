@@ -390,11 +390,9 @@ class Metafeatures(object):
         return resource[consts.VALUE_KEY], resource[consts.COMPUTE_TIME_KEY]
 
     def _get_arguments(self, resource_id):
-        resource_computer = self._resources_info[resource_id]
-        args = resource_computer.argmap
         resolved_parameters = {}
         total_time = 0.0
-        for parameter, argument in args.items():
+        for parameter, argument in self._resources_info[resource_id].argmap.items():
             argument_type = type(argument)
             if parameter == "seed":
                 seed_base, compute_time = self._get_resource("seed_base")
@@ -407,7 +405,7 @@ class Metafeatures(object):
             elif dtype_is_numeric(argument_type):
                 compute_time = 0
             else:
-                raise Exception(f"unhandled argument type '{argument_type}'")
+                raise TypeError(f'unhandled argument type: {argument_type}')
             resolved_parameters[parameter] = argument
             total_time += compute_time
         return (resolved_parameters, total_time)
