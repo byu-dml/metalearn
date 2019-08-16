@@ -14,7 +14,6 @@ import numpy as np
 
 from metalearn import Metafeatures, METAFEATURES_JSON_SCHEMA_PATH
 import metalearn.metafeatures.constants as consts
-from metalearn.metafeatures.resources import metafeature_ids
 from tests.config import CORRECTNESS_SEED, METADATA_PATH
 from tests.data.dataset import read_dataset
 from tests.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
@@ -118,7 +117,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_failures = {}
         fail_message = "Metafeature lists do not match."
 
-        master_mf_ids_set = set(metafeature_ids)
+        master_mf_ids_set = set(Metafeatures.IDS)
 
         known_mf_ids_set = set({
             x for x in known_mfs.keys() if "_Time" not in x
@@ -761,3 +760,6 @@ class MetafeaturesTestCase(unittest.TestCase):
             Metafeatures().compute(X,y)
         except Exception as e:
             self.fail(e)
+
+    def test_no_duplicate_mf_ids(self):
+        self.assertEqual(len(Metafeatures.IDS), len(set(Metafeatures.IDS)), 'Metafeatures has duplicate IDS')

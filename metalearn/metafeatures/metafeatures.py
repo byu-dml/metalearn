@@ -10,10 +10,20 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
 
-from metalearn.metafeatures.common_operations import *
-from metalearn.metafeatures.resources import resources_info, metafeature_ids
 from metalearn.metafeatures.base import collectordict, ResourceComputer, MetafeatureComputer
+from metalearn.metafeatures.common_operations import *
 import metalearn.metafeatures.constants as consts
+
+from metalearn.metafeatures.decision_tree_metafeatures import resources_info as dt_resources
+from metalearn.metafeatures.general_resource_computers import resources_info as general_resources
+from metalearn.metafeatures.text_metafeatures import resources_info as text_resources
+
+from metalearn.metafeatures.decision_tree_metafeatures import metafeatures_info as dt_metafeatures
+from metalearn.metafeatures.information_theoretic_metafeatures import metafeatures_info as info_theoretic_metafeatures
+from metalearn.metafeatures.landmarking_metafeatures import metafeatures_info as landmarking_metafeatures
+from metalearn.metafeatures.simple_metafeatures import metafeatures_info as simple_metafeatures
+from metalearn.metafeatures.statistical_metafeatures import metafeatures_info as statistical_metafeatures
+from metalearn.metafeatures.text_metafeatures import metafeatures_info as text_metafeatures
 
 
 class Metafeatures(object):
@@ -24,9 +34,29 @@ class Metafeatures(object):
     meta-learning applications.
     """
 
+    _resources_info = collectordict()
+    _resources_info.update(dt_resources)
+    _resources_info.update(general_resources)
+    _resources_info.update(text_resources)
 
-    _resources_info: collectordict = resources_info
-    IDS: List[str] = metafeature_ids
+    # noop resource computers for the user-provided resources
+    # `_get_arguments` and `_resource_is_target_dependent` assumes ResourceComputer's
+    for resource_name in ["X_raw", "X", "Y", "column_types", "sample_shape", "seed_base", "n_folds"]:
+        _resources_info[resource_name] = ResourceComputer(lambda: None, [resource_name])
+
+    _mfs_info = [
+        dt_metafeatures,
+        info_theoretic_metafeatures,
+        landmarking_metafeatures,
+        simple_metafeatures,
+        statistical_metafeatures,
+        text_metafeatures,
+    ]
+
+    for mf_info in _mfs_info:
+        _resources_info.update(mf_info)
+
+    IDS: List[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
 
     @classmethod
     def list_metafeatures(cls, group="all"):
@@ -160,8 +190,8 @@ class Metafeatures(object):
     ):
         # Add the base resources to our resources hash
         self._resources = {
-            "X_raw": self._format_resource(X, 0.),
-            "X": self._format_resource(X.dropna(axis=1, how="all"), 0.),
+            "X_raw": self._format_resource(X, 0.),  # TODO: rename to X
+            "X": self._format_resource(X.dropna(axis=1, how="all"), 0.),  # TODO: make resource computer; rename
             "Y": self._format_resource(Y, 0.),
             "column_types": self._format_resource(column_types, 0.),
             "sample_shape": self._format_resource(sample_shape, 0.),
