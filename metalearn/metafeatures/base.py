@@ -128,8 +128,7 @@ class ResourceComputerMap(MutableMapping):
             self.__setitem__(resource_name, computer)
     
     def __setitem__(self, resource_name: str, computer: ResourceComputer):
-        if resource_name in self._map:
-            raise ValueError(
+        assert resource_name not in self._map, (
                 f"duplicate computer '{computer.name}' provided for resource '{resource_name}', "
                 f"which is already present in the resouce map, registered "
                 f"by computer '{self._map[resource_name].name}'"
