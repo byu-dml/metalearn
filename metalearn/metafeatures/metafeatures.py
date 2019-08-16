@@ -41,7 +41,7 @@ class Metafeatures(object):
     with open(METAFEATURE_CONFIG, 'r') as f:
         _metadata = json.load(f)
     IDS = list(_metadata["metafeatures"].keys())
-    _resources_info = {}
+    _resources_info: dict = {}
     _resources_info.update(_metadata["resources"])
     _resources_info.update(_metadata["metafeatures"])
 

@@ -4,8 +4,11 @@ python:
 
 install:
   - pip install -r requirements.txt
+  - pip install mypy
   - python setup.py install
-  - rm -r metalearn
+  
 
 script:
+  - mypy . --ignore-missing-imports
+  - rm -r metalearn
   - nosetests -s -v
