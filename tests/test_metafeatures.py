@@ -12,7 +12,7 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from metalearn import Metafeatures, METAFEATURES_JSON_SCHEMA
+from metalearn import Metafeatures, METAFEATURES_JSON_SCHEMA_PATH
 import metalearn.metafeatures.constants as consts
 from metalearn.metafeatures.resources import metafeature_ids
 from tests.config import CORRECTNESS_SEED, METADATA_PATH
@@ -361,7 +361,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         self._report_test_failures(test_failures, test_name)
 
     def test_output_format(self):
-        with open(METAFEATURES_JSON_SCHEMA) as f:
+        with open(METAFEATURES_JSON_SCHEMA_PATH) as f:
             mf_schema = json.load(f)
         for dataset_filename, dataset in self.datasets.items():
             computed_mfs = Metafeatures().compute(
@@ -377,7 +377,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 )
 
     def test_output_json_compatibility(self):
-        with open(METAFEATURES_JSON_SCHEMA) as f:
+        with open(METAFEATURES_JSON_SCHEMA_PATH) as f:
             mf_schema = json.load(f)
         for dataset_filename, dataset in self.datasets.items():
             computed_mfs = Metafeatures().compute(

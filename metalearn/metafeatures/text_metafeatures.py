@@ -8,6 +8,7 @@ from metalearn.metafeatures.common_operations import *
 from metalearn.metafeatures.base import ResourceComputer, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
+
 def get_string_lengths_array_from_text_features(text_features_array):
 	lengths = [feature.apply(len) for feature in text_features_array]
 	return (lengths,)

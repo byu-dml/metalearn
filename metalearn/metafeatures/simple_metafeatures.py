@@ -5,6 +5,7 @@ from metalearn.metafeatures.common_operations import *
 from metalearn.metafeatures.base import MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
+
 def get_dataset_stats(X, column_types):
     number_of_instances = X.shape[0]
     number_of_features = X.shape[1]

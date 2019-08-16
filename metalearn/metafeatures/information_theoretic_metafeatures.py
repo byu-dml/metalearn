@@ -6,6 +6,7 @@ from metalearn.metafeatures.common_operations import *
 from metalearn.metafeatures.base import MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
+
 def get_entropy(col):
     return entropy(col.value_counts())
 

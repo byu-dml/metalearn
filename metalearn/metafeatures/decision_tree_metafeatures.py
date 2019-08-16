@@ -26,6 +26,7 @@ class DecisionTree:
     def get_attributes(self):
         return [x for x in Counter(self.tree.feature).values() if x != -2]
 
+
 class TraversedDecisionTree:
 
     def __init__(self, tree):
