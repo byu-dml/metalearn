@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from metalearn.metafeatures.common_operations import *
-from metalearn.metafeatures.base import ResourceComputer, MetafeatureComputer
+from metalearn.metafeatures.base import build_resources_info, ResourceComputer, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
@@ -232,18 +232,18 @@ get_mfs_for_tokens_split_by_space = MetafeatureComputer(
 A list of all ResourceComputer
 instances in this module.
 """
-resource_computers = [
+resources_info = build_resources_info(
 	get_string_lengths_array_from_text_features
-]
+)
 
 """
 A list of all MetafeatureComputer
 instances in this module.
 """
-metafeature_computers = [
+metafeatures_info = build_resources_info(
     get_string_length_means,
 	get_string_length_stdev,
 	get_string_length_skewness,
 	get_string_length_kurtosis,
 	get_mfs_for_tokens_split_by_space
-]
+)

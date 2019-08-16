@@ -3,7 +3,7 @@ from collections import Counter
 from sklearn.tree import DecisionTreeClassifier
 
 from metalearn.metafeatures.common_operations import profile_distribution
-from metalearn.metafeatures.base import ResourceComputer, MetafeatureComputer
+from metalearn.metafeatures.base import build_resources_info, ResourceComputer, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
@@ -194,19 +194,19 @@ get_decision_tree_width = MetafeatureComputer(
 A list of all ResourceComputer
 instances in this module.
 """
-resource_computers = [
+resources_info = build_resources_info(
     get_decision_tree,
     traverse_tree
-]
+)
 
 """
 A list of all MetafeatureComputer
 instances in this module.
 """
-metafeature_computers = [
+metafeatures_info = build_resources_info(
     get_decision_tree_level_sizes,
     get_decision_tree_branch_lengths,
     get_decision_tree_attributes,
     get_decision_tree_general_info,
     get_decision_tree_width
-]
+)

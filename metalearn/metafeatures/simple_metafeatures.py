@@ -2,7 +2,7 @@ import numpy as np
 from pandas import DataFrame
 
 from metalearn.metafeatures.common_operations import *
-from metalearn.metafeatures.base import MetafeatureComputer
+from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
@@ -156,11 +156,11 @@ get_numeric_cardinalities = MetafeatureComputer(
 A list of all MetafeatureComputer
 instances in this module.
 """
-metafeature_computers = [
+metafeatures_info = build_resources_info(
     get_dataset_stats,
     get_class_stats,
     get_dimensionality,
     get_missing_values,
     get_categorical_cardinalities,
     get_numeric_cardinalities
-]
+)

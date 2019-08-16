@@ -11,7 +11,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 
 from metalearn.metafeatures.common_operations import *
-from metalearn.metafeatures.base import MetafeatureComputer
+from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import MetafeatureGroup, ProblemType
 
 
@@ -187,7 +187,7 @@ get_lda = MetafeatureComputer(
 A list of all MetafeatureComputer
 instances in this module.
 """
-metafeature_computers = [
+metafeatures_info = build_resources_info(
     get_naive_bayes,
     get_knn_1,
     get_decision_stump,
@@ -195,4 +195,4 @@ metafeature_computers = [
     get_random_tree_depth_2,
     get_random_tree_depth_3,
     get_lda
-]
+)

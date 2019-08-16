@@ -3,7 +3,7 @@ from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
 from metalearn.metafeatures.common_operations import *
-from metalearn.metafeatures.base import MetafeatureComputer
+from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
@@ -226,7 +226,7 @@ def translate_into_tuples(col1, col2):
 A list of all MetafeatureComputer
 instances in this module.
 """
-metafeature_computers = [
+metafeatures_info = build_resources_info(
     get_class_entropy,
     get_categorical_attribute_entropy,
     get_numeric_attribute_entropy,
@@ -238,4 +238,4 @@ metafeature_computers = [
     get_equivalent_number_numeric_features,
     get_categorical_noise_signal_ratio,
     get_numeric_noise_signal_ratio
-]
+)

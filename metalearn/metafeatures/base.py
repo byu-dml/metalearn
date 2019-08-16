@@ -1,4 +1,4 @@
-from collections.abc import MutableMapping
+from collections.abc import Mapping
 import inspect
 import itertools
 from typing import List, Callable, Dict, Union, Optional, Any
@@ -90,56 +90,40 @@ class MetafeatureComputer(ResourceComputer):
         self.problem_type = problem_type
 
 
-class ResourceComputerMap(MutableMapping):
-    def __init__(self, computers: Union[ResourceComputer,List[ResourceComputer],None] = None) -> None:
-        """
-        Wraps a dictionary map of resource names to their computers.
-        Includes visibility into whether duplicate computers
-        are trying to become associated with a resource in the map e.g.
-        if a package developer has accidentally declared two computers
-        that return the same resource.
-        """
-        self._map: Dict[str,ResourceComputer] = {}
-        if computers is not None:
-            self.add(computers)
-    
-    def add(self, computers: Union[ResourceComputer,List[ResourceComputer]]) -> None:
-        """
-        Adds more resource name/resource computer key/value
-        pairs to a resource map, throwing an error on duplicates.
-        """
-        if isinstance(computers, list):
-            for computer in computers:
-                self._add_one(computer)
-        elif isinstance(computers, ResourceComputer):
-            self._add_one(computers)
-        else:
-            raise ValueError("computers must be ResourceComputer or List[ResourceComputer]")
-    
-    def __getitem__(self, key: str = None) -> ResourceComputer:
-        """Used for getting a resource from the map."""
-        return self._map[key]
+class collectordict(Mapping):
+    """
+    A partially mutable mapping in which keys can be set at most one time.
+    A LookupError is raised if a key is set more than once.
+    For simplicity, all values must be set manually.
+    """
 
-    def _add_one(self, computer: ResourceComputer) -> None:
-        if not isinstance(computer, ResourceComputer):
-            raise ValueError(f"computer is not a ResourceComputer; it is a {type(computer)}")
-            
-        for resource_name in computer.returns:
-            self.__setitem__(resource_name, computer)
-    
-    def __setitem__(self, resource_name: str, computer: ResourceComputer):
-        assert resource_name not in self._map, (
-                f"duplicate computer '{computer.name}' provided for resource '{resource_name}', "
-                f"which is already present in the resouce map, registered "
-                f"by computer '{self._map[resource_name].name}'"
-            )
-        self._map[resource_name] = computer
-    
+    dict_cls = dict
+
+    def __init__(self):
+        self._dict = self.dict_cls()
+
+    def __getitem__(self, key):
+        return self._dict[key]
+
     def __iter__(self):
-        return iter(self._map)
-    
+        return iter(self._dict)
+
     def __len__(self):
-        return len(self._map)
-    
-    def __delitem__(self, key: str):
-        raise TypeError("ResourceComputerMap does not support deletion of its ResourceComputers")
+        return len(self._dict)
+
+    def __setitem__(self, key, value):
+        if key in self._dict:
+            raise LookupError(f'{key} already exists')
+        self._dict[key] = value
+
+    def update(self, mapping: Mapping):
+        for key, value in mapping.items():
+            self[key] = value
+
+
+def build_resources_info(*computers: ResourceComputer) -> collectordict:
+    resources_info = collectordict()
+    for computer in computers:
+        for resource_name in computer.returns:
+            resources_info[resource_name] = computer
+    return resources_info

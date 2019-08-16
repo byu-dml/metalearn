@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedShuffleSplit
 
-from metalearn.metafeatures.base import ResourceComputer
+from metalearn.metafeatures.base import build_resources_info, ResourceComputer
 import metalearn.metafeatures.constants as consts
 
 
@@ -234,7 +234,7 @@ get_text_features_with_no_missing_values = ResourceComputer(
 A list of all ResourceComputer
 instances in this module.
 """
-resource_computers = [
+resources_info = build_resources_info(
     get_cv_seed,
     sample_columns,
     sample_rows,
@@ -245,4 +245,4 @@ resource_computers = [
     get_binned_numeric_features_with_no_missing_values,
     get_binned_numeric_features_and_class_with_no_missing_values,
     get_text_features_with_no_missing_values
-]
+)

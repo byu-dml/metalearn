@@ -12,7 +12,7 @@ from pandas import DataFrame, Series
 
 from metalearn.metafeatures.common_operations import *
 from metalearn.metafeatures.resources import resources_info, metafeature_ids
-from metalearn.metafeatures.base import ResourceComputer, MetafeatureComputer, ResourceComputerMap
+from metalearn.metafeatures.base import collectordict, ResourceComputer, MetafeatureComputer
 import metalearn.metafeatures.constants as consts
 
 
@@ -25,7 +25,7 @@ class Metafeatures(object):
     """
 
 
-    _resources_info: ResourceComputerMap = resources_info
+    _resources_info: collectordict = resources_info
     IDS: List[str] = metafeature_ids
 
     @classmethod

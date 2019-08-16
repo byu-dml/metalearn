@@ -9,7 +9,7 @@ from sklearn.decomposition import PCA
 from sklearn.cross_decomposition import CCA
 
 from metalearn.metafeatures.common_operations import *
-from metalearn.metafeatures.base import MetafeatureComputer
+from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 import metalearn.metafeatures.constants as consts
 
@@ -218,10 +218,10 @@ def get_canonical_correlations(dataframe, column_types):
 A list of all MetafeatureComputer
 instances in this module.
 """
-metafeature_computers = [
+metafeatures_info = build_resources_info(
     get_numeric_means,
     get_numeric_stdev,
     get_numeric_skewness,
     get_numeric_kurtosis,
     get_pca
-]
+)
