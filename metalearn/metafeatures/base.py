@@ -39,10 +39,9 @@ class ResourceComputer:
 
         if argmap is not None:
             # override computer arg value with developer provided values
-            # Note each value in `argmap` is a global resource name (e.g. `"XSample"`) or a literal value (e.g. `5`)
+            # Note each value in `argmap` is a global resource name (e.g. `'XSample'`) or a literal value (e.g. `5`)
             self.argmap.update(argmap)
-        
-    
+
     def __call__(self, *args, **kwargs):
         """
         Allows a ``ResourceComputer`` instance to be callable. Just forwards all arguments on to self.computer.
@@ -56,36 +55,33 @@ class ResourceComputer:
 
 
 class MetafeatureComputer(ResourceComputer):
+    """
+    Decorates ``computer``, a metafeature computing function
+    with metadata about that function.
+
+    Parameters
+    ----------
+    computer
+        The function that computes the metafeatures.
+    returns
+        The names of the metafeatures that ``computer`` returns, specified in
+        the same order as ``computer`` returns them.
+    problem_type
+        The type of ML problem `computer`'s metafeatures can be computed for.
+    groups
+        The metafeature groups this computer's returned metafeatures belong to.
+        e.g. statistical, info-theoretic, simple, etc.
+    argmap
+        A custom map of ``computer``'s argument names to the global resource names
+        that will be passed as ``computer``'s arguments when ``computer`` is called.
+    """
 
     def __init__(
-        self,
-        computer: Callable,
-        returns: List[str], # TODO: Add support for passing just a string, not a list?
-        problem_type: ProblemType,
-        groups: List[MetafeatureGroup],
-        argmap: Optional[Dict[str,str]] = {}
+        self, computer: Callable, returns: List[str], problem_type: ProblemType, groups: List[MetafeatureGroup],
+        argmap: Optional[Dict[str,str]] = None
     ) -> None:
-        """
-        Decorates ``computer``, a metafeature computing function
-        with metadata about that function.
-        
-        Parameters
-        ----------
-        computer
-            The function that computes the metafeatures.
-        returns
-            The names of the metafeatures that ``computer`` returns, specified in
-            the same order as ``computer`` returns them.
-        problem_type
-            The type of ML problem `computer`'s metafeatures can be computed for.
-        groups
-            The metafeature groups this computer's returned metafeatures belong to.
-            e.g. statistical, info-theoretic, simple, etc.
-        argmap
-            A custom map of ``computer``'s argument names to the global resource names
-            that will be passed as ``computer``'s arguments when ``computer`` is called.
-        """
-        super(MetafeatureComputer, self).__init__(computer, returns, argmap)
+        # TODO: Add support for passing a string to `returns`, not just a list?
+        super().__init__(computer, returns, argmap)
         self.groups = groups
         self.problem_type = problem_type
 
@@ -93,8 +89,8 @@ class MetafeatureComputer(ResourceComputer):
 class collectordict(Mapping):
     """
     A partially mutable mapping in which keys can be set at most one time.
-    A LookupError is raised if a key is set more than once.
-    For simplicity, all values must be set manually.
+    A LookupError is raised if a key is set more than once. Keys cannot be deleted.
+    For simplicity, all values must be set manually, not in __init__.
     """
 
     dict_cls = dict
@@ -122,6 +118,9 @@ class collectordict(Mapping):
 
 
 def build_resources_info(*computers: ResourceComputer) -> collectordict:
+    """
+    Combines multiple resource computers into a mapping of resource name to computer
+    """
     resources_info = collectordict()
     for computer in computers:
         for resource_name in computer.returns:
