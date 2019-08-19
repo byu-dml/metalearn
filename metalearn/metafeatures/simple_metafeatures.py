@@ -4,22 +4,23 @@ import numpy as np
 from pandas import DataFrame
 
 from metalearn.metafeatures.common_operations import *
-from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
+from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer, ResourceComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
-def get_dataset_stats(X, column_types):
+def get_dataset_stats(X, column_types, num_binary_numeric, num_binary_categorical):
     number_of_instances = X.shape[0]
     number_of_features = X.shape[1]
     numeric_features = len(get_numeric_features(X, column_types))
     categorical_features = number_of_features - numeric_features
-    binary_features = get_categorical_cardinalities_at_values(X,column_types)[0]  # TODO: can this be optimized?
-    ratio_of_binary_features = binary_features / number_of_features
+    ratio_of_binary_numeric_features = num_binary_numeric / number_of_features
+    ratio_of_binary_categorical_features = num_binary_categorical / number_of_features
     ratio_of_numeric_features = numeric_features / number_of_features
     ratio_of_categorical_features = categorical_features / number_of_features
     return (
-        number_of_instances, number_of_features, numeric_features, categorical_features, binary_features,
-        ratio_of_numeric_features, ratio_of_categorical_features, ratio_of_binary_features
+        number_of_instances, number_of_features, numeric_features, categorical_features,
+        ratio_of_numeric_features, ratio_of_categorical_features, ratio_of_binary_numeric_features,
+        ratio_of_binary_categorical_features
     )
 
 get_dataset_stats = MetafeatureComputer(
@@ -30,11 +31,17 @@ get_dataset_stats = MetafeatureComputer(
         "NumberOfNumericFeatures",
         "NumberOfCategoricalFeatures",
         "RatioOfNumericFeatures",
-        "RatioOfCategoricalFeatures"
+        "RatioOfCategoricalFeatures",
+        "RatioOfBinaryNumericFeatures",
+        "RatioOfBinaryCategoricalFeatures"
     ],
     ProblemType.ANY,
     [MetafeatureGroup.SIMPLE],
-    { "X": "X_raw" }
+    {
+        "X": "X_raw",
+        "num_binary_numeric": "NumberOfBinaryNumericFeatures",
+        "num_binary_categorical": "NumberOfBinaryCategoricalFeatures"
+    }
 )
 
 
@@ -95,8 +102,8 @@ def get_class_stats(Y):
     return (number_of_classes, *profile_distribution(probs), minority_class_size, majority_class_size)
 
 get_class_stats = MetafeatureComputer(
-    computer=get_class_stats,
-    returns=[
+    get_class_stats,
+    [
         "NumberOfClasses",
         "MeanClassProbability",
         "StdevClassProbability",
@@ -110,25 +117,55 @@ get_class_stats = MetafeatureComputer(
         "MinorityClassSize",
         "MajorityClassSize"
     ],
-    problem_type=ProblemType.CLASSIFICATION,
-    groups=[MetafeatureGroup.SIMPLE]
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.SIMPLE]
 )
 
 
-def get_categorical_cardinalities_at_values(X,column_types):
-    counts = Counter(get_categorical_cardinalities(X, column_types)[0])
+def get_categorical_cardinalities_at_values(CategoricalCardinalities):
+    counts = Counter(CategoricalCardinalities)
     return counts.get(2, 0), counts.get(3, 0), counts.get(4, 0)
 
-def get_numeric_cardinalities_at_values(X,column_types):
-    counts = Counter(get_numeric_cardinalities(X, column_types)[0])
+get_categorical_cardinalities_at_values = MetafeatureComputer(
+    get_categorical_cardinalities_at_values,
+    [
+        "NumberOfBinaryCategoricalFeatures",
+        "CategoricalCardinalityAtThree",
+        "CategoricalCardinalityAtFour"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.SIMPLE]
+)
+
+
+def get_numeric_cardinalities_at_values(NumericCardinalities):
+    counts = Counter(NumericCardinalities)
     return counts.get(2, 0), counts.get(3, 0), counts.get(4, 0)
+
+get_numeric_cardinalities_at_values = MetafeatureComputer(
+    get_numeric_cardinalities_at_values,
+    [
+        "NumberOfBinaryNumericFeatures",
+        "NumericCardinalityAtThree",
+        "NumericCardinalityAtFour"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.SIMPLE]
+)
+
 
 def get_categorical_cardinalities(X, column_types):
-    cardinalities = [X[feature].unique().shape[0] for feature in get_categorical_features(X, column_types)]
-    return profile_distribution(cardinalities)
+    cat_cards = [X[feature].unique().shape[0] for feature in get_categorical_features(X, column_types)]
+    return (cat_cards,)
 
-get_categorical_cardinalities = MetafeatureComputer(
+get_categorical_cardinalities = ResourceComputer(
     get_categorical_cardinalities,
+    ["CategoricalCardinalities"]
+)
+
+
+profile_categorical_cardinalities = MetafeatureComputer(
+    profile_distribution,
     [
         "MeanCardinalityOfCategoricalFeatures",
         "StdevCardinalityOfCategoricalFeatures",
@@ -142,15 +179,21 @@ get_categorical_cardinalities = MetafeatureComputer(
     ],
     ProblemType.ANY,
     [MetafeatureGroup.SIMPLE],
+    { "data": "CategoricalCardinalities" }
 )
 
 
 def get_numeric_cardinalities(X, column_types):
-    cardinalities = [X[feature].unique().shape[0] for feature in get_numeric_features(X, column_types)]
-    return profile_distribution(cardinalities)
+    num_cards = [X[feature].unique().shape[0] for feature in get_numeric_features(X, column_types)]
+    return (num_cards,)
 
-get_numeric_cardinalities = MetafeatureComputer(
+get_numeric_cardinalities = ResourceComputer(
     get_numeric_cardinalities,
+    ["NumericCardinalities"]
+)
+
+profile_numeric_cardinalities = MetafeatureComputer(
+    profile_distribution,
     [
         "MeanCardinalityOfNumericFeatures",
         "StdevCardinalityOfNumericFeatures",
@@ -163,9 +206,18 @@ get_numeric_cardinalities = MetafeatureComputer(
         "MaxCardinalityOfNumericFeatures"
     ],
     ProblemType.ANY,
-    [MetafeatureGroup.SIMPLE]
+    [MetafeatureGroup.SIMPLE],
+    { "data": "NumericCardinalities" }
 )
 
+"""
+A list of all ResourceComputer
+instances in this module.
+"""
+resources_info = build_resources_info(
+    get_categorical_cardinalities,
+    get_numeric_cardinalities
+)
 
 """
 A list of all MetafeatureComputer
@@ -174,8 +226,10 @@ instances in this module.
 metafeatures_info = build_resources_info(
     get_dataset_stats,
     get_class_stats,
+    get_categorical_cardinalities_at_values,
+    get_numeric_cardinalities_at_values,
     get_dimensionality,
     get_missing_values,
-    get_categorical_cardinalities,
-    get_numeric_cardinalities
+    profile_categorical_cardinalities,
+    profile_numeric_cardinalities
 )

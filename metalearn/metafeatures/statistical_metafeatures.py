@@ -219,13 +219,20 @@ def autocorrelation(Y, column_types):
         ac = None
     elif Y.size == 1:
         ac = 1.0
-    elif column_types[Y.name] == "NUMERIC":
+    elif column_types[Y.name] == consts.NUMERIC:
         ac = Y.autocorr()
-    elif column_types[Y.name] == "CATEGORICAL":
+    elif column_types[Y.name] == consts.CATEGORICAL:
         ac = np.equal(Y[:-1].values, Y[1:].values).mean()
     else:
         ac = None
     return (ac,)
+
+autocorrelation = MetafeatureComputer(
+    autocorrelation,
+    ["Autocorrelation"],
+    ProblemType.ANY,
+    [MetafeatureGroup.STATISTICAL]
+)
 
 """
 A list of all MetafeatureComputer
@@ -236,5 +243,6 @@ metafeatures_info = build_resources_info(
     get_numeric_stdev,
     get_numeric_skewness,
     get_numeric_kurtosis,
-    get_pca
+    get_pca,
+    autocorrelation
 )
