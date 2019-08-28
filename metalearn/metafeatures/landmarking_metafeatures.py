@@ -10,7 +10,9 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 
-from .common_operations import *
+from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
+from metalearn.metafeatures.constants import MetafeatureGroup, ProblemType
 
 
 '''
@@ -42,11 +44,41 @@ def get_naive_bayes(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([('naive_bayes', GaussianNB())])
     return run_pipeline(X, Y, pipeline, n_folds, cv_seed)
 
+get_naive_bayes = MetafeatureComputer(
+    get_naive_bayes,
+    [
+        "NaiveBayesErrRate",
+        "NaiveBayesKappa"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.LANDMARKING],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample"
+    }
+)
+
+
 def get_knn_1(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([(
         'knn_1', KNeighborsClassifier(n_neighbors = 1, n_jobs=1)
     )])
     return run_pipeline(X, Y, pipeline, n_folds, cv_seed)
+
+get_knn_1 = MetafeatureComputer(
+    get_knn_1,
+    [
+        "kNN1NErrRate",
+        "kNN1NKappa"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.LANDMARKING],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample"
+    }
+)
+
 
 def get_decision_stump(X, Y, seed, n_folds, cv_seed):
     pipeline = Pipeline([(
@@ -55,6 +87,22 @@ def get_decision_stump(X, Y, seed, n_folds, cv_seed):
         )
     )])
     return run_pipeline(X, Y, pipeline, n_folds, cv_seed)
+
+get_decision_stump = MetafeatureComputer(
+    get_decision_stump,
+    [
+        "DecisionStumpErrRate",
+        "DecisionStumpKappa"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.LANDMARKING],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample",
+        "seed": 5
+    }
+)
+
 
 def get_random_tree(X, Y, depth, seed, n_folds, cv_seed):
     pipeline = Pipeline([(
@@ -65,8 +113,86 @@ def get_random_tree(X, Y, depth, seed, n_folds, cv_seed):
     )])
     return run_pipeline(X, Y, pipeline, n_folds, cv_seed)
 
+get_random_tree_depth_1 = MetafeatureComputer(
+    get_random_tree,
+    [
+        "RandomTreeDepth1ErrRate",
+        "RandomTreeDepth1Kappa"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.LANDMARKING],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample",
+        "depth": 1,
+        "seed": 6
+    }
+)
+
+get_random_tree_depth_2 = MetafeatureComputer(
+    get_random_tree,
+    [
+        "RandomTreeDepth2ErrRate",
+        "RandomTreeDepth2Kappa"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.LANDMARKING],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample",
+        "depth": 2,
+        "seed": 7
+    }
+)
+
+get_random_tree_depth_3 = MetafeatureComputer(
+    get_random_tree,
+    [
+        "RandomTreeDepth3ErrRate",
+        "RandomTreeDepth3Kappa"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.LANDMARKING],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample",
+        "depth": 3,
+        "seed": 8
+    }
+)
+
+
 def get_lda(X, Y, n_folds, cv_seed):
     pipeline = Pipeline([(
         'lda', LinearDiscriminantAnalysis()
     )])
     return run_pipeline(X, Y, pipeline, n_folds, cv_seed)
+
+get_lda = MetafeatureComputer(
+    get_lda,
+    [
+        "LinearDiscriminantAnalysisErrRate",
+        "LinearDiscriminantAnalysisKappa"
+    ],
+    ProblemType.CLASSIFICATION,
+    [MetafeatureGroup.LANDMARKING],
+    {
+        "X": "XPreprocessed",
+        "Y": "YSample"
+    }
+)
+
+
+"""
+A list of all MetafeatureComputer
+instances in this module.
+"""
+metafeatures_info = build_resources_info(
+    get_naive_bayes,
+    get_knn_1,
+    get_decision_stump,
+    get_random_tree_depth_1,
+    get_random_tree_depth_2,
+    get_random_tree_depth_3,
+    get_lda
+)

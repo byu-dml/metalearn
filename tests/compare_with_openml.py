@@ -8,6 +8,7 @@ import openml
 
 from tests.data.dataset import _read_arff_dataset
 from metalearn import Metafeatures
+import metalearn.metafeatures.constants as consts
 from tests.config import OPENML_COMPARE_RESULTS_DIR
 
 
@@ -115,7 +116,7 @@ def _compare_metafeatures(oml_dataset, tol, verbose):
     inconsistent_mfs = {}
 
     for our_mf_id, our_mf_result in our_mfs.items():
-        our_mf_value = our_mf_result[Metafeatures.VALUE_KEY]
+        our_mf_value = our_mf_result[consts.VALUE_KEY]
         if our_mf_id in mf_id_map:
             oml_mf_id = mf_id_map[our_mf_id]["openmlName"]
             if oml_mf_id in oml_mfs:

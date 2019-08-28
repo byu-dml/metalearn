@@ -9,18 +9,23 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
-from sklearn.model_selection import StratifiedShuffleSplit
 
-from .resources import METAFEATURE_CONFIG
-from .common_operations import *
-from .simple_metafeatures import *
-from .statistical_metafeatures import *
-from .information_theoretic_metafeatures import *
-from .landmarking_metafeatures import *
-from .decision_tree_metafeatures import *
-from .text_metafeatures import *
-from .perceptron_metafeatures import *
+from metalearn.metafeatures.base import collectordict, ResourceComputer, MetafeatureComputer
+from metalearn.metafeatures.common_operations import *
+import metalearn.metafeatures.constants as consts
 
+from metalearn.metafeatures.decision_tree_metafeatures import resources_info as dt_resources
+from metalearn.metafeatures.general_resource_computers import resources_info as general_resources
+from metalearn.metafeatures.text_metafeatures import resources_info as text_resources
+from metalearn.metafeatures.perceptron_metafeatures import resources_info as perceptron_resources
+
+from metalearn.metafeatures.decision_tree_metafeatures import metafeatures_info as dt_metafeatures
+from metalearn.metafeatures.information_theoretic_metafeatures import metafeatures_info as info_theoretic_metafeatures
+from metalearn.metafeatures.landmarking_metafeatures import metafeatures_info as landmarking_metafeatures
+from metalearn.metafeatures.simple_metafeatures import metafeatures_info as simple_metafeatures
+from metalearn.metafeatures.statistical_metafeatures import metafeatures_info as statistical_metafeatures
+from metalearn.metafeatures.text_metafeatures import metafeatures_info as text_metafeatures
+from metalearn.metafeatures.perceptron_metafeatures import metafeatures_info as perceptron_metafeatures
 
 class Metafeatures(object):
     """
@@ -30,21 +35,31 @@ class Metafeatures(object):
     meta-learning applications.
     """
 
-    VALUE_KEY = 'value'
-    COMPUTE_TIME_KEY = 'compute_time'
-    NUMERIC = "NUMERIC"
-    TEXT = "TEXT"
-    CATEGORICAL = "CATEGORICAL"
-    NO_TARGETS = "NO_TARGETS"
-    NUMERIC_TARGETS = "NUMERIC_TARGETS"
-    TIMEOUT = "TIMEOUT"
+    _resources_info = collectordict()
+    _resources_info.update(dt_resources)
+    _resources_info.update(general_resources)
+    _resources_info.update(text_resources)
+    _resources_info.update(perceptron_resources)
 
-    with open(METAFEATURE_CONFIG, 'r') as f:
-        _metadata = json.load(f)
-    IDS = list(_metadata["metafeatures"].keys())
-    _resources_info = {}
-    _resources_info.update(_metadata["resources"])
-    _resources_info.update(_metadata["metafeatures"])
+    # noop resource computers for the user-provided resources
+    # `_get_arguments` and `_resource_is_target_dependent` assumes ResourceComputer's
+    for resource_name in ["X_raw", "X", "Y", "column_types", "sample_shape", "seed_base", "n_folds"]:
+        _resources_info[resource_name] = ResourceComputer(lambda: None, [resource_name])
+
+    _mfs_info = [
+        dt_metafeatures,
+        info_theoretic_metafeatures,
+        landmarking_metafeatures,
+        simple_metafeatures,
+        statistical_metafeatures,
+        text_metafeatures,
+        perceptron_metafeatures
+    ]
+
+    for mf_info in _mfs_info:
+        _resources_info.update(mf_info)
+
+    IDS: List[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
 
     @classmethod
     def list_metafeatures(cls, group="all"):
@@ -140,65 +155,51 @@ class Metafeatures(object):
             X, Y, column_types, sample_shape, seed, n_folds
         )
 
-        computed_metafeatures = {name: {self.VALUE_KEY: self.TIMEOUT, self.COMPUTE_TIME_KEY: 0}
-                                 for name in metafeature_ids}
+        computed_metafeatures = {
+            name: self._format_resource(consts.TIMEOUT, 0)
+            for name in metafeature_ids
+        }
         try:
             for metafeature_id in metafeature_ids:
                 self._check_timeout()
                 if verbose:
                     print(metafeature_id)
                 if self._resource_is_target_dependent(metafeature_id) and (
-                    Y is None or column_types[Y.name] == self.NUMERIC
+                    Y is None or column_types[Y.name] == consts.NUMERIC
                 ):
                     if Y is None:
-                        value = self.NO_TARGETS
+                        value = consts.NO_TARGETS
                     else:
-                        value = self.NUMERIC_TARGETS
+                        value = consts.NUMERIC_TARGETS
                     compute_time = None
                 else:
                     value, compute_time = self._get_resource(metafeature_id)
 
-                computed_metafeatures[metafeature_id] = {
-                    self.VALUE_KEY: value,
-                    self.COMPUTE_TIME_KEY: compute_time
-                }
+                computed_metafeatures[metafeature_id] = self._format_resource(value, compute_time)
         except TimeoutError:
             pass
 
         return computed_metafeatures
+    
+    def _format_resource(self, value, compute_time):
+        """Formats the resource data as a dict"""
+        return {
+            consts.VALUE_KEY: value,
+            consts.COMPUTE_TIME_KEY: compute_time
+        }
 
     def _init_resources(
         self, X, Y, column_types, sample_shape, seed, n_folds
     ):
+        # Add the base resources to our resources hash
         self._resources = {
-            "X_raw": {
-                self.VALUE_KEY: X,
-                self.COMPUTE_TIME_KEY: 0.
-            },
-            "X": {
-                self.VALUE_KEY: X.dropna(axis=1, how="all"),
-                self.COMPUTE_TIME_KEY: 0.
-            },
-            "Y": {
-                self.VALUE_KEY: Y,
-                self.COMPUTE_TIME_KEY: 0.
-            },
-            "column_types": {
-                self.VALUE_KEY: column_types,
-                self.COMPUTE_TIME_KEY: 0.
-            },
-            "sample_shape": {
-                self.VALUE_KEY: sample_shape,
-                self.COMPUTE_TIME_KEY: 0.
-            },
-            "seed_base": {
-                self.VALUE_KEY: seed,
-                self.COMPUTE_TIME_KEY: 0.
-            },
-            "n_folds": {
-                self.VALUE_KEY: n_folds,
-                self.COMPUTE_TIME_KEY: 0.
-            }
+            "X_raw": self._format_resource(X, 0.),  # TODO: rename to X
+            "X": self._format_resource(X.dropna(axis=1, how="all"), 0.),  # TODO: make resource computer; rename
+            "Y": self._format_resource(Y, 0.),
+            "column_types": self._format_resource(column_types, 0.),
+            "sample_shape": self._format_resource(sample_shape, 0.),
+            "seed_base": self._format_resource(seed, 0.),
+            "n_folds": self._format_resource(n_folds, 0.)
         }
 
     @classmethod
@@ -208,18 +209,13 @@ class Metafeatures(object):
         elif resource_id=='XSample':
             return False
         else:
-            resource_info = cls._resources_info[resource_id]
-            function = resource_info["function"]
-            args = resource_info["arguments"]
-            for parameter, argument in args.items():
+            resource_computer = cls._resources_info[resource_id]
+            for argument in resource_computer.argmap.values():
                 if (argument in cls._resources_info and
                     cls._resource_is_target_dependent(argument)
                 ):
                     return True
             return False
-
-    def _get_cv_seed(self, seed_base, seed_offset):
-        return (seed_base + seed_offset,)
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
@@ -268,13 +264,13 @@ class Metafeatures(object):
                         f"Column type not specified for column {col}"
                     )
                 col_type = column_types[col]
-                # todo: add self.TEXT to check. Additionally add self.TEXT to all tests that check for column types
-                if not col_type in [self.NUMERIC, self.CATEGORICAL, self.TEXT]:
+                # todo: add consts.TEXT to check. Additionally add consts.TEXT to all tests that check for column types
+                if not col_type in [consts.NUMERIC, consts.CATEGORICAL, consts.TEXT]:
                     invalid_column_types[col] = col_type
             if len(invalid_column_types) > 0:
                 raise ValueError(
                     f"Invalid column types: {invalid_column_types}. Valid types " +
-                    f"include {self.NUMERIC} and {self.CATEGORICAL} and {self.TEXT}."
+                    f"include {consts.NUMERIC} and {consts.CATEGORICAL} and {consts.TEXT}."
                 )
 
     def _validate_metafeature_ids(
@@ -332,7 +328,7 @@ class Metafeatures(object):
             raise ValueError(f"`n_folds` must be >= 2, but was {n_folds}")
         if (Y is not None and 
             column_types is not None and 
-            column_types[Y.name] != self.NUMERIC and 
+            column_types[Y.name] != consts.NUMERIC and 
             metafeature_ids is not None):
             # when computing landmarking metafeatures, there must be at least
             # n_folds instances of each class of Y
@@ -361,16 +357,16 @@ class Metafeatures(object):
         column_types = {}
         for col_name in X.columns:
             if dtype_is_numeric(X[col_name].dtype):
-                column_types[col_name] = self.NUMERIC
+                column_types[col_name] = consts.NUMERIC
             else:
-                column_types[col_name] = self.CATEGORICAL
+                column_types[col_name] = consts.CATEGORICAL
         if not Y is None:
             if dtype_is_numeric(Y.dtype):
-                column_types[Y.name] = self.NUMERIC
+                column_types[Y.name] = consts.NUMERIC
             else:
                 # todo: get number of unique values in col_name, compute unique/total ratio. Use ratio to infer type
 
-                column_types[Y.name] = self.CATEGORICAL
+                column_types[Y.name] = consts.CATEGORICAL
         return column_types
 
     def _get_metafeature_ids(self, exclude):
@@ -382,37 +378,24 @@ class Metafeatures(object):
     def _get_resource(self, resource_id):
         self._check_timeout()
         if not resource_id in self._resources:
-            resource_info = self._resources_info[resource_id]
-            f_name = resource_info["function"]
-            f = self._get_function(f_name)
+            resource_computer = self._resources_info[resource_id]
             args, total_time = self._get_arguments(resource_id)
-            return_resources = resource_info["returns"]
+            return_resources = resource_computer.returns
             start_timestamp = time.perf_counter()
-            computed_resources = f(**args)
+            computed_resources = resource_computer(**args)
             compute_time = time.perf_counter() - start_timestamp
             total_time += compute_time
             for res_id, computed_resource in zip(
                 return_resources, computed_resources
             ):
-                self._resources[res_id] = {
-                    self.VALUE_KEY: computed_resource,
-                    self.COMPUTE_TIME_KEY: total_time
-                }
+                self._resources[res_id] = self._format_resource(computed_resource, total_time)
         resource = self._resources[resource_id]
-        return resource[self.VALUE_KEY], resource[self.COMPUTE_TIME_KEY]
-
-    def _get_function(self, f_name):
-        if f_name.startswith("self."):
-            return getattr(self, f_name[len("self."):])
-        else:
-            return globals()[f_name]
+        return resource[consts.VALUE_KEY], resource[consts.COMPUTE_TIME_KEY]
 
     def _get_arguments(self, resource_id):
-        resource_info = self._resources_info[resource_id]
-        args = resource_info["arguments"]
         resolved_parameters = {}
         total_time = 0.0
-        for parameter, argument in args.items():
+        for parameter, argument in self._resources_info[resource_id].argmap.items():
             argument_type = type(argument)
             if parameter == "seed":
                 seed_base, compute_time = self._get_resource("seed_base")
@@ -425,153 +408,7 @@ class Metafeatures(object):
             elif dtype_is_numeric(argument_type):
                 compute_time = 0
             else:
-                raise Exception("unhandled argument type")
+                raise TypeError(f'unhandled argument type: {argument_type}')
             resolved_parameters[parameter] = argument
             total_time += compute_time
         return (resolved_parameters, total_time)
-
-    def _get_preprocessed_data(self, X_sample, X_sampled_columns, column_types, seed):
-        series_array = []
-        for feature in X_sample.columns:
-            is_text = False
-            feature_series = X_sample[feature].copy()
-            col = feature_series.values
-            dropped_nan_series = X_sampled_columns[feature].dropna(
-                axis=0,how='any'
-            )
-            num_nan = np.sum(feature_series.isnull())
-            np.random.seed(seed)
-            col[feature_series.isnull()] = np.random.choice(
-                dropped_nan_series, size=num_nan
-            )
-            if column_types[feature_series.name] == self.CATEGORICAL:
-                feature_series = pd.get_dummies(feature_series)
-            elif column_types[feature_series.name] == self.TEXT:
-                is_text = True
-            if not is_text:
-                series_array.append(feature_series)
-        return (pd.concat(series_array, axis=1, copy=False),)
-
-    def _sample_columns(self, X, sample_shape, seed):
-        if sample_shape[1] is None or X.shape[1] <= sample_shape[1]:
-            X_sample = X
-        else:
-            np.random.seed(seed)
-            sampled_column_indices = np.random.choice(
-                X.shape[1], size=sample_shape[1], replace=False
-            )
-            sampled_columns = X.columns[sampled_column_indices]
-            X_sample = X[sampled_columns]
-        return (X_sample,)
-
-    def _sample_rows(self, X, Y, sample_shape, seed):
-        """
-        Stratified uniform sampling of rows, according to the classes in Y.
-        Ensures there are enough samples from each class in Y for cross
-        validation.
-        """
-        if sample_shape[0] is None or X.shape[0] <= sample_shape[0]:
-            X_sample, Y_sample = X, Y
-        elif Y is None:
-            np.random.seed(seed)
-            row_indices = np.random.choice(
-                X.shape[0], size=sample_shape[0], replace=False
-            )
-            X_sample, Y_sample = X.iloc[row_indices], Y
-        else:
-            drop_size = X.shape[0] - sample_shape[0]
-            sample_size = sample_shape[0]
-            sss = StratifiedShuffleSplit(
-                n_splits=2, test_size=drop_size, train_size=sample_size, random_state=seed
-            )
-            row_indices, _ = next(sss.split(X, Y))
-            X_sample, Y_sample = X.iloc[row_indices], Y.iloc[row_indices]
-        return (X_sample, Y_sample)
-
-    def _get_categorical_features_with_no_missing_values(
-        self, X_sample, column_types
-    ):
-        categorical_features_with_no_missing_values = []
-        for feature in X_sample.columns:
-            if column_types[feature] == self.CATEGORICAL:
-                no_nan_series = X_sample[feature].dropna(
-                    axis=0, how='any'
-                )
-                categorical_features_with_no_missing_values.append(
-                    no_nan_series
-                )
-        return (categorical_features_with_no_missing_values,)
-
-    def _get_categorical_features_and_class_with_no_missing_values(
-        self, X_sample, Y_sample, column_types
-    ):
-        categorical_features_and_class_with_no_missing_values = []
-        for feature in X_sample.columns:
-            if column_types[feature] == self.CATEGORICAL:
-                df = pd.concat([X_sample[feature],Y_sample], axis=1).dropna(
-                    axis=0, how='any'
-                )
-                categorical_features_and_class_with_no_missing_values.append(
-                    (df[feature],df[Y_sample.name])
-                )
-        return (categorical_features_and_class_with_no_missing_values,)
-
-    def _get_numeric_features_with_no_missing_values(
-        self, X_sample, column_types
-    ):
-        numeric_features_with_no_missing_values = []
-        for feature in X_sample.columns:
-            if column_types[feature] == self.NUMERIC:
-                no_nan_series = X_sample[feature].dropna(
-                    axis=0, how='any'
-                )
-                numeric_features_with_no_missing_values.append(
-                    no_nan_series
-                )
-        return (numeric_features_with_no_missing_values,)
-
-    def _get_text_features_with_no_missing_values(
-				self, X_sample, column_types
-		):
-        text_features_with_no_missing_values = []
-        for feature in X_sample.columns:
-            if column_types[feature] == self.TEXT:
-                no_nan_series = X_sample[feature].dropna(
-					axis=0, how='any'
-				)
-                text_features_with_no_missing_values.append(
-					no_nan_series
-				)
-        return (text_features_with_no_missing_values,)
-
-    def _get_binned_numeric_features_with_no_missing_values(
-        self, numeric_features_array
-    ):
-        binned_feature_array = [
-            (
-                pd.cut(feature,
-                round(feature.shape[0]**(1./3.)))
-            ) for feature in numeric_features_array
-        ]
-        return (binned_feature_array,)
-
-    def _get_binned_numeric_features_and_class_with_no_missing_values(
-        self, X_sample, Y_sample, column_types
-    ):
-        numeric_features_and_class_with_no_missing_values = []
-        for feature in X_sample.columns:
-            if column_types[feature] == self.NUMERIC:
-                # renaming avoids name collisions and problems when y does not have a name
-                df = pd.concat([X_sample[feature].rename('x'), Y_sample.rename('y')], axis=1)
-                df.dropna(axis=0, how='any', inplace=True)
-                numeric_features_and_class_with_no_missing_values.append(
-                    (df['x'],df['y'])
-                )
-        binned_feature_class_array = [
-            (
-                pd.cut(feature_class_pair[0],
-                round(feature_class_pair[0].shape[0]**(1./3.))),
-                feature_class_pair[1]
-            ) for feature_class_pair in numeric_features_and_class_with_no_missing_values
-        ]
-        return (binned_feature_class_array,)
