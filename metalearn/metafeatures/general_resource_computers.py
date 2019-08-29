@@ -6,6 +6,11 @@ from metalearn.metafeatures.base import build_resources_info, ResourceComputer
 import metalearn.metafeatures.constants as consts
 
 
+def get_X(X_raw):
+    return X_raw.dropna(axis=1, how="all"),
+
+get_X = ResourceComputer(get_X, ["X"])
+
 def get_cv_seed(seed_base, seed_offset):
     return (seed_base + seed_offset,)
 
@@ -235,6 +240,7 @@ A list of all ResourceComputer
 instances in this module.
 """
 resources_info = build_resources_info(
+    get_X,
     get_cv_seed,
     sample_columns,
     sample_rows,
