@@ -147,8 +147,6 @@ class Metafeatures(object):
             n_folds, verbose, return_times
         )
 
-        self._return_times = return_times
-
         self._init_resources(
             X, Y, column_types, sample_shape, seed, n_folds
         )
@@ -196,7 +194,6 @@ class Metafeatures(object):
         # Add the base resources to our resources hash
         self._resources = {
             "X_raw": self._format_resource(X, 0.),  # TODO: rename to X
-            # "X": self._format_resource(X.dropna(axis=1, how="all"), 0.),  # TODO: make resource computer; rename
             "Y": self._format_resource(Y, 0.),
             "column_types": self._format_resource(column_types, 0.),
             "sample_shape": self._format_resource(sample_shape, 0.),
