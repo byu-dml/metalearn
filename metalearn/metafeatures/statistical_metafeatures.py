@@ -8,23 +8,111 @@ from scipy.stats import skew, kurtosis
 from sklearn.decomposition import PCA
 from sklearn.cross_decomposition import CCA
 
-from .common_operations import *
+from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
+from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
+import metalearn.metafeatures.constants as consts
+
 
 def get_numeric_means(numeric_features_array):
     means = [feature.mean() for feature in numeric_features_array]
     return profile_distribution(means)
 
+get_numeric_means = MetafeatureComputer(
+    get_numeric_means,
+    [
+        "MeanMeansOfNumericFeatures",
+        "StdevMeansOfNumericFeatures",
+        "SkewMeansOfNumericFeatures",
+        "KurtosisMeansOfNumericFeatures",
+        "MinMeansOfNumericFeatures",
+        "Quartile1MeansOfNumericFeatures",
+        "Quartile2MeansOfNumericFeatures",
+        "Quartile3MeansOfNumericFeatures",
+        "MaxMeansOfNumericFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.STATISTICAL],
+    {
+        "numeric_features_array": "NoNaNNumericFeatures"
+    }
+)
+
+
 def get_numeric_stdev(numeric_features_array):
     stdevs = [feature.std() for feature in numeric_features_array]
     return profile_distribution(stdevs)
+
+get_numeric_stdev = MetafeatureComputer(
+    get_numeric_stdev,
+    [
+        "MeanStdDevOfNumericFeatures",
+        "StdevStdDevOfNumericFeatures",
+        "SkewStdDevOfNumericFeatures",
+        "KurtosisStdDevOfNumericFeatures",
+        "MinStdDevOfNumericFeatures",
+        "Quartile1StdDevOfNumericFeatures",
+        "Quartile2StdDevOfNumericFeatures",
+        "Quartile3StdDevOfNumericFeatures",
+        "MaxStdDevOfNumericFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.STATISTICAL],
+    {
+        "numeric_features_array": "NoNaNNumericFeatures"
+    }
+)
+
 
 def get_numeric_skewness(numeric_features_array):
     skews = [feature.skew() for feature in numeric_features_array]
     return profile_distribution(skews)
 
+get_numeric_skewness = MetafeatureComputer(
+    get_numeric_skewness,
+    [
+        "MeanSkewnessOfNumericFeatures",
+        "StdevSkewnessOfNumericFeatures",
+        "SkewSkewnessOfNumericFeatures",
+        "KurtosisSkewnessOfNumericFeatures",
+        "MinSkewnessOfNumericFeatures",
+        "Quartile1SkewnessOfNumericFeatures",
+        "Quartile2SkewnessOfNumericFeatures",
+        "Quartile3SkewnessOfNumericFeatures",
+        "MaxSkewnessOfNumericFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.STATISTICAL],
+    {
+        "numeric_features_array": "NoNaNNumericFeatures"
+    }
+)
+
+
 def get_numeric_kurtosis(numeric_features_array):
     kurtoses = [feature.kurtosis() for feature in numeric_features_array]
     return profile_distribution(kurtoses)
+
+get_numeric_kurtosis = MetafeatureComputer(
+    get_numeric_kurtosis,
+    [
+        "MeanKurtosisOfNumericFeatures",
+        "StdevKurtosisOfNumericFeatures",
+        "SkewKurtosisOfNumericFeatures",
+        "KurtosisKurtosisOfNumericFeatures",
+        "MinKurtosisOfNumericFeatures",
+        "Quartile1KurtosisOfNumericFeatures",
+        "Quartile2KurtosisOfNumericFeatures",
+        "Quartile3KurtosisOfNumericFeatures",
+        "MaxKurtosisOfNumericFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.STATISTICAL],
+    {
+        "numeric_features_array": "NoNaNNumericFeatures"
+    }
+)
+
 
 def get_pca(X_preprocessed):
     num_components = min(3, X_preprocessed.shape[1])
@@ -40,6 +128,25 @@ def get_pca(X_preprocessed):
     for i in range(len(pred_eigen)):
         eigenvalues[i] = pred_eigen[i]
     return (variance_percentages[0], variance_percentages[1], variance_percentages[2], eigenvalues[0], eigenvalues[1], eigenvalues[2], pred_det)
+
+get_pca = MetafeatureComputer(
+    get_pca,
+    [
+        "PredPCA1",
+        "PredPCA2",
+        "PredPCA3",
+        "PredEigen1",
+        "PredEigen2",
+        "PredEigen3",
+        "PredDet"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.STATISTICAL],
+    {
+        "X_preprocessed": "XPreprocessed"
+    }
+)
+
 
 def get_correlations(X_sample, column_types):
     correlations = get_canonical_correlations(X_sample, column_types)
@@ -65,7 +172,7 @@ def get_canonical_correlations(dataframe, column_types):
     '''
 
     def preprocess(series):
-        if column_types[series.name] == 'CATEGORICAL':
+        if column_types[series.name] == consts.CATEGORICAL:
             series = pd.get_dummies(series)
         array = series.values.reshape(series.shape[0], -1)
         return array
@@ -105,3 +212,16 @@ def get_canonical_correlations(dataframe, column_types):
         correlations.append(c)
 
     return correlations
+
+
+"""
+A list of all MetafeatureComputer
+instances in this module.
+"""
+metafeatures_info = build_resources_info(
+    get_numeric_means,
+    get_numeric_stdev,
+    get_numeric_skewness,
+    get_numeric_kurtosis,
+    get_pca
+)

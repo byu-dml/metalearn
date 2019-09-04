@@ -4,7 +4,9 @@ from itertools import chain
 import numpy as np
 import pandas as pd
 
-from .common_operations import *
+from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.base import build_resources_info, ResourceComputer, MetafeatureComputer
+from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
 
 def get_string_lengths_array_from_text_features(text_features_array):
@@ -12,9 +14,37 @@ def get_string_lengths_array_from_text_features(text_features_array):
     return lengths,
 
 
+get_string_lengths_array_from_text_features = ResourceComputer(
+    get_string_lengths_array_from_text_features,
+    ["ArrayOfStringLengthsOfTextFeatures"],
+    {"text_features_array": "NoNaNTextFeatures"}
+)
+
+
 def get_string_length_means(string_lengths_array):
     means = [feature.mean() for feature in string_lengths_array]
     return profile_distribution(means)
+
+
+get_string_length_means = MetafeatureComputer(
+    get_string_length_means,
+    [
+        "MeanMeansOfStringLengthOfTextFeatures",
+        "StdevMeansOfStringLengthOfTextFeatures",
+        "SkewMeansOfStringLengthOfTextFeatures",
+        "KurtosisMeansOfStringLengthOfTextFeatures",
+        "MinMeansOfStringLengthOfTextFeatures",
+        "Quartile1MeansOfStringLengthOfTextFeatures",
+        "Quartile2MeansOfStringLengthOfTextFeatures",
+        "Quartile3MeansOfStringLengthOfTextFeatures",
+        "MaxMeansOfStringLengthOfTextFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.TEXT],
+    {
+        "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+    }
+)
 
 
 def get_string_length_stdev(string_lengths_array):
@@ -22,9 +52,51 @@ def get_string_length_stdev(string_lengths_array):
     return profile_distribution(stdevs)
 
 
+get_string_length_stdev = MetafeatureComputer(
+    get_string_length_stdev,
+    [
+        "MeanStdDevOfStringLengthOfTextFeatures",
+        "StdevStdDevOfStringLengthOfTextFeatures",
+        "SkewStdDevOfStringLengthOfTextFeatures",
+        "KurtosisStdDevOfStringLengthOfTextFeatures",
+        "MinStdDevOfStringLengthOfTextFeatures",
+        "Quartile1StdDevOfStringLengthOfTextFeatures",
+        "Quartile2StdDevOfStringLengthOfTextFeatures",
+        "Quartile3StdDevOfStringLengthOfTextFeatures",
+        "MaxStdDevOfStringLengthOfTextFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.TEXT],
+    {
+        "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+    }
+)
+
+
 def get_string_length_skewness(string_lengths_array):
     skews = [feature.skew() for feature in string_lengths_array]
     return profile_distribution(skews)
+
+
+get_string_length_skewness = MetafeatureComputer(
+    get_string_length_skewness,
+    [
+        "MeanSkewnessOfStringLengthOfTextFeatures",
+        "StdevSkewnessOfStringLengthOfTextFeatures",
+        "SkewSkewnessOfStringLengthOfTextFeatures",
+        "KurtosisSkewnessOfStringLengthOfTextFeatures",
+        "MinSkewnessOfStringLengthOfTextFeatures",
+        "Quartile1SkewnessOfStringLengthOfTextFeatures",
+        "Quartile2SkewnessOfStringLengthOfTextFeatures",
+        "Quartile3SkewnessOfStringLengthOfTextFeatures",
+        "MaxSkewnessOfStringLengthOfTextFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.TEXT],
+    {
+        "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+    }
+)
 
 
 def get_string_length_kurtosis(string_lengths_array):
@@ -32,12 +104,25 @@ def get_string_length_kurtosis(string_lengths_array):
     return profile_distribution(kurtoses)
 
 
-def get_mfs_for_tokens_split_by_punctuation(text_features_array, most_common_limit=10):
-    return get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, "[.?!\\-_(),:;/{}]")
-
-
-def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit=10):
-    return get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, " ")
+get_string_length_kurtosis = MetafeatureComputer(
+    get_string_length_kurtosis,
+    [
+        "MeanKurtosisOfStringLengthOfTextFeatures",
+        "StdevKurtosisOfStringLengthOfTextFeatures",
+        "SkewKurtosisOfStringLengthOfTextFeatures",
+        "KurtosisKurtosisOfStringLengthOfTextFeatures",
+        "MinKurtosisOfStringLengthOfTextFeatures",
+        "Quartile1KurtosisOfStringLengthOfTextFeatures",
+        "Quartile2KurtosisOfStringLengthOfTextFeatures",
+        "Quartile3KurtosisOfStringLengthOfTextFeatures",
+        "MaxKurtosisOfStringLengthOfTextFeatures"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.TEXT],
+    {
+        "string_lengths_array": "ArrayOfStringLengthsOfTextFeatures"
+    }
+)
 
 
 def get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, delimeter):
@@ -92,9 +177,53 @@ def get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit
 
     ratio_of_distinct_tokens = 0 if number_of_tokens == 0 else (number_of_distinct_tokens / number_of_tokens)
     ratio_of_tokens_containing_numeric_char = 0 if number_of_tokens == 0 else (
-                number_of_tokens_containing_numeric_char / number_of_tokens)
+            number_of_tokens_containing_numeric_char / number_of_tokens)
 
     return number_of_tokens, number_of_distinct_tokens, number_of_tokens_containing_numeric_char, ratio_of_distinct_tokens, ratio_of_tokens_containing_numeric_char
+
+
+def get_mfs_for_tokens_split_by_punctuation(text_features_array, most_common_limit):
+    return get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, "[.?!\\-_(),:;/{}]")
+
+
+get_mfs_for_tokens_split_by_punctuation = MetafeatureComputer(
+    get_mfs_for_tokens_split_by_punctuation,
+    [
+        "NumberOfTokensSplitByPunctuation",
+        "NumberOfDistinctTokensSplitByPunctuation",
+        "NumberOfTokensSplitByPunctuationContainingNumericChar",
+        "RatioOfDistinctTokensSplitByPunctuation",
+        "RatioOfTokensSplitByPunctuationContainingNumericChar"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.TEXT],
+    {
+        "text_features_array": "NoNaNTextFeatures",
+        'most_common_limit': 10,
+    }
+)
+
+
+def get_mfs_for_tokens_split_by_space(text_features_array, most_common_limit):
+    return get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit, " ")
+
+
+get_mfs_for_tokens_split_by_space = MetafeatureComputer(
+    get_mfs_for_tokens_split_by_space,
+    [
+        "NumberOfTokens",
+        "NumberOfDistinctTokens",
+        "NumberOfTokensContainingNumericChar",
+        "RatioOfDistinctTokens",
+        "RatioOfTokensContainingNumericChar"
+    ],
+    ProblemType.ANY,
+    [MetafeatureGroup.TEXT],
+    {
+        "text_features_array": "NoNaNTextFeatures",
+        'most_common_limit': 10,
+    }
+)
 
 # todo: re-include these loops after deciding what to do with most_common_tokens,
 # todo: most_common_alphanumeric_tokens, and most_common_numeric_tokens
@@ -136,3 +265,25 @@ def get_mfs_for_tokens_split_by_delimiter(text_features_array, most_common_limit
 # 	)
 # 	if len(most_common_tokens) == most_common_limit:
 # 		break
+
+
+"""
+A list of all ResourceComputer
+instances in this module.
+"""
+resources_info = build_resources_info(
+    get_string_lengths_array_from_text_features
+)
+
+"""
+A list of all MetafeatureComputer
+instances in this module.
+"""
+metafeatures_info = build_resources_info(
+    get_string_length_means,
+    get_string_length_stdev,
+    get_string_length_skewness,
+    get_string_length_kurtosis,
+    get_mfs_for_tokens_split_by_space,
+    get_mfs_for_tokens_split_by_punctuation
+)
