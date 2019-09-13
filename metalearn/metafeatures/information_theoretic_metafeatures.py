@@ -17,7 +17,10 @@ get_class_entropy = MetafeatureComputer(
     get_class_entropy,
     ["ClassEntropy"],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "Y_sample": "YSample"
     }
@@ -87,7 +90,10 @@ get_categorical_joint_entropy = MetafeatureComputer(
         "MaxCategoricalJointEntropy"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
     }
@@ -107,7 +113,10 @@ get_numeric_joint_entropy = MetafeatureComputer(
         "MaxNumericJointEntropy"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
     }
@@ -132,7 +141,10 @@ get_categorical_mutual_information = MetafeatureComputer(
         "MaxCategoricalMutualInformation"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "feature_class_array": "NoNaNCategoricalFeaturesAndClass"
     }
@@ -152,7 +164,10 @@ get_numeric_mutual_information = MetafeatureComputer(
         "MaxNumericMutualInformation"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "feature_class_array": "NoNaNBinnedNumericFeaturesAndClass"
     }
@@ -170,7 +185,10 @@ get_equivalent_number_categorical_features = MetafeatureComputer(
     get_equivalent_number_features,
     ["EquivalentNumberOfCategoricalFeatures"],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "class_entropy": "ClassEntropy",
         "mutual_information": "MeanCategoricalMutualInformation"
@@ -181,7 +199,10 @@ get_equivalent_number_numeric_features = MetafeatureComputer(
     get_equivalent_number_features,
     ["EquivalentNumberOfNumericFeatures"],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "class_entropy": "ClassEntropy",
         "mutual_information": "MeanNumericMutualInformation"
@@ -200,7 +221,10 @@ get_categorical_noise_signal_ratio = MetafeatureComputer(
     get_noise_signal_ratio,
     ["CategoricalNoiseToSignalRatio"],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "attribute_entropy": "MeanCategoricalAttributeEntropy",
         "mutual_information": "MeanCategoricalMutualInformation"
@@ -211,7 +235,10 @@ get_numeric_noise_signal_ratio = MetafeatureComputer(
     get_noise_signal_ratio,
     ["NumericNoiseToSignalRatio"],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.INFO_THEORETIC],
+    [
+        MetafeatureGroup.INFO_THEORETIC,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "attribute_entropy": "MeanNumericAttributeEntropy",
         "mutual_information": "MeanNumericMutualInformation"

@@ -103,7 +103,10 @@ get_decision_tree_level_sizes = MetafeatureComputer(
         "MaxDecisionTreeLevelSize"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.MODEL_BASED],
+    [
+        MetafeatureGroup.MODEL_BASED,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "tree": "TraversedDecisionTree"
     }
@@ -127,7 +130,10 @@ get_decision_tree_branch_lengths = MetafeatureComputer(
         "MaxDecisionTreeBranchLength"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.MODEL_BASED],
+    [
+        MetafeatureGroup.MODEL_BASED,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "tree": "TraversedDecisionTree"
     }
@@ -151,7 +157,10 @@ get_decision_tree_attributes = MetafeatureComputer(
         "MaxDecisionTreeAttribute"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.MODEL_BASED],
+    [
+        MetafeatureGroup.MODEL_BASED,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "tree": "DecisionTree"
     }
@@ -169,7 +178,10 @@ get_decision_tree_general_info = MetafeatureComputer(
         "DecisionTreeHeight",
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.MODEL_BASED],
+    [
+        MetafeatureGroup.MODEL_BASED,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "tree": "DecisionTree"
     }
@@ -183,7 +195,10 @@ get_decision_tree_width = MetafeatureComputer(
     get_decision_tree_width,
     ["DecisionTreeWidth"],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.MODEL_BASED],
+    [
+        MetafeatureGroup.MODEL_BASED,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "tree": "TraversedDecisionTree"
     }

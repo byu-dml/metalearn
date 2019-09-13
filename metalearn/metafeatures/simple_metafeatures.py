@@ -104,7 +104,10 @@ get_class_stats = MetafeatureComputer(
         "MajorityClassSize"
     ],
     problem_type=ProblemType.CLASSIFICATION,
-    groups=[MetafeatureGroup.SIMPLE]
+    groups=[
+        MetafeatureGroup.SIMPLE,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ]
 )
 
 
