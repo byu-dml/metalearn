@@ -82,7 +82,8 @@ class Metafeatures(object):
         self, X: DataFrame, Y: Series=None,
         column_types: Dict[str, str]=None, metafeature_ids: List=None,
         exclude: List=None, sample_shape=None, seed=None, n_folds=2,
-        verbose=False, timeout=None
+        verbose=False, timeout=None,
+        groups: List=None, exclude_groups: List=None
     ) -> dict:
         """
         Parameters
@@ -91,10 +92,10 @@ class Metafeatures(object):
         Y: pandas.Series, the dataset targets
         column_types: Dict[str, str], dict from column name to column type as
             "NUMERIC" or "CATEGORICAL" or "TEXT", must include Y column
-        metafeature_ids: list, the metafeatures to compute. default of None
-            indicates to compute all metafeatures
-        exclude: list, default None. The metafeatures to be excluded from computation.
-            Must be None if metafeature_ids is not None.
+        metafeature_ids: list, the metafeatures to compute. Default of None
+            indicates to compute all metafeatures.
+        exclude: list, default None. The metafeatures to be excluded from
+            computation. Must be None if metafeature_ids is not None.
         sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
             Default is (None, None), indicate not to sample rows or columns.
         seed: int, the seed used to generate pseudo-random numbers. when None
@@ -109,6 +110,16 @@ class Metafeatures(object):
             will be run to completion. Otherwise, execution will halt after
             approximately timeout seconds. Any metafeatures that have not been
             computed will be labeled 'TIMEOUT'.
+        groups: list, default None. Must consist only of values enumerated in
+            constants.MetafeatureGroup. The metafeature groups to be computed.
+            Values listed in metafeature_ids or exclude take precedence over
+            groups and exclude_groups (e.g., if 'landmarking' is in the list
+            exclude_group but 'NaiveBayesErrRate' is in metafeature_ids,
+            NaiveBayesErrRate will be computed while all other landmarking
+            metafeatures will be excluded).
+        exclude_groups: list, default None. Must consist only of values enumerated in
+            constants.MetafeatureGroup. The metafeature groups to exclude from
+            computation. Must be None if groups is not None.
 
         Returns
         -------
@@ -120,7 +131,7 @@ class Metafeatures(object):
         start_time = time.time()
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-            n_folds, verbose
+            n_folds, verbose, groups, exclude_groups
         )
         if timeout is None:
             def check_time():
@@ -133,16 +144,15 @@ class Metafeatures(object):
 
         if column_types is None:
             column_types = self._infer_column_types(X, Y)
-        if metafeature_ids is None:
-            metafeature_ids = self._get_metafeature_ids(exclude)
-            exclude = None
+        metafeature_ids = self._get_metafeature_ids(metafeature_ids, exclude, groups, exclude_groups)
+        exclude = None
         if sample_shape is None:
             sample_shape = (None, None)
         if seed is None:
             seed = np.random.randint(np.iinfo(np.int32).max)
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-            n_folds, verbose
+            n_folds, verbose, groups, exclude_groups
         )
 
         self._init_resources(
@@ -200,21 +210,21 @@ class Metafeatures(object):
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         for f in [
             self._validate_X, self._validate_Y, self._validate_column_types,
             self._validate_metafeature_ids, self._validate_sample_shape,
-            self._validate_n_folds, self._validate_verbose
+            self._validate_n_folds, self._validate_verbose, self._validate_groups
         ]:
             f(
                 X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-                n_folds, verbose
+                n_folds, verbose, groups, exclude_groups
             )
 
     def _validate_X(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -223,7 +233,7 @@ class Metafeatures(object):
 
     def _validate_Y(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
@@ -232,7 +242,7 @@ class Metafeatures(object):
 
     def _validate_column_types(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         if not column_types is None:
             invalid_column_types = {}
@@ -256,7 +266,7 @@ class Metafeatures(object):
 
     def _validate_metafeature_ids(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         ids = None
         if metafeature_ids is not None and exclude is not None:
@@ -279,7 +289,7 @@ class Metafeatures(object):
 
     def _validate_sample_shape(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         if not sample_shape is None:
             if not type(sample_shape) in [tuple, list]:
@@ -301,7 +311,7 @@ class Metafeatures(object):
 
     def _validate_n_folds(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         if not dtype_is_numeric(type(n_folds)) or (n_folds != int(n_folds)):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
@@ -328,10 +338,33 @@ class Metafeatures(object):
 
     def _validate_verbose(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose
+        n_folds, verbose, groups, exclude_groups
     ):
         if not type(verbose) is bool:
             raise ValueError("`verbose` must be of type bool.")
+
+    def _validate_groups(
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose, groups, exclude_groups
+    ):
+        group_labels = None
+        if groups is not None and exclude_groups is not None:
+            raise ValueError("groups and exclude_groups cannot both be non-null")
+        elif groups is not None:
+            group_labels = groups
+            list_label = 'requested'
+        elif exclude_groups is not None:
+            group_labels = exclude_groups
+            list_label = 'excluded'
+        if group_labels is not None:
+            invalid_group_labels = [
+                gr for gr in group_labels if gr not in [i.value for i in consts.MetafeatureGroup]
+            ]
+            if len(invalid_group_labels) > 0:
+                raise ValueError(
+                    'One or more {} metafeature groups are not valid: {}'.
+                    format(list_label, invalid_group_labels)
+                )
 
     # todo: intelligently infer TEXT data type
     def _infer_column_types(self, X, Y):
@@ -350,11 +383,34 @@ class Metafeatures(object):
                 column_types[Y.name] = consts.CATEGORICAL
         return column_types
 
-    def _get_metafeature_ids(self, exclude):
-        if exclude is not None:
-            return [mf for mf in self.list_metafeatures() if mf not in exclude]
-        else:
+    def _get_metafeature_ids(self, metafeature_ids, exclude, groups, exclude_groups):
+        if (
+            groups is None and
+            exclude_groups is None and
+            metafeature_ids is not None
+        ):
+            return metafeature_ids
+
+        mfs = self._get_metafeature_group_features(groups, exclude_groups)
+        if metafeature_ids is None and exclude is None:
+            return mfs
+        elif metafeature_ids is not None:
+            return list(set(mfs + metafeature_ids))
+        elif exclude is not None:
+            return list(set(mfs) - set(exclude))
+
+    def _get_metafeature_group_features(self, groups, exclude_groups):
+        if groups is None and exclude_groups is None:
             return self.list_metafeatures()
+        elif groups is not None:
+            mfs = [self.list_metafeatures(g) for g in groups]
+            # flatten list
+            return [mf for sublist in mfs for mf in sublist]
+        elif exclude_groups is not None:
+            exclude_mfs = [self.list_metafeatures(g) for g in exclude_groups]
+            # flatten list
+            exclude_mfs = [mf for sublist in exclude_mfs for mf in sublist]
+            return [mf for mf in self.list_metafeatures() if mf not in exclude_mfs]
 
     def _get_resource(self, resource_id):
         self._check_timeout()
