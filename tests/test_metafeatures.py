@@ -763,18 +763,3 @@ class MetafeaturesTestCase(unittest.TestCase):
 
     def test_no_duplicate_mf_ids(self):
         self.assertEqual(len(Metafeatures.IDS), len(set(Metafeatures.IDS)), 'Metafeatures has duplicate IDS')
-
-    def test_compute_times(self):
-        X = pd.DataFrame(np.random.rand(8, 2))
-        y = pd.Series(['a', 'a', 'a', 'a', 'b', 'b', 'b', 'b'])
-        mf_list = Metafeatures.list_metafeatures()
-        metafeatures = Metafeatures()
-        for mf in mf_list:
-            start = time.perf_counter()
-            result = metafeatures.compute(X, y, metafeature_ids=[mf], return_times=True)
-            measured_time = time.perf_counter() - start
-            returned_time = result[mf][consts.COMPUTE_TIME_KEY]
-
-            if measured_time < returned_time or not np.isclose(measured_time, returned_time, rtol=0.05, atol=0.005):
-                self.fail(f'Compute time for {mf} is incorrect. '
-                          f'Returned time is {returned_time}, measured time is {measured_time}')
