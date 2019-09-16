@@ -40,7 +40,6 @@ class Metafeatures(object):
     _resources_info.update(text_resources)
 
     # noop resource computers for the user-provided resources
-    # `_get_arguments` and `_resource_is_target_dependent` assumes ResourceComputer's
     for resource_name in ["X_raw", "X", "Y", "column_types", "sample_shape", "seed_base", "n_folds"]:
         _resources_info[resource_name] = ResourceComputer(lambda: None, [resource_name])
 
@@ -59,7 +58,7 @@ class Metafeatures(object):
     IDS: List[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
 
     @classmethod
-    def list_metafeatures(cls, group="all"):
+    def list_metafeatures(cls, group: consts.MetafeatureGroup='all'):
         """
         Returns a list of metafeatures computable by the Metafeatures class.
         """
@@ -68,18 +67,16 @@ class Metafeatures(object):
         # PredPCA1, PredPCA2, PredPCA3, PredEigen1, PredEigen2, PredEigen3,
         # PredDet, kNN1NErrRate, kNN1NKappa, LinearDiscriminantAnalysisKappa,
         # LinearDiscriminantAnalysisErrRate
-        if group == "all":
-            return copy.deepcopy(cls.IDS)
-        elif group == "landmarking":
-            return list(filter(
-                lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id, cls.IDS
-            ))
-        elif group == "target_dependent":
-            return list(filter(
-                cls._resource_is_target_dependent, cls.IDS
-            ))
-        else:
+
+        if group not in [i.value for i in consts.MetafeatureGroup]:
             raise ValueError(f"Unknown group {group}")
+
+        if group == consts.MetafeatureGroup.ALL.value:
+            return copy.deepcopy(cls.IDS)
+        else:
+            return list(
+                mf_id for mf_id in cls.IDS if group in [g.value for g in cls._resources_info[mf_id].groups]
+            )
 
     def compute(
         self, X: DataFrame, Y: Series=None,
@@ -157,11 +154,13 @@ class Metafeatures(object):
             for name in metafeature_ids
         }
         try:
-            for metafeature_id in metafeature_ids:
+            for mf_id in metafeature_ids:
                 self._check_timeout()
                 if verbose:
-                    print(metafeature_id)
-                if self._resource_is_target_dependent(metafeature_id) and (
+                    print(mf_id)
+                if (
+                    consts.MetafeatureGroup.TARGET_DEPENDENT in self._resources_info[mf_id].groups
+                ) and (
                     Y is None or column_types[Y.name] == consts.NUMERIC
                 ):
                     if Y is None:
@@ -170,14 +169,14 @@ class Metafeatures(object):
                         value = consts.NUMERIC_TARGETS
                     compute_time = None
                 else:
-                    value, compute_time = self._get_resource(metafeature_id)
+                    value, compute_time = self._get_resource(mf_id)
 
-                computed_metafeatures[metafeature_id] = self._format_resource(value, compute_time)
+                computed_metafeatures[mf_id] = self._format_resource(value, compute_time)
         except TimeoutError:
             pass
 
         return computed_metafeatures
-    
+
     def _format_resource(self, value, compute_time):
         """Formats the resource data as a dict"""
         return {
@@ -198,21 +197,6 @@ class Metafeatures(object):
             "seed_base": self._format_resource(seed, 0.),
             "n_folds": self._format_resource(n_folds, 0.)
         }
-
-    @classmethod
-    def _resource_is_target_dependent(cls, resource_id):
-        if resource_id=='Y':
-            return True
-        elif resource_id=='XSample':
-            return False
-        else:
-            resource_computer = cls._resources_info[resource_id]
-            for argument in resource_computer.argmap.values():
-                if (argument in cls._resources_info and
-                    cls._resource_is_target_dependent(argument)
-                ):
-                    return True
-            return False
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
