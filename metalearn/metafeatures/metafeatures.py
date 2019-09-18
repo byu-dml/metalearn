@@ -111,6 +111,9 @@ class Metafeatures(object):
             will be run to completion. Otherwise, execution will halt after
             approximately timeout seconds. Any metafeatures that have not been
             computed will be labeled 'TIMEOUT'.
+        return_times: bool, default False. When true, includes compute times for
+            each metafeature. **Note** Metafeatures are timed as if each dependency
+            has to be recomputed whenever it is needed.
 
         Returns
         -------
