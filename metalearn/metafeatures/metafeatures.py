@@ -114,7 +114,7 @@ class Metafeatures(object):
             constants.MetafeatureGroup. The metafeature groups to be computed.
             Values listed in metafeature_ids or exclude take precedence over
             groups and exclude_groups (e.g., if 'landmarking' is in the list
-            exclude_group but 'NaiveBayesErrRate' is in metafeature_ids,
+            exclude_groups but 'NaiveBayesErrRate' is in metafeature_ids,
             NaiveBayesErrRate will be computed while all other landmarking
             metafeatures will be excluded).
         exclude_groups: list, default None. Must consist only of values enumerated in

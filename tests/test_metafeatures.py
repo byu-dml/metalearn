@@ -312,6 +312,70 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
         self._report_test_failures(test_failures, test_name)
 
+    def test_request_metafeature_groups(self):
+        SUBSET_LENGTH = 3
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            groups = random.sample(
+                [i.value for i in consts.MetafeatureGroup],
+                SUBSET_LENGTH
+            )
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                groups=groups,
+                column_types=dataset["column_types"]
+            )
+            known_metafeatures = dataset["known_metafeatures"]
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs, known_metafeatures, dataset_filename])
+            ]
+            test_failures.update(self._perform_checks(required_checks))
+
+            metafeature_ids = list(set(
+                [mf for sublist in [
+                    Metafeatures().list_metafeatures(g) for g in groups
+                ] for mf in sublist]
+            ))
+            self.assertEqual(
+                metafeature_ids.sort(), list(computed_mfs.keys()).sort(),
+                "Compute did not return requested metafeatures"
+            )
+        self._report_test_failures(test_failures, test_name)
+
+    def test_exclude_metafeature_groups(self):
+        SUBSET_LENGTH = 3
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            groups = random.sample(
+                [i.value for i in consts.MetafeatureGroup],
+                SUBSET_LENGTH
+            )
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                exclude_groups=groups,
+                column_types=dataset["column_types"]
+            )
+            known_metafeatures = dataset["known_metafeatures"]
+            required_checks = [
+                (self._check_correctness,
+                 [computed_mfs, known_metafeatures, dataset_filename])
+            ]
+            test_failures.update(self._perform_checks(required_checks))
+
+            metafeature_ids = list(set(
+                [mf for sublist in [
+                    Metafeatures().list_metafeatures(g) for g in groups
+                ] for mf in sublist]
+            ))
+
+            if any(mf_id in computed_mfs.keys() for mf_id in metafeature_ids):
+                self.assertTrue(False, "Metafeatures computed an excluded metafeature")
+
+        self._report_test_failures(test_failures, test_name)
+
     def test_compute_effects_on_dataset(self):
         """
         Tests whether computing metafeatures has any side effects on the input
@@ -551,6 +615,29 @@ class MetafeaturesTestCase(unittest.TestCase):
                                    metafeature_ids=[], exclude=[])
 
         self.assertEqual(str(cm.exception), expected_exception_string)
+
+    def test_request_and_exclude_metafeature_groups(self):
+        expected_exception_string_1 = "groups and exclude_groups cannot both be non-null"
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   groups=[], exclude_groups=[])
+
+        self.assertEqual(str(cm.exception), expected_exception_string_1)
+
+        expected_exception_string_2 = "One or more requested metafeature groups are not valid: ['foobar']"
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   groups=['foobar'])
+
+        expected_exception_string_3 = "One or more excluded metafeature groups are not valid: ['foobar']"
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
+                                   exclude_groups=['foobar'])
+
+        self.assertEqual(str(cm.exception), expected_exception_string_3)
 
     def test_column_type_input(self):
         column_types = {col: consts.NUMERIC for col in self.dummy_features.columns}
