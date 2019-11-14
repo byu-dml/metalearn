@@ -25,6 +25,7 @@ from metalearn.metafeatures.simple_metafeatures import metafeatures_info as simp
 from metalearn.metafeatures.statistical_metafeatures import metafeatures_info as statistical_metafeatures
 from metalearn.metafeatures.text_metafeatures import metafeatures_info as text_metafeatures
 
+
 class Metafeatures(object):
     """
     Computes metafeatures on a given tabular dataset (pandas.DataFrame) with
@@ -112,8 +113,8 @@ class Metafeatures(object):
             approximately timeout seconds. Any metafeatures that have not been
             computed will be labeled 'TIMEOUT'.
         return_times: bool, default False. When true, includes compute times for
-            each metafeature. **Note** Metafeatures are timed as if each dependency
-            has to be recomputed whenever it is needed.
+            each metafeature. **Note** compute times are are overestimated.
+            See https://github.com/byu-dml/metalearn/issues/205.
 
         Returns
         -------
