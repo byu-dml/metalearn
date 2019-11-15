@@ -116,7 +116,9 @@ class Metafeatures(object):
             groups and exclude_groups (e.g., if 'landmarking' is in the list
             exclude_groups but 'NaiveBayesErrRate' is in metafeature_ids,
             NaiveBayesErrRate will be computed while all other landmarking
-            metafeatures will be excluded).
+            metafeatures will be excluded). This parameter is mutually exclusive
+            with exclude_groups, i.e., groups must be None if exclude_groups is
+            not None. If both are non-null, a ValueError will be raised.
         exclude_groups: list, default None. Must consist only of values enumerated in
             constants.MetafeatureGroup. The metafeature groups to exclude from
             computation. Must be None if groups is not None.
