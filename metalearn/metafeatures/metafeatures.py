@@ -58,7 +58,7 @@ class Metafeatures(object):
     IDS: List[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
 
     @classmethod
-    def list_metafeatures(cls, group: consts.MetafeatureGroup='all'):
+    def list_metafeatures(cls, group: consts.MetafeatureGroup=consts.MetafeatureGroup.ALL):
         """
         Returns a list of metafeatures computable by the Metafeatures class.
         """
@@ -71,7 +71,7 @@ class Metafeatures(object):
         if group not in [i.value for i in consts.MetafeatureGroup]:
             raise ValueError(f"Unknown group {group}")
 
-        if group == consts.MetafeatureGroup.ALL.value:
+        if group == consts.MetafeatureGroup.ALL:
             return copy.deepcopy(cls.IDS)
         else:
             return list(
@@ -323,7 +323,7 @@ class Metafeatures(object):
             metafeature_ids is not None):
             # when computing landmarking metafeatures, there must be at least
             # n_folds instances of each class of Y
-            landmarking_mfs = self.list_metafeatures(group="landmarking")
+            landmarking_mfs = self.list_metafeatures(group=consts.MetafeatureGroup.LANDMARKING)
             if len(list(filter(
                 lambda mf_id: mf_id in landmarking_mfs,metafeature_ids
             ))):
