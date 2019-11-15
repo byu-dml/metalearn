@@ -213,7 +213,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                "target_dependent"
+                consts.MetafeatureGroup.TARGET_DEPENDENT.value
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
@@ -247,7 +247,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                "target_dependent"
+                consts.MetafeatureGroup.TARGET_DEPENDENT.value
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
