@@ -5,8 +5,7 @@
         "dataset_metafeature": {
             "type": "object",
             "required": [
-                "value",
-                "compute_time"
+                "value"
             ],
             "properties": {
                 "value": {

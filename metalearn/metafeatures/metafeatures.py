@@ -40,7 +40,8 @@ class Metafeatures(object):
     _resources_info.update(text_resources)
 
     # noop resource computers for the user-provided resources
-    for resource_name in ["X_raw", "X", "Y", "column_types", "sample_shape", "seed_base", "n_folds"]:
+    # `_get_arguments` and `_resource_is_target_dependent` assumes ResourceComputer's
+    for resource_name in ["X_raw", "Y", "column_types", "sample_shape", "seed_base", "n_folds"]:
         _resources_info[resource_name] = ResourceComputer(lambda: None, [resource_name])
 
     _mfs_info = [
@@ -82,8 +83,8 @@ class Metafeatures(object):
         self, X: DataFrame, Y: Series=None,
         column_types: Dict[str, str]=None, metafeature_ids: List=None,
         exclude: List=None, sample_shape=None, seed=None, n_folds=2,
-        verbose=False, timeout=None,
-        groups: List=None, exclude_groups: List=None
+        verbose=False, timeout=None, groups: List=None,
+        exclude_groups: List=None, return_times=False
     ) -> dict:
         """
         Parameters
@@ -122,6 +123,9 @@ class Metafeatures(object):
         exclude_groups: list, default None. Must consist only of values enumerated in
             constants.MetafeatureGroup. The metafeature groups to exclude from
             computation. Must be None if groups is not None.
+        return_times: bool, default False. When true, includes compute times for
+            each metafeature. **Note** compute times are overestimated.
+            See https://github.com/byu-dml/metalearn/issues/205.
 
         Returns
         -------
@@ -133,7 +137,7 @@ class Metafeatures(object):
         start_time = time.time()
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-            n_folds, verbose, groups, exclude_groups
+            n_folds, verbose, groups, exclude_groups, return_times
         )
         if timeout is None:
             def check_time():
@@ -154,7 +158,7 @@ class Metafeatures(object):
             seed = np.random.randint(np.iinfo(np.int32).max)
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-            n_folds, verbose, groups, exclude_groups
+            n_folds, verbose, groups, exclude_groups, return_times
         )
 
         self._init_resources(
@@ -187,6 +191,10 @@ class Metafeatures(object):
         except TimeoutError:
             pass
 
+        if not return_times:
+            for mf, result_dict in computed_metafeatures.items():
+                del result_dict[consts.COMPUTE_TIME_KEY]
+
         return computed_metafeatures
 
     def _format_resource(self, value, compute_time):
@@ -202,7 +210,6 @@ class Metafeatures(object):
         # Add the base resources to our resources hash
         self._resources = {
             "X_raw": self._format_resource(X, 0.),  # TODO: rename to X
-            "X": self._format_resource(X.dropna(axis=1, how="all"), 0.),  # TODO: make resource computer; rename
             "Y": self._format_resource(Y, 0.),
             "column_types": self._format_resource(column_types, 0.),
             "sample_shape": self._format_resource(sample_shape, 0.),
@@ -212,21 +219,22 @@ class Metafeatures(object):
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         for f in [
             self._validate_X, self._validate_Y, self._validate_column_types,
             self._validate_metafeature_ids, self._validate_sample_shape,
-            self._validate_n_folds, self._validate_verbose, self._validate_groups
+            self._validate_n_folds, self._validate_verbose, self._validate_groups,
+            self._validate_return_times
         ]:
             f(
                 X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-                n_folds, verbose, groups, exclude_groups
+                n_folds, verbose, groups, exclude_groups, return_times
             )
 
     def _validate_X(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -235,7 +243,7 @@ class Metafeatures(object):
 
     def _validate_Y(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
@@ -244,7 +252,7 @@ class Metafeatures(object):
 
     def _validate_column_types(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         if not column_types is None:
             invalid_column_types = {}
@@ -268,7 +276,7 @@ class Metafeatures(object):
 
     def _validate_metafeature_ids(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         ids = None
         if metafeature_ids is not None and exclude is not None:
@@ -291,7 +299,7 @@ class Metafeatures(object):
 
     def _validate_sample_shape(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         if not sample_shape is None:
             if not type(sample_shape) in [tuple, list]:
@@ -313,7 +321,7 @@ class Metafeatures(object):
 
     def _validate_n_folds(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         if not dtype_is_numeric(type(n_folds)) or (n_folds != int(n_folds)):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
@@ -340,14 +348,14 @@ class Metafeatures(object):
 
     def _validate_verbose(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         if not type(verbose) is bool:
             raise ValueError("`verbose` must be of type bool.")
 
     def _validate_groups(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups
+        n_folds, verbose, groups, exclude_groups, return_times
     ):
         group_labels = None
         if groups is not None and exclude_groups is not None:
@@ -367,6 +375,13 @@ class Metafeatures(object):
                     'One or more {} metafeature groups are not valid: {}'.
                     format(list_label, invalid_group_labels)
                 )
+
+    def _validate_return_times(
+        self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
+        n_folds, verbose, groups, exclude_groups, return_times
+    ):
+        if not type(return_times) is bool:
+            raise ValueError("`return_times` must be of type bool.")
 
     # todo: intelligently infer TEXT data type
     def _infer_column_types(self, X, Y):

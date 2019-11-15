@@ -850,3 +850,20 @@ class MetafeaturesTestCase(unittest.TestCase):
 
     def test_no_duplicate_mf_ids(self):
         self.assertEqual(len(Metafeatures.IDS), len(set(Metafeatures.IDS)), 'Metafeatures has duplicate IDS')
+
+    def test_compute_time(self):
+        no_time_mfs = Metafeatures().compute(self.dummy_features, self.dummy_target, return_times=False)
+        self.assertTrue(
+            all(len(result.keys()) == 1
+                and consts.COMPUTE_TIME_KEY not in result
+                and consts.VALUE_KEY in result
+                for result in no_time_mfs.values()),
+            f'return_times is set to False but some compute_times were still returned')
+
+        timed_mfs = Metafeatures().compute(self.dummy_features, self.dummy_target, return_times=True,)
+        self.assertTrue(
+            all(len(result) == 2
+                and consts.COMPUTE_TIME_KEY in result
+                and consts.VALUE_KEY in result
+                for result in timed_mfs.values()),
+            f'return_times is set to True but some compute_times were not returned')
