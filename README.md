@@ -1,4 +1,7 @@
-[![Build Status](https://api.travis-ci.org/byu-dml/metalearn.png)](https://travis-ci.org/byu-dml/metalearn)
+| **Develop**                                                                                                                                  | **Master**                                                                                                                                 |
+|----------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| [![Build Status](https://travis-ci.org/byu-dml/metalearn.svg?branch=develop)](https://travis-ci.org/byu-dml/metalearn)                       | [![Build Status](https://travis-ci.org/byu-dml/metalearn.svg?branch=master)](https://travis-ci.org/byu-dml/metalearn)                      |
+| [![codecov](https://codecov.io/gh/byu-dml/metalearn/branch/develop/graph/badge.svg)](https://codecov.io/gh/byu-dml/metalearn/branch/develop) | [![codecov](https://codecov.io/gh/byu-dml/metalearn/branch/master/graph/badge.svg)](https://codecov.io/gh/byu-dml/metalearn/branch/master) |
 
 # Metalearn
 
@@ -60,7 +63,8 @@ mfs = metafeatures.compute(
     seed=0,
     n_folds=2,
     verbose=True,
-    timeout=10
+    timeout=10,
+    return_times=True,
 )
 
 print(mfs)
@@ -68,6 +72,9 @@ print(mfs)
 # RatioOfNumericFeatures
 # {'RatioOfNumericFeatures': {'value': 0.5, 'compute_time': 3.9138991269283e-05}}
 ```
+**Warning:** Metafeatures are timed as if each dependency has to be recomputed whenever it is needed.
+This means that the returned times may not be accurate for a particular application, especially if a 
+metafeature depends on a computationally intensive resource in multiple places.
 
 ## Using the Test Suite
 
