@@ -3,9 +3,11 @@ python:
   - "3.6"
 
 install:
+  - pip install mypy
   - pip install -r requirements.txt
   - python setup.py install
   - rm -r metalearn
 
 script:
+  - mypy .
   - nosetests -s -v

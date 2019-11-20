@@ -33,8 +33,8 @@ class ResourceComputer:
         ):
             raise ValueError('`computer` must use only positional arguments with no default values')
 
-        self.computer = computer
-        self.returns = returns
+        self.computer: Callable = computer
+        self.returns: List[str] = returns
         self.argmap = {arg_name: arg_name for arg_name in argspec.args}
 
         if argmap is not None:
