@@ -3,7 +3,7 @@ from copy import deepcopy
 from typing import Dict, List
 
 import numpy as np
-from pandas import DataFrame, Series
+import pandas as pd
 
 from metalearn.metafeatures.base import collectordict, ResourceComputer
 from metalearn.metafeatures.common_operations import dtype_is_numeric
@@ -77,7 +77,7 @@ class Metafeatures(object):
             raise ValueError(f"Unknown group {group}")
 
     def compute(
-        self, X: DataFrame, Y: Series=None,
+        self, X: pd.DataFrame, Y: pd.Series=None,
         column_types: Dict[str, str]=None, metafeature_ids: List=None,
         exclude: List=None, sample_shape=None, seed=None, n_folds=2,
         verbose=False, timeout=None, return_times=False
@@ -233,7 +233,7 @@ class Metafeatures(object):
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
         n_folds, verbose, return_times
     ):
-        if not isinstance(X, DataFrame):
+        if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
         if X.empty:
             raise ValueError('X must not be empty')
@@ -242,7 +242,7 @@ class Metafeatures(object):
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
         n_folds, verbose, return_times
     ):
-        if not isinstance(Y, Series) and not Y is None:
+        if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
         if Y is not None and Y.shape[0] != X.shape[0]:
             raise ValueError('Y must have the same number of rows as X')

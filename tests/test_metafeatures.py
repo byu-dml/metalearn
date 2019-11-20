@@ -22,6 +22,7 @@ FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
 TEST_NAME = "test_name"
 
+
 class MetafeaturesWithDataTestCase(unittest.TestCase):
     """ Contains tests for Metafeatures that require loading data first. """
 

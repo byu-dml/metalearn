@@ -1,4 +1,4 @@
-from pandas import Series
+import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
@@ -220,7 +220,7 @@ get_numeric_noise_signal_ratio = MetafeatureComputer(
 
 
 def translate_into_tuples(col1, col2):
-    return Series([x for x in zip(col1, col2)])
+    return pd.Series([x for x in zip(col1, col2)])
 
 """
 A list of all MetafeatureComputer
