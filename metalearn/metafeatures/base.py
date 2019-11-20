@@ -78,7 +78,7 @@ class MetafeatureComputer(ResourceComputer):
 
     def __init__(
         self, computer: Callable, returns: List[str], problem_type: ProblemType, groups: List[MetafeatureGroup],
-        argmap: Optional[Dict[str,str]] = None
+        argmap: Optional[Dict[str,Any]] = None
     ) -> None:
         # TODO: Add support for passing a string to `returns`, not just a list?
         super().__init__(computer, returns, argmap)
