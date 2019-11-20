@@ -6,10 +6,10 @@
         "value": 1.3321790402101223
     },
     "DecisionStumpErrRate": {
-        "value": 0.7
+        "value": 0.6
     },
     "DecisionStumpKappa": {
-        "value": 0.05882352941176472
+        "value": 0.11764705882352944
     },
     "DecisionTreeHeight": {
         "value": 4
@@ -93,10 +93,10 @@
         "value": -2.0
     },
     "LinearDiscriminantAnalysisErrRate": {
-        "value": 0.7
+        "value": 0.5
     },
     "LinearDiscriminantAnalysisKappa": {
-        "value": 0.042397660818713545
+        "value": 0.1875
     },
     "MajorityClassSize": {
         "value": 4
@@ -285,10 +285,10 @@
         "value": 2
     },
     "NaiveBayesErrRate": {
-        "value": 0.7
+        "value": 0.5
     },
     "NaiveBayesKappa": {
-        "value": -0.05555555555555547
+        "value": 0.1875
     },
     "NumberOfCategoricalFeatures": {
         "value": 4
@@ -327,25 +327,25 @@
         "value": 0.8185194089132799
     },
     "PredDet": {
-        "value": 1.0271201550018805e-08
+        "value": 1.0271201550018733e-08
     },
     "PredEigen1": {
-        "value": 6.114621511001614
+        "value": 6.114621511001612
     },
     "PredEigen2": {
-        "value": 0.39471862161052784
+        "value": 0.39471862161052756
     },
     "PredEigen3": {
-        "value": 0.2437796639097066
+        "value": 0.24377966390970598
     },
     "PredPCA1": {
-        "value": 0.8662514396391524
+        "value": 0.8662514396391525
     },
     "PredPCA2": {
-        "value": 0.05591933590775793
+        "value": 0.05591933590775791
     },
     "PredPCA3": {
-        "value": 0.03453598631355685
+        "value": 0.03453598631355678
     },
     "Quartile1CardinalityOfCategoricalFeatures": {
         "value": 3.0
@@ -528,22 +528,22 @@
         "value": 6.591921309314467
     },
     "RandomTreeDepth1ErrRate": {
-        "value": 0.8
+        "value": 0.5
     },
     "RandomTreeDepth1Kappa": {
-        "value": -0.1356209150326797
+        "value": 0.2647058823529412
     },
     "RandomTreeDepth2ErrRate": {
-        "value": 0.8
+        "value": 0.6
     },
     "RandomTreeDepth2Kappa": {
-        "value": -0.08187134502923976
+        "value": 0.14215686274509814
     },
     "RandomTreeDepth3ErrRate": {
-        "value": 0.8
+        "value": 0.6
     },
     "RandomTreeDepth3Kappa": {
-        "value": -0.02631578947368418
+        "value": 0.11764705882352944
     },
     "RatioOfCategoricalFeatures": {
         "value": 0.5714285714285714
@@ -687,9 +687,9 @@
         "value": 1.666147569494993
     },
     "kNN1NErrRate": {
-        "value": 0.8
+        "value": 0.6
     },
     "kNN1NKappa": {
-        "value": -0.02631578947368407
+        "value": 0.20833333333333337
     }
 }
