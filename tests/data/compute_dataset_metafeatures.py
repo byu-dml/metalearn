@@ -3,7 +3,6 @@ import os
 import time
 
 import numpy as np
-import pandas as pd
 
 from metalearn import Metafeatures
 from tests.config import CORRECTNESS_SEED, METAFEATURES_DIR, METADATA_PATH

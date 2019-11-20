@@ -1,7 +1,6 @@
 import warnings
 
 import numpy as np
-from pandas import DataFrame
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_validate, StratifiedKFold
 from sklearn.metrics import make_scorer, accuracy_score, cohen_kappa_score
@@ -10,7 +9,6 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 
-from metalearn.metafeatures.common_operations import *
 from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import MetafeatureGroup, ProblemType
 

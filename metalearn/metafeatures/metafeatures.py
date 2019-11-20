@@ -1,17 +1,12 @@
-import os
-import math
-import json
 import time
-import io
-import copy
+from copy import deepcopy
 from typing import Dict, List
 
 import numpy as np
-import pandas as pd
 from pandas import DataFrame, Series
 
-from metalearn.metafeatures.base import collectordict, ResourceComputer, MetafeatureComputer
-from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.base import collectordict, ResourceComputer
+from metalearn.metafeatures.common_operations import dtype_is_numeric
 import metalearn.metafeatures.constants as consts
 
 from metalearn.metafeatures.decision_tree_metafeatures import resources_info as dt_resources
@@ -69,7 +64,7 @@ class Metafeatures(object):
         # PredDet, kNN1NErrRate, kNN1NKappa, LinearDiscriminantAnalysisKappa,
         # LinearDiscriminantAnalysisErrRate
         if group == "all":
-            return copy.deepcopy(cls.IDS)
+            return deepcopy(cls.IDS)
         elif group == "landmarking":
             return list(filter(
                 lambda mf_id: "ErrRate" in mf_id or "Kappa" in mf_id, cls.IDS
@@ -184,7 +179,7 @@ class Metafeatures(object):
                 del result_dict[consts.COMPUTE_TIME_KEY]
 
         return computed_metafeatures
-    
+
     def _format_resource(self, value, compute_time):
         """Formats the resource data as a dict"""
         return {
@@ -238,7 +233,7 @@ class Metafeatures(object):
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
         n_folds, verbose, return_times
     ):
-        if not isinstance(X, pd.DataFrame):
+        if not isinstance(X, DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
         if X.empty:
             raise ValueError('X must not be empty')
@@ -247,7 +242,7 @@ class Metafeatures(object):
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
         n_folds, verbose, return_times
     ):
-        if not isinstance(Y, pd.Series) and not Y is None:
+        if not isinstance(Y, Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
         if Y is not None and Y.shape[0] != X.shape[0]:
             raise ValueError('Y must have the same number of rows as X')

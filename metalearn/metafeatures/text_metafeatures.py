@@ -2,9 +2,8 @@ from collections import Counter
 from itertools import chain
 
 import numpy as np
-import pandas as pd
 
-from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.common_operations import profile_distribution
 from metalearn.metafeatures.base import build_resources_info, ResourceComputer, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 

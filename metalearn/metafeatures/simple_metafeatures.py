@@ -1,5 +1,4 @@
 import numpy as np
-from pandas import DataFrame
 
 from metalearn.metafeatures.common_operations import *
 from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer

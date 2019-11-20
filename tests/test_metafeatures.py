@@ -2,7 +2,6 @@
 import inspect
 import json
 import jsonschema
-import math
 import os
 import random
 import time
@@ -18,10 +17,10 @@ from tests.config import CORRECTNESS_SEED, METADATA_PATH
 from tests.data.dataset import read_dataset
 from tests.data.compute_dataset_metafeatures import get_dataset_metafeatures_path
 
+
 FAIL_MESSAGE = "message"
 FAIL_REPORT = "report"
 TEST_NAME = "test_name"
-
 
 class MetafeaturesWithDataTestCase(unittest.TestCase):
     """ Contains tests for Metafeatures that require loading data first. """

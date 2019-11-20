@@ -1,8 +1,8 @@
-import pandas as pd
+from pandas import Series
 from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
-from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.common_operations import profile_distribution
 from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
@@ -220,7 +220,7 @@ get_numeric_noise_signal_ratio = MetafeatureComputer(
 
 
 def translate_into_tuples(col1, col2):
-    return pd.Series([x for x in zip(col1, col2)])
+    return Series([x for x in zip(col1, col2)])
 
 """
 A list of all MetafeatureComputer
