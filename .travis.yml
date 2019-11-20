@@ -4,12 +4,13 @@ python:
 
 install:
   - pip install mypy
+  - pip install codecov
   - pip install -r requirements.txt
-
+  - python setup.py install
 
 script:
   - mypy .
   # Run tests with the installed version of the code only
-  - python setup.py install
   - rm -r metalearn
-  - nosetests -s -v
+  - nosetests -s -v --with-coverage --cover-package=metalearn
+  - codecov
