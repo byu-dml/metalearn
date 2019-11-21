@@ -17,6 +17,7 @@ import metalearn.metafeatures.constants as consts
 from metalearn.metafeatures.decision_tree_metafeatures import resources_info as dt_resources
 from metalearn.metafeatures.general_resource_computers import resources_info as general_resources
 from metalearn.metafeatures.text_metafeatures import resources_info as text_resources
+from metalearn.metafeatures.simple_metafeatures import resources_info as simple_resources
 
 from metalearn.metafeatures.decision_tree_metafeatures import metafeatures_info as dt_metafeatures
 from metalearn.metafeatures.information_theoretic_metafeatures import metafeatures_info as info_theoretic_metafeatures
@@ -38,6 +39,7 @@ class Metafeatures(object):
     _resources_info.update(dt_resources)
     _resources_info.update(general_resources)
     _resources_info.update(text_resources)
+    _resources_info.update(simple_resources)
 
     # noop resource computers for the user-provided resources
     # `_get_arguments` and `_resource_is_target_dependent` assumes ResourceComputer's

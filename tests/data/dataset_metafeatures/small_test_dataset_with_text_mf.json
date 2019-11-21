@@ -1,4 +1,13 @@
 {
+    "Autocorrelation": {
+        "value": 0.6666666666666666
+    },
+    "CategoricalCardinalityAtFour": {
+        "value": 0
+    },
+    "CategoricalCardinalityAtThree": {
+        "value": 0
+    },
     "CategoricalNoiseToSignalRatio": {
         "value": 1.0834895643494507
     },
@@ -290,6 +299,12 @@
     "NaiveBayesKappa": {
         "value": 0.1875
     },
+    "NumberOfBinaryCategoricalFeatures": {
+        "value": 1
+    },
+    "NumberOfBinaryNumericFeatures": {
+        "value": 0
+    },
     "NumberOfCategoricalFeatures": {
         "value": 4
     },
@@ -322,6 +337,12 @@
     },
     "NumberOfTokensContainingNumericChar": {
         "value": 2
+    },
+    "NumericCardinalityAtFour": {
+        "value": 0
+    },
+    "NumericCardinalityAtThree": {
+        "value": 0
     },
     "NumericNoiseToSignalRatio": {
         "value": 0.8185194089132799
@@ -544,6 +565,12 @@
     },
     "RandomTreeDepth3Kappa": {
         "value": 0.11764705882352944
+    },
+    "RatioOfBinaryCategoricalFeatures": {
+        "value": 0.14285714285714285
+    },
+    "RatioOfBinaryNumericFeatures": {
+        "value": 0.0
     },
     "RatioOfCategoricalFeatures": {
         "value": 0.5714285714285714
