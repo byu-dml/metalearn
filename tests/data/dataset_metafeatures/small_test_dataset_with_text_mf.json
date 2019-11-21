@@ -8,12 +8,10 @@
         "value": 1.3321790402101223
     },
     "DecisionStumpErrRate": {
-        "compute_time": 0.007548697292804718,
-        "value": 0.7
+        "value": 0.6
     },
     "DecisionStumpKappa": {
-        "compute_time": 0.007548697292804718,
-        "value": 0.05882352941176472
+        "value": 0.11764705882352944
     },
     "DecisionTreeHeight": {
         "compute_time": 0.004707846790552139,
@@ -164,12 +162,10 @@
         "value": -2.0
     },
     "LinearDiscriminantAnalysisErrRate": {
-        "compute_time": 0.008001654176041484,
-        "value": 0.7
+        "value": 0.5
     },
     "LinearDiscriminantAnalysisKappa": {
-        "compute_time": 0.008001654176041484,
-        "value": 0.042397660818713545
+        "value": 0.1875
     },
     "MajorityClassSize": {
         "compute_time": 0.0008407579734921455,
@@ -516,12 +512,10 @@
         "value": 2
     },
     "NaiveBayesErrRate": {
-        "compute_time": 0.00845083617605269,
-        "value": 0.7
+        "value": 0.5
     },
     "NaiveBayesKappa": {
-        "compute_time": 0.00845083617605269,
-        "value": -0.05555555555555547
+        "value": 0.1875
     },
     "NumberOfCategoricalFeatures": {
         "compute_time": 1.9064173102378845e-05,
@@ -588,32 +582,25 @@
         "value": -19.86
     },
     "PredDet": {
-        "compute_time": 0.004536337917670608,
-        "value": 1.0271201550018805e-08
+        "value": 1.0271201550018733e-08
     },
     "PredEigen1": {
-        "compute_time": 0.004536337917670608,
-        "value": 6.114621511001614
+        "value": 6.114621511001612
     },
     "PredEigen2": {
-        "compute_time": 0.004536337917670608,
-        "value": 0.39471862161052784
+        "value": 0.39471862161052756
     },
     "PredEigen3": {
-        "compute_time": 0.004536337917670608,
-        "value": 0.2437796639097066
+        "value": 0.24377966390970598
     },
     "PredPCA1": {
-        "compute_time": 0.004536337917670608,
-        "value": 0.8662514396391524
+        "value": 0.8662514396391525
     },
     "PredPCA2": {
-        "compute_time": 0.004536337917670608,
-        "value": 0.05591933590775793
+        "value": 0.05591933590775791
     },
     "PredPCA3": {
-        "compute_time": 0.004536337917670608,
-        "value": 0.03453598631355685
+        "value": 0.03453598631355678
     },
     "Quartile1CardinalityOfCategoricalFeatures": {
         "compute_time": 0.000592157943174243,
@@ -952,28 +939,22 @@
         "value": 6.591921309314467
     },
     "RandomTreeDepth1ErrRate": {
-        "compute_time": 0.007472100900486112,
-        "value": 0.8
+        "value": 0.5
     },
     "RandomTreeDepth1Kappa": {
-        "compute_time": 0.007472100900486112,
-        "value": -0.1356209150326797
+        "value": 0.2647058823529412
     },
     "RandomTreeDepth2ErrRate": {
-        "compute_time": 0.007459784159436822,
-        "value": 0.8
+        "value": 0.6
     },
     "RandomTreeDepth2Kappa": {
-        "compute_time": 0.007459784159436822,
-        "value": -0.08187134502923976
+        "value": 0.14215686274509814
     },
     "RandomTreeDepth3ErrRate": {
-        "compute_time": 0.007484645117074251,
-        "value": 0.8
+        "value": 0.6
     },
     "RandomTreeDepth3Kappa": {
-        "compute_time": 0.007484645117074251,
-        "value": -0.02631578947368418
+        "value": 0.11764705882352944
     },
     "RatioOfCategoricalFeatures": {
         "compute_time": 1.9064173102378845e-05,
@@ -1236,11 +1217,9 @@
         "value": 1.666147569494993
     },
     "kNN1NErrRate": {
-        "compute_time": 0.009796905098482966,
-        "value": 0.8
+        "value": 0.6
     },
     "kNN1NKappa": {
-        "compute_time": 0.009796905098482966,
-        "value": -0.02631578947368407
+        "value": 0.20833333333333337
     }
 }
