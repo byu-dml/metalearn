@@ -1,14 +1,11 @@
 {
     "Autocorrelation": {
-        "compute_time": 0.00015590805560350418,
         "value": 0.6666666666666666
     },
     "CategoricalCardinalityAtFour": {
-        "compute_time": 0.00012374669313430786,
         "value": 0
     },
     "CategoricalCardinalityAtThree": {
-        "compute_time": 0.00012374669313430786,
         "value": 0
     },
     "CategoricalNoiseToSignalRatio": {
@@ -303,11 +300,9 @@
         "value": 0.1875
     },
     "NumberOfBinaryCategoricalFeatures": {
-        "compute_time": 0.00012374669313430786,
         "value": 1
     },
     "NumberOfBinaryNumericFeatures": {
-        "compute_time": 0.00014639459550380707,
         "value": 0
     },
     "NumberOfCategoricalFeatures": {
@@ -344,11 +339,9 @@
         "value": 2
     },
     "NumericCardinalityAtFour": {
-        "compute_time": 0.00014639459550380707,
         "value": 0
     },
     "NumericCardinalityAtThree": {
-        "compute_time": 0.00014639459550380707,
         "value": 0
     },
     "NumericNoiseToSignalRatio": {
@@ -574,11 +567,9 @@
         "value": 0.11764705882352944
     },
     "RatioOfBinaryCategoricalFeatures": {
-        "compute_time": 0.00028851069509983063,
         "value": 0.14285714285714285
     },
     "RatioOfBinaryNumericFeatures": {
-        "compute_time": 0.00028851069509983063,
         "value": 0.0
     },
     "RatioOfCategoricalFeatures": {
