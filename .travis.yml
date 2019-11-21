@@ -3,11 +3,14 @@ python:
   - "3.6"
 
 install:
-  - pip install -r requirements.txt
+  - pip install mypy
   - pip install codecov
+  - pip install -r requirements.txt
   - python setup.py install
-  - rm -r metalearn
 
 script:
+  - mypy .
+  # Run tests with the installed version of the code only
+  - rm -r metalearn
   - nosetests -s -v --with-coverage --cover-package=metalearn
   - codecov
