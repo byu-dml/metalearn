@@ -78,12 +78,10 @@ class Metafeatures(object):
         if group not in valid_metafeature_group_values:
             raise ValueError('Invalid group: {}. Must be one of {}'.format(group, valid_metafeature_group_values))
 
-        group = consts.MetafeatureGroup(group)
-
-        if group == consts.MetafeatureGroup.ALL:
+        if group == consts.MetafeatureGroup.ALL.value:
             return [id_ for id_ in cls.IDS]
         else:
-            return [id_ for id_ in cls.IDS if group in cls._resources_info[id_].groups]
+            return [id_ for id_ in cls.IDS if consts.MetafeatureGroup(group) in cls._resources_info[id_].groups]
 
     def compute(
         self, X: pd.DataFrame, Y: pd.Series = None,
