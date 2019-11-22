@@ -2,7 +2,7 @@ import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import mutual_info_score
 
-from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.common_operations import profile_distribution
 from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
