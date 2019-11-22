@@ -213,7 +213,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                consts.MetafeatureGroup.TARGET_DEPENDENT
+                consts.MetafeatureGroup.TARGET_DEPENDENT.value
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
@@ -247,7 +247,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                consts.MetafeatureGroup.TARGET_DEPENDENT
+                consts.MetafeatureGroup.TARGET_DEPENDENT.value
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
@@ -335,7 +335,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
             metafeature_ids = list(set(
                 [mf for sublist in [
-                    Metafeatures().list_metafeatures(g) for g in groups
+                    Metafeatures().list_metafeatures(g.value) for g in groups
                 ] for mf in sublist]
             ))
             self.assertEqual(
@@ -367,7 +367,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
             metafeature_ids = list(set(
                 [mf for sublist in [
-                    Metafeatures().list_metafeatures(g) for g in groups
+                    Metafeatures().list_metafeatures(g.value) for g in groups
                 ] for mf in sublist]
             ))
 

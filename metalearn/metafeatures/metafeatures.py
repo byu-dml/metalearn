@@ -54,32 +54,43 @@ class Metafeatures(object):
     IDS: List[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
 
     @classmethod
-    def list_metafeatures(cls, group: consts.MetafeatureGroup=consts.MetafeatureGroup.ALL):
+    def list_metafeatures(cls, group: str = 'all') -> List[str]:
         """
-        Returns a list of metafeatures computable by the Metafeatures class.
+        Lists the ids of computable metafeatures.
+
+        Parameters
+        ----------
+        group: str
+            the name of a grouping of metafeatures
+
+        Returns
+        -------
+        A list of metafeature ids
         """
+
         # todo make group for intractable metafeatures for wide datasets or
         # datasets with high cardinality categorical columns:
         # PredPCA1, PredPCA2, PredPCA3, PredEigen1, PredEigen2, PredEigen3,
         # PredDet, kNN1NErrRate, kNN1NKappa, LinearDiscriminantAnalysisKappa,
         # LinearDiscriminantAnalysisErrRate
 
-        if group not in [i for i in consts.MetafeatureGroup]:
-            raise ValueError(f"Unknown group {group}")
+        valid_metafeature_group_values = [_group.value for _group in consts.MetafeatureGroup]
+        if group not in valid_metafeature_group_values:
+            raise ValueError('Invalid group: {}. Must be one of {}'.format(group, valid_metafeature_group_values))
+
+        group = consts.MetafeatureGroup(group)
 
         if group == consts.MetafeatureGroup.ALL:
-            return deepcopy(cls.IDS)
+            return [id_ for id_ in cls.IDS]
         else:
-            return list(
-                mf_id for mf_id in cls.IDS if group in [g for g in cls._resources_info[mf_id].groups]
-            )
+            return [id_ for id_ in cls.IDS if group in cls._resources_info[id_].groups]
 
     def compute(
-        self, X: pd.DataFrame, Y: pd.Series=None,
-        column_types: Dict[str, str]=None, metafeature_ids: List=None,
-        exclude: List=None, sample_shape=None, seed=None, n_folds=2,
-        verbose=False, timeout=None, groups: List=None,
-        exclude_groups: List=None, return_times=False
+        self, X: pd.DataFrame, Y: pd.Series = None,
+        column_types: Dict[str, str] = None, metafeature_ids: List[str] = None,
+        exclude: List[str] = None, sample_shape = None, seed = None, n_folds: int = 2,
+        verbose: bool = False, timeout = None, groups: List[str] = None,
+        exclude_groups: List[str] = None, return_times: bool = False
     ) -> dict:
         """
         Parameters
@@ -331,7 +342,7 @@ class Metafeatures(object):
             metafeature_ids is not None):
             # when computing landmarking metafeatures, there must be at least
             # n_folds instances of each class of Y
-            landmarking_mfs = self.list_metafeatures(group=consts.MetafeatureGroup.LANDMARKING)
+            landmarking_mfs = self.list_metafeatures(group=consts.MetafeatureGroup.LANDMARKING.value)
             if len(list(filter(
                 lambda mf_id: mf_id in landmarking_mfs,metafeature_ids
             ))):
@@ -412,11 +423,11 @@ class Metafeatures(object):
         if groups is None and exclude_groups is None:
             return self.list_metafeatures()
         elif groups is not None:
-            mfs = [self.list_metafeatures(g) for g in groups]
+            mfs = [self.list_metafeatures(g.value) for g in groups]
             # flatten list
             return [mf for sublist in mfs for mf in sublist]
         elif exclude_groups is not None:
-            exclude_mfs = [self.list_metafeatures(g) for g in exclude_groups]
+            exclude_mfs = [self.list_metafeatures(g.value) for g in exclude_groups]
             # flatten list
             exclude_mfs = [mf for sublist in exclude_mfs for mf in sublist]
             return [mf for mf in self.list_metafeatures() if mf not in exclude_mfs]

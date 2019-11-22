@@ -93,6 +93,8 @@ class collectordict(Mapping):
     For simplicity, all values must be set manually, not in __init__.
     """
 
+    # TODO: define __str__ method
+
     dict_cls = dict
 
     def __init__(self):
