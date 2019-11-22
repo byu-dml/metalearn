@@ -1,5 +1,3 @@
-import time
-import math
 import itertools
 
 import numpy as np
@@ -8,7 +6,7 @@ from scipy.stats import skew, kurtosis
 from sklearn.decomposition import PCA
 from sklearn.cross_decomposition import CCA
 
-from metalearn.metafeatures.common_operations import *
+from metalearn.metafeatures.common_operations import profile_distribution
 from metalearn.metafeatures.base import build_resources_info, MetafeatureComputer
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 import metalearn.metafeatures.constants as consts

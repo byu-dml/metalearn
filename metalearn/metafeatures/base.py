@@ -1,6 +1,5 @@
 from collections.abc import Mapping
 import inspect
-import itertools
 from typing import List, Callable, Dict, Union, Optional
 
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup

@@ -1,9 +1,9 @@
 import numpy as np
-import pandas as pd
 
 from scipy.stats import skew, kurtosis
 
 import metalearn.metafeatures.constants as consts
+
 
 def profile_distribution(data):
     """

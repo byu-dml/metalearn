@@ -3,7 +3,9 @@ import os
 from arff2pandas import a2p
 import pandas as pd
 
+
 DATASET_DIR = './tests/data/datasets/'
+
 
 def get_dataset_path(dataset_filename):
     return os.path.join(DATASET_DIR, dataset_filename)
