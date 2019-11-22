@@ -617,7 +617,7 @@ class MetafeaturesTestCase(unittest.TestCase):
         self.assertEqual(str(cm.exception), expected_exception_string)
 
     def test_request_and_exclude_metafeature_groups(self):
-        expected_exception_string_1 = "groups and exclude_groups cannot both be non-null"
+        expected_exception_string_1 = "groups and exclude_groups cannot both be set"
 
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
@@ -625,13 +625,13 @@ class MetafeaturesTestCase(unittest.TestCase):
 
         self.assertEqual(str(cm.exception), expected_exception_string_1)
 
-        expected_exception_string_2 = "One or more requested metafeature groups are not valid: ['foobar']"
+        expected_exception_string_2 = "groups contains invalid values: ['foobar']"
 
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
                                    groups=['foobar'])
 
-        expected_exception_string_3 = "One or more excluded metafeature groups are not valid: ['foobar']"
+        expected_exception_string_3 = "exclude_groups contains invalid values: ['foobar']"
 
         with self.assertRaises(ValueError) as cm:
             Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,

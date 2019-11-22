@@ -355,24 +355,18 @@ class Metafeatures(object):
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
         n_folds, verbose, groups, exclude_groups, return_times
     ):
-        group_labels = None
         if groups is not None and exclude_groups is not None:
-            raise ValueError("groups and exclude_groups cannot both be non-null")
-        elif groups is not None:
-            group_labels = groups
-            list_label = 'requested'
-        elif exclude_groups is not None:
-            group_labels = exclude_groups
-            list_label = 'excluded'
-        if group_labels is not None:
-            invalid_group_labels = [
-                gr for gr in group_labels if gr not in [i for i in consts.MetafeatureGroup]
-            ]
-            if len(invalid_group_labels) > 0:
-                raise ValueError(
-                    'One or more {} metafeature groups are not valid: {}'.
-                    format(list_label, invalid_group_labels)
-                )
+            raise ValueError('groups and exclude_groups cannot both be set')
+
+        if groups is not None:
+            invalid_groups = [group for group in groups if group not in consts.MetafeatureGroup]
+            if invalid_groups:
+                raise ValueError('groups contains invalid values: {}'.format(invalid_groups))
+
+        if exclude_groups is not None:
+            invalid_groups = [group for group in exclude_groups if group not in consts.MetafeatureGroup]
+            if invalid_groups:
+                raise ValueError('exclude_groups contains invalid values: {}'.format(invalid_groups))
 
     def _validate_return_times(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
