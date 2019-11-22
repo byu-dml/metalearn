@@ -1,6 +1,6 @@
 from collections.abc import Mapping
 import inspect
-from typing import List, Callable, Dict, Optional, Any
+from typing import List, Callable, Dict, Union, Optional
 
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
@@ -22,7 +22,8 @@ class ResourceComputer:
     """
 
     def __init__(
-        self, computer: Callable, returns: List[str], argmap: Optional[Dict[str,Any]] = None
+        self, computer: Callable, returns: List[str],
+        argmap: Optional[Dict[str,Union[str,int,float]]] = None
     ) -> None:
         argspec = inspect.getfullargspec(computer)
         # TODO: If needed, add support for `computer` functions that use these types of arguments.
@@ -32,8 +33,8 @@ class ResourceComputer:
         ):
             raise ValueError('`computer` must use only positional arguments with no default values')
 
-        self.computer = computer
-        self.returns = returns
+        self.computer: Callable = computer
+        self.returns: List[str] = returns
         self.argmap = {arg_name: arg_name for arg_name in argspec.args}
 
         if argmap is not None:
@@ -77,7 +78,7 @@ class MetafeatureComputer(ResourceComputer):
 
     def __init__(
         self, computer: Callable, returns: List[str], problem_type: ProblemType, groups: List[MetafeatureGroup],
-        argmap: Optional[Dict[str,str]] = None
+        argmap: Optional[Dict[str,Union[str,int,float]]] = None
     ) -> None:
         # TODO: Add support for passing a string to `returns`, not just a list?
         super().__init__(computer, returns, argmap)

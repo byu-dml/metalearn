@@ -6,10 +6,10 @@
         "value": 0.2303678505246139
     },
     "DecisionStumpErrRate": {
-        "value": 0.0530205974425042
+        "value": 0.05302256539579053
     },
     "DecisionStumpKappa": {
-        "value": 0.6460807839667586
+        "value": 0.64608584630921
     },
     "DecisionTreeHeight": {
         "value": 11
@@ -93,10 +93,10 @@
         "value": NaN
     },
     "LinearDiscriminantAnalysisErrRate": {
-        "value": 0.050901392889222574
+        "value": 0.05355222596601905
     },
     "LinearDiscriminantAnalysisKappa": {
-        "value": 0.41518335844457105
+        "value": 0.3857589925350658
     },
     "MajorityClassSize": {
         "value": 3541
@@ -285,10 +285,10 @@
         "value": 231
     },
     "NaiveBayesErrRate": {
-        "value": 0.6781856595244019
+        "value": 0.6271993635076799
     },
     "NaiveBayesKappa": {
-        "value": 0.039699494487290043
+        "value": 0.04421998456446913
     },
     "NumberOfCategoricalFeatures": {
         "value": 22
@@ -327,25 +327,25 @@
         "value": 43.499206497970064
     },
     "PredDet": {
-        "value": 8.398206098130474e+47
+        "value": 8.39820609813119e+47
     },
     "PredEigen1": {
         "value": 2076.940458333572
     },
     "PredEigen2": {
-        "value": 584.6940837111429
+        "value": 584.6940837111425
     },
     "PredEigen3": {
-        "value": 416.0684363789902
+        "value": 416.06843637898976
     },
     "PredPCA1": {
         "value": 0.6131782342417007
     },
     "PredPCA2": {
-        "value": 0.17262010780474016
+        "value": 0.17262010780474007
     },
     "PredPCA3": {
-        "value": 0.12283650603410787
+        "value": 0.12283650603410773
     },
     "Quartile1CardinalityOfCategoricalFeatures": {
         "value": 2.0
@@ -540,10 +540,10 @@
         "value": 0.0
     },
     "RandomTreeDepth3ErrRate": {
-        "value": 0.046121234356528484
+        "value": 0.06468746793290403
     },
     "RandomTreeDepth3Kappa": {
-        "value": 0.3551191328085659
+        "value": 0.16934246039579826
     },
     "RatioOfCategoricalFeatures": {
         "value": 0.7586206896551724
@@ -687,9 +687,9 @@
         "value": NaN
     },
     "kNN1NErrRate": {
-        "value": 0.09093279580094993
+        "value": 0.09040144841361886
     },
     "kNN1NKappa": {
-        "value": 0.16702041294319114
+        "value": 0.18924686295501464
     }
 }
