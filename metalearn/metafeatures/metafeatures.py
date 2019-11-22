@@ -68,7 +68,7 @@ class Metafeatures(object):
             raise ValueError(f"Unknown group {group}")
 
         if group == consts.MetafeatureGroup.ALL:
-            return copy.deepcopy(cls.IDS)
+            return deepcopy(cls.IDS)
         else:
             return list(
                 mf_id for mf_id in cls.IDS if group in [g for g in cls._resources_info[mf_id].groups]
