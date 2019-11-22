@@ -92,6 +92,8 @@ class Metafeatures(object):
             indicates to compute all metafeatures.
         exclude: list, default None. The metafeatures to be excluded from
             computation. Must be None if metafeature_ids is not None.
+            **TODO** This parameter will be renamed in a future version. See
+            https://github.com/byu-dml/metalearn/issues/210.
         sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
             Default is (None, None), indicate not to sample rows or columns.
         seed: int, the seed used to generate pseudo-random numbers. when None
