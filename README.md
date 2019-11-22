@@ -21,6 +21,9 @@ git clone https://github.com/byu-dml/metalearn.git
 cd metalearn
 python3 setup.py install
 ```
+
+Note that this project follows the versioning scheme defined by [Semantic Versioning 2.0.0](https://semver.org). This means (among other things) that a given version of the package has _zero guarantee of backwards compatibility_ with previous major versions.
+
 ## Example Usage
 
 ### Simple Example
