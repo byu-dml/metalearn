@@ -59,7 +59,7 @@ class Metafeatures(object):
     IDS: List[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
 
     @classmethod
-    def list_metafeatures(cls, group: consts.MetafeatureGroup=consts.MetafeatureGroup.ALL.value):
+    def list_metafeatures(cls, group: consts.MetafeatureGroup=consts.MetafeatureGroup.ALL):
         """
         Returns a list of metafeatures computable by the Metafeatures class.
         """
@@ -69,14 +69,14 @@ class Metafeatures(object):
         # PredDet, kNN1NErrRate, kNN1NKappa, LinearDiscriminantAnalysisKappa,
         # LinearDiscriminantAnalysisErrRate
 
-        if group not in [i.value for i in consts.MetafeatureGroup]:
+        if group not in [i for i in consts.MetafeatureGroup]:
             raise ValueError(f"Unknown group {group}")
 
-        if group == consts.MetafeatureGroup.ALL.value:
+        if group == consts.MetafeatureGroup.ALL:
             return copy.deepcopy(cls.IDS)
         else:
             return list(
-                mf_id for mf_id in cls.IDS if group in [g.value for g in cls._resources_info[mf_id].groups]
+                mf_id for mf_id in cls.IDS if group in [g for g in cls._resources_info[mf_id].groups]
             )
 
     def compute(
@@ -165,31 +165,32 @@ class Metafeatures(object):
             X, Y, column_types, sample_shape, seed, n_folds
         )
 
-        computed_metafeatures = {
-            name: self._format_resource(consts.TIMEOUT, 0)
-            for name in metafeature_ids
-        }
-        try:
-            for mf_id in metafeature_ids:
-                self._check_timeout()
-                if verbose:
-                    print(mf_id)
-                if (
-                    consts.MetafeatureGroup.TARGET_DEPENDENT in self._resources_info[mf_id].groups
-                ) and (
-                    Y is None or column_types[Y.name] == consts.NUMERIC
-                ):
-                    if Y is None:
-                        value = consts.NO_TARGETS
+        if metafeature_ids is not None:
+            computed_metafeatures = {
+                name: self._format_resource(consts.TIMEOUT, 0)
+                for name in metafeature_ids
+            }
+            try:
+                for mf_id in metafeature_ids:
+                    self._check_timeout()
+                    if verbose:
+                        print(mf_id)
+                    if (
+                        consts.MetafeatureGroup.TARGET_DEPENDENT in self._resources_info[mf_id].groups
+                    ) and (
+                        Y is None or column_types[Y.name] == consts.NUMERIC
+                    ):
+                        if Y is None:
+                            value = consts.NO_TARGETS
+                        else:
+                            value = consts.NUMERIC_TARGETS
+                        compute_time = None
                     else:
-                        value = consts.NUMERIC_TARGETS
-                    compute_time = None
-                else:
-                    value, compute_time = self._get_resource(mf_id)
+                        value, compute_time = self._get_resource(mf_id)
 
-                computed_metafeatures[mf_id] = self._format_resource(value, compute_time)
-        except TimeoutError:
-            pass
+                    computed_metafeatures[mf_id] = self._format_resource(value, compute_time)
+            except TimeoutError:
+                pass
 
         if not return_times:
             for mf, result_dict in computed_metafeatures.items():
@@ -333,7 +334,7 @@ class Metafeatures(object):
             metafeature_ids is not None):
             # when computing landmarking metafeatures, there must be at least
             # n_folds instances of each class of Y
-            landmarking_mfs = self.list_metafeatures(group=consts.MetafeatureGroup.LANDMARKING.value)
+            landmarking_mfs = self.list_metafeatures(group=consts.MetafeatureGroup.LANDMARKING)
             if len(list(filter(
                 lambda mf_id: mf_id in landmarking_mfs,metafeature_ids
             ))):
@@ -368,7 +369,7 @@ class Metafeatures(object):
             list_label = 'excluded'
         if group_labels is not None:
             invalid_group_labels = [
-                gr for gr in group_labels if gr not in [i.value for i in consts.MetafeatureGroup]
+                gr for gr in group_labels if gr not in [i for i in consts.MetafeatureGroup]
             ]
             if len(invalid_group_labels) > 0:
                 raise ValueError(

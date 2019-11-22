@@ -213,7 +213,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                consts.MetafeatureGroup.TARGET_DEPENDENT.value
+                consts.MetafeatureGroup.TARGET_DEPENDENT
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
@@ -247,7 +247,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                consts.MetafeatureGroup.TARGET_DEPENDENT.value
+                consts.MetafeatureGroup.TARGET_DEPENDENT
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
@@ -318,7 +318,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
             groups = random.sample(
-                [i.value for i in consts.MetafeatureGroup],
+                [i for i in consts.MetafeatureGroup],
                 SUBSET_LENGTH
             )
             computed_mfs = Metafeatures().compute(
@@ -350,7 +350,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
             groups = random.sample(
-                [i.value for i in consts.MetafeatureGroup],
+                [i for i in consts.MetafeatureGroup],
                 SUBSET_LENGTH
             )
             computed_mfs = Metafeatures().compute(
