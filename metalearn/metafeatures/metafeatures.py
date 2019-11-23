@@ -1,6 +1,6 @@
-import time
 from copy import deepcopy
-from typing import Dict, List
+import time
+import typing
 
 import numpy as np
 import pandas as pd
@@ -51,10 +51,10 @@ class Metafeatures(object):
     for mf_info in _mfs_info:
         _resources_info.update(mf_info)
 
-    IDS: List[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
+    IDS: typing.Sequence[str] = [mf_id for mfs_info in _mfs_info for mf_id in mfs_info.keys()]
 
     @classmethod
-    def list_metafeatures(cls, group: str = 'all') -> List[str]:
+    def list_metafeatures(cls, group: str = 'all') -> typing.Sequence[str]:
         """
         Lists the ids of computable metafeatures.
 
@@ -83,55 +83,63 @@ class Metafeatures(object):
         else:
             return [id_ for id_ in cls.IDS if consts.MetafeatureGroup(group) in cls._resources_info[id_].groups]
 
+    # TODO: make most args kw only
     def compute(
-        self, X: pd.DataFrame, Y: pd.Series = None,
-        column_types: Dict[str, str] = None, metafeature_ids: List[str] = None,
-        exclude: List[str] = None, sample_shape = None, seed = None, n_folds: int = 2,
-        verbose: bool = False, timeout = None, groups: List[str] = None,
-        exclude_groups: List[str] = None, return_times: bool = False
+        self, X: pd.DataFrame, Y: pd.Series = None, column_types: typing.Mapping[str, str] = None,
+        metafeature_ids: typing.Sequence[str] = None, exclude: typing.Sequence[str] = None, sample_shape = None,
+        seed: int = None, n_folds: int = 2, verbose: bool = False, timeout = None, return_times: bool = False,
+        groups: typing.Sequence[str] = None, exclude_groups: typing.Sequence[str] = None
     ) -> dict:
         """
         Parameters
         ----------
-        X: pandas.DataFrame, the dataset features
-        Y: pandas.Series, the dataset targets
-        column_types: Dict[str, str], dict from column name to column type as
-            "NUMERIC" or "CATEGORICAL" or "TEXT", must include Y column
-        metafeature_ids: list, the metafeatures to compute. Default of None
-            indicates to compute all metafeatures.
-        exclude: list, default None. The metafeatures to be excluded from
-            computation. Must be None if metafeature_ids is not None.
-            **TODO** This parameter will be renamed in a future version. See
-            https://github.com/byu-dml/metalearn/issues/210.
-        sample_shape: tuple, the shape of X after sampling (X,Y) uniformly.
-            Default is (None, None), indicate not to sample rows or columns.
-        seed: int, the seed used to generate pseudo-random numbers. when None
-            is given, a seed will be generated pseudo-randomly. this can be
-            used for reproducibility of metafeatures. a generated seed can be
-            accessed through the 'seed' property, after calling this method.
-        n_folds: int, the number of cross validation folds used by the
+        X: pandas.DataFrame
+            The dataset features
+        Y: pandas.Series
+            The dataset targets
+        column_types: Mapping[str, str]
+            Maps column names to semantic types. Valid typs include "NUMERIC", "CATEGORICAL", and "TEXT".
+            Must include Y.name if Y is not None.
+        metafeature_ids: Sequence[str]
+            The metafeatures to compute. None indicates to compute all metafeatures. Mutually exclusive with `exclude`.
+        exclude: Sequence[str]
+            All metafeatures except those listed in `exclude` will be computed.
+            Mutually exclustive with `metafeature_ids`.
+            **TODO** This parameter will be renamed in a future version.
+            See https://github.com/byu-dml/metalearn/issues/210.
+        sample_shape: tuple
+            The shape of X after sampling (X,Y) uniformly. Default is (None, None), indicate not to sample rows or
+            columns.
+        seed: int
+            The seed used to generate pseudo-random numbers. When None is given, a seed will be generated
+            pseudo-randomly. This can be used for reproducibility of metafeatures. A generated seed can be accessed
+            through the 'seed' property, after calling this method.
+        n_folds: int
+            the number of cross validation folds used by the
             landmarking metafeatures. also affects the sample_shape validation
-        verbose: bool, default False. When True, prints the ID of each
+        verbose: bool
+            When True, prints the ID of each
             metafeature right before it is about to be computed.
-        timeout: float, default None. If timeout is None, compute_metafeatures
+        timeout: float
+            If timeout is None, compute_metafeatures
             will be run to completion. Otherwise, execution will halt after
             approximately timeout seconds. Any metafeatures that have not been
             computed will be labeled 'TIMEOUT'.
-        groups: list, default None. Must consist only of values enumerated in
-            constants.MetafeatureGroup. The metafeature groups to be computed.
-            Values listed in metafeature_ids or exclude take precedence over
-            groups and exclude_groups (e.g., if 'landmarking' is in the list
-            exclude_groups but 'NaiveBayesErrRate' is in metafeature_ids,
-            NaiveBayesErrRate will be computed while all other landmarking
-            metafeatures will be excluded). This parameter is mutually exclusive
-            with exclude_groups, i.e., groups must be None if exclude_groups is
-            not None. If both are non-null, a ValueError will be raised.
-        exclude_groups: list, default None. Must consist only of values enumerated in
-            constants.MetafeatureGroup. The metafeature groups to exclude from
-            computation. Must be None if groups is not None.
-        return_times: bool, default False. When true, includes compute times for
-            each metafeature. **Note** compute times are overestimated.
+        return_times: bool
+            When true, includes compute times for each metafeature. **Note** compute times are overestimated.
             See https://github.com/byu-dml/metalearn/issues/205.
+        groups: list
+            The metafeature groups to be computed. Must consist only of values
+            enumerated in constants.MetafeatureGroup. Values listed in
+            metafeature_ids or exclude take precedence over groups (e.g., if
+            'landmarking' is in the list exclude_groups but 'NaiveBayesErrRate'
+            is in metafeature_ids, NaiveBayesErrRate will be computed while all
+            other landmarking metafeatures will be excluded). At least one of
+            groups and exclude_groups must be None.
+        exclude_groups: list
+            The metafeature groups to exclude from computation. Must consist
+            only of values enumerated in constants.MetafeatureGroup. At least
+            one of groups and exclude_groups must be None.
 
         Returns
         -------
@@ -334,10 +342,10 @@ class Metafeatures(object):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
         if n_folds < 2:
             raise ValueError(f"`n_folds` must be >= 2, but was {n_folds}")
-        if (Y is not None and 
-            column_types is not None and 
-            column_types[Y.name] != consts.NUMERIC and 
-            metafeature_ids is not None):
+        if (
+            Y is not None and column_types is not None and column_types[Y.name] != consts.NUMERIC and
+            metafeature_ids is not None
+        ):
             # when computing landmarking metafeatures, there must be at least
             # n_folds instances of each class of Y
             landmarking_mfs = self.list_metafeatures(group=consts.MetafeatureGroup.LANDMARKING.value)
