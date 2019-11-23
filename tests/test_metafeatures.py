@@ -5,7 +5,6 @@ import jsonschema
 import os
 import random
 import time
-import copy
 import unittest
 
 import pandas as pd
@@ -284,7 +283,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
             test_failures.update(self._perform_checks(required_checks))
             self.assertEqual(
-                metafeature_ids, list(computed_mfs.keys()),
+                set(metafeature_ids), set(computed_mfs.keys()),
                 "Compute did not return requested metafeatures"
             )
         self._report_test_failures(test_failures, test_name)
@@ -317,14 +316,10 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_failures = {}
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
-            groups = random.sample(
-                [i for i in consts.MetafeatureGroup],
-                SUBSET_LENGTH
-            )
+            groups = random.sample([group.value for group in consts.MetafeatureGroup], SUBSET_LENGTH)
             computed_mfs = Metafeatures().compute(
-                X=dataset["X"], Y=dataset["Y"], seed=CORRECTNESS_SEED,
+                X=dataset["X"], Y=dataset["Y"], column_types=dataset["column_types"], seed=CORRECTNESS_SEED,
                 groups=groups,
-                column_types=dataset["column_types"]
             )
             known_metafeatures = dataset["known_metafeatures"]
             required_checks = [
@@ -333,14 +328,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             ]
             test_failures.update(self._perform_checks(required_checks))
 
-            metafeature_ids = list(set(
-                [mf for sublist in [
-                    Metafeatures().list_metafeatures(g.value) for g in groups
-                ] for mf in sublist]
-            ))
+            metafeature_ids = set(mf_id for group in groups for mf_id in Metafeatures.list_metafeatures(group))
             self.assertEqual(
-                metafeature_ids.sort(), list(computed_mfs.keys()).sort(),
-                "Compute did not return requested metafeatures"
+                metafeature_ids, set(computed_mfs.keys()), 'Compute did not return requested metafeatures'
             )
         self._report_test_failures(test_failures, test_name)
 
@@ -350,7 +340,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
         test_name = inspect.stack()[0][3]
         for dataset_filename, dataset in self.datasets.items():
             groups = random.sample(
-                [i for i in consts.MetafeatureGroup],
+                [i.value for i in consts.MetafeatureGroup],
                 SUBSET_LENGTH
             )
             computed_mfs = Metafeatures().compute(
@@ -367,7 +357,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
             metafeature_ids = list(set(
                 [mf for sublist in [
-                    Metafeatures().list_metafeatures(g.value) for g in groups
+                    Metafeatures.list_metafeatures(g) for g in groups
                 ] for mf in sublist]
             ))
 
@@ -617,27 +607,14 @@ class MetafeaturesTestCase(unittest.TestCase):
         self.assertEqual(str(cm.exception), expected_exception_string)
 
     def test_request_and_exclude_metafeature_groups(self):
-        expected_exception_string_1 = "groups and exclude_groups cannot both be set"
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, groups=[], exclude_groups=[])
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
-                                   groups=[], exclude_groups=[])
-
-        self.assertEqual(str(cm.exception), expected_exception_string_1)
-
-        expected_exception_string_2 = "groups contains invalid values: ['foobar']"
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, groups=['foobar'])
 
         with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
-                                   groups=['foobar'])
-
-        expected_exception_string_3 = "exclude_groups contains invalid values: ['foobar']"
-
-        with self.assertRaises(ValueError) as cm:
-            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target,
-                                   exclude_groups=['foobar'])
-
-        self.assertEqual(str(cm.exception), expected_exception_string_3)
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, exclude_groups=['foobar'])
 
     def test_column_type_input(self):
         column_types = {col: consts.NUMERIC for col in self.dummy_features.columns}
@@ -834,11 +811,11 @@ class MetafeaturesTestCase(unittest.TestCase):
 
     def test_list_metafeatures(self):
         mf_list = Metafeatures.list_metafeatures()
-        mf_list_copy = copy.deepcopy(mf_list)
+        mf_list_copy = [mf for mf in mf_list]
         mf_list.clear()
         if Metafeatures.list_metafeatures() != mf_list_copy:
             mf_list.extend(mf_list_copy)
-            self.assertTrue(False, "Metafeature list has been mutated")
+            self.fail('Metafeature list has been mutated')
 
     def test_y_no_name(self):
         X = pd.DataFrame(np.random.rand(8,2))
