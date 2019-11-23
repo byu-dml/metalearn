@@ -49,7 +49,10 @@ get_naive_bayes = MetafeatureComputer(
         "NaiveBayesKappa"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.LANDMARKING],
+    [
+        MetafeatureGroup.LANDMARKING,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "X": "XPreprocessed",
         "Y": "YSample"
@@ -70,7 +73,10 @@ get_knn_1 = MetafeatureComputer(
         "kNN1NKappa"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.LANDMARKING],
+    [
+        MetafeatureGroup.LANDMARKING,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "X": "XPreprocessed",
         "Y": "YSample"
@@ -93,7 +99,10 @@ get_decision_stump = MetafeatureComputer(
         "DecisionStumpKappa"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.LANDMARKING],
+    [
+        MetafeatureGroup.LANDMARKING,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "X": "XPreprocessed",
         "Y": "YSample",
@@ -118,7 +127,10 @@ get_random_tree_depth_1 = MetafeatureComputer(
         "RandomTreeDepth1Kappa"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.LANDMARKING],
+    [
+        MetafeatureGroup.LANDMARKING,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "X": "XPreprocessed",
         "Y": "YSample",
@@ -134,7 +146,10 @@ get_random_tree_depth_2 = MetafeatureComputer(
         "RandomTreeDepth2Kappa"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.LANDMARKING],
+    [
+        MetafeatureGroup.LANDMARKING,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "X": "XPreprocessed",
         "Y": "YSample",
@@ -150,7 +165,10 @@ get_random_tree_depth_3 = MetafeatureComputer(
         "RandomTreeDepth3Kappa"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.LANDMARKING],
+    [
+        MetafeatureGroup.LANDMARKING,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "X": "XPreprocessed",
         "Y": "YSample",
@@ -173,7 +191,10 @@ get_lda = MetafeatureComputer(
         "LinearDiscriminantAnalysisKappa"
     ],
     ProblemType.CLASSIFICATION,
-    [MetafeatureGroup.LANDMARKING],
+    [
+        MetafeatureGroup.LANDMARKING,
+        MetafeatureGroup.TARGET_DEPENDENT
+    ],
     {
         "X": "XPreprocessed",
         "Y": "YSample"

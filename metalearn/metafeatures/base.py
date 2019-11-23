@@ -1,6 +1,6 @@
-from collections.abc import Mapping
+from collections import abc
 import inspect
-from typing import List, Callable, Dict, Union, Optional
+import typing
 
 from metalearn.metafeatures.constants import ProblemType, MetafeatureGroup
 
@@ -22,8 +22,7 @@ class ResourceComputer:
     """
 
     def __init__(
-        self, computer: Callable, returns: List[str],
-        argmap: Optional[Dict[str,Union[str,int,float]]] = None
+        self, computer: typing.Callable, returns: typing.Sequence[str], argmap: typing.Mapping[str, typing.Any] = None
     ) -> None:
         argspec = inspect.getfullargspec(computer)
         # TODO: If needed, add support for `computer` functions that use these types of arguments.
@@ -33,8 +32,8 @@ class ResourceComputer:
         ):
             raise ValueError('`computer` must use only positional arguments with no default values')
 
-        self.computer: Callable = computer
-        self.returns: List[str] = returns
+        self.computer: typing.Callable = computer
+        self.returns: typing.Sequence[str] = returns
         self.argmap = {arg_name: arg_name for arg_name in argspec.args}
 
         if argmap is not None:
@@ -77,8 +76,8 @@ class MetafeatureComputer(ResourceComputer):
     """
 
     def __init__(
-        self, computer: Callable, returns: List[str], problem_type: ProblemType, groups: List[MetafeatureGroup],
-        argmap: Optional[Dict[str,Union[str,int,float]]] = None
+        self, computer: typing.Callable, returns: typing.Sequence[str], problem_type: ProblemType,
+        groups: typing.Sequence[MetafeatureGroup], argmap: typing.Mapping[str, typing.Any] = None
     ) -> None:
         # TODO: Add support for passing a string to `returns`, not just a list?
         super().__init__(computer, returns, argmap)
@@ -86,12 +85,14 @@ class MetafeatureComputer(ResourceComputer):
         self.problem_type = problem_type
 
 
-class collectordict(Mapping):
+class collectordict(abc.Mapping):
     """
     A partially mutable mapping in which keys can be set at most one time.
     A LookupError is raised if a key is set more than once. Keys cannot be deleted.
     For simplicity, all values must be set manually, not in __init__.
     """
+
+    # TODO: define __str__ method
 
     dict_cls = dict
 
@@ -112,7 +113,7 @@ class collectordict(Mapping):
             raise LookupError(f'{key} already exists')
         self._dict[key] = value
 
-    def update(self, mapping: Mapping):
+    def update(self, mapping: typing.Mapping):
         for key, value in mapping.items():
             self[key] = value
 

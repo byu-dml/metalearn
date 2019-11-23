@@ -5,7 +5,6 @@ import jsonschema
 import os
 import random
 import time
-import copy
 import unittest
 
 import pandas as pd
@@ -213,7 +212,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                "target_dependent"
+                consts.MetafeatureGroup.TARGET_DEPENDENT.value
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
@@ -242,12 +241,12 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             column_types[dataset["Y"].name] = consts.NUMERIC
             computed_mfs = metafeatures.compute(
                 X=dataset["X"], Y=pd.Series(np.random.rand(dataset["Y"].shape[0]),
-                name=dataset["Y"].name), seed=CORRECTNESS_SEED, 
+                name=dataset["Y"].name), seed=CORRECTNESS_SEED,
                 column_types=column_types
             )
             known_mfs = dataset["known_metafeatures"]
             target_dependent_metafeatures = Metafeatures.list_metafeatures(
-                "target_dependent"
+                consts.MetafeatureGroup.TARGET_DEPENDENT.value
             )
             for mf_name in target_dependent_metafeatures:
                 known_mfs[mf_name] = {
@@ -284,7 +283,7 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
 
             test_failures.update(self._perform_checks(required_checks))
             self.assertEqual(
-                metafeature_ids, list(computed_mfs.keys()),
+                set(metafeature_ids), set(computed_mfs.keys()),
                 "Compute did not return requested metafeatures"
             )
         self._report_test_failures(test_failures, test_name)
@@ -310,6 +309,49 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
             if any(mf_id in computed_mfs.keys() for mf_id in metafeature_ids):
                 self.assertTrue(False, "Metafeatures computed an excluded metafeature")
 
+        self._report_test_failures(test_failures, test_name)
+
+    def test_request_metafeature_groups(self):
+        SUBSET_LENGTH = 3
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            groups = random.sample([group.value for group in consts.MetafeatureGroup], SUBSET_LENGTH)
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"], Y=dataset["Y"], column_types=dataset["column_types"], seed=CORRECTNESS_SEED,
+                groups=groups,
+            )
+            known_metafeatures = dataset["known_metafeatures"]
+            required_checks = [
+                (self._check_correctness, [computed_mfs, known_metafeatures, dataset_filename])
+            ]
+            test_failures.update(self._perform_checks(required_checks))
+
+            metafeature_ids = set(mf_id for group in groups for mf_id in Metafeatures.list_metafeatures(group))
+            self.assertEqual(
+                metafeature_ids, set(computed_mfs.keys()), 'Compute did not return requested metafeatures'
+            )
+        self._report_test_failures(test_failures, test_name)
+
+    def test_exclude_metafeature_groups(self):
+        SUBSET_LENGTH = 3
+        test_failures = {}
+        test_name = inspect.stack()[0][3]
+        for dataset_filename, dataset in self.datasets.items():
+            groups = random.sample([group.value for group in consts.MetafeatureGroup], SUBSET_LENGTH)
+            computed_mfs = Metafeatures().compute(
+                X=dataset["X"], Y=dataset["Y"], column_types=dataset["column_types"], seed=CORRECTNESS_SEED,
+                exclude_groups=groups,
+            )
+            known_metafeatures = dataset["known_metafeatures"]
+            required_checks = [
+                (self._check_correctness, [computed_mfs, known_metafeatures, dataset_filename])
+            ]
+            test_failures.update(self._perform_checks(required_checks))
+
+            metafeature_ids = set(mf_id for group in groups for mf_id in Metafeatures.list_metafeatures(group))
+            if any(mf_id in computed_mfs.keys() for mf_id in metafeature_ids):
+                self.fail('Metafeatures computed an excluded metafeature')
         self._report_test_failures(test_failures, test_name)
 
     def test_compute_effects_on_dataset(self):
@@ -391,9 +433,9 @@ class MetafeaturesWithDataTestCase(unittest.TestCase):
                 )
 
     def test_soft_timeout(self):
-        """Tests Metafeatures().compute() with timeout set"""   
-        test_name = inspect.stack()[0][3]   
-        test_failures = {} 
+        """Tests Metafeatures().compute() with timeout set"""
+        test_name = inspect.stack()[0][3]
+        test_failures = {}
         for dataset_filename, dataset in self.datasets.items():
             metafeatures = Metafeatures()
 
@@ -551,6 +593,16 @@ class MetafeaturesTestCase(unittest.TestCase):
                                    metafeature_ids=[], exclude=[])
 
         self.assertEqual(str(cm.exception), expected_exception_string)
+
+    def test_request_and_exclude_metafeature_groups(self):
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, groups=[], exclude_groups=[])
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, groups=['foobar'])
+
+        with self.assertRaises(ValueError) as cm:
+            Metafeatures().compute(X=self.dummy_features, Y=self.dummy_target, exclude_groups=['foobar'])
 
     def test_column_type_input(self):
         column_types = {col: consts.NUMERIC for col in self.dummy_features.columns}
@@ -747,11 +799,11 @@ class MetafeaturesTestCase(unittest.TestCase):
 
     def test_list_metafeatures(self):
         mf_list = Metafeatures.list_metafeatures()
-        mf_list_copy = copy.deepcopy(mf_list)
+        mf_list_copy = [mf for mf in mf_list]
         mf_list.clear()
         if Metafeatures.list_metafeatures() != mf_list_copy:
             mf_list.extend(mf_list_copy)
-            self.assertTrue(False, "Metafeature list has been mutated")
+            self.fail('Metafeature list has been mutated')
 
     def test_y_no_name(self):
         X = pd.DataFrame(np.random.rand(8,2))
