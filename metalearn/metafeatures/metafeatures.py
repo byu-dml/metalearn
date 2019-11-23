@@ -151,7 +151,7 @@ class Metafeatures(object):
         start_time = time.time()
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-            n_folds, verbose, groups, exclude_groups, return_times
+            n_folds, verbose, return_times, groups, exclude_groups
         )
         if timeout is None:
             def check_time():
@@ -172,7 +172,7 @@ class Metafeatures(object):
             seed = np.random.randint(np.iinfo(np.int32).max)
         self._validate_compute_arguments(
             X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-            n_folds, verbose, groups, exclude_groups, return_times
+            n_folds, verbose, return_times, groups, exclude_groups
         )
 
         self._init_resources(
@@ -234,7 +234,7 @@ class Metafeatures(object):
 
     def _validate_compute_arguments(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         for f in [
             self._validate_X, self._validate_Y, self._validate_column_types,
@@ -244,12 +244,12 @@ class Metafeatures(object):
         ]:
             f(
                 X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-                n_folds, verbose, groups, exclude_groups, return_times
+                n_folds, verbose, return_times, groups, exclude_groups
             )
 
     def _validate_X(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if not isinstance(X, pd.DataFrame):
             raise TypeError('X must be of type pandas.DataFrame')
@@ -258,7 +258,7 @@ class Metafeatures(object):
 
     def _validate_Y(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if not isinstance(Y, pd.Series) and not Y is None:
             raise TypeError('Y must be of type pandas.Series')
@@ -267,7 +267,7 @@ class Metafeatures(object):
 
     def _validate_column_types(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if not column_types is None:
             invalid_column_types = {}
@@ -291,7 +291,7 @@ class Metafeatures(object):
 
     def _validate_metafeature_ids(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         ids = None
         if metafeature_ids is not None and exclude is not None:
@@ -314,7 +314,7 @@ class Metafeatures(object):
 
     def _validate_sample_shape(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if not sample_shape is None:
             if not type(sample_shape) in [tuple, list]:
@@ -336,7 +336,7 @@ class Metafeatures(object):
 
     def _validate_n_folds(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if not dtype_is_numeric(type(n_folds)) or (n_folds != int(n_folds)):
             raise ValueError(f"`n_folds` must be an integer, not {n_folds}")
@@ -363,14 +363,14 @@ class Metafeatures(object):
 
     def _validate_verbose(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if not type(verbose) is bool:
             raise ValueError("`verbose` must be of type bool.")
 
     def _validate_groups(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if groups is not None and exclude_groups is not None:
             raise ValueError('groups and exclude_groups cannot both be set')
@@ -387,7 +387,7 @@ class Metafeatures(object):
 
     def _validate_return_times(
         self, X, Y, column_types, metafeature_ids, exclude, sample_shape, seed,
-        n_folds, verbose, groups, exclude_groups, return_times
+        n_folds, verbose, return_times, groups, exclude_groups
     ):
         if not type(return_times) is bool:
             raise ValueError("`return_times` must be of type bool.")
