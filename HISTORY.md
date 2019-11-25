@@ -2,7 +2,7 @@
 
 * Added selecting and filter of metafeatures by semantic groups
 * Updated dependency versions for scikit-learn, numpy, and pandas
-* Identified a bug in calculating metafeature compute time, so by compute time is not returned by default
+* Identified a bug in calculating metafeature compute time, so compute time is not returned by default
 * Reorganized test suite
 * Added custom function decorators for easier internal maintainability of computable metafeatures that replaced the metafeatures.json file
 * Added usage examples to README
