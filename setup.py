@@ -13,9 +13,9 @@ setup(
     download_url = 'https://github.com/byu-dml/metalearn/archive/{}.tar.gz'.format(__version__),
     keywords = ['metalearning', 'machine learning', 'metalearn'],
     install_requires = [
-        'numpy<=1.17.3',
-        'scikit-learn<=0.21.3',
-        'pandas<=0.25.2'
+        'numpy<=1.18.2',
+        'scikit-learn<=0.22.2.post1',
+        'pandas<=1.0.3'
     ],
     classifiers = [
         'Programming Language :: Python :: 3.6'
