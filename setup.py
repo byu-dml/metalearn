@@ -12,6 +12,7 @@ setup(
     url = 'https://github.com/byu-dml/metalearn',
     download_url = 'https://github.com/byu-dml/metalearn/archive/{}.tar.gz'.format(__version__),
     keywords = ['metalearning', 'machine learning', 'metalearn'],
+    license='MIT',
     install_requires = [
         'numpy<=1.18.2',
         'scikit-learn<=0.22.2.post1',
