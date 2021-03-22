@@ -61,5 +61,14 @@
             "text_col_2": "TEXT",
             "class": "CATEGORICAL"
         }
+    },
+    {
+        "filename": "small_test_dataset_single_class.arff",
+        "target_class_name": "class",
+        "column_types": {
+            "x1": "NUMERIC",
+            "x2": "CATEGORICAL",
+            "class": "CATEGORICAL"
+        }
     }
 ]

@@ -1,0 +1,17 @@
+@RELATION small_test_dataset_single_class
+
+@ATTRIBUTE x1   numeric
+@ATTRIBUTE x2   {T,F}
+@ATTRIBUTE class     {A}
+
+@DATA
+-1.0806504 , T, A
+-0.41202231, F, A
+-0.49257031,  F, A
+0.48211995,  F, A
+-1.30681325, T, A
+1.11003139,  F, A
+1.99054707,  T, A
+-0.78720164,  T, A
+-1.05682486, T, A
+-1.26429323,  T, A

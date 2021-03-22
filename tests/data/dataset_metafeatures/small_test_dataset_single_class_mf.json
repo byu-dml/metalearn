@@ -1,204 +1,204 @@
 {
     "CategoricalNoiseToSignalRatio": {
-        "value": 1.0834895643494507
+        "value": 1731985767290789.8
     },
     "ClassEntropy": {
-        "value": 1.3321790402101223
+        "value": 0.0
     },
     "DecisionStumpErrRate": {
-        "value": 0.6
+        "value": 0.0
     },
     "DecisionStumpKappa": {
-        "value": 0.11764705882352944
+        "value": NaN
     },
     "DecisionTreeHeight": {
-        "value": 4
+        "value": 1
     },
     "DecisionTreeLeafCount": {
-        "value": 5
+        "value": 1
     },
     "DecisionTreeNodeCount": {
-        "value": 9
+        "value": 1
     },
     "DecisionTreeWidth": {
-        "value": 4
+        "value": 0
     },
     "Dimensionality": {
-        "value": 0.5
+        "value": 0.2
     },
     "EquivalentNumberOfCategoricalFeatures": {
-        "value": 2.661227372130404
+        "value": 0.0
     },
     "EquivalentNumberOfNumericFeatures": {
-        "value": 3.521069926069284
+        "value": -0.0
     },
     "FullPerceptronNIters": {
-        "value": 7
+        "value": 0
     },
     "FullPerceptronWeightsSum": {
-        "value": -15.367
+        "value": 0.0
     },
     "KurtosisCardinalityOfCategoricalFeatures": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisCardinalityOfNumericFeatures": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisCategoricalAttributeEntropy": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisCategoricalJointEntropy": {
-        "value": -2.0000000000000004
+        "value": -3.0
     },
     "KurtosisCategoricalMutualInformation": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisClassProbability": {
-        "value": -0.6666666666666661
+        "value": -3.0
     },
     "KurtosisDecisionTreeAttribute": {
-        "value": -0.8512709572742021
+        "value": -3.0
     },
     "KurtosisDecisionTreeBranchLength": {
-        "value": 0.24999999999999867
+        "value": -3.0
     },
     "KurtosisDecisionTreeLevelSize": {
-        "value": -0.9030470914127422
+        "value": -3.0
     },
     "KurtosisFullPerceptronBias": {
-        "value": -1.1542857142857144
+        "value": -3.0
     },
     "KurtosisFullPerceptronWeights": {
-        "value": 0.6581550511767431
+        "value": -3.0
     },
     "KurtosisKurtosisOfNumericFeatures": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisKurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "KurtosisMeansOfNumericFeatures": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisMeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "KurtosisNumericAttributeEntropy": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisNumericJointEntropy": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisNumericMutualInformation": {
-        "value": -2.0
+        "value": -3.0
     },
     "KurtosisOneHalfPerceptronBias": {
-        "value": -1.371900826446281
+        "value": -3.0
     },
     "KurtosisOneHalfPerceptronWeights": {
-        "value": -0.4182923206240523
+        "value": -3.0
     },
     "KurtosisOneTenthPerceptronBias": {
-        "value": -1.0
+        "value": -3.0
     },
     "KurtosisOneTenthPerceptronWeights": {
-        "value": 0.6203674707874303
+        "value": -3.0
     },
     "KurtosisSkewnessOfNumericFeatures": {
-        "value": -1.9999999999999998
+        "value": -3.0
     },
     "KurtosisSkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "KurtosisSqrtPerceptronBias": {
-        "value": -1.371900826446281
+        "value": -3.0
     },
     "KurtosisSqrtPerceptronWeights": {
-        "value": 0.5785624533659579
+        "value": -3.0
     },
     "KurtosisStdDevOfNumericFeatures": {
-        "value": -1.9999999999999998
+        "value": -3.0
     },
     "KurtosisStdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "LinearDiscriminantAnalysisErrRate": {
-        "value": 0.5
+        "value": 0.0
     },
     "LinearDiscriminantAnalysisKappa": {
-        "value": 0.1875
+        "value": NaN
     },
     "MajorityClassSize": {
-        "value": 4
+        "value": 10
     },
     "MaxCardinalityOfCategoricalFeatures": {
-        "value": 6.0
+        "value": 2.0
     },
     "MaxCardinalityOfNumericFeatures": {
-        "value": 9.0
+        "value": 10.0
     },
     "MaxCategoricalAttributeEntropy": {
-        "value": 1.4750763110546947
+        "value": 0.6730116670092565
     },
     "MaxCategoricalJointEntropy": {
-        "value": 1.945910149055313
+        "value": 0.6730116670092565
     },
     "MaxCategoricalMutualInformation": {
-        "value": 0.8062004214655205
+        "value": 3.885780586188048e-16
     },
     "MaxClassProbability": {
-        "value": 0.4
+        "value": 1.0
     },
     "MaxDecisionTreeAttribute": {
-        "value": 5.0
+        "value": 1.0
     },
     "MaxDecisionTreeBranchLength": {
-        "value": 3.0
+        "value": 0.0
     },
     "MaxDecisionTreeLevelSize": {
-        "value": 4.0
+        "value": 1.0
     },
     "MaxFullPerceptronBias": {
         "value": 0.0
     },
     "MaxFullPerceptronWeights": {
-        "value": 5.0
+        "value": 0.0
     },
     "MaxKurtosisOfNumericFeatures": {
-        "value": -0.833323850726984
+        "value": 0.3526546524165246
     },
     "MaxKurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MaxMeansOfNumericFeatures": {
-        "value": 0.5714285714285714
+        "value": -0.28176775899999995
     },
     "MaxMeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MaxNumericAttributeEntropy": {
-        "value": 0.6931471805599453
+        "value": 0.6108643020548935
     },
     "MaxNumericJointEntropy": {
-        "value": 1.5498260458782016
+        "value": 0.6108643020548935
     },
     "MaxNumericMutualInformation": {
-        "value": 0.4101163182884089
+        "value": -1.1102230246251565e-16
     },
     "MaxOneHalfPerceptronBias": {
         "value": 0.0
     },
     "MaxOneHalfPerceptronWeights": {
-        "value": 2.0
+        "value": 0.0
     },
     "MaxOneTenthPerceptronBias": {
-        "value": -1.0
+        "value": 0.0
     },
     "MaxOneTenthPerceptronWeights": {
-        "value": 2.0
+        "value": 0.0
     },
     "MaxSkewnessOfNumericFeatures": {
-        "value": 0.5062323443248941
+        "value": 1.1651210302454011
     },
     "MaxSkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
@@ -207,94 +207,94 @@
         "value": 0.0
     },
     "MaxSqrtPerceptronWeights": {
-        "value": 1.0
+        "value": 0.0
     },
     "MaxStdDevOfNumericFeatures": {
-        "value": 2.3704530408864084
+        "value": 1.1183277645426972
     },
     "MaxStdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MeanCardinalityOfCategoricalFeatures": {
-        "value": 4.0
+        "value": 2.0
     },
     "MeanCardinalityOfNumericFeatures": {
-        "value": 7.5
+        "value": 10.0
     },
     "MeanCategoricalAttributeEntropy": {
-        "value": 1.0429703065547942
+        "value": 0.6730116670092565
     },
     "MeanCategoricalJointEntropy": {
-        "value": 1.846988748800701
+        "value": 0.6730116670092565
     },
     "MeanCategoricalMutualInformation": {
-        "value": 0.5005882075922236
+        "value": 3.885780586188048e-16
     },
     "MeanClassProbability": {
-        "value": 0.25
+        "value": 1.0
     },
     "MeanDecisionTreeAttribute": {
-        "value": 2.25
+        "value": 1.0
     },
     "MeanDecisionTreeBranchLength": {
-        "value": 2.6
+        "value": 0.0
     },
     "MeanDecisionTreeLevelSize": {
-        "value": 2.25
+        "value": 1.0
     },
     "MeanFullPerceptronBias": {
-        "value": -1.75
+        "value": 0.0
     },
     "MeanFullPerceptronWeights": {
-        "value": -0.42686111111111114
+        "value": 0.0
     },
     "MeanKurtosisOfNumericFeatures": {
-        "value": -1.3493249532290488
+        "value": 0.3526546524165246
     },
     "MeanKurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MeanMeansOfNumericFeatures": {
-        "value": 0.5505892857142857
+        "value": -0.28176775899999995
     },
     "MeanMeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MeanNumericAttributeEntropy": {
-        "value": 0.6880276426302085
+        "value": 0.6108643020548935
     },
     "MeanNumericJointEntropy": {
-        "value": 1.468060203499046
+        "value": 0.6108643020548935
     },
     "MeanNumericMutualInformation": {
-        "value": 0.3783449542841908
+        "value": -1.1102230246251565e-16
     },
     "MeanOneHalfPerceptronBias": {
-        "value": -1.25
+        "value": 0.0
     },
     "MeanOneHalfPerceptronWeights": {
-        "value": -0.45352777777777775
+        "value": 0.0
     },
     "MeanOneTenthPerceptronBias": {
-        "value": -2.0
+        "value": 0.0
     },
     "MeanOneTenthPerceptronWeights": {
-        "value": -0.5516666666666666
+        "value": 0.0
     },
     "MeanSkewnessOfNumericFeatures": {
-        "value": 0.42456949227053975
+        "value": 1.1651210302454011
     },
     "MeanSkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MeanSqrtPerceptronBias": {
-        "value": -1.25
+        "value": 0.0
     },
     "MeanSqrtPerceptronWeights": {
-        "value": -0.5041111111111111
+        "value": 0.0
     },
     "MeanStdDevOfNumericFeatures": {
-        "value": 1.306626611641099
+        "value": 1.1183277645426972
     },
     "MeanStdDevOfStringLengthOfTextFeatures": {
         "value": NaN
@@ -303,121 +303,121 @@
         "value": 2.0
     },
     "MinCardinalityOfNumericFeatures": {
-        "value": 6.0
+        "value": 10.0
     },
     "MinCategoricalAttributeEntropy": {
-        "value": 0.6108643020548935
+        "value": 0.6730116670092565
     },
     "MinCategoricalJointEntropy": {
-        "value": 1.7480673485460894
+        "value": 0.6730116670092565
     },
     "MinCategoricalMutualInformation": {
-        "value": 0.1949759937189266
+        "value": 3.885780586188048e-16
     },
     "MinClassProbability": {
-        "value": 0.2
+        "value": 1.0
     },
     "MinDecisionTreeAttribute": {
         "value": 1.0
     },
     "MinDecisionTreeBranchLength": {
-        "value": 1.0
+        "value": 0.0
     },
     "MinDecisionTreeLevelSize": {
         "value": 1.0
     },
     "MinFullPerceptronBias": {
-        "value": -4.0
+        "value": 0.0
     },
     "MinFullPerceptronWeights": {
-        "value": -4.0
+        "value": 0.0
     },
     "MinKurtosisOfNumericFeatures": {
-        "value": -1.8653260557311135
+        "value": 0.3526546524165246
     },
     "MinKurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MinMeansOfNumericFeatures": {
-        "value": 0.5297499999999999
+        "value": -0.28176775899999995
     },
     "MinMeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MinNumericAttributeEntropy": {
-        "value": 0.6829081047004717
+        "value": 0.6108643020548935
     },
     "MinNumericJointEntropy": {
-        "value": 1.3862943611198906
+        "value": 0.6108643020548935
     },
     "MinNumericMutualInformation": {
-        "value": 0.3465735902799727
+        "value": -1.1102230246251565e-16
     },
     "MinOneHalfPerceptronBias": {
-        "value": -2.0
+        "value": 0.0
     },
     "MinOneHalfPerceptronWeights": {
-        "value": -2.0
+        "value": 0.0
     },
     "MinOneTenthPerceptronBias": {
-        "value": -3.0
+        "value": 0.0
     },
     "MinOneTenthPerceptronWeights": {
-        "value": -4.0
+        "value": 0.0
     },
     "MinSkewnessOfNumericFeatures": {
-        "value": 0.3429066402161854
+        "value": 1.1651210302454011
     },
     "MinSkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MinSqrtPerceptronBias": {
-        "value": -2.0
+        "value": 0.0
     },
     "MinSqrtPerceptronWeights": {
-        "value": -3.0
+        "value": 0.0
     },
     "MinStdDevOfNumericFeatures": {
-        "value": 0.24280018239578932
+        "value": 1.1183277645426972
     },
     "MinStdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "MinorityClassSize": {
-        "value": 2
+        "value": 10
     },
     "NaiveBayesErrRate": {
-        "value": 0.5
+        "value": 0.0
     },
     "NaiveBayesKappa": {
-        "value": 0.1875
+        "value": NaN
     },
     "NumberOfCategoricalFeatures": {
-        "value": 2
+        "value": 1
     },
     "NumberOfClasses": {
-        "value": 4
+        "value": 1
     },
     "NumberOfDistinctTokens": {
         "value": 0
     },
     "NumberOfFeatures": {
-        "value": 5
+        "value": 2
     },
     "NumberOfFeaturesWithMissingValues": {
-        "value": 4
+        "value": 0
     },
     "NumberOfInstances": {
         "value": 10
     },
     "NumberOfInstancesWithMissingValues": {
-        "value": 10
+        "value": 0
     },
     "NumberOfMissingValues": {
-        "value": 18
+        "value": 0
     },
     "NumberOfNumericFeatures": {
-        "value": 3
+        "value": 1
     },
     "NumberOfTokens": {
         "value": 0
@@ -426,328 +426,328 @@
         "value": 0
     },
     "NumericNoiseToSignalRatio": {
-        "value": 0.8185194089132799
+        "value": -5502176486216714.0
     },
     "OneHalfPerceptronNIters": {
-        "value": 7
+        "value": 0
     },
     "OneHalfPerceptronWeightsSum": {
-        "value": -16.326999999999998
+        "value": 0.0
     },
     "OneTenthPerceptronNIters": {
-        "value": 9
+        "value": 0
     },
     "OneTenthPerceptronWeightsSum": {
-        "value": -19.86
+        "value": 0.0
     },
     "PredDet": {
-        "value": 1.0271201550018733e-08
+        "value": 1.6256755756304425e-17
     },
     "PredEigen1": {
-        "value": 6.114621511001612
+        "value": 1.3501916410118426
     },
     "PredEigen2": {
-        "value": 0.39471862161052756
+        "value": 0.43379868126855636
     },
     "PredEigen3": {
-        "value": 0.24377966390970598
+        "value": 8.559688641721052e-35
     },
     "PredPCA1": {
-        "value": 0.8662514396391525
+        "value": 0.7568379851332098
     },
     "PredPCA2": {
-        "value": 0.05591933590775791
+        "value": 0.2431620148667903
     },
     "PredPCA3": {
-        "value": 0.03453598631355678
+        "value": 4.7980577780150543e-35
     },
     "Quartile1CardinalityOfCategoricalFeatures": {
-        "value": 3.0
+        "value": 2.0
     },
     "Quartile1CardinalityOfNumericFeatures": {
-        "value": 6.75
+        "value": 10.0
     },
     "Quartile1CategoricalAttributeEntropy": {
-        "value": 0.8269173043048439
+        "value": 0.6730116670092565
     },
     "Quartile1CategoricalJointEntropy": {
-        "value": 1.7975280486733953
+        "value": 0.6730116670092565
     },
     "Quartile1CategoricalMutualInformation": {
-        "value": 0.3477821006555751
+        "value": 3.885780586188048e-16
     },
     "Quartile1ClassProbability": {
-        "value": 0.2
+        "value": 1.0
     },
     "Quartile1DecisionTreeAttribute": {
         "value": 1.0
     },
     "Quartile1DecisionTreeBranchLength": {
-        "value": 3.0
+        "value": 0.0
     },
     "Quartile1DecisionTreeLevelSize": {
-        "value": 1.75
+        "value": 1.0
     },
     "Quartile1FullPerceptronBias": {
-        "value": -2.5
+        "value": 0.0
     },
     "Quartile1FullPerceptronWeights": {
-        "value": -2.0
+        "value": 0.0
     },
     "Quartile1KurtosisOfNumericFeatures": {
-        "value": -1.6073255044800812
+        "value": 0.3526546524165246
     },
     "Quartile1KurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile1MeansOfNumericFeatures": {
-        "value": 0.5401696428571428
+        "value": -0.28176775899999995
     },
     "Quartile1MeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile1NumericAttributeEntropy": {
-        "value": 0.6854678736653401
+        "value": 0.6108643020548935
     },
     "Quartile1NumericJointEntropy": {
-        "value": 1.4271772823094682
+        "value": 0.6108643020548935
     },
     "Quartile1NumericMutualInformation": {
-        "value": 0.36245927228208175
+        "value": -1.1102230246251565e-16
     },
     "Quartile1OneHalfPerceptronBias": {
-        "value": -2.0
+        "value": 0.0
     },
     "Quartile1OneHalfPerceptronWeights": {
-        "value": -1.0
+        "value": 0.0
     },
     "Quartile1OneTenthPerceptronBias": {
-        "value": -2.25
+        "value": 0.0
     },
     "Quartile1OneTenthPerceptronWeights": {
-        "value": -1.0
+        "value": 0.0
     },
     "Quartile1SkewnessOfNumericFeatures": {
-        "value": 0.3837380662433626
+        "value": 1.1651210302454011
     },
     "Quartile1SkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile1SqrtPerceptronBias": {
-        "value": -2.0
+        "value": 0.0
     },
     "Quartile1SqrtPerceptronWeights": {
-        "value": -1.0
+        "value": 0.0
     },
     "Quartile1StdDevOfNumericFeatures": {
-        "value": 0.7747133970184441
+        "value": 1.1183277645426972
     },
     "Quartile1StdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile2CardinalityOfCategoricalFeatures": {
-        "value": 4.0
-    },
-    "Quartile2CardinalityOfNumericFeatures": {
-        "value": 7.5
-    },
-    "Quartile2CategoricalAttributeEntropy": {
-        "value": 1.0429703065547942
-    },
-    "Quartile2CategoricalJointEntropy": {
-        "value": 1.846988748800701
-    },
-    "Quartile2CategoricalMutualInformation": {
-        "value": 0.5005882075922236
-    },
-    "Quartile2ClassProbability": {
-        "value": 0.2
-    },
-    "Quartile2DecisionTreeAttribute": {
-        "value": 1.5
-    },
-    "Quartile2DecisionTreeBranchLength": {
-        "value": 3.0
-    },
-    "Quartile2DecisionTreeLevelSize": {
         "value": 2.0
     },
+    "Quartile2CardinalityOfNumericFeatures": {
+        "value": 10.0
+    },
+    "Quartile2CategoricalAttributeEntropy": {
+        "value": 0.6730116670092565
+    },
+    "Quartile2CategoricalJointEntropy": {
+        "value": 0.6730116670092565
+    },
+    "Quartile2CategoricalMutualInformation": {
+        "value": 3.885780586188048e-16
+    },
+    "Quartile2ClassProbability": {
+        "value": 1.0
+    },
+    "Quartile2DecisionTreeAttribute": {
+        "value": 1.0
+    },
+    "Quartile2DecisionTreeBranchLength": {
+        "value": 0.0
+    },
+    "Quartile2DecisionTreeLevelSize": {
+        "value": 1.0
+    },
     "Quartile2FullPerceptronBias": {
-        "value": -1.5
+        "value": 0.0
     },
     "Quartile2FullPerceptronWeights": {
         "value": 0.0
     },
     "Quartile2KurtosisOfNumericFeatures": {
-        "value": -1.3493249532290488
+        "value": 0.3526546524165246
     },
     "Quartile2KurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile2MeansOfNumericFeatures": {
-        "value": 0.5505892857142857
+        "value": -0.28176775899999995
     },
     "Quartile2MeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile2NumericAttributeEntropy": {
-        "value": 0.6880276426302085
+        "value": 0.6108643020548935
     },
     "Quartile2NumericJointEntropy": {
-        "value": 1.468060203499046
+        "value": 0.6108643020548935
     },
     "Quartile2NumericMutualInformation": {
-        "value": 0.3783449542841908
+        "value": -1.1102230246251565e-16
     },
     "Quartile2OneHalfPerceptronBias": {
-        "value": -1.5
+        "value": 0.0
     },
     "Quartile2OneHalfPerceptronWeights": {
-        "value": -0.2455
+        "value": 0.0
     },
     "Quartile2OneTenthPerceptronBias": {
-        "value": -2.0
+        "value": 0.0
     },
     "Quartile2OneTenthPerceptronWeights": {
         "value": 0.0
     },
     "Quartile2SkewnessOfNumericFeatures": {
-        "value": 0.42456949227053975
+        "value": 1.1651210302454011
     },
     "Quartile2SkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile2SqrtPerceptronBias": {
-        "value": -1.5
+        "value": 0.0
     },
     "Quartile2SqrtPerceptronWeights": {
         "value": 0.0
     },
     "Quartile2StdDevOfNumericFeatures": {
-        "value": 1.306626611641099
+        "value": 1.1183277645426972
     },
     "Quartile2StdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile3CardinalityOfCategoricalFeatures": {
-        "value": 5.0
+        "value": 2.0
     },
     "Quartile3CardinalityOfNumericFeatures": {
-        "value": 8.25
+        "value": 10.0
     },
     "Quartile3CategoricalAttributeEntropy": {
-        "value": 1.2590233088047444
+        "value": 0.6730116670092565
     },
     "Quartile3CategoricalJointEntropy": {
-        "value": 1.896449448928007
+        "value": 0.6730116670092565
     },
     "Quartile3CategoricalMutualInformation": {
-        "value": 0.653394314528872
+        "value": 3.885780586188048e-16
     },
     "Quartile3ClassProbability": {
-        "value": 0.25
+        "value": 1.0
     },
     "Quartile3DecisionTreeAttribute": {
-        "value": 2.75
+        "value": 1.0
     },
     "Quartile3DecisionTreeBranchLength": {
-        "value": 3.0
+        "value": 0.0
     },
     "Quartile3DecisionTreeLevelSize": {
-        "value": 2.5
+        "value": 1.0
     },
     "Quartile3FullPerceptronBias": {
-        "value": -0.75
+        "value": 0.0
     },
     "Quartile3FullPerceptronWeights": {
-        "value": 0.7509999999999998
+        "value": 0.0
     },
     "Quartile3KurtosisOfNumericFeatures": {
-        "value": -1.0913244019780164
+        "value": 0.3526546524165246
     },
     "Quartile3KurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile3MeansOfNumericFeatures": {
-        "value": 0.5610089285714286
+        "value": -0.28176775899999995
     },
     "Quartile3MeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile3NumericAttributeEntropy": {
-        "value": 0.6905874115950769
+        "value": 0.6108643020548935
     },
     "Quartile3NumericJointEntropy": {
-        "value": 1.5089431246886238
+        "value": 0.6108643020548935
     },
     "Quartile3NumericMutualInformation": {
-        "value": 0.39423063628629984
+        "value": -1.1102230246251565e-16
     },
     "Quartile3OneHalfPerceptronBias": {
-        "value": -0.75
+        "value": 0.0
     },
     "Quartile3OneHalfPerceptronWeights": {
         "value": 0.0
     },
     "Quartile3OneTenthPerceptronBias": {
-        "value": -1.75
+        "value": 0.0
     },
     "Quartile3OneTenthPerceptronWeights": {
         "value": 0.0
     },
     "Quartile3SkewnessOfNumericFeatures": {
-        "value": 0.46540091829771685
+        "value": 1.1651210302454011
     },
     "Quartile3SkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "Quartile3SqrtPerceptronBias": {
-        "value": -0.75
+        "value": 0.0
     },
     "Quartile3SqrtPerceptronWeights": {
         "value": 0.0
     },
     "Quartile3StdDevOfNumericFeatures": {
-        "value": 1.8385398262637536
+        "value": 1.1183277645426972
     },
     "Quartile3StdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "RandomTreeDepth1ErrRate": {
-        "value": 0.5
+        "value": 0.0
     },
     "RandomTreeDepth1Kappa": {
-        "value": 0.2647058823529412
+        "value": NaN
     },
     "RandomTreeDepth2ErrRate": {
-        "value": 0.6
+        "value": 0.0
     },
     "RandomTreeDepth2Kappa": {
-        "value": 0.14215686274509814
+        "value": NaN
     },
     "RandomTreeDepth3ErrRate": {
-        "value": 0.6
+        "value": 0.0
     },
     "RandomTreeDepth3Kappa": {
-        "value": 0.11764705882352944
+        "value": NaN
     },
     "RatioOfCategoricalFeatures": {
-        "value": 0.4
+        "value": 0.5
     },
     "RatioOfDistinctTokens": {
         "value": 0
     },
     "RatioOfFeaturesWithMissingValues": {
-        "value": 0.8
+        "value": 0.0
     },
     "RatioOfInstancesWithMissingValues": {
-        "value": 1.0
+        "value": 0.0
     },
     "RatioOfMissingValues": {
-        "value": 0.36
+        "value": 0.0
     },
     "RatioOfNumericFeatures": {
-        "value": 0.6
+        "value": 0.5
     },
     "RatioOfTokensContainingNumericChar": {
         "value": 0
@@ -759,31 +759,31 @@
         "value": 0.0
     },
     "SkewCategoricalAttributeEntropy": {
-        "value": -4.3002068602548916e-16
+        "value": 0.0
     },
     "SkewCategoricalJointEntropy": {
-        "value": 3.360166224435086e-15
+        "value": 0.0
     },
     "SkewCategoricalMutualInformation": {
         "value": 0.0
     },
     "SkewClassProbability": {
-        "value": 1.154700538379252
+        "value": 0.0
     },
     "SkewDecisionTreeAttribute": {
-        "value": 0.9575491625535641
+        "value": 0.0
     },
     "SkewDecisionTreeBranchLength": {
-        "value": -1.4999999999999996
+        "value": 0.0
     },
     "SkewDecisionTreeLevelSize": {
-        "value": 0.6520236646847545
+        "value": 0.0
     },
     "SkewFullPerceptronBias": {
-        "value": -0.4346507595746657
+        "value": 0.0
     },
     "SkewFullPerceptronWeights": {
-        "value": 0.48224508476108713
+        "value": 0.0
     },
     "SkewKurtosisOfNumericFeatures": {
         "value": 0.0
@@ -798,138 +798,138 @@
         "value": NaN
     },
     "SkewNumericAttributeEntropy": {
-        "value": -3.2549324088873523e-14
+        "value": 0.0
     },
     "SkewNumericJointEntropy": {
-        "value": 4.065822249747896e-15
+        "value": 0.0
     },
     "SkewNumericMutualInformation": {
         "value": 0.0
     },
     "SkewOneHalfPerceptronBias": {
-        "value": 0.49338220021815865
+        "value": 0.0
     },
     "SkewOneHalfPerceptronWeights": {
-        "value": 0.3265889035436927
+        "value": 0.0
     },
     "SkewOneTenthPerceptronBias": {
         "value": 0.0
     },
     "SkewOneTenthPerceptronWeights": {
-        "value": -0.5434914132634219
+        "value": 0.0
     },
     "SkewSkewnessOfNumericFeatures": {
-        "value": -9.954206526050281e-16
+        "value": 0.0
     },
     "SkewSkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "SkewSqrtPerceptronBias": {
-        "value": 0.49338220021815865
+        "value": 0.0
     },
     "SkewSqrtPerceptronWeights": {
-        "value": -0.8249240950221939
+        "value": 0.0
     },
     "SkewStdDevOfNumericFeatures": {
-        "value": -2.7664266387282363e-16
+        "value": 0.0
     },
     "SkewStdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "SqrtPerceptronNIters": {
-        "value": 7
+        "value": 0
     },
     "SqrtPerceptronWeightsSum": {
-        "value": -18.148
+        "value": 0.0
     },
     "StdevCardinalityOfCategoricalFeatures": {
-        "value": 2.8284271247461903
+        "value": 0.0
     },
     "StdevCardinalityOfNumericFeatures": {
-        "value": 2.1213203435596424
+        "value": 0.0
     },
     "StdevCategoricalAttributeEntropy": {
-        "value": 0.6110901719466091
+        "value": 0.0
     },
     "StdevCategoricalJointEntropy": {
-        "value": 0.1398959858490094
+        "value": 0.0
     },
     "StdevCategoricalMutualInformation": {
-        "value": 0.4322009376864835
+        "value": 0.0
     },
     "StdevClassProbability": {
-        "value": 0.1
+        "value": 0.0
     },
     "StdevDecisionTreeAttribute": {
-        "value": 1.8929694486000912
+        "value": 0.0
     },
     "StdevDecisionTreeBranchLength": {
-        "value": 0.8944271909999161
+        "value": 0.0
     },
     "StdevDecisionTreeLevelSize": {
-        "value": 1.2583057392117916
+        "value": 0.0
     },
     "StdevFullPerceptronBias": {
-        "value": 1.707825127659933
+        "value": 0.0
     },
     "StdevFullPerceptronWeights": {
-        "value": 1.8596268466362167
+        "value": 0.0
     },
     "StdevKurtosisOfNumericFeatures": {
-        "value": 0.7297357573578896
+        "value": 0.0
     },
     "StdevKurtosisOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "StdevMeansOfNumericFeatures": {
-        "value": 0.029471200487310768
+        "value": 0.0
     },
     "StdevMeansOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "StdevNumericAttributeEntropy": {
-        "value": 0.007240119973317253
+        "value": 0.0
     },
     "StdevNumericJointEntropy": {
-        "value": 0.1156343632314625
+        "value": 0.0
     },
     "StdevNumericMutualInformation": {
-        "value": 0.04493149386985759
+        "value": 0.0
     },
     "StdevOneHalfPerceptronBias": {
-        "value": 0.9574271077563381
+        "value": 0.0
     },
     "StdevOneHalfPerceptronWeights": {
-        "value": 1.1073148858157766
+        "value": 0.0
     },
     "StdevOneTenthPerceptronBias": {
-        "value": 0.816496580927726
+        "value": 0.0
     },
     "StdevOneTenthPerceptronWeights": {
-        "value": 1.279067740862182
+        "value": 0.0
     },
     "StdevSkewnessOfNumericFeatures": {
-        "value": 0.11548871291733546
+        "value": 0.0
     },
     "StdevSkewnessOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "StdevSqrtPerceptronBias": {
-        "value": 0.9574271077563381
+        "value": 0.0
     },
     "StdevSqrtPerceptronWeights": {
-        "value": 0.9971240008223015
+        "value": 0.0
     },
     "StdevStdDevOfNumericFeatures": {
-        "value": 1.5044777642496585
+        "value": 0.0
     },
     "StdevStdDevOfStringLengthOfTextFeatures": {
         "value": NaN
     },
     "kNN1NErrRate": {
-        "value": 0.6
+        "value": 0.0
     },
     "kNN1NKappa": {
-        "value": 0.20833333333333337
+        "value": NaN
     }
 }

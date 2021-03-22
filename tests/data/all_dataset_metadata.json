@@ -24,5 +24,13 @@
     {
         "filename": "small_test_dataset.arff",
         "target_class_name": "class"
+    },
+    {
+        "filename": "small_test_dataset_with_text.arff",
+        "target_class_name": "class"
+    },
+    {
+        "filename": "small_test_dataset_single_class.arff",
+        "target_class_name": "class"
     }
 ]

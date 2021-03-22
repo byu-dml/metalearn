@@ -12,6 +12,7 @@ import metalearn.metafeatures.constants as consts
 from metalearn.metafeatures.decision_tree_metafeatures import resources_info as dt_resources
 from metalearn.metafeatures.general_resource_computers import resources_info as general_resources
 from metalearn.metafeatures.text_metafeatures import resources_info as text_resources
+from metalearn.metafeatures.perceptron_metafeatures import resources_info as perceptron_resources
 
 from metalearn.metafeatures.decision_tree_metafeatures import metafeatures_info as dt_metafeatures
 from metalearn.metafeatures.information_theoretic_metafeatures import metafeatures_info as info_theoretic_metafeatures
@@ -19,7 +20,7 @@ from metalearn.metafeatures.landmarking_metafeatures import metafeatures_info as
 from metalearn.metafeatures.simple_metafeatures import metafeatures_info as simple_metafeatures
 from metalearn.metafeatures.statistical_metafeatures import metafeatures_info as statistical_metafeatures
 from metalearn.metafeatures.text_metafeatures import metafeatures_info as text_metafeatures
-
+from metalearn.metafeatures.perceptron_metafeatures import metafeatures_info as perceptron_metafeatures
 
 class Metafeatures(object):
     """
@@ -33,6 +34,7 @@ class Metafeatures(object):
     _resources_info.update(dt_resources)
     _resources_info.update(general_resources)
     _resources_info.update(text_resources)
+    _resources_info.update(perceptron_resources)
 
     # noop resource computers for the user-provided resources
     # `_get_arguments` and `_resource_is_target_dependent` assumes ResourceComputer's
@@ -46,6 +48,7 @@ class Metafeatures(object):
         simple_metafeatures,
         statistical_metafeatures,
         text_metafeatures,
+        perceptron_metafeatures
     ]
 
     for mf_info in _mfs_info:
