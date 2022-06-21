@@ -14,7 +14,7 @@ setup(
     keywords = ['metalearning', 'machine learning', 'metalearn'],
     license='MIT',
     install_requires = [
-        'numpy<=1.18.2',
+        'numpy<1.22.1',
         'scikit-learn<=0.22.2.post1',
         'pandas<=1.0.3'
     ],
